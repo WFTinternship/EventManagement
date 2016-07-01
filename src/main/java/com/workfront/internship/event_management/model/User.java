@@ -1,5 +1,7 @@
 package com.workfront.internship.event_management.model;
 
+import java.util.Date;
+
 /**
  * Created by hermine on 7/1/16.
  */
@@ -87,5 +89,6 @@ public class User {
     private String email;
     private String phoneNumber;
     private boolean verified;
+    private Date registrationDate;
 
 }

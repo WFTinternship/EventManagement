@@ -18,7 +18,7 @@ public class GenericDAO {
                 rs.close();
             }
         } catch (SQLException e) {
-            System.out.println("exception " + e.getMessage());
+            System.out.println("SQLException " + e.getMessage());
         }
 
         try {
@@ -26,7 +26,7 @@ public class GenericDAO {
                 stmt.close();
             }
         } catch (SQLException e) {
-            System.out.println("exception " + e.getMessage());
+            System.out.println("SQLException " + e.getMessage());
         }
 
         try {
@@ -34,7 +34,7 @@ public class GenericDAO {
                 conn.close();
             }
         } catch (SQLException e) {
-            System.out.println("exception " + e.getMessage());
+            System.out.println("SQLException " + e.getMessage());
         }
     }
 
