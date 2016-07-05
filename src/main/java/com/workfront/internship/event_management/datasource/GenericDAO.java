@@ -1,10 +1,7 @@
 package com.workfront.internship.event_management.datasource;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
  * Created by hermine on 7/1/16.
@@ -35,6 +32,27 @@ public class GenericDAO {
             }
         } catch (SQLException e) {
             System.out.println("SQLException " + e.getMessage());
+        }
+    }
+
+    public void deleteRecordById(String tableName, int id) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            DataSourceManager dsManager = DataSourceManager.getInstance();
+            conn = dsManager.getConnection();
+            String sqlStr = "DELETE ? WHERE id = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
+            preparedStatement.setString(1, tableName);
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+        } catch (IOException e) {
+            System.out.println("IOException " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException " + e.getMessage());
+        } finally {
+            closeResources(rs, stmt, conn);
         }
     }
 

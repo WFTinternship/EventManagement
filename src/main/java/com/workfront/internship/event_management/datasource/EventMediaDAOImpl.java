@@ -1,7 +1,6 @@
 package com.workfront.internship.event_management.datasource;
 
 import com.workfront.internship.event_management.model.EventMedia;
-import com.workfront.internship.event_management.model.User;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -28,12 +27,17 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
             stmt = conn.prepareStatement(sqlStr);
             rs = stmt.executeQuery();
             mediaList = new ArrayList<EventMedia>();
+            EventMedia media = new EventMedia();
             while (rs.next()) {
-                EventMedia media = new EventMedia(rs.getInt("media_id"),
-                        rs.getString("media_path"),
-                        rs.getString("media_type"),
-                        rs.getInt("event_id"),
-                        rs.getInt("owner_id"));
+                media.setId(rs.getInt("id"))
+                        .setPath(rs.getString("path"))
+                        .setType("type")
+                        .setEventId(rs.getInt("event_id"))
+                        .setOwnerId(rs.getInt("owner_id"))
+                        .setUploadDate(rs.getTimestamp("upload_date"));
+                if(rs.getString("description") != null) {
+                    media.setDescription(rs.getString("description"));
+                }
                 mediaList.add(media);
             }
         } catch (IOException e) {
@@ -43,12 +47,11 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
         } finally {
             closeResources(rs, stmt, conn);
         }
-
         return mediaList;
     }
 
     public List<EventMedia> getMediaByEvent(int eventId) {
-        return getMediaByField("event_id", eventId);
+        return getMediaByField("id", eventId);
     }
 
     public List<EventMedia> getMediaByType(String type) {
@@ -56,15 +59,79 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
     }
 
     public List<EventMedia> getMediaByOwner(int eventId) {
-        return getMediaByField("event_id", eventId);
+        return getMediaByField("id", eventId);
     }
 
     public void insertMedia(EventMedia media) {
-
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            DataSourceManager dsManager = DataSourceManager.getInstance();
+            conn = dsManager.getConnection();
+            String sqlStr = "INSERT INTO event_media "
+                    + "(path, type, description, event_id, owner_id) VALUES "
+                    + "(?, ?, ?, ?, ?)";
+            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
+            preparedStatement.setString(1, media.getPath());
+            preparedStatement.setString(2, media.getType());
+            preparedStatement.setString(3, media.getDescription());
+            preparedStatement.setInt(4, media.getEventId());
+            preparedStatement.setInt(5, media.getOwnerId());
+            preparedStatement.executeUpdate();
+        } catch (IOException e) {
+            System.out.println("IOException " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException " + e.getMessage());
+        } finally {
+            closeResources(rs, stmt, conn);
+        }
     }
 
     public void updateMedia(EventMedia media) {
-        
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            DataSourceManager dsManager = DataSourceManager.getInstance();
+            conn = dsManager.getConnection();
+            String sqlStr = "UPDATE event_media SET path = ?, type = ?, " +
+                    "description = ?, event_id = ?, owner_id = ? WHERE id = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
+            preparedStatement.setString(1, media.getPath());
+            preparedStatement.setString(2, media.getType());
+            preparedStatement.setString(3, media.getDescription());
+            preparedStatement.setInt(4, media.getEventId());
+            preparedStatement.setInt(5, media.getOwnerId());
+            preparedStatement.setInt(6, media.getId());
+            preparedStatement.executeUpdate();
+        } catch (IOException e) {
+            System.out.println("IOException " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException " + e.getMessage());
+        } finally {
+            closeResources(rs, stmt, conn);
+        }
+    }
+    public void updateMediaDescription(int mediaId, String desc) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            DataSourceManager dsManager = DataSourceManager.getInstance();
+            conn = dsManager.getConnection();
+            String sqlStr = "UPDATE event_media SET description = ? WHERE id = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
+            preparedStatement.setString(1, desc);
+            preparedStatement.setInt(2, mediaId);
+            preparedStatement.executeUpdate();
+        } catch (IOException e) {
+            System.out.println("IOException " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException " + e.getMessage());
+        } finally {
+            closeResources(rs, stmt, conn);
+        }
     }
 
     public void deleteMedia(int mediaId) {
@@ -74,7 +141,7 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
         try {
             DataSourceManager dsManager = DataSourceManager.getInstance();
             conn = dsManager.getConnection();
-            String sqlStr = "DELETE event_media WHERE media_id = ?";
+            String sqlStr = "DELETE event_media WHERE id = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
             preparedStatement.setInt(1, mediaId);
             preparedStatement.executeUpdate();
@@ -101,12 +168,17 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
             stmt.setObject(2, columnValue);
             rs = stmt.executeQuery();
             mediaList = new ArrayList<EventMedia>();
+            EventMedia media = new EventMedia();
             while (rs.next()) {
-                EventMedia media = new EventMedia(rs.getInt("media_id"),
-                        rs.getString("media_path"),
-                        rs.getString("media_type"),
-                        rs.getInt("event_id"),
-                        rs.getInt("owner_id"));
+                media.setId(rs.getInt("id"))
+                        .setPath(rs.getString("path"))
+                        .setType("type")
+                        .setEventId(rs.getInt("id"))
+                        .setOwnerId(rs.getInt("owner_id"))
+                        .setUploadDate(rs.getTimestamp("upload_date"));
+                if(rs.getString("description") != null) {
+                    media.setDescription(rs.getString("description"));
+                }
                 mediaList.add(media);
             }
         } catch (IOException e) {

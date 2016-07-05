@@ -6,8 +6,20 @@ import java.util.Date;
  * Created by hermine on 7/1/16.
  */
 public class User {
+    private int id;
+    private String firstName;
+    private String lastName;
+    private String username;
+    private String password;
+    private String email;
+    private String phoneNumber;
+    private String avatarPath;
+    private boolean verified;
+    private Date registrationDate;
 
-    public User() {}
+
+    public User() {
+    }
 
     public int getId() {
         return id;
@@ -81,14 +93,21 @@ public class User {
         return this;
     }
 
-    private int id;
-    private String firstName;
-    private String lastName;
-    private String username;
-    private String password;
-    private String email;
-    private String phoneNumber;
-    private boolean verified;
-    private Date registrationDate;
+    public Date getRegistrationDate() {
+        return registrationDate;
+    }
 
+    public User setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
+        return this;
+    }
+
+    public String getAvatarPath() {
+        return avatarPath;
+    }
+
+    public User setAvatarPath(String avatarPath) {
+        this.avatarPath = avatarPath;
+        return this;
+    }
 }

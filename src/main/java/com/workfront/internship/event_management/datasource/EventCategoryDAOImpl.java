@@ -26,7 +26,7 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
         try {
             DataSourceManager dsManager = DataSourceManager.getInstance();
             conn = dsManager.getConnection();
-            String query = "select * from event_category";
+            String query = "SELECT * FROM event_category";
             stmt = conn.prepareStatement(query);
             rs = stmt.executeQuery();
 
@@ -34,8 +34,8 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
             EventCategory category = new EventCategory();
             while (rs.next()) {
                 category.setId(rs.getInt("id"))
-                        .setTitle(rs.getString("title"));
-
+                        .setTitle(rs.getString("title"))
+                        .setCreationDate(rs.getTimestamp("creation_date"));
                 String description = rs.getString("description");
                 if (description != null) {
                     category.setDescription(description);
@@ -58,7 +58,6 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
         PreparedStatement stmt = null;
         ResultSet rs = null;
         EventCategory category = null;
-
         try {
             DataSourceManager dsManager = DataSourceManager.getInstance();
             conn = dsManager.getConnection();
@@ -68,8 +67,8 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
             category = new EventCategory();
             while (rs.first()) {
                 category.setId(rs.getInt("id"))
-                        .setTitle(rs.getString("title"));
-
+                        .setTitle(rs.getString("title"))
+                        .setCreationDate(rs.getTimestamp("creation_date"));
                 String description = rs.getString("description");
                 if (description != null) {
                     category.setDescription(description);
@@ -116,7 +115,7 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
         try {
             DataSourceManager dsManager = DataSourceManager.getInstance();
             conn = dsManager.getConnection();
-            String sqlStr = "UPDATE event_category SET title = ?, description = ? WHERE category_id = ?";
+            String sqlStr = "UPDATE event_category SET title = ?, description = ? WHERE id = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
             preparedStatement.setString(1, category.getTitle());
             preparedStatement.setString(2, category.getDescription());
@@ -139,7 +138,7 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
         try {
             DataSourceManager dsManager = DataSourceManager.getInstance();
             conn = dsManager.getConnection();
-            String sqlStr = "DELETE event_category WHERE category_id = ?";
+            String sqlStr = "DELETE event_category WHERE id = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
             preparedStatement.setInt(1, categoryId);
             preparedStatement.executeUpdate();

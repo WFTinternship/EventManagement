@@ -14,6 +14,6 @@ public interface EventMediaDAO {
     public List<EventMedia> getMediaByOwner(int ownerId);
     public void insertMedia(EventMedia media); //???
     public void updateMedia(EventMedia media); //???
+    public void updateMediaDescription(int mediaId, String desc);
     public void deleteMedia(int mediaId);
-
 }

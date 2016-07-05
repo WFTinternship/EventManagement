@@ -25,21 +25,18 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             String sqlStr = "SELECT * FROM user";
             stmt = conn.prepareStatement(sqlStr);
             rs = stmt.executeQuery();
-            User user = new User();
             usersList = new ArrayList<User>();
+            User user = new User();
             while (rs.next()) {
-                user.setId(rs.getInt("user_id"))
+                user.setId(rs.getInt("id"))
                         .setFirstName(rs.getString("first_name"))
                         .setLastName(rs.getString("last_name"))
                         .setUsername(rs.getString("username"))
-                        .setPassword(rs.getString("password"))
                         .setEmail(rs.getString("email"))
-                        .setVerified(rs.getBoolean("verified"));
-
-                String phoneNumber = rs.getString("phone_number");
-                if (phoneNumber != null) {
-                    user.setPhoneNumber(phoneNumber);
-                }
+                        .setRegistrationDate(rs.getTimestamp("registration_date"))
+                        .setAvatarPath(rs.getString("avatar_path"))
+                        .setPhoneNumber(rs.getString("phone_number"))
+                        .setVerified(rs.getBoolean("is_verified"));
                 usersList.add(user);
             }
         } catch (IOException e) {
@@ -49,20 +46,19 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
         } finally {
             closeResources(rs, stmt, conn);
         }
-
         return usersList;
     }
 
     public User getUserById(int userId) {
-        return getUserByField("user_id", userId );
+        return getUserByField("id", userId);
     }
 
     public User getUserByUsername(String username) {
-        return getUserByField("username", username );
+        return getUserByField("username", username);
     }
 
     public User getUserByEmail(String email) {
-        return getUserByField("email", email );
+        return getUserByField("email", email);
     }
 
     public void updateUser(User user) {
@@ -73,15 +69,16 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             DataSourceManager dsManager = DataSourceManager.getInstance();
             conn = dsManager.getConnection();
             String sqlStr = "UPDATE user SET first_name = ?, last_name = ?, username = ?, password = ?, " +
-                    "email = ?, phone_number = ? WHERE USER_ID = ?";
+                    "email = ?, phone_number = ?, avatar_path = ? WHERE id = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
             preparedStatement.setString(1, user.getFirstName());
             preparedStatement.setString(2, user.getLastName());
             preparedStatement.setString(3, user.getUsername());
-            preparedStatement.setString(4, user.getPassword()); //should be already encrypted ?
+            preparedStatement.setString(4, user.getPassword());
             preparedStatement.setString(5, user.getEmail());
             preparedStatement.setString(6, user.getPhoneNumber());
-            preparedStatement.setInt(7, user.getId());
+            preparedStatement.setString(7, user.getAvatarPath());
+            preparedStatement.setInt(8, user.getId());
             preparedStatement.executeUpdate();
 
         } catch (IOException e) {
@@ -101,15 +98,16 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             DataSourceManager dsManager = DataSourceManager.getInstance();
             conn = dsManager.getConnection();
             String sqlStr = "INSERT INTO user "
-                    + "(first_name, last_name, username, password, email, phone_number) VALUES "
-                    + "(?, ?, ?, ?, ?, ?)";
+                    + "(first_name, last_name, username, password, email, phone_number, avatar_path) VALUES "
+                    + "(?, ?, ?, ?, ?, ?, ? )";
             PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
             preparedStatement.setString(1, user.getFirstName());
             preparedStatement.setString(2, user.getLastName());
             preparedStatement.setString(3, user.getUsername());
-            preparedStatement.setString(4, user.getPassword()); //should be already encrypted ?
+            preparedStatement.setString(4, user.getPassword());
             preparedStatement.setString(5, user.getEmail());
             preparedStatement.setString(6, user.getPhoneNumber());
+            preparedStatement.setString(7, user.getAvatarPath());
             preparedStatement.executeUpdate();
 
         } catch (IOException e) {
@@ -128,7 +126,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
         try {
             DataSourceManager dsManager = DataSourceManager.getInstance();
             conn = dsManager.getConnection();
-            String sqlStr = "DELETE user WHERE user_id = ?";
+            String sqlStr = "DELETE user WHERE id = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
             preparedStatement.setInt(1, userId);
             preparedStatement.executeUpdate();
@@ -153,7 +151,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             String sqlStr = "SELECT * FROM user WHERE ? = ?";
             stmt = conn.prepareStatement(sqlStr);
             stmt.setString(1, columnName);
-            stmt.setObject(1, columnValue);
+            stmt.setObject(2, columnValue);
             rs = stmt.executeQuery();
 
             if (rs.first()) {
@@ -161,14 +159,11 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
                         .setFirstName(rs.getString("first_name"))
                         .setLastName(rs.getString("last_name"))
                         .setUsername(rs.getString("username"))
-                        .setPassword(rs.getString("password"))
                         .setEmail(rs.getString("email"))
-                        .setVerified(rs.getBoolean("verified"));
-
-                String phoneNumber = rs.getString("phone_number");
-                if (phoneNumber != null) {
-                    user.setPhoneNumber(phoneNumber);
-                }
+                        .setRegistrationDate(rs.getTimestamp("registration_date"))
+                        .setAvatarPath(rs.getString("avatar_path"))
+                        .setPhoneNumber(rs.getString("phone_number"))
+                        .setVerified(rs.getBoolean("is_verified"));
             }
         } catch (IOException e) {
             System.out.println("IOException " + e.getMessage());
