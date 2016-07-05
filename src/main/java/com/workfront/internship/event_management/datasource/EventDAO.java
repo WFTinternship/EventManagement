@@ -2,7 +2,7 @@ package com.workfront.internship.event_management.datasource;
 
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.EventMedia;
-import com.workfront.internship.event_management.model.Participant;
+import com.workfront.internship.event_management.model.EventParticipant;
 
 import java.util.List;
 import java.util.Map;
@@ -24,6 +24,7 @@ public interface EventDAO {
     public void deleteEvent(int eventId);
 
     public List<EventMedia> getMediaByEventId(int eventId);
-        public List<Participant> getParticipantsByEventId(int eventId);
+
+    public List<EventParticipant> getParticipantsByEventId(int eventId);
 
 }

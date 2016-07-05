@@ -1,6 +1,6 @@
 package com.workfront.internship.event_management.model;
 
-public class Participant extends User {
+public class EventParticipant extends User {
 
     private int participantsCount;
     private String response;
@@ -11,7 +11,7 @@ public class Participant extends User {
         return participantsCount;
     }
 
-    public Participant setParticipantsCount(int participantsCount) {
+    public EventParticipant setParticipantsCount(int participantsCount) {
         this.participantsCount = participantsCount;
         return this;
     }
@@ -20,7 +20,7 @@ public class Participant extends User {
         return response;
     }
 
-    public Participant setResponse(String response) {
+    public EventParticipant setResponse(String response) {
         this.response = response;
         return this;
     }
@@ -30,7 +30,7 @@ public class Participant extends User {
 
     }
 
-    public Participant setCheckedIn(boolean checkedIn) {
+    public EventParticipant setCheckedIn(boolean checkedIn) {
         this.checkedIn = checkedIn;
         return this;
     }
@@ -39,7 +39,7 @@ public class Participant extends User {
         return role;
     }
 
-    public Participant setRole(String role) {
+    public EventParticipant setRole(String role) {
         this.role = role;
         return this;
     }

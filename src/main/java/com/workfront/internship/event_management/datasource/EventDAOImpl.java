@@ -160,11 +160,11 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         return mediaList;
     }
 
-    public List<Participant> getParticipantsByEventId(int eventId) {
+    public List<EventParticipant> getParticipantsByEventId(int eventId) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        List<Participant> participantsList = null;
+        List<EventParticipant> participantsList = null;
         try {
             DataSourceManager dsManager = DataSourceManager.getInstance();
             conn = dsManager.getConnection();
@@ -174,8 +174,8 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, eventId);
             rs = stmt.executeQuery();
-            participantsList = new ArrayList<Participant>();
-            Participant participant = new Participant();
+            participantsList = new ArrayList<EventParticipant>();
+            EventParticipant participant = new EventParticipant();
             while (rs.next()) {
                 participant.setId(rs.getInt("id"))
                         .setFirstName(rs.getString("first_name"))

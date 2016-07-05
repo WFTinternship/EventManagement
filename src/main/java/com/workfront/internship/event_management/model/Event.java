@@ -21,7 +21,7 @@ public class Event {
     private EventCategory category;
     private int organizerId;
     private List<DateRange> dates;
-    private List<Participant> participants;
+    private List<EventParticipant> participants;
     private List<EventMedia> media;
     private String access;
 
@@ -151,11 +151,11 @@ public class Event {
         return this;
     }
 
-    public List<Participant> getParticipants() {
+    public List<EventParticipant> getParticipants() {
         return participants;
     }
 
-    public Event setParticipants(List<Participant> participants) {
+    public Event setParticipants(List<EventParticipant> participants) {
         this.participants = participants;
         return this;
     }

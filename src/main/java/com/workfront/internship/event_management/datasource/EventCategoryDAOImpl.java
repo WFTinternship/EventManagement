@@ -1,7 +1,6 @@
 package com.workfront.internship.event_management.datasource;
 
 import com.workfront.internship.event_management.model.EventCategory;
-import com.workfront.internship.event_management.model.User;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -132,22 +131,23 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
     }
 
     public void deleteCategory(int categoryId) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        try {
-            DataSourceManager dsManager = DataSourceManager.getInstance();
-            conn = dsManager.getConnection();
-            String sqlStr = "DELETE event_category WHERE id = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
-            preparedStatement.setInt(1, categoryId);
-            preparedStatement.executeUpdate();
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } finally {
-            closeResources(rs, stmt, conn);
-        }
+        deleteRecordById("event_category", categoryId);
+//        Connection conn = null;
+//        PreparedStatement stmt = null;
+//        ResultSet rs = null;
+//        try {
+//            DataSourceManager dsManager = DataSourceManager.getInstance();
+//            conn = dsManager.getConnection();
+//            String sqlStr = "DELETE event_category WHERE id = ?";
+//            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
+//            preparedStatement.setInt(1, categoryId);
+//            preparedStatement.executeUpdate();
+//        } catch (IOException e) {
+//            System.out.println("IOException " + e.getMessage());
+//        } catch (SQLException e) {
+//            System.out.println("SQLException " + e.getMessage());
+//        } finally {
+//            closeResources(rs, stmt, conn);
+//        }
     }
 }

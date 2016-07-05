@@ -36,15 +36,15 @@ public class GenericDAO {
     }
 
     public void deleteRecordById(String tableName, int id) {
+        System.out.println(tableName + " " + id);
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            DataSourceManager dsManager = DataSourceManager.getInstance();
-            conn = dsManager.getConnection();
-            String sqlStr = "DELETE ? WHERE id = ?";
+            conn = DataSourceManager.getInstance().getConnection();
+            String sqlStr = "DELETE FROM " + tableName + " WHERE id = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
-            preparedStatement.setString(1, tableName);
+           // preparedStatement.setString(1, tableName);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (IOException e) {

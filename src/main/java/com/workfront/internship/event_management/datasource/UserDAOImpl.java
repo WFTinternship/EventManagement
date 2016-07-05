@@ -20,25 +20,11 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
         List<User> usersList = null;
 
         try {
-            DataSourceManager dsManager = DataSourceManager.getInstance();
-            conn = dsManager.getConnection();
+            conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "SELECT * FROM user";
             stmt = conn.prepareStatement(sqlStr);
             rs = stmt.executeQuery();
-            usersList = new ArrayList<User>();
-            User user = new User();
-            while (rs.next()) {
-                user.setId(rs.getInt("id"))
-                        .setFirstName(rs.getString("first_name"))
-                        .setLastName(rs.getString("last_name"))
-                        .setUsername(rs.getString("username"))
-                        .setEmail(rs.getString("email"))
-                        .setRegistrationDate(rs.getTimestamp("registration_date"))
-                        .setAvatarPath(rs.getString("avatar_path"))
-                        .setPhoneNumber(rs.getString("phone_number"))
-                        .setVerified(rs.getBoolean("is_verified"));
-                usersList.add(user);
-            }
+            usersList = createUsersListFromRS(rs);
         } catch (IOException e) {
             System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
@@ -66,8 +52,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            DataSourceManager dsManager = DataSourceManager.getInstance();
-            conn = dsManager.getConnection();
+            conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "UPDATE user SET first_name = ?, last_name = ?, username = ?, password = ?, " +
                     "email = ?, phone_number = ?, avatar_path = ? WHERE id = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
@@ -95,8 +80,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            DataSourceManager dsManager = DataSourceManager.getInstance();
-            conn = dsManager.getConnection();
+            conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "INSERT INTO user "
                     + "(first_name, last_name, username, password, email, phone_number, avatar_path) VALUES "
                     + "(?, ?, ?, ?, ?, ?, ? )";
@@ -120,51 +104,39 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
     }
 
     public void deleteUser(int userId) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        try {
-            DataSourceManager dsManager = DataSourceManager.getInstance();
-            conn = dsManager.getConnection();
-            String sqlStr = "DELETE user WHERE id = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
-            preparedStatement.setInt(1, userId);
-            preparedStatement.executeUpdate();
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } finally {
-            closeResources(rs, stmt, conn);
-        }
+        deleteRecordById("user", userId);
+//        Connection conn = null;
+//        PreparedStatement stmt = null;
+//        ResultSet rs = null;
+//        try {
+//            conn = DataSourceManager.getInstance().getConnection();
+//            String sqlStr = "DELETE FROM user WHERE id = ?";
+//            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
+//            preparedStatement.setInt(1, userId);
+//            preparedStatement.executeUpdate();
+//        } catch (IOException e) {
+//            System.out.println("IOException " + e.getMessage());
+//        } catch (SQLException e) {
+//            System.out.println("SQLException " + e.getMessage());
+//        } finally {
+//            closeResources(rs, stmt, conn);
+//        }
     }
 
+    //helper methods
     private User getUserByField(String columnName, Object columnValue) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         User user = new User();
-
         try {
-            DataSourceManager dsManager = DataSourceManager.getInstance();
-            conn = dsManager.getConnection();
+            conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "SELECT * FROM user WHERE ? = ?";
             stmt = conn.prepareStatement(sqlStr);
             stmt.setString(1, columnName);
             stmt.setObject(2, columnValue);
             rs = stmt.executeQuery();
-
-            if (rs.first()) {
-                user.setId(rs.getInt("id"))
-                        .setFirstName(rs.getString("first_name"))
-                        .setLastName(rs.getString("last_name"))
-                        .setUsername(rs.getString("username"))
-                        .setEmail(rs.getString("email"))
-                        .setRegistrationDate(rs.getTimestamp("registration_date"))
-                        .setAvatarPath(rs.getString("avatar_path"))
-                        .setPhoneNumber(rs.getString("phone_number"))
-                        .setVerified(rs.getBoolean("is_verified"));
-            }
+            user = createUserFromRS(rs);
         } catch (IOException e) {
             System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
@@ -173,5 +145,39 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             closeResources(rs, stmt, conn);
         }
         return user;
+    }
+
+    private User createUserFromRS(ResultSet rs) throws SQLException {
+        User user = new User();
+        while (rs.next()) {
+              user.setId(rs.getInt("id"))
+                    .setFirstName(rs.getString("first_name"))
+                    .setLastName(rs.getString("last_name"))
+                    .setUsername(rs.getString("username"))
+                    .setEmail(rs.getString("email"))
+                    .setRegistrationDate(rs.getTimestamp("registration_date"))
+                    .setAvatarPath(rs.getString("avatar_path"))
+                    .setPhoneNumber(rs.getString("phone_number"))
+                    .setVerified(rs.getBoolean("is_verified"));
+        }
+        return user;
+    }
+
+    private List<User> createUsersListFromRS(ResultSet rs) throws SQLException {
+        List<User> usersList = new ArrayList<User>();
+        while (rs.next()) {
+            User user = new User();
+            user.setId(rs.getInt("id"))
+                    .setFirstName(rs.getString("first_name"))
+                    .setLastName(rs.getString("last_name"))
+                    .setUsername(rs.getString("username"))
+                    .setEmail(rs.getString("email"))
+                    .setRegistrationDate(rs.getTimestamp("registration_date"))
+                    .setAvatarPath(rs.getString("avatar_path"))
+                    .setPhoneNumber(rs.getString("phone_number"))
+                    .setVerified(rs.getBoolean("is_verified"));
+            usersList.add(user);
+        }
+        return usersList ;
     }
 }
