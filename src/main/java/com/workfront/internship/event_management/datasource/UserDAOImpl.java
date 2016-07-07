@@ -13,6 +13,38 @@ import java.util.List;
  */
 public class UserDAOImpl extends GenericDAO implements UserDAO {
 
+    //CREATE
+    public boolean insertUser(User user) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        int affectedRows = 0;
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+            String sqlStr = "INSERT INTO user "
+                    + "(first_name, last_name, username, password, email, phone_number, avatar_path) VALUES "
+                    + "(?, ?, ?, ?, ?, ?, ? )";
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setString(1, user.getFirstName());
+            stmt.setString(2, user.getLastName());
+            stmt.setString(3, user.getUsername());
+            stmt.setString(4, user.getPassword());
+            stmt.setString(5, user.getEmail());
+            stmt.setString(6, user.getPhoneNumber());
+            stmt.setString(7, user.getAvatarPath());
+            affectedRows = stmt.executeUpdate();
+        } catch (IOException e) {
+            System.out.println("IOException " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException " + e.getMessage());
+        } catch (PropertyVetoException e) {
+            System.out.println("SQLException " + e.getMessage());
+        } finally {
+            closeResources(stmt, conn);
+        }
+        return affectedRows != 0;
+    }
+
+    //READ
     public List<User> getAllUsers() {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -48,17 +80,17 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
         return getUserByField("email", email);
     }
 
+    //UPDATE
     public boolean setVerified(int userId) {
         Connection conn = null;
         PreparedStatement stmt = null;
-        ResultSet rs = null;
         int affectedRows = 0;
         try {
             conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "UPDATE user SET verified = ? WHERE id = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
-            preparedStatement.setInt(1, userId);
-            preparedStatement.executeUpdate();
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setInt(1, userId);
+            affectedRows = stmt.executeUpdate();
         } catch (IOException e) {
             System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
@@ -66,7 +98,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
         } catch (PropertyVetoException e) {
             System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(rs, stmt, conn);
+            closeResources(stmt, conn);
         }
         return affectedRows != 0;
     }
@@ -74,22 +106,21 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
     public boolean updateUser(User user) {
         Connection conn = null;
         PreparedStatement stmt = null;
-        ResultSet rs = null;
         int affectedRows = 0;
         try {
             conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "UPDATE user SET first_name = ?, last_name = ?, username = ?, password = ?, " +
                     "email = ?, phone_number = ?, avatar_path = ? WHERE id = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
-            preparedStatement.setString(1, user.getFirstName());
-            preparedStatement.setString(2, user.getLastName());
-            preparedStatement.setString(3, user.getUsername());
-            preparedStatement.setString(4, user.getPassword());
-            preparedStatement.setString(5, user.getEmail());
-            preparedStatement.setString(6, user.getPhoneNumber());
-            preparedStatement.setString(7, user.getAvatarPath());
-            preparedStatement.setInt(8, user.getId());
-            preparedStatement.executeUpdate();
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setString(1, user.getFirstName());
+            stmt.setString(2, user.getLastName());
+            stmt.setString(3, user.getUsername());
+            stmt.setString(4, user.getPassword());
+            stmt.setString(5, user.getEmail());
+            stmt.setString(6, user.getPhoneNumber());
+            stmt.setString(7, user.getAvatarPath());
+            stmt.setInt(8, user.getId());
+            affectedRows = stmt.executeUpdate();
         } catch (IOException e) {
             System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
@@ -97,64 +128,14 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
         } catch (PropertyVetoException e) {
             System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(rs, stmt, conn);
+            closeResources(stmt, conn);
         }
         return affectedRows != 0;
     }
 
-    public boolean insertUser(User user) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        int affectedRows = 0;
-        try {
-            conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "INSERT INTO user "
-                    + "(first_name, last_name, username, password, email, phone_number, avatar_path) VALUES "
-                    + "(?, ?, ?, ?, ?, ?, ? )";
-            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
-            preparedStatement.setString(1, user.getFirstName());
-            preparedStatement.setString(2, user.getLastName());
-            preparedStatement.setString(3, user.getUsername());
-            preparedStatement.setString(4, user.getPassword());
-            preparedStatement.setString(5, user.getEmail());
-            preparedStatement.setString(6, user.getPhoneNumber());
-            preparedStatement.setString(7, user.getAvatarPath());
-            affectedRows = preparedStatement.executeUpdate();
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } finally {
-            closeResources(rs, stmt, conn);
-        }
-        return affectedRows != 0;
-    }
-
+    //DELETE
     public boolean deleteUser(int userId) {
         return deleteEntryById("user", userId);
-       /* Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        int affectedRows = 0;
-        try {
-            conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "DELETE FROM user WHERE id = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
-            preparedStatement.setInt(1, userId);
-            affectedRows = preparedStatement.executeUpdate();
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            System.out.println("PropertyVetoException " + e.getMessage());
-        } finally {
-            closeResources(rs, stmt, conn);
-        }
-        return affectedRows != 0;*/
     }
 
     //helper methods

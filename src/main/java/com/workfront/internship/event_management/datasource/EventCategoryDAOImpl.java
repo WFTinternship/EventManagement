@@ -16,6 +16,33 @@ import java.util.List;
  */
 public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDAO {
 
+    //CREATE
+    public boolean insertCategory(EventCategory category) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        int affectedRows = 0;
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+            String sqlStr = "INSERT INTO event_category "
+                    + "(title, description) VALUES "
+                    + "(?, ?)";
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setString(1, category.getTitle());
+            stmt.setString(2, category.getDescription());
+            affectedRows = stmt.executeUpdate();
+        } catch (IOException e) {
+            System.out.println("IOException " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException " + e.getMessage());
+        } catch (PropertyVetoException e) {
+            System.out.println("PropertyVetoException " + e.getMessage());
+        } finally {
+            closeResources(stmt, conn);
+        }
+        return affectedRows != 0;
+    }
+
+    //READ
     public List<EventCategory> getAllCategories() {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -62,45 +89,19 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
         return category;
     }
 
-    public boolean insertCategory(EventCategory category) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        int affectedRows = 0;
-        try {
-            conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "INSERT INTO event_category "
-                    + "(title, description) VALUES "
-                    + "(?, ?)";
-            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
-            preparedStatement.setString(1, category.getTitle());
-            preparedStatement.setString(2, category.getDescription());
-            affectedRows = preparedStatement.executeUpdate();
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            System.out.println("PropertyVetoException " + e.getMessage());
-        } finally {
-            closeResources(rs, stmt, conn);
-        }
-        return affectedRows != 0;
-    }
-
+    //UPDATE
     public boolean updateCategory(EventCategory category) {
         Connection conn = null;
         PreparedStatement stmt = null;
-        ResultSet rs = null;
         int affectedRows = 0;
         try {
             conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "UPDATE event_category SET title = ?, description = ? WHERE id = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
-            preparedStatement.setString(1, category.getTitle());
-            preparedStatement.setString(2, category.getDescription());
-            preparedStatement.setInt(3, category.getId());
-            affectedRows = preparedStatement.executeUpdate();
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setString(1, category.getTitle());
+            stmt.setString(2, category.getDescription());
+            stmt.setInt(3, category.getId());
+            affectedRows = stmt.executeUpdate();
         } catch (IOException e) {
             System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
@@ -108,33 +109,14 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
         } catch (PropertyVetoException e) {
             System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(rs, stmt, conn);
+            closeResources(stmt, conn);
         }
         return affectedRows != 0;
     }
 
+    //DELETE
     public boolean deleteCategory(int categoryId) {
         return deleteEntryById("event_category", categoryId);
-        /*Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        int affectedRows = 0;
-        try {
-            conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "DELETE event_category WHERE id = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
-            preparedStatement.setInt(1, categoryId);
-            affectedRows = preparedStatement.executeUpdate();
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            System.out.println("PropertyVetoException " + e.getMessage());
-        } finally {
-            closeResources(rs, stmt, conn);
-        }
-        return affectedRows != 0;*/
     }
 
     //helper methods

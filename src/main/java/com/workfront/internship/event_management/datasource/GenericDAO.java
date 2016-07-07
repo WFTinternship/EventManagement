@@ -36,16 +36,45 @@ public class GenericDAO {
         }
     }
 
-    public boolean deleteEntryById(String tableName, int columnId) {
+    protected void closeResources(Statement stmt, Connection conn) {
+        try {
+            if(stmt != null) {
+                stmt.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("SQLException " + e.getMessage());
+        }
+
+        try {
+            if(conn != null) {
+                conn.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("SQLException " + e.getMessage());
+        }
+    }
+
+    protected void closeResources(Connection conn) {
+
+        try {
+            if(conn != null) {
+                conn.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("SQLException " + e.getMessage());
+        }
+    }
+
+
+    public boolean deleteEntryById(String tableName, int id) {
         Connection conn = null;
         PreparedStatement stmt = null;
-        ResultSet rs = null;
         int affectedRows = 0;
         try {
             conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "DELETE FROM "+ tableName + " WHERE id = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
-            preparedStatement.setInt(1, columnId);
+            preparedStatement.setInt(1, id);
             affectedRows = preparedStatement.executeUpdate();
         } catch (IOException e) {
             System.out.println("IOException " + e.getMessage());
@@ -54,7 +83,7 @@ public class GenericDAO {
         } catch (PropertyVetoException e) {
             System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(rs, stmt, conn);
+            closeResources(stmt, conn);
         }
         return affectedRows != 0;
     }

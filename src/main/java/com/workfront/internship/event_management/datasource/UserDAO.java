@@ -8,12 +8,12 @@ import java.util.List;
  * Created by hermine on 7/1/16.
  */
 public interface UserDAO {
+    public boolean insertUser(User user);
     public List<User> getAllUsers();
     public User getUserById(int userId);
     public User getUserByUsername(String username);
     public User getUserByEmail(String email);
     public boolean setVerified(int userId);
     public boolean updateUser(User user);
-    public boolean insertUser(User user);
     public boolean deleteUser(int userId);
 }

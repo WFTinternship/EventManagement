@@ -22,7 +22,7 @@ public class Event {
     private Date creationDate;
     private Date lastModified;
     private List<DateRange> dates;
-    private List<EventParticipant> participants;
+    private List<EventInvitation> invitations;
     private List<EventMedia> media;
 
     public int getId() {
@@ -160,12 +160,12 @@ public class Event {
         return this;
     }
 
-    public List<EventParticipant> getParticipants() {
-        return participants;
+    public List<EventInvitation> getInvitations() {
+        return invitations;
     }
 
-    public Event setParticipants(List<EventParticipant> participants) {
-        this.participants = participants;
+    public Event setInvitations(List<EventInvitation> invitations) {
+        this.invitations = invitations;
         return this;
     }
 

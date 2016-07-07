@@ -16,6 +16,70 @@ import java.util.List;
  */
 public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
 
+    //CREATE
+    public boolean insertMedia(EventMedia media) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        int affectedRows = 0;
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+            String sqlStr = "INSERT INTO event_media "
+                    + "(path, type, description, event_id, uploader_id) VALUES "
+                    + "(?, ?, ?, ?, ?)";
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setString(1, media.getPath());
+            stmt.setString(2, media.getType());
+            stmt.setString(3, media.getDescription());
+            stmt.setInt(4, media.getEventId());
+            stmt.setInt(5, media.getUploaderId());
+            affectedRows = stmt.executeUpdate();
+        } catch (IOException e) {
+            System.out.println("IOException " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException " + e.getMessage());
+        } catch (PropertyVetoException e) {
+            System.out.println("PropertyVetoException " + e.getMessage());
+        } finally {
+            closeResources(stmt, conn);
+        }
+        return affectedRows != 0;
+    }
+
+    public boolean insertMediaList(List<EventMedia> mediaList) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        int affectedRows = 0;
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+            String sqlStr = "INSERT INTO event_media "
+                    + "(path, type, description, event_id, uploader_id) VALUES "
+                    + "(?, ?, ?, ?, ?)";
+            stmt = conn.prepareStatement(sqlStr);
+            conn.setAutoCommit(false);
+            for(EventMedia media: mediaList) {
+                stmt.setString(1, media.getPath());
+                stmt.setString(2, media.getType());
+                stmt.setString(3, media.getDescription());
+                stmt.setInt(4, media.getEventId());
+                stmt.setInt(5, media.getUploaderId());
+                stmt.addBatch();
+            }
+            affectedRows = stmt.executeBatch().length;
+            conn.commit();
+            conn.setAutoCommit(true);
+        } catch (IOException e) {
+            System.out.println("IOException " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException " + e.getMessage());
+        } catch (PropertyVetoException e) {
+            System.out.println("PropertyVetoException " + e.getMessage());
+        } finally {
+            closeResources(stmt, conn);
+        }
+        return affectedRows != mediaList.size() ;
+    }
+
+    //READ
     public List<EventMedia> getAllMedia() {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -51,76 +115,18 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
         return getMediaByField("id", eventId);
     }
 
-    public boolean insertMedia(EventMedia media) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        int affectedRows = 0;
-        try {
-            conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "INSERT INTO event_media "
-                    + "(path, type, description, event_id, uploader_id) VALUES "
-                    + "(?, ?, ?, ?, ?)";
-            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
-            preparedStatement.setString(1, media.getPath());
-            preparedStatement.setString(2, media.getType());
-            preparedStatement.setString(3, media.getDescription());
-            preparedStatement.setInt(4, media.getEventId());
-            preparedStatement.setInt(5, media.getUploaderId());
-            affectedRows = preparedStatement.executeUpdate();
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            System.out.println("PropertyVetoException " + e.getMessage());
-        } finally {
-            closeResources(rs, stmt, conn);
-        }
-        return affectedRows != 0;
-    }
-
-    public boolean updateMedia(EventMedia media) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        int affectedRows = 0;
-        try {
-            conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "UPDATE event_media SET path = ?, type = ?, " +
-                    "description = ?, event_id = ?, uploader_id = ? WHERE id = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
-            preparedStatement.setString(1, media.getPath());
-            preparedStatement.setString(2, media.getType());
-            preparedStatement.setString(3, media.getDescription());
-            preparedStatement.setInt(4, media.getEventId());
-            preparedStatement.setInt(5, media.getUploaderId());
-            preparedStatement.setInt(6, media.getId());
-            affectedRows = preparedStatement.executeUpdate();
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            System.out.println("PropertyVetoException " + e.getMessage());
-        } finally {
-            closeResources(rs, stmt, conn);
-        }
-        return affectedRows != 0;
-    }
-
+    //UPDATE
     public boolean updateMediaDescription(int mediaId, String desc) {
         Connection conn = null;
         PreparedStatement stmt = null;
-        ResultSet rs = null;
         int affectedRows = 0;
         try {
             conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "UPDATE event_media SET description = ? WHERE id = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
-            preparedStatement.setString(1, desc);
-            preparedStatement.setInt(2, mediaId);
-            affectedRows = preparedStatement.executeUpdate();
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setString(1, desc);
+            stmt.setInt(2, mediaId);
+            affectedRows = stmt.executeUpdate();
         } catch (IOException e) {
             System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
@@ -128,22 +134,22 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
         } catch (PropertyVetoException e) {
             System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(rs, stmt, conn);
+            closeResources(stmt, conn);
         }
         return affectedRows != 0;
     }
 
+    //DELETE
     public boolean deleteMedia(int mediaId) {
         Connection conn = null;
         PreparedStatement stmt = null;
-        ResultSet rs = null;
         int affectedRows = 0;
         try {
             conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "DELETE event_media WHERE id = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
-            preparedStatement.setInt(1, mediaId);
-            affectedRows = preparedStatement.executeUpdate();
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setInt(1, mediaId);
+            affectedRows = stmt.executeUpdate();
         } catch (IOException e) {
             System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
@@ -151,7 +157,7 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
         } catch (PropertyVetoException e) {
             e.printStackTrace();
         } finally {
-            closeResources(rs, stmt, conn);
+            closeResources(stmt, conn);
         }
         return affectedRows != 0;
     }
