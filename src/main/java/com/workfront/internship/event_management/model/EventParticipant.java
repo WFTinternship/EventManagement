@@ -2,17 +2,17 @@ package com.workfront.internship.event_management.model;
 
 public class EventParticipant extends User {
 
-    private int participantsCount;
+    private int peopleCount;
     private String response;
     private String role;
     private boolean checkedIn;
 
-    public int getParticipantsCount() {
-        return participantsCount;
+    public int getPeopleCount() {
+        return peopleCount;
     }
 
-    public EventParticipant setParticipantsCount(int participantsCount) {
-        this.participantsCount = participantsCount;
+    public EventParticipant setPeopleCount(int peopleCount) {
+        this.peopleCount = peopleCount;
         return this;
     }
 

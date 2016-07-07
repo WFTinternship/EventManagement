@@ -12,7 +12,8 @@ public interface UserDAO {
     public User getUserById(int userId);
     public User getUserByUsername(String username);
     public User getUserByEmail(String email);
-    public void updateUser(User user);
-    public void insertUser(User user);
-    public void deleteUser(int userId);
+    public boolean setVerified(int userId);
+    public boolean updateUser(User user);
+    public boolean insertUser(User user);
+    public boolean deleteUser(int userId);
 }

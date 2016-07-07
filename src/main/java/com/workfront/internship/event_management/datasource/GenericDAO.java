@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.datasource;
 
+import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.sql.*;
 
@@ -35,25 +36,27 @@ public class GenericDAO {
         }
     }
 
-    public void deleteRecordById(String tableName, int id) {
-        System.out.println(tableName + " " + id);
+    public boolean deleteEntryById(String tableName, int columnId) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
+        int affectedRows = 0;
         try {
             conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "DELETE FROM " + tableName + " WHERE id = ?";
+            String sqlStr = "DELETE FROM "+ tableName + " WHERE id = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
-           // preparedStatement.setString(1, tableName);
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
+            preparedStatement.setInt(1, columnId);
+            affectedRows = preparedStatement.executeUpdate();
         } catch (IOException e) {
             System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
             System.out.println("SQLException " + e.getMessage());
+        } catch (PropertyVetoException e) {
+            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(rs, stmt, conn);
         }
+        return affectedRows != 0;
     }
 
 }

@@ -11,19 +11,19 @@ public class Event {
     private String title;
     private String shortDesc;
     private String fullDesc;
-    private Date creationDate;
-    private Date lastModified;
     private String location;
     private float lat;
     private float lng;
     private String filePath;
     private String imagePath;
     private EventCategory category;
-    private int organizerId;
+    private boolean publicAccess;
+    private boolean guestsAllowed;
+    private Date creationDate;
+    private Date lastModified;
     private List<DateRange> dates;
     private List<EventParticipant> participants;
     private List<EventMedia> media;
-    private String access;
 
     public int getId() {
         return id;
@@ -133,15 +133,24 @@ public class Event {
         return this;
     }
 
-    public int getOrganizerId() {
-        return organizerId;
+
+    public boolean isPublicAccess() {
+        return publicAccess;
     }
 
-    public Event setOrganizerId(int organizerId) {
-        this.organizerId = organizerId;
+    public Event setPublicAccess(boolean publicAccess) {
+        this.publicAccess = publicAccess;
         return this;
     }
 
+    public boolean isGuestsAllowed() {
+        return guestsAllowed;
+    }
+
+    public Event setGuestsAllowed(boolean guestsAllowed) {
+        this.guestsAllowed = guestsAllowed;
+    return this;
+}
     public List<DateRange> getDates() {
         return dates;
     }
@@ -166,15 +175,6 @@ public class Event {
 
     public Event setMedia(List<EventMedia> media) {
         this.media = media;
-        return this;
-    }
-
-    public String getAccess() {
-        return access;
-    }
-
-    public Event setAccess(String access) {
-        this.access = access;
         return this;
     }
 }

@@ -12,7 +12,7 @@ public class EventMedia {
     private String path;
     private String description;
     private int eventId;
-    private int ownerId;
+    private int uploaderId;
     private Date uploadDate;
 
     public int getId() {
@@ -60,12 +60,12 @@ public class EventMedia {
         return this;
     }
 
-    public int getOwnerId() {
-        return ownerId;
+    public int getUploaderId() {
+        return uploaderId;
     }
 
-    public EventMedia setOwnerId(int ownerId) {
-        this.ownerId = ownerId;
+    public EventMedia setUploaderId(int uploaderId) {
+        this.uploaderId = uploaderId;
         return this;
     }
 

@@ -1,6 +1,8 @@
 package com.workfront.internship.event_management.datasource;
 
 import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
+
+import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.sql.*;
 
@@ -12,14 +14,14 @@ public class DataSourceManager {
     private static DataSourceManager dsManager;
     private BasicDataSource ds;
 
-    private DataSourceManager() throws IOException, SQLException {
+    private DataSourceManager() throws IOException, SQLException, PropertyVetoException {
         ds = new BasicDataSource();
         ds.setUsername(DBConfig.USERNAME);
         ds.setPassword(DBConfig.PASSWORD);
         ds.setUrl(DBConfig.CONN_STRING);
     }
 
-    public static DataSourceManager getInstance() throws IOException, SQLException {
+    public static DataSourceManager getInstance() throws IOException, SQLException, PropertyVetoException {
         if (dsManager == null) {
             return new DataSourceManager();
         }

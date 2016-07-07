@@ -10,7 +10,7 @@ import java.util.List;
 public interface EventCategoryDAO  {
     public List<EventCategory> getAllCategories();
     public EventCategory getCategoryById(int id);
-    public void insertCategory(EventCategory category);
-    public void updateCategory(EventCategory category);
-    public void deleteCategory(int categoryId);
+    public boolean insertCategory(EventCategory category);
+    public boolean updateCategory(EventCategory category);
+    public boolean deleteCategory(int categoryId);
 }

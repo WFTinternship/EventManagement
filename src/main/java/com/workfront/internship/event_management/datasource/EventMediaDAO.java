@@ -11,9 +11,8 @@ public interface EventMediaDAO {
     public List<EventMedia> getAllMedia();
     public List<EventMedia> getMediaByEvent(int eventId);
     public List<EventMedia> getMediaByType(String type);
-    public List<EventMedia> getMediaByOwner(int ownerId);
-    public void insertMedia(EventMedia media); //???
-    public void updateMedia(EventMedia media); //???
-    public void updateMediaDescription(int mediaId, String desc);
-    public void deleteMedia(int mediaId);
+    public List<EventMedia> getMediaByUploader(int uploaderId);
+    public boolean insertMedia(EventMedia media);
+    public boolean updateMediaDescription(int mediaId, String desc);
+    public boolean deleteMedia(int mediaId);
 }
