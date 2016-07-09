@@ -4,7 +4,6 @@ import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.EventInvitation;
 import com.workfront.internship.event_management.model.EventMedia;
 
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -13,42 +12,27 @@ import java.util.List;
 public interface EventDAO {
 
     //CREATE
-    public boolean insertInvitation(EventInvitation invitation);
-
-    public boolean insertInvitationsList(List<EventInvitation> invitations);
-
-    public boolean createEvent(Event event, int creatorId); //- optional lists + in
-
-    public boolean updateEvent(Event event); //- optional lists
+    public boolean createEvent(Event event, int creatorId);
 
     //READ
-    public List<Event> getAllEvents(); //- organizer info
+    public List<Event> getAllEvents();
 
-    public Event getEventById(int eventId); // - organizer info
+    public Event getEventById(int eventId);
 
-    public List<Event> getEventsByCategory(int categoryId); //- organizer info
+    public List<Event> getEventsByCategory(int categoryId);
 
-    public List<Event> getEventsByOrganizerId(int organizerId); //- organizer info
+    public List<Event> getEventsByOrganizerId(int organizerId);
 
-    public List<Event> getInvitedEventsByUserId(int userId); //- organizer info
+    public List<Event> getInvitedEventsByUserId(int userId);
 
-    public List<Event> getParticipatedEventsByUserId(int partId); //- organizer info
+    public List<Event> getParticipatedEventsByUserId(int partId);
 
-    public List<Event> getAcceptedEventsByUserId(int partId); //- organizer info
-
-    public Event getEventFullInfoById(int eventId); // - multiple queries
-
-    public void getEventAdditionalInfo(Event event); // - separate methods???
-
-    public List<EventMedia> getMediaByEventId(int eventId);
-
-    public List<EventInvitation> getInvitationsByEventId(int eventId);
+    public List<Event> getAcceptedEventsByUserId(int partId);
 
     //UPDATE
-    public boolean updateInvitation(EventInvitation invitation);
+    public boolean updateEvent(Event event); //- optional lists
 
     //DELETE
-    public boolean deleteInvitation(int eventId, int userId);
 
     public boolean deleteEvent(int eventId);
 }

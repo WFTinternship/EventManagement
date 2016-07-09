@@ -10,6 +10,7 @@ import java.util.List;
 public interface EventInvitationDAO {
     public boolean insertInvitation(EventInvitation invitation);
     public boolean insertInvitationsList(List<EventInvitation> invitations);
+    public List<EventInvitation> getInvitationsByEventId(int eventId);
     public boolean updateInvitation(EventInvitation invitation);
     public boolean deleteInvitation(int eventId, int userId);
 }

@@ -1,13 +1,12 @@
 package com.workfront.internship.event_management.datasource;
 
+import com.workfront.internship.event_management.model.EventInvitation;
 import com.workfront.internship.event_management.model.EventMedia;
+import com.workfront.internship.event_management.model.User;
 
 import java.beans.PropertyVetoException;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,14 +23,15 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
         try {
             conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "INSERT INTO event_media "
-                    + "(path, type, description, event_id, uploader_id) VALUES "
-                    + "(?, ?, ?, ?, ?)";
+                    + "(event_id, path, type, description, uploader_id, upload_date) "
+                    + "VALUES (?, ?, ?, ?, ?, ?)";
             stmt = conn.prepareStatement(sqlStr);
-            stmt.setString(1, media.getPath());
-            stmt.setString(2, media.getType());
-            stmt.setString(3, media.getDescription());
-            stmt.setInt(4, media.getEventId());
+            stmt.setInt(1, media.getEventId());
+            stmt.setString(2, media.getPath());
+            stmt.setString(3, media.getType());
+            stmt.setString(4, media.getDescription());
             stmt.setInt(5, media.getUploaderId());
+            stmt.setTimestamp(6, new Timestamp(media.getUploadDate().getTime()));
             affectedRows = stmt.executeUpdate();
         } catch (IOException e) {
             System.out.println("IOException " + e.getMessage());
@@ -40,7 +40,7 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
         } catch (PropertyVetoException e) {
             System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(stmt, conn);
+            closeResources(null, stmt, conn);
         }
         return affectedRows != 0;
     }
@@ -74,7 +74,7 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
         } catch (PropertyVetoException e) {
             System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(stmt, conn);
+            closeResources(null, stmt, conn);
         }
         return affectedRows != mediaList.size() ;
     }
@@ -115,6 +115,31 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
         return getMediaByField("id", eventId);
     }
 
+    public List<EventMedia> getMediaByEventId(int eventId) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<EventMedia> mediaList = null;
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+            String sqlStr = "SELECT * FROM event_media " +
+                    "WHERE event_id = ?";
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setInt(1, eventId);
+            rs = stmt.executeQuery();
+            mediaList = createMediaListFromRS(rs);
+        } catch (IOException e) {
+            System.out.println("IOException " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException " + e.getMessage());
+        } catch (PropertyVetoException e) {
+            System.out.println("PropertyVetoException " + e.getMessage());
+        } finally {
+            closeResources(rs, stmt, conn);
+        }
+        return mediaList;
+    }
+
     //UPDATE
     public boolean updateMediaDescription(int mediaId, String desc) {
         Connection conn = null;
@@ -134,7 +159,7 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
         } catch (PropertyVetoException e) {
             System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(stmt, conn);
+            closeResources(null, stmt, conn);
         }
         return affectedRows != 0;
     }
@@ -157,7 +182,7 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
         } catch (PropertyVetoException e) {
             e.printStackTrace();
         } finally {
-            closeResources(stmt, conn);
+            closeResources(null, stmt, conn);
         }
         return affectedRows != 0;
     }
@@ -193,13 +218,14 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
             EventMedia media = new EventMedia();
             media.setId(rs.getInt("id"))
                     .setEventId(rs.getInt("event_id"))
+                    .setType(rs.getString("type"))
                     .setPath(rs.getString("path"))
-                    .setType("type")
+                    .setDescription(rs.getString("description"))
                     .setUploaderId(rs.getInt("uploader_id"))
-                    .setUploadDate(rs.getTimestamp("upload_date"))
-                    .setDescription(rs.getString("description"));
+                    .setUploadDate(rs.getTimestamp("upload_date"));
             mediaList.add(media);
         }
         return mediaList;
     }
+
 }

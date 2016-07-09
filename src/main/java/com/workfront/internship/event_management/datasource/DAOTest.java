@@ -12,7 +12,6 @@ import java.util.List;
 public  class DAOTest {
     public static void main(String[] args) {
          EventDAO eventDAO = new EventDAOImpl();
-        EventInvitation invitation = eventDAO.getInvitationsByEventId(3).get(1);
         Event event = eventDAO.getEventById(3);
         List<DateRange> dates = new ArrayList<DateRange>();
         dates.add(new DateRange(event.getCreationDate(), event.getCreationDate()));

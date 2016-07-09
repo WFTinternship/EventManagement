@@ -21,8 +21,9 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
         try {
             conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "INSERT INTO user "
-                    + "(first_name, last_name, username, password, email, phone_number, avatar_path) VALUES "
-                    + "(?, ?, ?, ?, ?, ?, ? )";
+                    + "(first_name, last_name, username, password, email, phone_number, " +
+                    "avatar_path, verified, registration_date) VALUES "
+                    + "(?, ?, ?, ?, ?, ?, ?, ?, ? )";
             stmt = conn.prepareStatement(sqlStr);
             stmt.setString(1, user.getFirstName());
             stmt.setString(2, user.getLastName());
@@ -31,6 +32,8 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             stmt.setString(5, user.getEmail());
             stmt.setString(6, user.getPhoneNumber());
             stmt.setString(7, user.getAvatarPath());
+            stmt.setBoolean(8, user.isVerified());
+            stmt.setTimestamp(9, new Timestamp(user.getRegistrationDate().getTime()));
             affectedRows = stmt.executeUpdate();
         } catch (IOException e) {
             System.out.println("IOException " + e.getMessage());
@@ -39,7 +42,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
         } catch (PropertyVetoException e) {
             System.out.println("SQLException " + e.getMessage());
         } finally {
-            closeResources(stmt, conn);
+            closeResources(null, stmt, conn);
         }
         return affectedRows != 0;
     }
@@ -87,7 +90,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
         int affectedRows = 0;
         try {
             conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "UPDATE user SET verified = ? WHERE id = ?";
+            String sqlStr = "UPDATE user SET verified = 1 WHERE id = ?";
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, userId);
             affectedRows = stmt.executeUpdate();
@@ -98,7 +101,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
         } catch (PropertyVetoException e) {
             System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(stmt, conn);
+            closeResources(null, stmt, conn);
         }
         return affectedRows != 0;
     }
@@ -128,7 +131,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
         } catch (PropertyVetoException e) {
             System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(stmt, conn);
+            closeResources(null, stmt, conn);
         }
         return affectedRows != 0;
     }
@@ -170,6 +173,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
                     .setFirstName(rs.getString("first_name"))
                     .setLastName(rs.getString("last_name"))
                     .setUsername(rs.getString("username"))
+                    .setPassword(rs.getString("password"))
                     .setEmail(rs.getString("email"))
                     .setAvatarPath(rs.getString("avatar_path"))
                     .setPhoneNumber(rs.getString("phone_number"))
@@ -187,9 +191,10 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
                     .setFirstName(rs.getString("first_name"))
                     .setLastName(rs.getString("last_name"))
                     .setUsername(rs.getString("username"))
+                    .setPassword(rs.getString("password"))
                     .setEmail(rs.getString("email"))
-                    .setAvatarPath(rs.getString("avatar_path"))
                     .setPhoneNumber(rs.getString("phone_number"))
+                    .setAvatarPath(rs.getString("avatar_path"))
                     .setVerified(rs.getBoolean("verified"))
                     .setRegistrationDate(rs.getTimestamp("registration_date"));
             usersList.add(user);

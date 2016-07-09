@@ -16,7 +16,6 @@ import java.util.List;
  */
 public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDAO {
 
-    //CREATE
     public boolean insertCategory(EventCategory category) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -37,12 +36,11 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
         } catch (PropertyVetoException e) {
             System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(stmt, conn);
+            closeResources(null, stmt, conn);
         }
         return affectedRows != 0;
     }
 
-    //READ
     public List<EventCategory> getAllCategories() {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -73,8 +71,10 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
         EventCategory category = null;
         try {
             conn = DataSourceManager.getInstance().getConnection();
-            String query = "SELECT * FROM event_category";
+            String query = "SELECT * FROM event_category "
+                    + "where id = ?";
             stmt = conn.prepareStatement(query);
+            stmt.setInt(1, id);
             rs = stmt.executeQuery();
             category = createEventCategoryFromRS(rs);
         } catch (IOException e) {
@@ -89,7 +89,6 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
         return category;
     }
 
-    //UPDATE
     public boolean updateCategory(EventCategory category) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -109,12 +108,11 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
         } catch (PropertyVetoException e) {
             System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(stmt, conn);
+            closeResources(null, stmt, conn);
         }
         return affectedRows != 0;
     }
 
-    //DELETE
     public boolean deleteCategory(int categoryId) {
         return deleteEntryById("event_category", categoryId);
     }
@@ -125,7 +123,7 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
         while (rs.next()) {
             category.setId(rs.getInt("id"))
                     .setTitle(rs.getString("title"))
-                    .setDescription("description")
+                    .setDescription(rs.getString("description"))
                     .setCreationDate(rs.getTimestamp("creation_date"));
         }
         return category;
@@ -137,8 +135,9 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
             EventCategory category = new EventCategory();
             category.setId(rs.getInt("id"))
                     .setTitle(rs.getString("title"))
-                    .setDescription("description")
+                    .setDescription(rs.getString("description"))
                     .setCreationDate(rs.getTimestamp("creation_date"));
+            categoryList.add(category);
         }
         return categoryList;
     }
