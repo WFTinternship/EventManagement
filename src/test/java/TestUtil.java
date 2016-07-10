@@ -10,14 +10,13 @@ public class TestUtil {
 
     public static User setUpTestUser() {
         User testUser = new User();
-        testUser.setId(111111)
-                .setFirstName("TestFirstName")
-                .setLastName("TestLastName")
-                .setUsername("TestUsername")
-                .setPassword("TestPassword")
-                .setEmail("test@test.com")
+        testUser.setFirstName("Test FirstName")
+                .setLastName("Test LastName")
+                .setUsername("Test Username")
+                .setPassword("Test Password")
+                .setEmail("test-test@test.com")
                 .setPhoneNumber("1111111")
-                .setAvatarPath("/users/test_user.jpg");
+                .setAvatarPath("/users/test_user_av.jpg");
         return testUser;
     }
 
@@ -29,7 +28,7 @@ public class TestUtil {
         return invitation;
     }
 
-    public static List<EventInvitation> setUpTestInvitationsList(User testUser1, User testUser2,Event testEvent) {
+    public static List<EventInvitation> setUpTestInvitationsList(User testUser1, User testUser2, Event testEvent) {
         List<EventInvitation> invitationsList = new ArrayList<EventInvitation>();
         EventInvitation invitation1 = new EventInvitation();
         EventInvitation invitation2 = new EventInvitation();
@@ -43,16 +42,14 @@ public class TestUtil {
 
     public static EventCategory setUpTestCategory() {
         EventCategory category = new EventCategory();
-        category.setId(111111)
-                .setTitle("TestCategory")
-                .setDescription("TestDescription");
+        category.setTitle("Test Category")
+                .setDescription("Test Description");
         return category;
     }
 
     public static Event setUpTestEvent(EventCategory category) {
         Event testEvent = new Event();
-        testEvent.setId(111111)
-                .setTitle("Test title")
+        testEvent.setTitle("Test title")
                 .setShortDesc("Test short description")
                 .setFullDesc("Test full description")
                 .setLocation("Test location")
@@ -66,8 +63,7 @@ public class TestUtil {
 
     public static EventMedia setUpTestMedia(User testUser, Event testEvent) {
         EventMedia media = new EventMedia();
-        media.setId(11111)
-                .setEventId(testEvent.getId())
+        media.setEventId(testEvent.getId())
                 .setUploaderId(testUser.getId())
                 .setPath("/event/111/test_path.jpg")
                 .setType("Image")

@@ -28,6 +28,7 @@ public class TestUserDAOImpl {
         try {
             conn = DataSourceManager.getInstance().getConnection();
             insertTestUser();
+            testUser.setId(getTestUser().getId());
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -54,8 +55,7 @@ public class TestUserDAOImpl {
     public void testInsertUser() throws SQLException {
         deleteTestUser();
         userDAO.insertUser(testUser);
-        User actualUser = getTestUserFromDB();
-        testUser.setId(actualUser.getId()); // set correct userid (AI field)
+        User actualUser = getTestUser();
         assertEquals(actualUser.getFirstName(), testUser.getFirstName());
         assertEquals(actualUser.getLastName(), testUser.getLastName());
         assertEquals(actualUser.getUsername(), testUser.getUsername());
@@ -134,18 +134,17 @@ public class TestUserDAOImpl {
     @Test
     public void testSetVerified() throws SQLException {
         userDAO.setVerified(testUser.getId());
-        User actualUser = getTestUserFromDB();
+        User actualUser = getTestUser();
         assertTrue(actualUser.isVerified());
     }
 
     @Test
     public void testUpdateUser() throws SQLException {
-        User newUser = testUser;
+        User newUser = new User(testUser);
         newUser.setEmail("new_email@test.com");
         newUser.setPassword("nes_password");
-
         userDAO.updateUser(newUser);
-        User actualUser = getTestUserFromDB();
+        User actualUser = getTestUser();
         assertEquals(actualUser.getId(), newUser.getId());
         assertEquals(actualUser.getFirstName(), newUser.getFirstName());
         assertEquals(actualUser.getLastName(), newUser.getLastName());
@@ -160,7 +159,7 @@ public class TestUserDAOImpl {
     @Test
     public void testDeleteUser() throws SQLException {
         userDAO.deleteUser(testUser.getId());
-        assertNull(getTestUserFromDB());
+        assertNull(getTestUser());
     }
 
     //helper methods
@@ -191,31 +190,29 @@ public class TestUserDAOImpl {
     }
 
     private void deleteTestUser() throws SQLException {
-        String sqlStr = "DELETE FROM user WHERE id = ?";
+        String sqlStr = "DELETE FROM user WHERE username = ?";
         PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
-        preparedStatement.setInt(1, testUser.getId());
+        preparedStatement.setString(1, testUser.getUsername());
         preparedStatement.executeUpdate();
     }
 
     private void insertTestUser() throws SQLException {
         String sqlStr = "INSERT INTO user "
-                + "(id, first_name, last_name, username, password, "
-                + "email, phone_number, avatar_path, verified) VALUES "
-                + "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "(first_name, last_name, username, password, "
+                + "email, phone_number, avatar_path) VALUES "
+                + "(?, ?, ?, ?, ?, ?, ?)";
         stmt = conn.prepareStatement(sqlStr);
-        stmt.setInt(1, testUser.getId());
-        stmt.setString(2, testUser.getFirstName());
-        stmt.setString(3, testUser.getLastName());
-        stmt.setString(4, testUser.getUsername());
-        stmt.setString(5, testUser.getPassword());
-        stmt.setString(6, testUser.getEmail());
-        stmt.setString(7, testUser.getPhoneNumber());
-        stmt.setString(8, testUser.getAvatarPath());
-        stmt.setBoolean(9, testUser.isVerified());
+        stmt.setString(1, testUser.getFirstName());
+        stmt.setString(2, testUser.getLastName());
+        stmt.setString(3, testUser.getUsername());
+        stmt.setString(4, testUser.getPassword());
+        stmt.setString(5, testUser.getEmail());
+        stmt.setString(6, testUser.getPhoneNumber());
+        stmt.setString(7, testUser.getAvatarPath());
         stmt.executeUpdate();
     }
 
-    private User getTestUserFromDB() throws SQLException {
+    private User getTestUser() throws SQLException {
         String sqlStr = "SELECT * FROM user WHERE username  = ?";
         stmt = conn.prepareStatement(sqlStr);
         stmt.setString(1, testUser.getUsername());

@@ -12,6 +12,17 @@ public class EventCategory {
     private String description;
     private Date creationDate;
 
+    public EventCategory(EventCategory category) {
+        this.id = category.id;
+        this.title = category.title;
+        this.description = category.description;
+        this.creationDate = category.creationDate;
+    }
+
+    public EventCategory() {
+
+    }
+
     public int getId() {
         return id;
     }
