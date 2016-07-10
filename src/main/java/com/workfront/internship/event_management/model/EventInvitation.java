@@ -2,12 +2,23 @@ package com.workfront.internship.event_management.model;
 
 public class EventInvitation{
 
-    private User user;
     private int eventId;
+    private User user;
     private String userRole;
     private String userResponse;
     private int attendeesCount;
     private boolean realParticipation;
+
+    public EventInvitation(EventInvitation invitation) {
+        this.user = invitation.user;
+        this.eventId = invitation.eventId;
+        this.userRole = invitation.userRole;
+        this.userResponse = invitation.userResponse;
+        this.attendeesCount = invitation.attendeesCount;
+        this.realParticipation = invitation.realParticipation;
+    }
+
+    public EventInvitation() { }
 
     public int getEventId() {
         return eventId;

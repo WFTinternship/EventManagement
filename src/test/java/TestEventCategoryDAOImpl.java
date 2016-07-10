@@ -20,17 +20,15 @@ import static org.junit.Assert.*;
  */
 public class TestEventCategoryDAOImpl {
 
-    EventCategory testCategory = null;
-    Connection conn = null;
-    PreparedStatement stmt = null;
-    ResultSet rs = null;
+    private EventCategoryDAO categoryDAO =  new EventCategoryDAOImpl();
+    private EventCategory testCategory;
+    private Connection conn;
+    private PreparedStatement stmt;
+    private ResultSet rs;
 
     @Before
     public void setUp() {
-        testCategory = new EventCategory();
-        testCategory.setId(111111)
-                .setTitle("TestCategory")
-                .setDescription("TestDescription");
+        testCategory = TestUtil.setUpTestCategory();
         try {
             conn = DataSourceManager.getInstance().getConnection();
             insertTestCategory();
@@ -48,6 +46,7 @@ public class TestEventCategoryDAOImpl {
         try {
             deleteTestCategory();
             testCategory = null;
+            categoryDAO = null;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -58,7 +57,6 @@ public class TestEventCategoryDAOImpl {
     @Test
     public void testInsertCategory() throws SQLException {
         deleteTestCategory();
-        EventCategoryDAO categoryDAO = new EventCategoryDAOImpl();
         categoryDAO.insertCategory(testCategory);
         EventCategory actualCategory = getTestCategoryFromDB();
         testCategory.setId(actualCategory.getId()); // set correct cateId (AI field)
@@ -70,7 +68,6 @@ public class TestEventCategoryDAOImpl {
     @Test
     public void testGetAllCategories() throws SQLException {
         List<EventCategory> expectedCategories = getAllCategoriesFromDB();
-        EventCategoryDAO categoryDAO = new EventCategoryDAOImpl();
         List<EventCategory> actualCategories = categoryDAO.getAllCategories();
         assertEquals(actualCategories.size(), expectedCategories.size());
         for (int i = 0; i < actualCategories.size(); i++) {
@@ -83,7 +80,6 @@ public class TestEventCategoryDAOImpl {
 
     @Test
     public void testGetCategoryById() {
-        EventCategoryDAO categoryDAO = new EventCategoryDAOImpl();
         EventCategory actualCategory = categoryDAO.getCategoryById(testCategory.getId());
         assertEquals(actualCategory.getId(), testCategory.getId());
         assertEquals(actualCategory.getTitle(), testCategory.getTitle());
@@ -97,7 +93,6 @@ public class TestEventCategoryDAOImpl {
         newCategory.setTitle("New test title");
         newCategory.setDescription("New test description");
 
-        EventCategoryDAO categoryDAO = new EventCategoryDAOImpl();
         categoryDAO.updateCategory(newCategory);
 
         EventCategory actualCategory = getTestCategoryFromDB();
@@ -109,7 +104,6 @@ public class TestEventCategoryDAOImpl {
 
     @Test
     public void testDeleteCategory() throws SQLException {
-        EventCategoryDAO categoryDAO = new EventCategoryDAOImpl();
         categoryDAO.deleteCategory(testCategory.getId());
         assertNull(getTestCategoryFromDB());
     }
@@ -162,7 +156,7 @@ public class TestEventCategoryDAOImpl {
     private EventCategory getTestCategoryFromDB() throws SQLException {
         String sqlStr = "SELECT * FROM event_category WHERE title  = ?";
         stmt = conn.prepareStatement(sqlStr);
-        stmt.setObject(1, testCategory.getTitle());
+        stmt.setString(1, testCategory.getTitle());
         rs = stmt.executeQuery();
         EventCategory category = null;
         while (rs.next()) {

@@ -21,6 +21,19 @@ public class User {
     public User() {
     }
 
+    public User(User user) {
+        this.id = user.id;
+        this.firstName = user.firstName;
+        this.lastName = user.lastName;
+        this.username = user.username;
+        this.password = user.password;
+        this.email = user.email;
+        this.phoneNumber = user.phoneNumber;
+        this.avatarPath = user.avatarPath;
+        this.verified = user.verified;
+        this.registrationDate = user.registrationDate;
+    }
+
     public int getId() {
         return id;
     }

@@ -23,15 +23,14 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
         try {
             conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "INSERT INTO event_media "
-                    + "(event_id, path, type, description, uploader_id, upload_date) "
-                    + "VALUES (?, ?, ?, ?, ?, ?)";
+                    + "(event_id, path, type, description, uploader_id) "
+                    + "VALUES (?, ?, ?, ?, ?)";
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, media.getEventId());
             stmt.setString(2, media.getPath());
             stmt.setString(3, media.getType());
             stmt.setString(4, media.getDescription());
             stmt.setInt(5, media.getUploaderId());
-            stmt.setTimestamp(6, new Timestamp(media.getUploadDate().getTime()));
             affectedRows = stmt.executeUpdate();
         } catch (IOException e) {
             System.out.println("IOException " + e.getMessage());
@@ -52,15 +51,15 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
         try {
             conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "INSERT INTO event_media "
-                    + "(path, type, description, event_id, uploader_id) VALUES "
+                    + "(event_id, path, type, description, uploader_id) VALUES "
                     + "(?, ?, ?, ?, ?)";
             stmt = conn.prepareStatement(sqlStr);
             conn.setAutoCommit(false);
             for(EventMedia media: mediaList) {
-                stmt.setString(1, media.getPath());
-                stmt.setString(2, media.getType());
-                stmt.setString(3, media.getDescription());
-                stmt.setInt(4, media.getEventId());
+                stmt.setInt(1, media.getId());
+                stmt.setString(2, media.getPath());
+                stmt.setString(3, media.getType());
+                stmt.setString(4, media.getDescription());
                 stmt.setInt(5, media.getUploaderId());
                 stmt.addBatch();
             }

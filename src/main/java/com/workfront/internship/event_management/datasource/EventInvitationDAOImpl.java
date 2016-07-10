@@ -28,8 +28,8 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
                     + "(?, ?, ? )";
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, invitation.getEventId());
-            stmt.setInt(1, invitation.getUser().getId());
-            stmt.setString(1, invitation.getUserRole());
+            stmt.setInt(2, invitation.getUser().getId());
+            stmt.setString(3, invitation.getUserRole());
             affectedRows = stmt.executeUpdate();
         } catch (IOException e) {
             System.out.println("IOException " + e.getMessage());
@@ -101,20 +101,21 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
         return invitationsList;
     }
 
-    public boolean updateInvitation(EventInvitation ivitation) {
+    public boolean updateInvitation(EventInvitation invitation) {
         Connection conn = null;
         PreparedStatement stmt = null;
         int affectedRows = 0;
         try {
             conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "UPDATE event_invitation SET user_response = ?, attendees_count = ?, " +
-                    "real_participation = ? WHERE event_id = ? && user_id = ?";
+            String sqlStr = "UPDATE event_invitation SET user_role = ? , user_response = ?, attendees_count = ?, " +
+                    "real_participation = ? WHERE event_id = ? AND user_id = ?";
             stmt = conn.prepareStatement(sqlStr);
-            stmt.setString(1, ivitation.getUserResponse());
-            stmt.setInt(2, ivitation.getAttendeesCount());
-            stmt.setBoolean(3, ivitation.isRealParticipation());
-            stmt.setInt(4, ivitation.getEventId());
-            stmt.setInt(5, ivitation.getUser().getId());
+            stmt.setString(1, invitation.getUserRole());
+            stmt.setString(2, invitation.getUserResponse());
+            stmt.setInt(3, invitation.getAttendeesCount());
+            stmt.setBoolean(4, invitation.isRealParticipation());
+            stmt.setInt(5, invitation.getEventId());
+            stmt.setInt(6, invitation.getUser().getId());
             affectedRows = stmt.executeUpdate();
         } catch (IOException e) {
             System.out.println("IOException " + e.getMessage());
@@ -134,10 +135,10 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
         int affectedRows = 0;
         try {
             conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "DELETE FROM event_invitation WHERE user_id = ? && event_id = ?";
+            String sqlStr = "DELETE FROM event_invitation WHERE event_id = ? AND  user_id = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
-            preparedStatement.setInt(1, userId);
             preparedStatement.setInt(1, eventId);
+            preparedStatement.setInt(2, userId);
             affectedRows = preparedStatement.executeUpdate();
         } catch (IOException e) {
             System.out.println("IOException " + e.getMessage());
