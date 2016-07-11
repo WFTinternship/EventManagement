@@ -44,7 +44,7 @@ public class TestEventInvitationDAOImpl {
     public void setUp() {
         testUser = TestHelper.setUpTestUser();
         testCategory = TestHelper.setUpTestCategory();
-        testEvent = TestHelper.setUpTestEvent(testCategory);
+        testEvent = TestHelper.setUpTestEvent();
         testInvitation = TestHelper.setUpTestInvitation(testUser, testEvent);
         try {
             conn = DataSourceManager.getInstance().getConnection();
@@ -137,7 +137,7 @@ public class TestEventInvitationDAOImpl {
         testUser2.setId(getTestUserId(testUser2.getUsername()));
 
         List<EventInvitation> testInvitationsList = TestHelper.setUpTestInvitationsList(testUser1, testUser2, testEvent);
-        invitationDAO.insertInvitationsList(testInvitationsList) ;
+        invitationDAO.insertInvitations(testInvitationsList) ;
 
         List<EventInvitation> actualInvitationsList = getTestInvitations();
         assertEquals(actualInvitationsList.size(), testInvitationsList.size());

@@ -10,27 +10,25 @@ import java.util.List;
 public interface EventDAO {
 
     //CREATE
-    public boolean createEvent(Event event, int organizerId);
+    boolean insertEvent(Event event, int organizerId);
 
     //READ
-    public List<Event> getAllEvents();
+    List<Event> getAllEvents(); //only main info
 
-    public Event getEventById(int eventId);
+    Event getEventById(int eventId);
 
-    public List<Event> getEventsByCategory(int categoryId);
+    List<Event> getEventsByCategory(int categoryId);
 
-    public List<Event> getEventsByOrganizerId(int organizerId);
+    List<Event> getEventsByUserId(String userRole, int userId);
 
-    public List<Event> getInvitedEventsByUserId(int userId);
+     List<Event> getParticipatedEventsByUserId(int userId);
 
-    public List<Event> getParticipatedEventsByUserId(int partId);
-
-    public List<Event> getAcceptedEventsByUserId(int partId);
+     List<Event> getAcceptedEventsByUserId(int userId);
 
     //UPDATE
-    public boolean updateEvent(Event event); //- optional lists
+     boolean updateEvent(Event event); //- ???
 
     //DELETE
 
-    public boolean deleteEvent(int eventId);
+     boolean deleteEvent(int eventId);
 }

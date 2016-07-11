@@ -42,15 +42,15 @@ public class TestEventMediaDAOImpl {
     public void setUp() {
         testUser = TestHelper.setUpTestUser();
         testCategory = TestHelper.setUpTestCategory();
-        testEvent = TestHelper.setUpTestEvent(testCategory);
-        testMedia = TestHelper.setUpTestMedia(testUser, testEvent);
+        testEvent = TestHelper.setUpTestEvent();
+        testMedia = TestHelper.setUpTestMedia();
         try {
             conn = DataSourceManager.getInstance().getConnection();
             conn.setAutoCommit(false);
-            insertTestUser();
-            insertTestCategory();
-            insertTestEvent();
-            insertTestMedia();
+            testUser.setId(TestHelper.insertTestUser());
+            testCategory.setId(TestHelper.insertTestCategory());
+            testEvent.setId(TestHelper.insertTestEvent());
+            testMedia.setId(TestHelper.insertTestMedia());
             conn.commit();
         } catch (SQLException e) {
             try {
@@ -72,28 +72,22 @@ public class TestEventMediaDAOImpl {
         }
     }
 
-
     @After
-    public void tearDown() {
-        try {
-            deleteTestMedia();
-            deleteTestEvent();
-            deleteTestUser();
-            deleteTestCategory();
+    public void tearDown(){
+            TestHelper.deleteTestMedia(testEvent.getId());
+            TestHelper.deleteTestEvent(testEvent.getId());
+            TestHelper.deleteTestUser(testUser.getId());
+            TestHelper.deleteTestCategory(testCategory.getId());
             testUser = null;
             testCategory = null;
             testEvent = null;
             testMedia = null;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
             TestHelper.closeResources(rs, stmt, conn);
-        }
     }
 
     @Test
     public void testInsertMedia() throws SQLException {
-        deleteTestMedia();
+        TestHelper.deleteTestMedia(testMedia.getId());
         mediaDAO.insertMedia(testMedia);
         List<EventMedia> mediaList = getTestMedia();
         assertEquals(mediaList.size(), 1);
@@ -156,94 +150,6 @@ public class TestEventMediaDAOImpl {
     }
 
     //helper methods
-    private void insertTestUser() throws SQLException {
-        String sqlStr = "INSERT INTO user "
-                + "(first_name, last_name, username, password, "
-                + "email, phone_number, avatar_path) VALUES "
-                + "(?, ?, ?, ?, ?, ?, ?)";
-        stmt = conn.prepareStatement(sqlStr);
-        stmt.setString(1, testUser.getFirstName());
-        stmt.setString(2, testUser.getLastName());
-        stmt.setString(3, testUser.getUsername());
-        stmt.setString(4, testUser.getPassword());
-        stmt.setString(5, testUser.getEmail());
-        stmt.setString(6, testUser.getPhoneNumber());
-        stmt.setString(7, testUser.getAvatarPath());
-        stmt.executeUpdate();
-    }
-
-    private void insertTestEvent() throws SQLException {
-        String insertEvent = "INSERT INTO event "
-                + "(title, short_desc, full_desc, location, lat, lng, file_path, image_path, "
-                + "category_id, public_access, guests_allowed) VALUES "
-                + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)";
-        stmt = conn.prepareStatement(insertEvent);
-        stmt.setString(1, testEvent.getTitle());
-        stmt.setString(2, testEvent.getShortDesc());
-        stmt.setString(3, testEvent.getFullDesc());
-        stmt.setString(4, testEvent.getLocation());
-        stmt.setFloat(5, testEvent.getLat());
-        stmt.setFloat(6, testEvent.getLng());
-        stmt.setString(7, testEvent.getFilePath());
-        stmt.setString(8, testEvent.getImagePath());
-        stmt.setInt(9, testEvent.getCategory().getId());
-        stmt.setBoolean(10, testEvent.isPublicAccessed());
-        stmt.setBoolean(11, testEvent.isGuestsAllowed());
-        stmt.executeUpdate();
-    }
-
-    private void insertTestCategory() throws SQLException {
-        String sqlStr = "INSERT INTO event_category "
-                + "(title, description) "
-                + "VALUES (?, ?)";
-        stmt = conn.prepareStatement(sqlStr);
-        stmt.setString(1, testCategory.getTitle());
-        stmt.setString(2, testCategory.getDescription());
-        stmt.executeUpdate();
-    }
-
-    private void insertTestMedia() throws SQLException {
-        String sqlStr = "INSERT INTO event_media "
-                + "(event_id, path, type, description, uploader_id) "
-                + "VALUES (?, ?, ?, ?, ?)";
-        stmt = conn.prepareStatement(sqlStr);
-        stmt.setInt(1, testMedia.getEventId());
-        stmt.setString(2, testMedia.getPath());
-        stmt.setString(3, testMedia.getType());
-        stmt.setString(4, testMedia.getDescription());
-        stmt.setInt(5, testMedia.getUploaderId());
-    }
-
-    private void deleteTestUser() throws SQLException {
-        String sqlStr = "DELETE FROM user WHERE id = ?";
-        PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
-        preparedStatement.setInt(1, testUser.getId());
-        preparedStatement.executeUpdate();
-    }
-
-    private void deleteTestCategory() throws SQLException {
-        String sqlStr = "DELETE FROM event_category WHERE id = ?";
-        stmt = conn.prepareStatement(sqlStr);
-        stmt.setInt(1, testCategory.getId());
-        stmt.executeUpdate();
-    }
-
-    private void deleteTestEvent() throws SQLException {
-        String sqlStr = "DELETE FROM event WHERE id = ?";
-        stmt = conn.prepareStatement(sqlStr);
-        stmt.setInt(1, testEvent.getId());
-        stmt.executeUpdate();
-    }
-
-    private void deleteTestMedia() throws SQLException {
-        String sqlStr = "DELETE FROM event_media WHERE event_id = ?";
-        stmt = conn.prepareStatement(sqlStr);
-        stmt.setInt(1, testEvent.getId());
-        stmt.executeUpdate();
-    }
-
-
-
     private List<EventMedia> getTestMedia() throws SQLException {
         String sqlStr = "SELECT * FROM event_media where event_id = ?";
         stmt = conn.prepareStatement(sqlStr);

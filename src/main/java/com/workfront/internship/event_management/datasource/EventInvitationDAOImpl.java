@@ -19,58 +19,98 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
 
     public boolean insertInvitation(EventInvitation invitation) {
         Connection conn = null;
+        boolean success = false;
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+            success = insertInvitation(invitation, conn);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources(null, null, conn);
+        }
+        return success;
+    }
+
+    public boolean insertInvitation(EventInvitation invitation, Connection conn) {
         PreparedStatement stmt = null;
         int affectedRows = 0;
         try {
-            conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "INSERT INTO event_invitation "
-                    + "(event_id, user_id, user_role) VALUES "
-                    + "(?, ?, ? )";
+                    + "(event_id, user_id, user_role, user_response, attendees_count, participated) VALUES "
+                    + "(?, ?, ?, ?, ?, ? )";
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, invitation.getEventId());
             stmt.setInt(2, invitation.getUser().getId());
             stmt.setString(3, invitation.getUserRole());
+            stmt.setString(4, invitation.getUserResponse());
+            stmt.setInt(5, invitation.getAttendeesCount());
+            stmt.setBoolean(6, invitation.isParticipated());
             affectedRows = stmt.executeUpdate();
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            System.out.println("PropertyVetoException " + e.getMessage());
+            e.printStackTrace();
         } finally {
-            closeResources(null, stmt, conn);
-        }
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }        }
         return affectedRows != 0;
     }
 
-    public boolean insertInvitationsList(List<EventInvitation> invitations) {
+    public boolean insertInvitations(List<EventInvitation> invitations) {
         Connection conn = null;
+        boolean success = false;
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+            success = insertInvitations(invitations, conn);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources(null, null, conn);
+        }
+        return success;    }
+
+    public boolean insertInvitations(List<EventInvitation> invitations, Connection conn) {
         PreparedStatement stmt = null;
         int affectedRows = 0;
         try {
-            conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "INSERT INTO event_invitation "
-                    + "(event_id, user_id, user_role) VALUES "
-                    + "(?, ?, ? )";
+                    + "(event_id, user_id, user_role, user_response, attendees_count, participated) VALUES "
+                    + "(?, ?, ?, ?, ?, ? )";
             stmt = conn.prepareStatement(sqlStr);
-            conn.setAutoCommit(false);
+          //  conn.setAutoCommit(false);
+            stmt = conn.prepareStatement(sqlStr);
             for (EventInvitation invitation : invitations) {
                 stmt.setInt(1, invitation.getEventId());
                 stmt.setInt(2, invitation.getUser().getId());
                 stmt.setString(3, invitation.getUserRole());
+                stmt.setString(4, invitation.getUserResponse());
+                stmt.setInt(5, invitation.getAttendeesCount());
+                stmt.setBoolean(6, invitation.isParticipated());
                 stmt.addBatch();
             }
             affectedRows = stmt.executeBatch().length;
-            conn.commit();
-            conn.setAutoCommit(true);
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
+          //  conn.commit();
         } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            System.out.println("PropertyVetoException " + e.getMessage());
+            e.printStackTrace();
         } finally {
-            closeResources(null, stmt, conn);
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return affectedRows != 0;
     }
@@ -88,7 +128,7 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, eventId);
             rs = stmt.executeQuery();
-            invitationsList = createInvitationsListFromRS(rs);
+            invitationsList = createInvitationsFromRS(rs);
         } catch (IOException e) {
             System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
@@ -153,7 +193,7 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
     }
 
     //helper methods
-    private List<EventInvitation> createInvitationsListFromRS(ResultSet rs) throws SQLException {
+    private List<EventInvitation> createInvitationsFromRS(ResultSet rs) throws SQLException {
         List<EventInvitation> invitationsList = new ArrayList<EventInvitation>();
         while (rs.next()) {
             EventInvitation invitation = new EventInvitation();

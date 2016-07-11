@@ -8,13 +8,13 @@ import java.util.List;
  * Created by hermine on 7/2/16.
  */
 public interface EventMediaDAO {
-    public boolean insertMedia(EventMedia media);
-    public boolean insertMediaList(List<EventMedia> mediaList);
-    public List<EventMedia> getAllMedia();
-    public List<EventMedia> getMediaByEvent(int eventId);
-    public List<EventMedia> getMediaByType(String type);
-    public List<EventMedia> getMediaByUploader(int uploaderId);
-    public List<EventMedia> getMediaByEventId(int eventId);
-    public boolean updateMediaDescription(int mediaId, String desc);
-    public boolean deleteMedia(int mediaId);
+     boolean insertMedia(EventMedia media);
+     boolean insertMediaList(List<EventMedia> mediaList);
+     List<EventMedia> getAllMedia();
+     List<EventMedia> getMediaByEvent(int eventId);
+     List<EventMedia> getMediaByType(String type);
+     List<EventMedia> getMediaByUploader(int uploaderId);
+     List<EventMedia> getMediaByEventId(int eventId);
+     boolean updateMediaDescription(int mediaId, String desc);
+     boolean deleteMedia(int mediaId);
 }

@@ -2,6 +2,7 @@ package com.workfront.internship.event_management.datasource;
 
 import com.workfront.internship.event_management.model.EventRecurrence;
 
+import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -9,8 +10,11 @@ import java.util.List;
  */
 public interface EventRecurrenceDAO {
 
-    public boolean insertEventRecurrence(EventRecurrence recurrence);
-    public List<EventRecurrence> getEventRecurrencesByEventId(int eventId);
-    public boolean updateEventRecurrence(EventRecurrence recurrence);
-    public boolean deleteEventRecurrece(int id);
+     boolean insertEventRecurrences(List<EventRecurrence> recurrences, Connection conn);
+     boolean insertEventRecurrences(List<EventRecurrence> recurrences);
+     boolean insertEventRecurrence(EventRecurrence recurrence, Connection conn);
+     boolean insertEventRecurrence(EventRecurrence recurrence);
+     List<EventRecurrence> getEventRecurrencesByEventId(int eventId);
+     boolean updateEventRecurrence(EventRecurrence recurrence); //--------
+     boolean deleteEventRecurrece(int id);
 }

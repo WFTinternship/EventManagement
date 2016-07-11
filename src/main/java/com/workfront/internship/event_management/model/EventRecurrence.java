@@ -9,12 +9,21 @@ import java.util.Date;
  * Created by hermine on 7/10/16.
  */
 public class EventRecurrence {
-
+    private int id;
     private RecurrenceType recurrenceType;
     private int eventId;
     private int repeatInterval;
     private String repeatOn;
     private Date repeatEndDate;
+
+    public int getId() {
+        return id;
+    }
+
+    public EventRecurrence setId(int id) {
+        this.id = id;
+        return this;
+    }
 
     public RecurrenceType getRecurrenceType() {
         return recurrenceType;

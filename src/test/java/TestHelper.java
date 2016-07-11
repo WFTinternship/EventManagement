@@ -39,6 +39,7 @@ public class TestHelper {
         }
     }
 
+    //test object initializers
     public static User setUpTestUser() {
         User testUser = new User();
         java.util.Date currentDate = new java.util.Date();
@@ -80,7 +81,7 @@ public class TestHelper {
         return category;
     }
 
-    public static Event setUpTestEvent(EventCategory category) {
+    public static Event setUpTestEvent() {
         Event testEvent = new Event();
         testEvent.setTitle("Test title")
                 .setShortDesc("Test short description")
@@ -90,14 +91,14 @@ public class TestHelper {
                 .setLng(11111.1f)
                 .setFilePath("/events/test_event.doc")
                 .setImagePath("events/test_event.jpg")
-                .setCategory(category);
+                .setCategory(setUpTestCategory());
         return testEvent;
     }
 
-    public static EventMedia setUpTestMedia(User testUser, Event testEvent) {
+    public static EventMedia setUpTestMedia() {
         EventMedia media = new EventMedia();
-        media.setEventId(testEvent.getId())
-                .setUploaderId(testUser.getId())
+        media.setEventId(setUpTestEvent().getId())
+                .setUploaderId(setUpTestUser().getId())
                 .setPath("/event/111/test_path.jpg")
                 .setType("Image")
                 .setDescription("Test description");
@@ -110,6 +111,7 @@ public class TestHelper {
         return recType;
     }
 
+    //common methods
     public static int insertTestCategory() {
         EventCategory category = setUpTestCategory();
         Connection conn = null;
@@ -267,4 +269,114 @@ public class TestHelper {
             closeResources(null, stmt, conn);
         }
     }
+
+    public static int insertTestEvent(){
+        Event testEvent = setUpTestEvent();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        int id = 0;
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+            String insertEvent = "INSERT INTO event "
+                + "(title, short_desc, full_desc, location, lat, lng, file_path, image_path, "
+                + "category_id, public_access, guests_allowed) VALUES "
+                + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)";
+        stmt = conn.prepareStatement(insertEvent);
+        stmt.setString(1, testEvent.getTitle());
+        stmt.setString(2, testEvent.getShortDesc());
+        stmt.setString(3, testEvent.getFullDesc());
+        stmt.setString(4, testEvent.getLocation());
+        stmt.setFloat(5, testEvent.getLat());
+        stmt.setFloat(6, testEvent.getLng());
+        stmt.setString(7, testEvent.getFilePath());
+        stmt.setString(8, testEvent.getImagePath());
+        stmt.setInt(9, testEvent.getCategory().getId());
+        stmt.setBoolean(10, testEvent.isPublicAccessed());
+        stmt.setBoolean(11, testEvent.isGuestsAllowed());
+        stmt.executeUpdate();
+            stmt = conn.prepareStatement("SELECT LAST_INSERT_ID() as id");
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                id = rs.getInt("id");
+            }
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources(null, stmt, conn);
+        }
+        return id;
+    }
+
+    public static int insertTestMedia(){
+        EventMedia testMedia = setUpTestMedia();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        int id = 0;
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+        String sqlStr = "INSERT INTO event_media "
+                + "(event_id, path, type, description, uploader_id) "
+                + "VALUES (?, ?, ?, ?, ?)";
+        stmt = conn.prepareStatement(sqlStr);
+        stmt.setInt(1, testMedia.getEventId());
+        stmt.setString(2, testMedia.getPath());
+        stmt.setString(3, testMedia.getType());
+        stmt.setString(4, testMedia.getDescription());
+        stmt.setInt(5, testMedia.getUploaderId());
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources(null, stmt, conn);
+        }
+        return id;
+    }
+
+    public static  void deleteTestEvent(int eventId) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+            String sqlStr = "DELETE FROM event WHERE id = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
+            preparedStatement.setInt(1, eventId);
+            preparedStatement.executeUpdate();
+        } catch (IOException e) {
+            System.out.println("IOException " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException " + e.getMessage());
+        } catch (PropertyVetoException e) {
+            System.out.println("PropertyVetoException " + e.getMessage());
+        } finally {
+            closeResources(null, stmt, conn);
+        }
+    }
+
+    public static void deleteTestMedia(int mediaId) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+            String sqlStr = "DELETE FROM event_media WHERE id = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
+            preparedStatement.setInt(1, mediaId);
+            preparedStatement.executeUpdate();
+        } catch (IOException e) {
+            System.out.println("IOException " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException " + e.getMessage());
+        } catch (PropertyVetoException e) {
+            System.out.println("PropertyVetoException " + e.getMessage());
+        } finally {
+            closeResources(null, stmt, conn);
+        }
+    }
+
 }
