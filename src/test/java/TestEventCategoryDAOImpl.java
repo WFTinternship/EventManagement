@@ -1,7 +1,10 @@
-import com.workfront.internship.event_management.datasource.*;
+import com.workfront.internship.event_management.datasource.DataSourceManager;
+import com.workfront.internship.event_management.datasource.EventCategoryDAO;
+import com.workfront.internship.event_management.datasource.EventCategoryDAOImpl;
 import com.workfront.internship.event_management.model.EventCategory;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.beans.PropertyVetoException;
@@ -17,19 +20,23 @@ import static org.junit.Assert.*;
  */
 public class TestEventCategoryDAOImpl {
 
-    private EventCategoryDAO categoryDAO =  new EventCategoryDAOImpl();
+    private static EventCategoryDAO categoryDAO;
     private EventCategory testCategory;
     private Connection conn;
     private PreparedStatement stmt;
     private ResultSet rs;
 
+    @BeforeClass
+    public static void setUpClass(){
+        categoryDAO = new EventCategoryDAOImpl();
+    }
+
     @Before
     public void setUp() {
-        testCategory = TestUtil.setUpTestCategory();
+        testCategory = TestHelper.setUpTestCategory();
+        testCategory.setId(TestHelper.insertTestCategory());
         try {
             conn = DataSourceManager.getInstance().getConnection();
-            insertTestCategory();
-            testCategory.setId(getTestCategory().getId());
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -41,25 +48,22 @@ public class TestEventCategoryDAOImpl {
 
     @After
     public void tearDown() {
-        try {
-            deleteTestCategory();
-            testCategory = null;
-            categoryDAO = null;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeResources(rs, stmt, conn);
-        }
+        TestHelper.deleteTestCategory(testCategory.getId());
+        testCategory = null;
+        TestHelper.closeResources(rs, stmt, conn);
     }
 
     @Test
     public void testInsertCategory() throws SQLException {
-        deleteTestCategory();
+        TestHelper.deleteTestCategory(testCategory.getId());
         categoryDAO.insertCategory(testCategory);
-        EventCategory actualCategory = getTestCategory();
-        assertEquals(actualCategory.getTitle(), testCategory.getTitle());
-        assertEquals(actualCategory.getDescription(), testCategory.getDescription());
-        assertNotNull(actualCategory.getCreationDate());
+        EventCategory actualCategory = getTestCategory(testCategory.getId()+1);
+        try{
+            assertEquals(actualCategory.getTitle(), testCategory.getTitle());
+            assertEquals(actualCategory.getDescription(), testCategory.getDescription());
+       } finally {
+           TestHelper.deleteTestCategory(testCategory.getId()+1);
+       }
     }
 
     @Test
@@ -81,7 +85,6 @@ public class TestEventCategoryDAOImpl {
         assertEquals(actualCategory.getId(), testCategory.getId());
         assertEquals(actualCategory.getTitle(), testCategory.getTitle());
         assertEquals(actualCategory.getDescription(), testCategory.getDescription());
-        assertNotNull(actualCategory.getCreationDate());
     }
 
     @Test
@@ -89,69 +92,23 @@ public class TestEventCategoryDAOImpl {
         EventCategory newCategory = new EventCategory(testCategory);
         newCategory.setDescription("New test description");
         categoryDAO.updateCategory(newCategory);
-        EventCategory actualCategory = getTestCategory();
+        EventCategory actualCategory = getTestCategory(testCategory.getId());
         assertEquals(actualCategory.getId(), testCategory.getId());
         assertEquals(actualCategory.getTitle(), newCategory.getTitle());
         assertEquals(actualCategory.getDescription(), newCategory.getDescription());
-        assertNotNull(actualCategory.getCreationDate());
     }
 
     @Test
     public void testDeleteCategory() throws SQLException {
         categoryDAO.deleteCategory(testCategory.getId());
-        assertNull(getTestCategory());
+        assertNull(getTestCategory(testCategory.getId()));
     }
 
     //helper methods
-    private void closeResources(ResultSet rs, Statement stmt, Connection conn) {
-        try {
-            if (rs != null) {
-                rs.close();
-            }
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        }
-
-        try {
-            if (stmt != null) {
-                stmt.close();
-            }
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        }
-
-        try {
-            if (conn != null) {
-                conn.close();
-            }
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        }
-    }
-
-
-
-    private void insertTestCategory() throws SQLException {
-        String sqlStr = "INSERT INTO event_category "
-                + "(title, description) "
-                + "VALUES (?, ?)";
+    private EventCategory getTestCategory(int id) throws SQLException {
+        String sqlStr = "SELECT * FROM event_category WHERE id  = ?";
         stmt = conn.prepareStatement(sqlStr);
-        stmt.setString(1, testCategory.getTitle());
-        stmt.setString(2, testCategory.getDescription());
-        stmt.executeUpdate();
-    }
-
-    private void deleteTestCategory() throws SQLException {
-        String sqlStr = "DELETE FROM event_category WHERE title = ?";
-        PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
-        preparedStatement.setString(1, testCategory.getTitle());
-        preparedStatement.executeUpdate();
-    }
-
-    private EventCategory getTestCategory() throws SQLException {
-        String sqlStr = "SELECT * FROM event_category WHERE title  = ?";
-        stmt = conn.prepareStatement(sqlStr);
-        stmt.setString(1, testCategory.getTitle());
+        stmt.setInt(1, id);
         rs = stmt.executeQuery();
         EventCategory category = null;
         while (rs.next()) {

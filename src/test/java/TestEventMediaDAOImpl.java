@@ -1,7 +1,13 @@
-import com.workfront.internship.event_management.datasource.*;
-import com.workfront.internship.event_management.model.*;
+import com.workfront.internship.event_management.datasource.DataSourceManager;
+import com.workfront.internship.event_management.datasource.EventMediaDAO;
+import com.workfront.internship.event_management.datasource.EventMediaDAOImpl;
+import com.workfront.internship.event_management.model.Event;
+import com.workfront.internship.event_management.model.EventCategory;
+import com.workfront.internship.event_management.model.EventMedia;
+import com.workfront.internship.event_management.model.User;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.beans.PropertyVetoException;
@@ -10,7 +16,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -18,7 +23,7 @@ import static org.junit.Assert.assertNotNull;
  * Created by hermine on 7/9/16.
  */
 public class TestEventMediaDAOImpl {
-    private EventMediaDAO mediaDAO = new EventMediaDAOImpl();
+    private static EventMediaDAO mediaDAO;
     private EventMedia testMedia;
     private List<EventMedia> testMediaList;
     private User testUser;
@@ -28,12 +33,17 @@ public class TestEventMediaDAOImpl {
     private PreparedStatement stmt;
     private ResultSet rs;
 
+    @BeforeClass
+    public static void setUpClass(){
+        mediaDAO = new EventMediaDAOImpl();
+    }
+
     @Before
     public void setUp() {
-        testUser = TestUtil.setUpTestUser();
-        testCategory = TestUtil.setUpTestCategory();
-        testEvent = TestUtil.setUpTestEvent(testCategory);
-        testMedia = TestUtil.setUpTestMedia(testUser, testEvent);
+        testUser = TestHelper.setUpTestUser();
+        testCategory = TestHelper.setUpTestCategory();
+        testEvent = TestHelper.setUpTestEvent(testCategory);
+        testMedia = TestHelper.setUpTestMedia(testUser, testEvent);
         try {
             conn = DataSourceManager.getInstance().getConnection();
             conn.setAutoCommit(false);
@@ -77,7 +87,7 @@ public class TestEventMediaDAOImpl {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            closeResources(rs, stmt, conn);
+            TestHelper.closeResources(rs, stmt, conn);
         }
     }
 
@@ -146,32 +156,6 @@ public class TestEventMediaDAOImpl {
     }
 
     //helper methods
-    private void closeResources(ResultSet rs, Statement stmt, Connection conn) {
-        try {
-            if (rs != null) {
-                rs.close();
-            }
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        }
-
-        try {
-            if (stmt != null) {
-                stmt.close();
-            }
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        }
-
-        try {
-            if (conn != null) {
-                conn.close();
-            }
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        }
-    }
-
     private void insertTestUser() throws SQLException {
         String sqlStr = "INSERT INTO user "
                 + "(first_name, last_name, username, password, "
@@ -203,7 +187,7 @@ public class TestEventMediaDAOImpl {
         stmt.setString(7, testEvent.getFilePath());
         stmt.setString(8, testEvent.getImagePath());
         stmt.setInt(9, testEvent.getCategory().getId());
-        stmt.setBoolean(10, testEvent.isPublicAccess());
+        stmt.setBoolean(10, testEvent.isPublicAccessed());
         stmt.setBoolean(11, testEvent.isGuestsAllowed());
         stmt.executeUpdate();
     }

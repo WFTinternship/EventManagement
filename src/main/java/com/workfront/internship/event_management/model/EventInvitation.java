@@ -7,7 +7,7 @@ public class EventInvitation{
     private String userRole;
     private String userResponse;
     private int attendeesCount;
-    private boolean realParticipation;
+    private boolean participated;
 
     public EventInvitation(EventInvitation invitation) {
         this.user = invitation.user;
@@ -15,7 +15,7 @@ public class EventInvitation{
         this.userRole = invitation.userRole;
         this.userResponse = invitation.userResponse;
         this.attendeesCount = invitation.attendeesCount;
-        this.realParticipation = invitation.realParticipation;
+        this.participated = invitation.participated;
     }
 
     public EventInvitation() { }
@@ -47,13 +47,13 @@ public class EventInvitation{
         return this;
     }
 
-    public boolean isRealParticipation() {
-        return realParticipation;
+    public boolean isParticipated() {
+        return participated;
 
     }
 
-    public EventInvitation setRealParticipation(boolean realParticipation) {
-        this.realParticipation = realParticipation;
+    public EventInvitation setParticipated(boolean participated) {
+        this.participated = participated;
         return this;
     }
 

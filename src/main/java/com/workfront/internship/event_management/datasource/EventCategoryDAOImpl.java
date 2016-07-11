@@ -4,10 +4,7 @@ import com.workfront.internship.event_management.model.EventCategory;
 
 import java.beans.PropertyVetoException;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +20,17 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
         try {
             conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "INSERT INTO event_category "
-                    + "(title, description) VALUES "
-                    + "(?, ?)";
+                    + "(title, description, creation_date) VALUES "
+                    + "(?, ?, ?)";
+
             stmt = conn.prepareStatement(sqlStr);
             stmt.setString(1, category.getTitle());
             stmt.setString(2, category.getDescription());
+            if(category.getCreationDate() != null) {
+                stmt.setTimestamp(3, new Timestamp(category.getCreationDate().getTime()));
+            } else {
+                stmt.setTimestamp(3, null);
+            }
             affectedRows = stmt.executeUpdate();
         } catch (IOException e) {
             System.out.println("IOException " + e.getMessage());

@@ -7,6 +7,7 @@ import com.workfront.internship.event_management.model.EventInvitation;
 import com.workfront.internship.event_management.model.User;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.beans.PropertyVetoException;
@@ -24,22 +25,27 @@ import static org.junit.Assert.assertTrue;
  */
 public class TestEventInvitationDAOImpl {
 
-    private EventInvitationDAO invitationDAO = new EventInvitationDAOImpl();
+    private static EventInvitationDAO invitationDAO;
     private EventInvitation testInvitation;
     private User testUser;
-private User testUser1, testUser2;
+    private User testUser1, testUser2;
     private Event testEvent;
     private EventCategory testCategory;
     private Connection conn;
     private PreparedStatement stmt;
     private ResultSet rs;
 
+    @BeforeClass
+    public static void setUpClass(){
+        invitationDAO = new EventInvitationDAOImpl();
+    }
+
     @Before
     public void setUp() {
-        testUser = TestUtil.setUpTestUser();
-        testCategory = TestUtil.setUpTestCategory();
-        testEvent = TestUtil.setUpTestEvent(testCategory);
-        testInvitation = TestUtil.setUpTestInvitation(testUser, testEvent);
+        testUser = TestHelper.setUpTestUser();
+        testCategory = TestHelper.setUpTestCategory();
+        testEvent = TestHelper.setUpTestEvent(testCategory);
+        testInvitation = TestHelper.setUpTestInvitation(testUser, testEvent);
         try {
             conn = DataSourceManager.getInstance().getConnection();
             conn.setAutoCommit(false);
@@ -100,7 +106,7 @@ private User testUser1, testUser2;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            closeResources(rs, stmt, conn);
+            TestHelper.closeResources(rs, stmt, conn);
         }
     }
 
@@ -114,7 +120,7 @@ private User testUser1, testUser2;
         assertEquals(actualInvitation.getUserRole(), testInvitation.getUserRole());
         assertEquals(actualInvitation.getUserResponse(), "Undefined");
         assertEquals(actualInvitation.getAttendeesCount(), 1);
-        assertFalse(actualInvitation.isRealParticipation());
+        assertFalse(actualInvitation.isParticipated());
 
     }
 
@@ -130,7 +136,7 @@ private User testUser1, testUser2;
         testUser1.setId(getTestUserId(testUser1.getUsername()));
         testUser2.setId(getTestUserId(testUser2.getUsername()));
 
-        List<EventInvitation> testInvitationsList = TestUtil.setUpTestInvitationsList(testUser1, testUser2, testEvent);
+        List<EventInvitation> testInvitationsList = TestHelper.setUpTestInvitationsList(testUser1, testUser2, testEvent);
         invitationDAO.insertInvitationsList(testInvitationsList) ;
 
         List<EventInvitation> actualInvitationsList = getTestInvitations();
@@ -141,7 +147,7 @@ private User testUser1, testUser2;
             assertEquals(actualInvitationsList.get(i).getUserRole(), testInvitationsList.get(i).getUserRole());
             assertEquals(actualInvitationsList.get(i).getUserResponse(), "Undefined");
             assertEquals(actualInvitationsList.get(i).getAttendeesCount(), 1);
-            assertFalse(actualInvitationsList.get(i).isRealParticipation());
+            assertFalse(actualInvitationsList.get(i).isParticipated());
         }
     }
 
@@ -155,13 +161,13 @@ private User testUser1, testUser2;
         assertEquals(actualInvitation.getUserRole(), testInvitation.getUserRole());
         assertEquals(actualInvitation.getUserResponse(), "Undefined");
         assertEquals(actualInvitation.getAttendeesCount(), 1);
-        assertFalse(actualInvitation.isRealParticipation());
+        assertFalse(actualInvitation.isParticipated());
     }
 
     @Test
     public void testUpdateInvitation() throws SQLException {
         EventInvitation expectedInvitation = new EventInvitation(testInvitation);
-        expectedInvitation.setUserResponse("Yes").setAttendeesCount(2).setRealParticipation(true);
+        expectedInvitation.setUserResponse("Yes").setAttendeesCount(2).setParticipated(true);
         invitationDAO.updateInvitation(expectedInvitation);
         EventInvitation actualInvitation = getTestInvitations().get(0);
         assertEquals(actualInvitation.getEventId(), expectedInvitation.getEventId());
@@ -169,7 +175,7 @@ private User testUser1, testUser2;
         assertEquals(actualInvitation.getUserRole(), expectedInvitation.getUserRole());
         assertEquals(actualInvitation.getUserResponse(), expectedInvitation.getUserResponse());
         assertEquals(actualInvitation.getAttendeesCount(), expectedInvitation.getAttendeesCount());
-        assertEquals(actualInvitation.isRealParticipation(), expectedInvitation.isRealParticipation());
+        assertEquals(actualInvitation.isParticipated(), expectedInvitation.isParticipated());
     }
 
     @Test
@@ -179,31 +185,7 @@ private User testUser1, testUser2;
 
     }
 
-    private void closeResources(ResultSet rs, Statement stmt, Connection conn) {
-        try {
-            if (rs != null) {
-                rs.close();
-            }
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        }
 
-        try {
-            if (stmt != null) {
-                stmt.close();
-            }
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        }
-
-        try {
-            if (conn != null) {
-                conn.close();
-            }
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        }
-    }
 
     private void insertTestUser(User user) throws SQLException {
         String sqlStr = "INSERT INTO user "
@@ -314,7 +296,7 @@ private User testUser1, testUser2;
                     .setUserRole(rs.getString("user_role"))
                     .setUserResponse(rs.getString("user_response"))
                     .setAttendeesCount(rs.getInt("attendees_count"))
-                    .setRealParticipation(rs.getBoolean("real_participation"));
+                    .setParticipated(rs.getBoolean("participated"));
             invitationsList.add(invitation);
         }
         return invitationsList;

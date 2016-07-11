@@ -1,8 +1,6 @@
 package com.workfront.internship.event_management.datasource;
 
 import com.workfront.internship.event_management.model.Event;
-import com.workfront.internship.event_management.model.EventInvitation;
-import com.workfront.internship.event_management.model.EventMedia;
 
 import java.util.List;
 
@@ -12,7 +10,7 @@ import java.util.List;
 public interface EventDAO {
 
     //CREATE
-    public boolean createEvent(Event event, int creatorId);
+    public boolean createEvent(Event event, int organizerId);
 
     //READ
     public List<Event> getAllEvents();

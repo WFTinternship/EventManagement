@@ -1,24 +1,20 @@
 package com.workfront.internship.event_management.datasource;
 
-import com.workfront.internship.event_management.model.*;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.workfront.internship.event_management.model.datehelpers.RecurrenceType;
 
 /**
  * Created by Hermine Turshujyan on 6/29/16.
  */
 public  class DAOTest {
     public static void main(String[] args) {
-         EventDAO eventDAO = new EventDAOImpl();
-        Event event = eventDAO.getEventById(3);
-        List<DateRange> dates = new ArrayList<DateRange>();
-        dates.add(new DateRange(event.getCreationDate(), event.getCreationDate()));
-        event.setDates(dates);
-        eventDAO.createEvent(event, 4);
-//        invitation.setUserResponse("Maybe");
-//        eventDAO.updateInvitation(invitation);
+
+
+        RecurrenceTypeDAO recTypeDAO = new RecurrenceTypeDAOImpl();
+        RecurrenceType recType = new RecurrenceType();
+        //recType.setTitle("test_titleqg").setIntervalUnit("test_unit").setRepeatOnValues(new String[] {"val1", "val2"});
+        //recTypeDAO.insertRecurrenceType(recType);
+       // recTypeDAO.getAllRecurrenceTypes();
+        recTypeDAO.getRecurrenceTypeById(2);
     }
 
 

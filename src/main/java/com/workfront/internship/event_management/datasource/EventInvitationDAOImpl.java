@@ -108,12 +108,12 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
         try {
             conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "UPDATE event_invitation SET user_role = ? , user_response = ?, attendees_count = ?, " +
-                    "real_participation = ? WHERE event_id = ? AND user_id = ?";
+                    "participated = ? WHERE event_id = ? AND user_id = ?";
             stmt = conn.prepareStatement(sqlStr);
             stmt.setString(1, invitation.getUserRole());
             stmt.setString(2, invitation.getUserResponse());
             stmt.setInt(3, invitation.getAttendeesCount());
-            stmt.setBoolean(4, invitation.isRealParticipation());
+            stmt.setBoolean(4, invitation.isParticipated());
             stmt.setInt(5, invitation.getEventId());
             stmt.setInt(6, invitation.getUser().getId());
             affectedRows = stmt.executeUpdate();
@@ -173,7 +173,7 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
                     .setAttendeesCount(rs.getInt("attendees_count"))
                     .setUserResponse(rs.getString("user_response"))
                     .setUserRole(rs.getString("user_role"))
-                    .setRealParticipation(rs.getBoolean("real_participation"));
+                    .setParticipated(rs.getBoolean("participated"));
             invitationsList.add(invitation);
         }
         return invitationsList;

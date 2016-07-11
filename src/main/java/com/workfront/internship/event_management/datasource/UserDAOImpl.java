@@ -22,8 +22,8 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "INSERT INTO user "
                     + "(first_name, last_name, username, password, email, phone_number, " +
-                    "avatar_path) VALUES "
-                    + "(?, ?, ?, ?, ?, ?, ? )";
+                    "avatar_path, verified, registration_date) VALUES "
+                    + "(?, ?, ?, ?, ?, ?, ?, ?, ? )";
             stmt = conn.prepareStatement(sqlStr);
             stmt.setString(1, user.getFirstName());
             stmt.setString(2, user.getLastName());
@@ -32,7 +32,12 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             stmt.setString(5, user.getEmail());
             stmt.setString(6, user.getPhoneNumber());
             stmt.setString(7, user.getAvatarPath());
-          //  stmt.setTimestamp(9, new Timestamp(user.getRegistrationDate().getTime()));
+            stmt.setBoolean(8, user.isVerified());
+            if(user.getRegistrationDate() != null) {
+                stmt.setTimestamp(9, new Timestamp(user.getRegistrationDate().getTime()));
+            } else {
+                stmt.setTimestamp(9, null);
+            }
             affectedRows = stmt.executeUpdate();
         } catch (IOException e) {
             System.out.println("IOException " + e.getMessage());

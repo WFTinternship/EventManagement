@@ -1,5 +1,7 @@
 package com.workfront.internship.event_management.model;
 
+import com.workfront.internship.event_management.model.datehelpers.DateRange;
+
 import java.util.Date;
 import java.util.List;
 
@@ -17,11 +19,12 @@ public class Event {
     private String filePath;
     private String imagePath;
     private EventCategory category;
-    private boolean publicAccess;
+    private DateRange dateRange;
+    private boolean publicAccessed;
     private boolean guestsAllowed;
     private Date creationDate;
-    private Date lastModified;
-    private List<DateRange> dates;
+    private Date lastModifiedDate;
+    private List<EventRecurrence> recurrences;
     private List<EventInvitation> invitations;
     private List<EventMedia> media;
 
@@ -58,24 +61,6 @@ public class Event {
 
     public Event setFullDesc(String fullDesc) {
         this.fullDesc = fullDesc;
-        return this;
-    }
-
-    public Date getCreationDate() {
-        return creationDate;
-    }
-
-    public Event setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-        return this;
-    }
-
-    public Date getLastModified() {
-        return lastModified;
-    }
-
-    public Event setLastModified(Date lastModified) {
-        this.lastModified = lastModified;
         return this;
     }
 
@@ -133,13 +118,29 @@ public class Event {
         return this;
     }
 
-
-    public boolean isPublicAccess() {
-        return publicAccess;
+    public DateRange getDateRange() {
+        return dateRange;
     }
 
-    public Event setPublicAccess(boolean publicAccess) {
-        this.publicAccess = publicAccess;
+    public Event setDateRange(DateRange dateRange) {
+        this.dateRange = dateRange;
+        return this;
+    }
+    public List<EventRecurrence> getRecurrences() {
+        return recurrences;
+    }
+
+    public Event setRecurrences(List<EventRecurrence> recurrences) {
+        this.recurrences = recurrences;
+        return this;
+    }
+
+    public boolean isPublicAccessed() {
+        return publicAccessed;
+    }
+
+    public Event setPublicAccessed(boolean publicAccessed) {
+        this.publicAccessed = publicAccessed;
         return this;
     }
 
@@ -151,14 +152,26 @@ public class Event {
         this.guestsAllowed = guestsAllowed;
     return this;
 }
-    public List<DateRange> getDates() {
-        return dates;
+
+
+    public Date getCreationDate() {
+        return creationDate;
     }
 
-    public Event setDates(List<DateRange> dates) {
-        this.dates = dates;
+    public Event setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
         return this;
     }
+
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public Event setLastModifiedDate(Date lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+        return this;
+    }
+
 
     public List<EventInvitation> getInvitations() {
         return invitations;

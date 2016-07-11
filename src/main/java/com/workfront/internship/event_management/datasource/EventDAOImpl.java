@@ -1,6 +1,7 @@
 package com.workfront.internship.event_management.datasource;
 
 import com.workfront.internship.event_management.model.*;
+import com.workfront.internship.event_management.model.datehelpers.DateRange;
 
 import java.beans.PropertyVetoException;
 import java.io.IOException;
@@ -14,8 +15,8 @@ import java.util.Date;
 public class EventDAOImpl extends GenericDAO implements EventDAO {
 
     //CREATE
-    //?????????????
-    public boolean createEvent(Event event, int creatorId) {
+    // ?????????????
+    public boolean createEvent(Event event, int organizerId) {
         Connection conn = null;
         PreparedStatement stmtInsertEvent = null;
         PreparedStatement stmtInsertOrganizer = null;
@@ -23,14 +24,13 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         PreparedStatement stmtInsertInvitations = null;
         int affectedRows = 0;
         try {
-
             conn = DataSourceManager.getInstance().getConnection();
             conn.setAutoCommit(false);
 
             String insertEvent = "INSERT INTO event "
                     + "(title, short_desc, full_desc, location, lat, lng, file_path, image_path, "
-                    + "category_id, public_access, guests_allowed) VALUES "
-                    + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+                    + "category_id, public_accessed, guests_allowed, start, end) VALUES "
+                    + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
             stmtInsertEvent = conn.prepareStatement(insertEvent);
             stmtInsertEvent.setString(1, event.getTitle());
             stmtInsertEvent.setString(2, event.getShortDesc());
@@ -41,20 +41,22 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             stmtInsertEvent.setString(7, event.getFilePath());
             stmtInsertEvent.setString(8, event.getImagePath());
             stmtInsertEvent.setInt(9, event.getCategory().getId());
-            stmtInsertEvent.setBoolean(10, event.isPublicAccess());
+            stmtInsertEvent.setBoolean(10, event.isPublicAccessed());
             stmtInsertEvent.setBoolean(11, event.isGuestsAllowed());
+            stmtInsertEvent.setTimestamp(12, new Timestamp(event.getDateRange().getStart().getTime()));
+            stmtInsertEvent.setTimestamp(13, new Timestamp(event.getDateRange().getEnd().getTime()));
             stmtInsertEvent.executeUpdate();
 
             String insertOrganizer = "INSERT INTO event_invitation "
                     + "(event_id, user_id, user_role) VALUES "
                     + "(?, ?, ? )";
-            stmtInsertOrganizer = conn.prepareStatement(insertEvent);
+            stmtInsertOrganizer = conn.prepareStatement(insertOrganizer);
             stmtInsertOrganizer.setInt(1, event.getId());
-            stmtInsertOrganizer.setInt(2, creatorId);
+            stmtInsertOrganizer.setInt(2, organizerId);
             stmtInsertOrganizer.setString(3, "Organizer");
             stmtInsertEvent.executeUpdate();
 
-            if (event.getDates() != null) {
+           /* if (event.getDates() != null) {
                 String insertDates = "INSERT INTO event_date "
                         + "(event_id, start, end) VALUES "
                         + "(?, ?, ? )";
@@ -66,7 +68,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                     stmtInsertDates.setTimestamp(3, new Timestamp(range.getEnd().getTime()));
                     stmtInsertDates.executeUpdate();
                 }
-            }
+            }*/
 
             if (event.getInvitations() != null) {
                 String insertInvitations = "INSERT INTO event_invitation "
@@ -129,6 +131,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     //READ
+    //+++
     public List<Event> getAllEvents() {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -136,10 +139,8 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         List<Event> eventsList = null;
         try {
             conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "SELECT * " +
-                    "FROM (event LEFT JOIN event_category " +
-                    "ON event.category_id = event_category.id) " +
-                    "LEFT JOIN event_date ON event.id = event_date.event_id ";
+            String sqlStr = "SELECT * FROM (event LEFT JOIN event_category " +
+                    "ON event.category_id = event_category.id) ";
             stmt = conn.prepareStatement(sqlStr);
             rs = stmt.executeQuery();
             eventsList = createEventsListFromRS(rs);
@@ -165,7 +166,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             String sqlStr = "SELECT * " +
                     "FROM (event LEFT JOIN event_category " +
                     "ON event.category_id = event_category.id) " +
-                    "LEFT JOIN event_date ON event.id = event_date.event_id " +
+                    "LEFT JOIN event_recurrence ON event.id = event_recurrence.event_id " +
                     "WHERE event.id = ?";
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, eventId);
@@ -329,7 +330,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "UPDATE event SET title = ?, short_desc = ?, full_desc = ?, location = ?, " +
                     "lat = ?, lng = ?, file_path = ?, image_path = ?, " +
-                    "category_id = ?, public_access = ?, guests_allowed = ?, last_modified = now() " +
+                    "category_id = ?, public_accessed = ?, guests_allowed = ?, last_modified = now() " +
                     "WHERE id = ?";
             Timestamp date = new Timestamp(new Date().getTime());
             PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
@@ -342,7 +343,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             preparedStatement.setString(7, event.getFilePath());
             preparedStatement.setString(8, event.getImagePath());
             preparedStatement.setInt(9, event.getCategory().getId());
-            preparedStatement.setBoolean(10, event.isPublicAccess());
+            preparedStatement.setBoolean(10, event.isPublicAccessed());
             preparedStatement.setBoolean(11, event.isGuestsAllowed());
             preparedStatement.setInt(12, event.getId());
             affectedRows = preparedStatement.executeUpdate();
@@ -385,26 +386,26 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                         .setLng(rs.getFloat("lng"))
                         .setFilePath(rs.getString("file_path"))
                         .setImagePath(rs.getString("image_path"))
-                        .setPublicAccess(rs.getBoolean("public_access"))
+                        .setPublicAccessed(rs.getBoolean("public_accessed"))
                         .setGuestsAllowed(rs.getBoolean("guests_allowed"))
                         .setCreationDate(rs.getTimestamp("event.creation_date"))
-                        .setLastModified(rs.getTimestamp("last_modified"));
+                        .setLastModifiedDate(rs.getTimestamp("last_modified"))
+                        .setDateRange(new DateRange(rs.getTimestamp("start"), rs.getTimestamp("end")));
                 event.setCategory(category);
             }
-            DateRange dateRange = new DateRange();
-            dateRange.setStart(rs.getTimestamp("start"));
-            dateRange.setEnd(rs.getTimestamp("end"));
-            dates.add(dateRange);
-            event.setDates(dates);
+            EventRecurrence eventRecurrence = new EventRecurrence();
+            eventRecurrence.setEventId(rs.getInt("event_id"));
+          //  eventRecurrence.setRecurrenceType(rs.getTimestamp("end"));
+          //  dates.add(dateRange);
+           // event.setDates(dates);
+          //  event.set
         }
         return event;
     }
 
     private List<Event> createEventsListFromRS(ResultSet rs) throws SQLException {
-        Map<Integer, Event> eventsMap = new HashMap<Integer, Event>();
+        List<Event> eventsList = new ArrayList<Event>();
         while (rs.next()) {
-            int eventId = rs.getInt("event.id");
-            if (!eventsMap.containsKey(eventId)) {
                 EventCategory category = new EventCategory();
                 category.setId(rs.getInt("event_category.id"))
                         .setTitle(rs.getString("event_category.title"))
@@ -420,23 +421,15 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                         .setLng(rs.getFloat("lng"))
                         .setFilePath(rs.getString("file_path"))
                         .setImagePath(rs.getString("image_path"))
-                        .setPublicAccess(rs.getBoolean("public_access"))
+                        .setPublicAccessed(rs.getBoolean("public_accessed"))
                         .setGuestsAllowed(rs.getBoolean("guests_allowed"))
                         .setCreationDate(rs.getTimestamp("event.creation_date"))
-                        .setLastModified(rs.getTimestamp("last_modified"));
-                event.setCategory(category);
-                DateRange dateRange = new DateRange(rs.getTimestamp("start"), rs.getTimestamp("end"));
-                List<DateRange> dates = new ArrayList<DateRange>();
-                dates.add(dateRange);
-                event.setDates(dates);
-                eventsMap.put(eventId, event);
-            } else {
-                Event event = eventsMap.get(eventId);
-                DateRange dateRange = new DateRange(rs.getTimestamp("start"), rs.getTimestamp("end"));
-                event.getDates().add(dateRange);
-            }
+                        .setLastModifiedDate(rs.getTimestamp("event.last_modified"))
+                        .setDateRange(new DateRange(rs.getTimestamp("start"), rs.getTimestamp("end")))
+                    .setCategory(category);
+                eventsList.add(event);
         }
-        return new ArrayList<Event>(eventsMap.values());
+        return eventsList;
     }
 
 }
