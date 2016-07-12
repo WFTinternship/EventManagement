@@ -40,17 +40,17 @@ public class TestEventMediaDAOImpl {
 
     @Before
     public void setUp() {
-        testUser = TestHelper.setUpTestUser();
-        testCategory = TestHelper.setUpTestCategory();
-        testEvent = TestHelper.setUpTestEvent();
-        testMedia = TestHelper.setUpTestMedia();
+        testUser = TestHelper.createTestUser();
+        testCategory = TestHelper.createTestCategory();
+        testEvent = TestHelper.createTestEvent();
+        testMedia = TestHelper.createTestMedia();
         try {
             conn = DataSourceManager.getInstance().getConnection();
             conn.setAutoCommit(false);
-            testUser.setId(TestHelper.insertTestUser());
-            testCategory.setId(TestHelper.insertTestCategory());
-            testEvent.setId(TestHelper.insertTestEvent());
-            testMedia.setId(TestHelper.insertTestMedia());
+            testUser.setId(TestHelper.insertTestUser(testUser));
+            testCategory.setId(TestHelper.insertTestCategory(testCategory));
+           // testEvent.setId(TestHelper.insertTestEvent());
+          //  testMedia.setId(TestHelper.insertTestMedia());
             conn.commit();
         } catch (SQLException e) {
             try {

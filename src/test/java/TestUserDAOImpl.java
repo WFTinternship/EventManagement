@@ -30,8 +30,9 @@ public class TestUserDAOImpl {
 
     @Before
     public void setUp() {
-        testUser = TestHelper.setUpTestUser();
-        testUser.setId(TestHelper.insertTestUser());
+        testUser = TestHelper.createTestUser();
+        int userId = TestHelper.insertTestUser(testUser);
+        testUser.setId(userId);
         try {
             conn = DataSourceManager.getInstance().getConnection();
         } catch (SQLException e) {

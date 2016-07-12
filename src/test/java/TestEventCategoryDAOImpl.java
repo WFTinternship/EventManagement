@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.junit.Assert.*;
 
 /**
@@ -33,8 +32,9 @@ public class TestEventCategoryDAOImpl {
 
     @Before
     public void setUp() {
-        testCategory = TestHelper.setUpTestCategory();
-        testCategory.setId(TestHelper.insertTestCategory());
+        testCategory = TestHelper.createTestCategory();
+        int categoryId = TestHelper.insertTestCategory(testCategory);
+        testCategory.setId(categoryId);
         try {
             conn = DataSourceManager.getInstance().getConnection();
         } catch (SQLException e) {
