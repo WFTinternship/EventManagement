@@ -9,10 +9,15 @@ import org.junit.Test;
 
 import java.beans.PropertyVetoException;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Created by hermine on 7/9/16.
@@ -21,12 +26,9 @@ public class TestEventCategoryDAOImpl {
 
     private static EventCategoryDAO categoryDAO;
     private EventCategory testCategory;
-    private Connection conn;
-    private PreparedStatement stmt;
-    private ResultSet rs;
 
     @BeforeClass
-    public static void setUpClass(){
+    public static void setUpClass() {
         categoryDAO = new EventCategoryDAOImpl();
     }
 
@@ -35,41 +37,32 @@ public class TestEventCategoryDAOImpl {
         testCategory = TestHelper.createTestCategory();
         int categoryId = TestHelper.insertTestCategory(testCategory);
         testCategory.setId(categoryId);
-        try {
-            conn = DataSourceManager.getInstance().getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-        }
     }
 
     @After
     public void tearDown() {
         TestHelper.deleteTestCategory(testCategory.getId());
         testCategory = null;
-        TestHelper.closeResources(rs, stmt, conn);
     }
 
     @Test
     public void testInsertCategory() throws SQLException {
         TestHelper.deleteTestCategory(testCategory.getId());
         categoryDAO.insertCategory(testCategory);
-        EventCategory actualCategory = getTestCategory(testCategory.getId()+1);
-        try{
+        EventCategory actualCategory = getTestCategory(testCategory.getId() + 1);
+        try {
             assertEquals(actualCategory.getTitle(), testCategory.getTitle());
             assertEquals(actualCategory.getDescription(), testCategory.getDescription());
-       } finally {
-           TestHelper.deleteTestCategory(testCategory.getId()+1);
-       }
+        } finally {
+            TestHelper.deleteTestCategory(testCategory.getId() + 1);
+        }
     }
 
     @Test
     public void testGetAllCategories() throws SQLException {
         List<EventCategory> expectedCategories = getAllCategories();
         List<EventCategory> actualCategories = categoryDAO.getAllCategories();
+
         assertEquals(actualCategories.size(), expectedCategories.size());
         for (int i = 0; i < actualCategories.size(); i++) {
             assertEquals(actualCategories.get(i).getId(), expectedCategories.get(i).getId());
@@ -82,6 +75,7 @@ public class TestEventCategoryDAOImpl {
     @Test
     public void testGetCategoryById() throws SQLException {
         EventCategory actualCategory = categoryDAO.getCategoryById(testCategory.getId());
+
         assertEquals(actualCategory.getId(), testCategory.getId());
         assertEquals(actualCategory.getTitle(), testCategory.getTitle());
         assertEquals(actualCategory.getDescription(), testCategory.getDescription());
@@ -89,13 +83,13 @@ public class TestEventCategoryDAOImpl {
 
     @Test
     public void testUpdateCategory() throws SQLException {
-        EventCategory newCategory = new EventCategory(testCategory);
-        newCategory.setDescription("New test description");
-        categoryDAO.updateCategory(newCategory);
+        testCategory.setDescription("New test description");
+        categoryDAO.updateCategory(testCategory);
         EventCategory actualCategory = getTestCategory(testCategory.getId());
+
         assertEquals(actualCategory.getId(), testCategory.getId());
-        assertEquals(actualCategory.getTitle(), newCategory.getTitle());
-        assertEquals(actualCategory.getDescription(), newCategory.getDescription());
+        assertEquals(actualCategory.getTitle(), testCategory.getTitle());
+        assertEquals(actualCategory.getDescription(), testCategory.getDescription());
     }
 
     @Test
@@ -106,33 +100,61 @@ public class TestEventCategoryDAOImpl {
 
     //helper methods
     private EventCategory getTestCategory(int id) throws SQLException {
-        String sqlStr = "SELECT * FROM event_category WHERE id  = ?";
-        stmt = conn.prepareStatement(sqlStr);
-        stmt.setInt(1, id);
-        rs = stmt.executeQuery();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
         EventCategory category = null;
-        while (rs.next()) {
-            category = new EventCategory();
-            category.setId(rs.getInt("id"))
-                    .setTitle(rs.getString("title"))
-                    .setDescription(rs.getString("description"))
-                    .setCreationDate(rs.getTimestamp("creation_date"));
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+            String sqlStr = "SELECT * FROM event_category WHERE id  = ?";
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setInt(1, id);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                category = new EventCategory();
+                category.setId(rs.getInt("id"))
+                        .setTitle(rs.getString("title"))
+                        .setDescription(rs.getString("description"))
+                        .setCreationDate(rs.getTimestamp("creation_date"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        } finally {
+            TestHelper.closeResources(rs, stmt, conn);
         }
         return category;
     }
 
     private List<EventCategory> getAllCategories() throws SQLException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
         List<EventCategory> categoriesList = new ArrayList<EventCategory>();
-        String sqlStr = "SELECT * FROM event_category";
-        stmt = conn.prepareStatement(sqlStr);
-        rs = stmt.executeQuery();
-        while (rs.next()) {
-            EventCategory category = new EventCategory();
-            category.setId(rs.getInt("id"))
-                    .setTitle(rs.getString("title"))
-                    .setDescription(rs.getString("description"))
-                    .setCreationDate(rs.getTimestamp("creation_date"));
-            categoriesList.add(category);
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+            String sqlStr = "SELECT * FROM event_category";
+            stmt = conn.prepareStatement(sqlStr);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                EventCategory category = new EventCategory();
+                category.setId(rs.getInt("id"))
+                        .setTitle(rs.getString("title"))
+                        .setDescription(rs.getString("description"))
+                        .setCreationDate(rs.getTimestamp("creation_date"));
+                categoriesList.add(category);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        } finally {
+            TestHelper.closeResources(rs, stmt, conn);
         }
         return categoriesList;
     }

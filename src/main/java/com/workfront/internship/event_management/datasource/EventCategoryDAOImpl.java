@@ -22,7 +22,6 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
             String sqlStr = "INSERT INTO event_category "
                     + "(title, description, creation_date) VALUES "
                     + "(?, ?, ?)";
-
             stmt = conn.prepareStatement(sqlStr);
             stmt.setString(1, category.getTitle());
             stmt.setString(2, category.getDescription());
@@ -33,13 +32,16 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
             }
             affectedRows = stmt.executeUpdate();
         } catch (IOException e) {
+            e.printStackTrace();
             System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
+            e.printStackTrace();
             System.out.println("SQLException " + e.getMessage());
         } catch (PropertyVetoException e) {
+            e.printStackTrace();
             System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(null, stmt, conn);
+            closeResources(stmt, conn);
         }
         return affectedRows != 0;
     }
@@ -56,10 +58,13 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
             rs = stmt.executeQuery();
             categoriesList = createEventCategoryListFromRS(rs);
         } catch (IOException e) {
+            e.printStackTrace();
             System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
+            e.printStackTrace();
             System.out.println("SQLException " + e.getMessage());
         } catch (PropertyVetoException e) {
+
             System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(rs, stmt, conn);

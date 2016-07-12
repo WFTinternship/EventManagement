@@ -64,11 +64,7 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
                 stmt.setString(3, media.getType());
                 stmt.setString(4, media.getDescription());
                 stmt.setInt(5, media.getUploaderId());
-                if(media.getUploadDate() != null) {
-                    stmt.setTimestamp(6, new Timestamp(media.getUploadDate().getTime()));
-                } else {
-                    stmt.setObject(6, null);
-                }
+
                 stmt.addBatch();
             }
             affectedRows = stmt.executeBatch().length;
@@ -110,15 +106,15 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
         return mediaList;
     }
 
-    public List<EventMedia> getMediaByEvent(int eventId) {
-        return getMediaByField("id", eventId);
+    public EventMedia getMediaById(int mediaId) {
+        return getMediaByField("id", new Integer(mediaId)).get(0);
     }
 
     public List<EventMedia> getMediaByType(String type) {
         return getMediaByField("type", type);
     }
 
-    public List<EventMedia> getMediaByUploader(int eventId) {
+    public List<EventMedia> getMediaByUploaderId(int eventId) {
         return getMediaByField("id", eventId);
     }
 
@@ -173,7 +169,28 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
 
     //DELETE
     public boolean deleteMedia(int mediaId) {
-        return deleteEntryById("event_media", mediaId);
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        int affectedRows = 0;
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+            String sqlStr = "DELETE FROM event_media WHERE id = ?";
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setInt(1, mediaId);
+            affectedRows = stmt.executeUpdate();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("IOException " + e.getMessage());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("SQLException " + e.getMessage());
+
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources(null, stmt, conn);
+        }
+        return affectedRows != 0;
     }
 
     // helper methods

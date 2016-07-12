@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
 import static org.junit.Assert.*;
 
 /**
@@ -19,12 +20,9 @@ public class TestUserDAOImpl {
 
     private static UserDAO userDAO;
     private User testUser;
-    private Connection conn;
-    private PreparedStatement stmt;
-    private ResultSet rs;
 
     @BeforeClass
-    public static void setUpClass(){
+    public static void setUpClass() {
         userDAO = new UserDAOImpl();
     }
 
@@ -33,22 +31,12 @@ public class TestUserDAOImpl {
         testUser = TestHelper.createTestUser();
         int userId = TestHelper.insertTestUser(testUser);
         testUser.setId(userId);
-        try {
-            conn = DataSourceManager.getInstance().getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-        }
     }
 
     @After
     public void tearDown() {
         TestHelper.deleteTestUser(testUser.getId());
         testUser = null;
-        closeResources(rs, stmt, conn);
     }
 
     @Test
@@ -153,58 +141,50 @@ public class TestUserDAOImpl {
     }
 
     //helper methods
-    private void closeResources(ResultSet rs, Statement stmt, Connection conn) {
-        try {
-            if (rs != null) {
-                rs.close();
-            }
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        }
-
-        try {
-            if (stmt != null) {
-                stmt.close();
-            }
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        }
-
-        try {
-            if (conn != null) {
-                conn.close();
-            }
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        }
-    }
-
-
-
     private User getTestUser(int id) throws SQLException {
-        String sqlStr = "SELECT * FROM user WHERE id  = ?";
-        stmt = conn.prepareStatement(sqlStr);
-        stmt.setInt(1, id);
-        rs = stmt.executeQuery();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
         User actualUser = null;
-        while (rs.next()) {
-            actualUser = new User();
-            actualUser.setId(rs.getInt("id"))
-                    .setFirstName(rs.getString("first_name"))
-                    .setLastName(rs.getString("last_name"))
-                    .setUsername(rs.getString("username"))
-                    .setPassword(rs.getString("password"))
-                    .setEmail(rs.getString("email"))
-                    .setAvatarPath(rs.getString("avatar_path"))
-                    .setPhoneNumber(rs.getString("phone_number"))
-                    .setVerified(rs.getBoolean("verified"))
-                    .setRegistrationDate(rs.getTimestamp("registration_date"));
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+            String sqlStr = "SELECT * FROM user WHERE id  = ?";
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setInt(1, id);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                actualUser = new User();
+                actualUser.setId(rs.getInt("id"))
+                        .setFirstName(rs.getString("first_name"))
+                        .setLastName(rs.getString("last_name"))
+                        .setUsername(rs.getString("username"))
+                        .setPassword(rs.getString("password"))
+                        .setEmail(rs.getString("email"))
+                        .setAvatarPath(rs.getString("avatar_path"))
+                        .setPhoneNumber(rs.getString("phone_number"))
+                        .setVerified(rs.getBoolean("verified"))
+                        .setRegistrationDate(rs.getTimestamp("registration_date"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        } finally {
+            TestHelper.closeResources(rs, stmt, conn);
         }
         return actualUser;
     }
 
     private List<User> getAllUsersFromDB() throws SQLException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
         List<User> usersList = new ArrayList<User>();
+
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
         String sqlStr = "SELECT * FROM user";
         stmt = conn.prepareStatement(sqlStr);
         rs = stmt.executeQuery();
@@ -221,6 +201,15 @@ public class TestUserDAOImpl {
                     .setVerified(rs.getBoolean("verified"))
                     .setRegistrationDate(rs.getTimestamp("registration_date"));
             usersList.add(user);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } catch (IOException e) {
+        e.printStackTrace();
+    } catch (PropertyVetoException e) {
+        e.printStackTrace();
+    } finally {
+            TestHelper.closeResources(rs, stmt, conn);
         }
         return usersList;
     }

@@ -39,7 +39,15 @@ public class TestHelper {
         }
     }
 
-    //test object initializers
+    public static void closeResources(Statement stmt, Connection conn) {
+        closeResources(null, stmt, conn);
+    }
+
+    public static void closeResources(Connection conn) {
+        closeResources(null, conn);
+    }
+
+    //test object creation
     public static User createTestUser() {
         User testUser = new User();
         java.util.Date currentDate = new java.util.Date();
@@ -99,8 +107,18 @@ public class TestHelper {
         EventMedia media = new EventMedia();
         media.setPath("/event/111/test_path.jpg")
                 .setType("Image")
-                .setDescription("Test description");
+                .setDescription("Test description")
+                .setUploadDate(new java.util.Date());
         return media;
+    }
+
+    public static List<EventMedia> createTestMediaList(EventMedia media1, EventMedia media2) {
+        media1.setPath("media1 path");
+        media2.setPath("media2 path");
+        List<EventMedia> testMediaList = new ArrayList<EventMedia>();
+        testMediaList.add(media1);
+        testMediaList.add(media2);
+        return testMediaList;
     }
 
     public static RecurrenceType createTestRecurrenceType() {
@@ -334,14 +352,21 @@ public class TestHelper {
         try {
             conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "INSERT INTO event_media "
-                    + "(event_id, path, type, description, uploader_id) "
-                    + "VALUES (?, ?, ?, ?, ?)";
-            stmt = conn.prepareStatement(sqlStr);
+                    + "(event_id, path, type, description, uploader_id, upload_date) "
+                    + "VALUES (?, ?, ?, ?, ?, ?)";
+            stmt = conn.prepareStatement(sqlStr, Statement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, testMedia.getEventId());
             stmt.setString(2, testMedia.getPath());
             stmt.setString(3, testMedia.getType());
             stmt.setString(4, testMedia.getDescription());
             stmt.setInt(5, testMedia.getUploaderId());
+            stmt.setTimestamp(6, new Timestamp(testMedia.getUploadDate().getTime()));
+            stmt.executeUpdate();
+
+            ResultSet rs = stmt.getGeneratedKeys();
+            rs.next();
+            id = rs.getInt(1);
+
         } catch (PropertyVetoException e) {
             e.printStackTrace();
         } catch (IOException e) {

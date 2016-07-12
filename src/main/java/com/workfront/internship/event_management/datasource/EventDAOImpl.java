@@ -50,9 +50,8 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         } catch (SQLException e) {
             System.out.println("SQLException " + e.getMessage());
             try {
-                if(conn != null) {
-                    conn.rollback();
-                }
+
+                conn.rollback();
             } catch (SQLException re) {
                 System.out.println("SQLException " + e.getMessage());
 

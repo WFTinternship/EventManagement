@@ -30,7 +30,7 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
         } catch (PropertyVetoException e) {
             e.printStackTrace();
         } finally {
-            closeResources(null, null, conn);
+            closeResources(conn);
         }
         return success;
     }
@@ -76,7 +76,7 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
         } catch (PropertyVetoException e) {
             e.printStackTrace();
         } finally {
-            closeResources(null, null, conn);
+            closeResources(conn);
         }
         return success;    }
 

@@ -10,11 +10,11 @@ import java.util.List;
 public interface EventMediaDAO {
      boolean insertMedia(EventMedia media);
      boolean insertMediaList(List<EventMedia> mediaList);
+     EventMedia getMediaById(int mediaId);
      List<EventMedia> getAllMedia();
-     List<EventMedia> getMediaByEvent(int eventId);
-     List<EventMedia> getMediaByType(String type);
-     List<EventMedia> getMediaByUploader(int uploaderId);
      List<EventMedia> getMediaByEventId(int eventId);
+     List<EventMedia> getMediaByType(String type);
+     List<EventMedia> getMediaByUploaderId(int uploaderId);
      boolean updateMediaDescription(int mediaId, String desc);
      boolean deleteMedia(int mediaId);
 }
