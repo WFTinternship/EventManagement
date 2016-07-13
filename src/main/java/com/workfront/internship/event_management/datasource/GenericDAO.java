@@ -66,15 +66,8 @@ public class GenericDAO {
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, id);
             affectedRows = stmt.executeUpdate();
-        } catch (IOException e) {
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(stmt, conn);
         }

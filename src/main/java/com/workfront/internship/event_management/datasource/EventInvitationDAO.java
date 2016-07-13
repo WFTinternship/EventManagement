@@ -9,8 +9,8 @@ import java.util.List;
  * Created by hermine on 7/8/16.
  */
 public interface EventInvitationDAO {
-     boolean insertInvitation(EventInvitation invitation, Connection conn);
-     boolean insertInvitation(EventInvitation invitation);
+     int insertInvitation(EventInvitation invitation, Connection conn);
+     int insertInvitation(EventInvitation invitation);
      boolean insertInvitations(List<EventInvitation> invitations, Connection conn);
      boolean insertInvitations(List<EventInvitation> invitations);
      EventInvitation getInvitationById(int invId);

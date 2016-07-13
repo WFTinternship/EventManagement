@@ -29,21 +29,21 @@ public class TestUserDAOImpl {
     @Before
     public void setUp() {
         testUser = TestHelper.createTestUser();
-        int userId = TestHelper.insertTestUser(testUser);
+        int userId = TestHelper.insertTestUserToDB(testUser);
         testUser.setId(userId);
     }
 
     @After
     public void tearDown() {
-        TestHelper.deleteTestUser(testUser.getId());
+        TestHelper.deleteTestUserFromDB(testUser.getId());
         testUser = null;
     }
 
     @Test
     public void testInsertUser() {
-        TestHelper.deleteTestUser(testUser.getId());
-        userDAO.insertUser(testUser);
-        User actualUser = getTestUser(testUser.getId() + 1);
+        TestHelper.deleteTestUserFromDB(testUser.getId());
+        int newUserId = userDAO.insertUser(testUser);
+        User actualUser = getTestUser(newUserId);
         try {
             assertEquals(actualUser.getFirstName(), testUser.getFirstName());
             assertEquals(actualUser.getLastName(), testUser.getLastName());
@@ -53,7 +53,7 @@ public class TestUserDAOImpl {
             assertEquals(actualUser.getPhoneNumber(), testUser.getPhoneNumber());
             assertEquals(actualUser.getAvatarPath(), testUser.getAvatarPath());
         } finally {
-            TestHelper.deleteTestUser(testUser.getId() + 1);
+            TestHelper.deleteTestUserFromDB(newUserId);
         }
     }
 

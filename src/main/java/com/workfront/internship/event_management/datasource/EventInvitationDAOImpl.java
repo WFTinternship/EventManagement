@@ -17,49 +17,46 @@ import java.util.List;
  */
 public class EventInvitationDAOImpl extends GenericDAO implements EventInvitationDAO {
 
-    public boolean insertInvitation(EventInvitation invitation) {
+    public int insertInvitation(EventInvitation invitation) {
         Connection conn = null;
-        boolean success = false;
+        int id = 0;
         try {
             conn = DataSourceManager.getInstance().getConnection();
-            success = insertInvitation(invitation, conn);
-        } catch (IOException e) {
+            id = insertInvitation(invitation, conn);
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(conn);
         }
-        return success;
+        return id;
     }
 
-    public boolean insertInvitation(EventInvitation invitation, Connection conn) {
+    public int insertInvitation(EventInvitation invitation, Connection conn) {
         PreparedStatement stmt = null;
-        int affectedRows = 0;
+        ResultSet rs = null;
+        int id = 0;
         try {
             String sqlStr = "INSERT INTO event_invitation "
                     + "(event_id, user_id, user_role, user_response, attendees_count, participated) VALUES "
                     + "(?, ?, ?, ?, ?, ? )";
-            stmt = conn.prepareStatement(sqlStr);
+            stmt = conn.prepareStatement(sqlStr, PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, invitation.getEventId());
             stmt.setInt(2, invitation.getUser().getId());
             stmt.setString(3, invitation.getUserRole());
             stmt.setString(4, invitation.getUserResponse());
             stmt.setInt(5, invitation.getAttendeesCount());
             stmt.setBoolean(6, invitation.isParticipated());
-            affectedRows = stmt.executeUpdate();
+            stmt.executeUpdate();
+            rs = stmt.getGeneratedKeys();
+            if(rs.next()) {
+                id = rs.getInt(1);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
         } finally {
             closeResources(stmt);
         }
-        return affectedRows != 0;
+        return id;
     }
 
     public boolean insertInvitations(List<EventInvitation> invitations) {
@@ -68,15 +65,8 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
         try {
             conn = DataSourceManager.getInstance().getConnection();
             success = insertInvitations(invitations, conn);
-        } catch (IOException e) {
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(conn);
         }
@@ -105,7 +95,6 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
         } finally {
             closeResources(stmt);
         }
@@ -126,15 +115,8 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
             stmt.setInt(1, invId);
             rs = stmt.executeQuery();
             invitation = createInvitationsFromRS(rs).get(0);
-        } catch (IOException e) {
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -155,15 +137,8 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
             stmt.setInt(1, eventId);
             rs = stmt.executeQuery();
             invitationsList = createInvitationsFromRS(rs);
-        } catch (IOException e) {
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -185,15 +160,8 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
             stmt.setBoolean(4, invitation.isParticipated());
             stmt.setInt(5, invitation.getId());
             affectedRows = stmt.executeUpdate();
-        } catch (IOException e) {
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(stmt, conn);
         }
@@ -246,15 +214,8 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, id);
             affectedRows = stmt.executeUpdate();
-        } catch (IOException e) {
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(stmt, conn);
         }

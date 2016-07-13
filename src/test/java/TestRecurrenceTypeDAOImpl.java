@@ -34,26 +34,26 @@ public class TestRecurrenceTypeDAOImpl {
     @Before
     public void setUp() {
         testRecurrenceType = TestHelper.createTestRecurrenceType();
-        int recTypeId = TestHelper.insertTestRecurrenceType(testRecurrenceType);
+        int recTypeId = TestHelper.insertTestRecurrenceTypeToDB(testRecurrenceType);
         testRecurrenceType.setId(recTypeId);
     }
 
     @After
     public void tearDown() {
-        TestHelper.deleteTestRecurrenceType(testRecurrenceType.getId());
+        TestHelper.deleteTestRecurrenceTypeFromDB(testRecurrenceType.getId());
     }
 
     @Test
     public void  testInsertRecurrenceType(){
-        TestHelper.deleteTestRecurrenceType(testRecurrenceType.getId());
-        recTypeDAO.insertRecurrenceType(testRecurrenceType);
-        RecurrenceType actualRecType = getTestRecurrenceType(testRecurrenceType.getId() + 1);
+        TestHelper.deleteTestRecurrenceTypeFromDB(testRecurrenceType.getId());
+        int newRecTypeId = recTypeDAO.insertRecurrenceType(testRecurrenceType);
+        RecurrenceType actualRecType = getTestRecurrenceType(newRecTypeId);
         try {
             assertEquals(testRecurrenceType.getTitle(), testRecurrenceType.getTitle());
             assertEquals(testRecurrenceType.getIntervalUnit(), testRecurrenceType.getIntervalUnit());
             assertNotNull(testRecurrenceType.getRepeatOnValues());
         } finally {
-            TestHelper.deleteTestRecurrenceType(testRecurrenceType.getId() + 1);
+            TestHelper.deleteTestRecurrenceTypeFromDB(newRecTypeId);
         }
     }
 

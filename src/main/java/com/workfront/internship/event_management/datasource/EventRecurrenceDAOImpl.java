@@ -14,50 +14,50 @@ import java.util.List;
  */
 public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenceDAO {
 
-    public boolean insertEventRecurrence(EventRecurrence recurrence) {
+    //CREATE
+    public int insertEventRecurrence(EventRecurrence recurrence) {
         Connection conn = null;
-        boolean success = false;
+        int id = 0;
         try {
             conn = DataSourceManager.getInstance().getConnection();
-            success = insertEventRecurrence(recurrence, conn);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (PropertyVetoException e) {
+            id = insertEventRecurrence(recurrence, conn);
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
         } finally {
-            closeResources(null, null, conn);
+            closeResources(conn);
         }
-        return success;
+        return id;
     }
 
-    public boolean insertEventRecurrence(EventRecurrence recurrence, Connection conn) {
+    public int insertEventRecurrence(EventRecurrence recurrence, Connection conn) {
         PreparedStatement stmt = null;
-        int affectedRows = 0;
+        ResultSet rs = null;
+        int id = 0;
+        String sqlStr = "INSERT INTO event_recurrence "
+                + "(event_id, recurrence_type_id, repeat_on, repeat_interval, repeat_end) "
+                + "VALUES (?, ?, ?, ?, ?)";
         try {
-            String sqlStr = "INSERT INTO event_recurrence "
-                    + "(event_id, recurrence_type, repeat_on, repeat_interval, repeat_end) "
-                    + "VALUES (?, ?, ?, ?, ?)";
-            stmt = conn.prepareStatement(sqlStr);
+            stmt = conn.prepareStatement(sqlStr, PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, recurrence.getEventId());
             stmt.setInt(2, recurrence.getRecurrenceType().getId());
             stmt.setString(3, recurrence.getRepeatOn());
             stmt.setInt(4, recurrence.getRepeatInterval());
-            stmt.setTimestamp(5, new Timestamp(recurrence.getRepeatEndDate().getTime()));
-            affectedRows = stmt.executeUpdate();
+            if(recurrence.getRepeatEndDate()!= null) {
+                stmt.setTimestamp(5, new Timestamp(recurrence.getRepeatEndDate().getTime()));
+            } else {
+                stmt.setTimestamp(5, null);
+            }
+            stmt.executeUpdate();
+            rs = stmt.getGeneratedKeys();
+            if(rs.next()) {
+                id = rs.getInt(1);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            closeResources(rs, stmt);
         }
-        return affectedRows != 0;
+        return id;
     }
 
     public boolean insertEventRecurrences(List<EventRecurrence> recurrences) {
@@ -66,14 +66,10 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
         try {
             conn = DataSourceManager.getInstance().getConnection();
             success = insertEventRecurrences(recurrences, conn);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (PropertyVetoException e) {
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
         } finally {
-            closeResources(null, null, conn);
+            closeResources(conn);
         }
         return success;
     }
@@ -81,10 +77,10 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
     public boolean insertEventRecurrences(List<EventRecurrence> recurrences, Connection conn) {
         PreparedStatement stmt = null;
         int affectedRows = 0;
-        try {
-            String sqlStr = "INSERT INTO event_recurrence "
+        String sqlStr = "INSERT INTO event_recurrence "
                     + "(event_id, recurrence_type_id, repeat_on, repeat_interval, repeat_end) "
                     + "VALUES (?, ?, ?, ?, ?)";
+        try {
             stmt = conn.prepareStatement(sqlStr);
             for (EventRecurrence recurrence : recurrences) {
                 stmt.setInt(1, recurrence.getEventId());
@@ -102,17 +98,12 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            closeResources(stmt);
         }
         return affectedRows != 0;
     }
 
+    //READ
     public List<EventRecurrence> getEventRecurrencesByEventId(int eventId) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -120,17 +111,13 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
         List<EventRecurrence> recurrencesList = null;
         try {
             conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "SELECT * FROM  event_recurrence LEFT JOIN recurrence_type ON " +
+             String sqlStr = "SELECT * FROM  event_recurrence LEFT JOIN recurrence_type ON " +
                     "event_recurrence.recurrence_type_id = recurrence_type.id where event_id = ?";
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, eventId);
             rs = stmt.executeQuery();
             recurrencesList = createEventRecurrencesFromRS(rs);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (PropertyVetoException e) {
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
         } finally {
             closeResources(rs, stmt, conn);
@@ -138,12 +125,51 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
         return recurrencesList;
     }
 
+    //UPDATE
     public boolean updateEventRecurrence(EventRecurrence recurrence) {
-        return false;
-    }
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        int affectedRows = 0;
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+            String sqlStr = "UPDATE event_recurrence SET event_id = ?, recurrence_type_id = ?, " +
+                    "repeat_on = ?, repeat_interval = ?, repeat_end = ? WHERE id = ?";
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setInt(1, recurrence.getEventId());
+            stmt.setInt(2, recurrence.getRecurrenceType().getId());
+            stmt.setString(3, recurrence.getRepeatOn());
+            stmt.setInt(4, recurrence.getRepeatInterval());
+            if(recurrence.getRepeatEndDate()!= null) {
+                stmt.setTimestamp(5, new Timestamp(recurrence.getRepeatEndDate().getTime()));
+            } else {
+                stmt.setTimestamp(5, null);
+            }
+            stmt.setInt(6, recurrence.getId());
+            affectedRows = stmt.executeUpdate();
+        } catch (SQLException | IOException | PropertyVetoException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources(stmt, conn);
+        }
+        return affectedRows != 0;    }
 
+    //DELETE
     public boolean deleteEventRecurrece(int id) {
-        return deleteEntryById("event_recurrence", id);
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        int affectedRows = 0;
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+            String sqlStr = "DELETE FROM event_recurrence WHERE id = ?";
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setInt(1, id);
+            affectedRows = stmt.executeUpdate();
+        } catch (SQLException | IOException | PropertyVetoException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources(stmt, conn);
+        }
+        return affectedRows != 0;
     }
 
     //helper methods

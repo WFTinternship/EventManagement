@@ -45,28 +45,30 @@ public class TestEventInvitationDAOImpl {
         testEvent = TestHelper.createTestEvent();
         testInvitation = TestHelper.createTestInvitation();
 
-        int userId = TestHelper.insertTestUser(testUser);
+        int userId = TestHelper.insertTestUserToDB(testUser);
         testUser.setId(userId);
 
-        int categoryId = TestHelper.insertTestCategory(testCategory);
+        int categoryId = TestHelper.insertTestCategoryToDB(testCategory);
         testCategory.setId(categoryId);
 
         testEvent.setCategory(testCategory);
-        int eventId = TestHelper.insertTestEvent(testEvent);
+        int eventId = TestHelper.insertTestEventToDB(testEvent);
         testEvent.setId(eventId);
 
         testInvitation.setUser(testUser);
         testInvitation.setEventId(testEvent.getId());
-        int invId = TestHelper.insertTestInvitation(testInvitation);
+        int invId = TestHelper.insertTestInvitationToDB(testInvitation);
         testInvitation.setId(invId);
     }
 
     @After
     public void tearDown() {
-        TestHelper.deleteTestInvitation(testInvitation.getId());
-        TestHelper.deleteTestEvent(testEvent.getId());
-        TestHelper.deleteTestUser(testUser.getId());
-        TestHelper.deleteTestCategory(testCategory.getId());
+        //deleting test records from db
+        TestHelper.deleteTestInvitationFromDB(testInvitation.getId());
+        TestHelper.deleteTestEventFromDB(testEvent.getId());
+        TestHelper.deleteTestUserFromDB(testUser.getId());
+        TestHelper.deleteTestCategoryFromDB(testCategory.getId());
+
         testUser = null;
         testCategory = null;
         testEvent = null;
@@ -74,10 +76,11 @@ public class TestEventInvitationDAOImpl {
     }
 
     @Test
-    public void testInsertInvitation() throws SQLException {
-        TestHelper.deleteTestInvitation(testInvitation.getId());
-        invitationDAO.insertInvitation(testInvitation);
-        EventInvitation actualInvitation = getTestInvitationFromDB(testInvitation.getId() + 1);
+    public void testInsertInvitation(){
+        TestHelper.deleteTestInvitationFromDB(testInvitation.getId());
+        int newInvId = invitationDAO.insertInvitation(testInvitation);
+        EventInvitation actualInvitation = getTestInvitationFromDB(newInvId);
+
         try {
             assertEquals(actualInvitation.getEventId(), testInvitation.getEventId());
             assertEquals(actualInvitation.getUserRole(), testInvitation.getUserRole());
@@ -85,41 +88,18 @@ public class TestEventInvitationDAOImpl {
             assertEquals(actualInvitation.getAttendeesCount(), testInvitation.getAttendeesCount());
             assertEquals(actualInvitation.isParticipated(), testInvitation.isParticipated());
         } finally {
-            TestHelper.deleteTestInvitation(testInvitation.getId() + 1);
+            TestHelper.deleteTestInvitationFromDB(newInvId);
         }
     }
 
-    @Test
-    public void testInsertInvitationsList() throws SQLException {
-//        TestHelper.deleteTestInvitation(testInvitation.getEventId(), testUser.getId());
-//        //TestHelper.deleteTestUser(testUser.getId());
-//
-//        User testUser1 = TestHelper.createTestUser().setUsername("new_username1").setEmail("new_email1@test.com");
-//        User testUser2 = TestHelper.createTestUser().setUsername("new_username2").setEmail("new_email2@test.com");
-//        int userId1 = TestHelper.insertTestUser(testUser1);
-//        int userId2 = TestHelper.insertTestUser(testUser2);
-//        testUser1.setId(userId1);
-//        testUser2.setId(userId2);
-//
-//        List<EventInvitation> testInvitationsList = TestHelper.createTestInvitationsList(testUser1, testUser2, testEvent);
-//        invitationDAO.insertInvitations(testInvitationsList);
-//
-//        List<EventInvitation> actualInvitationsList = getTestInvitations();
-//        try {
-//            assertEquals(actualInvitationsList.size(), testInvitationsList.size());
-//            for (int i = 0; i < actualInvitationsList.size(); i++) {
-//                assertEquals(actualInvitationsList.get(i).getEventId(), testInvitationsList.get(i).getEventId());
-//                assertEquals(actualInvitationsList.get(i).getUserRole(), testInvitationsList.get(i).getUserRole());
-//            }
-//        } finally {
-//            TestHelper.deleteTestUser(testUser1.getId());
-//            TestHelper.deleteTestUser(testUser2.getId());
-//        }
+    @Test //---
+    public void testInsertInvitationsList() {
     }
 
     @Test
     public void testGetInvitationsByEventId() {
         List<EventInvitation> invitations = invitationDAO.getInvitationsByEventId(testEvent.getId());
+
         assertEquals(invitations.size(), 1);
         EventInvitation actualInvitation = invitations.get(0);
         assertEquals(actualInvitation.getEventId(), testInvitation.getEventId());
@@ -133,6 +113,7 @@ public class TestEventInvitationDAOImpl {
     @Test
     public void testGetInvitationById() {
         EventInvitation actualInvitation = invitationDAO.getInvitationById(testInvitation.getId());
+
         assertEquals(actualInvitation.getEventId(), testInvitation.getEventId());
         assertEquals(actualInvitation.getUser().getId(), testInvitation.getUser().getId());
         assertEquals(actualInvitation.getUserRole(), testInvitation.getUserRole());
@@ -142,10 +123,11 @@ public class TestEventInvitationDAOImpl {
     }
 
     @Test
-    public void testUpdateInvitation() throws SQLException {
+    public void testUpdateInvitation(){
         testInvitation.setUserResponse("Yes").setAttendeesCount(2).setParticipated(true);
         invitationDAO.updateInvitation(testInvitation);
         EventInvitation actualInvitation = getTestInvitationFromDB(testInvitation.getId());
+
         assertEquals(actualInvitation.getEventId(), testInvitation.getEventId());
         assertEquals(actualInvitation.getUserRole(), testInvitation.getUserRole());
         assertEquals(actualInvitation.getUserResponse(), testInvitation.getUserResponse());
@@ -154,19 +136,19 @@ public class TestEventInvitationDAOImpl {
     }
 
     @Test
-    public void testDeleteInvitation() throws SQLException {
+    public void testDeleteInvitation() {
         invitationDAO.deleteInvitation(testInvitation.getId());
         assertNull(getTestInvitationFromDB(testInvitation.getId()));
     }
 
     @Test
-    public void testDeleteInvitationsByEventId() throws SQLException {
+    public void testDeleteInvitationsByEventId(){
         invitationDAO.deleteInvitationsByEventId(testInvitation.getEventId());
         assertNull(getTestInvitationFromDB(testInvitation.getId()));
     }
 
     //helper methods
-    private EventInvitation getTestInvitationFromDB(int id) throws SQLException {
+    private EventInvitation getTestInvitationFromDB(int id) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;

@@ -14,16 +14,17 @@ import java.util.List;
 public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
 
     //CREATE
-    public boolean insertMedia(EventMedia media) {
+    public int insertMedia(EventMedia media) {
         Connection conn = null;
         PreparedStatement stmt = null;
-        int affectedRows = 0;
+        ResultSet rs = null;
+        int id = 0;
         try {
             conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "INSERT INTO event_media "
                     + "(event_id, path, type, description, uploader_id, upload_date) "
                     + "VALUES (?, ?, ?, ?, ?, ?)";
-            stmt = conn.prepareStatement(sqlStr);
+            stmt = conn.prepareStatement(sqlStr, PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, media.getEventId());
             stmt.setString(2, media.getPath());
             stmt.setString(3, media.getType());
@@ -34,17 +35,18 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
             } else {
                 stmt.setObject(6, null);
             }
-            affectedRows = stmt.executeUpdate();
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            System.out.println("PropertyVetoException " + e.getMessage());
+             stmt.executeUpdate();
+
+            rs = stmt.getGeneratedKeys();
+            if(rs.next()) {
+                id = rs.getInt(1);
+            }
+        } catch (SQLException | IOException | PropertyVetoException e) {
+            e.printStackTrace();
         } finally {
-            closeResources(null, stmt, conn);
+            closeResources(rs, stmt, conn);
         }
-        return affectedRows != 0;
+        return id;
     }
 
     public boolean insertMediaList(List<EventMedia> mediaList) {

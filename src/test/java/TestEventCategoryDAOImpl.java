@@ -35,26 +35,26 @@ public class TestEventCategoryDAOImpl {
     @Before
     public void setUp() {
         testCategory = TestHelper.createTestCategory();
-        int categoryId = TestHelper.insertTestCategory(testCategory);
+        int categoryId = TestHelper.insertTestCategoryToDB(testCategory);
         testCategory.setId(categoryId);
     }
 
     @After
     public void tearDown() {
-        TestHelper.deleteTestCategory(testCategory.getId());
+        TestHelper.deleteTestCategoryFromDB(testCategory.getId());
         testCategory = null;
     }
 
     @Test
     public void testInsertCategory(){
-        TestHelper.deleteTestCategory(testCategory.getId());
-        categoryDAO.insertCategory(testCategory);
-        EventCategory actualCategory = getTestCategory(testCategory.getId() + 1);
+        TestHelper.deleteTestCategoryFromDB(testCategory.getId());
+        int newCatId = categoryDAO.insertCategory(testCategory);
+        EventCategory actualCategory = getTestCategory(newCatId);
         try {
             assertEquals(actualCategory.getTitle(), testCategory.getTitle());
             assertEquals(actualCategory.getDescription(), testCategory.getDescription());
         } finally {
-            TestHelper.deleteTestCategory(testCategory.getId() + 1);
+            TestHelper.deleteTestCategoryFromDB(newCatId);
         }
     }
 
@@ -75,6 +75,7 @@ public class TestEventCategoryDAOImpl {
     @Test
     public void testGetCategoryById() {
         EventCategory actualCategory = categoryDAO.getCategoryById(testCategory.getId());
+
         assertEquals(actualCategory.getId(), testCategory.getId());
         assertEquals(actualCategory.getTitle(), testCategory.getTitle());
         assertEquals(actualCategory.getDescription(), testCategory.getDescription());
@@ -85,6 +86,7 @@ public class TestEventCategoryDAOImpl {
         testCategory.setDescription("New test description");
         categoryDAO.updateCategory(testCategory);
         EventCategory actualCategory = getTestCategory(testCategory.getId());
+
         assertEquals(actualCategory.getId(), testCategory.getId());
         assertEquals(actualCategory.getTitle(), testCategory.getTitle());
         assertEquals(actualCategory.getDescription(), testCategory.getDescription());

@@ -38,25 +38,20 @@ public class TestHelper {
             System.out.println("SQLException " + e.getMessage());
         }
     }
-
     public static void closeResources(Statement stmt, Connection conn) {
         closeResources(null, stmt, conn);
     }
-
+    public static void closeResources(ResultSet rs, Statement stmt) {
+        closeResources(rs, stmt, null);
+    }
     public static void closeResources(Connection conn) {
         closeResources(null, conn);
     }
-
     public static void closeResources(Statement stmt) {
-        closeResources(null, stmt, null);
+        closeResources(stmt, null);
     }
     public static void closeResources(ResultSet rs) {
-        closeResources(rs, null, null);
-    }
-
-
-    protected void closeResources(ResultSet rs, Statement stmt) {
-        closeResources(rs, stmt, null);
+        closeResources(rs, null);
     }
 
     //test object creation
@@ -73,26 +68,6 @@ public class TestHelper {
                 .setVerified(false)
                 .setRegistrationDate(currentDate);
         return testUser;
-    }
-
-    public static EventInvitation createTestInvitation() {
-        EventInvitation invitation = new EventInvitation();
-        invitation.setUserRole("Member")
-                .setAttendeesCount(1)
-                .setParticipated(false)
-                .setUserResponse("Yes");
-        return invitation;
-    }
-
-    public static List<EventInvitation> createTestInvitationsList(User testUser1, User testUser2, Event testEvent) {
-        List<EventInvitation> invitationsList = new ArrayList<EventInvitation>();
-        EventInvitation invitation1 = new EventInvitation();
-        EventInvitation invitation2 = new EventInvitation();
-        invitation1.setEventId(testEvent.getId()).setUser(testUser1).setUserRole("Member");
-        invitation2.setEventId(testEvent.getId()).setUser(testUser2).setUserRole("Organizer");
-        invitationsList.add(invitation1);
-        invitationsList.add(invitation2);
-        return invitationsList;
     }
 
     public static EventCategory createTestCategory() {
@@ -113,6 +88,26 @@ public class TestHelper {
                 .setFilePath("/events/test_event.doc")
                 .setImagePath("events/test_event.jpg");
         return testEvent;
+    }
+
+    public static EventInvitation createTestInvitation() {
+        EventInvitation invitation = new EventInvitation();
+        invitation.setUserRole("Member")
+                .setAttendeesCount(1)
+                .setParticipated(false)
+                .setUserResponse("Yes");
+        return invitation;
+    }
+
+    public static List<EventInvitation> createTestInvitationsList(User testUser1, User testUser2, Event testEvent) {
+        List<EventInvitation> invitationsList = new ArrayList<EventInvitation>();
+        EventInvitation invitation1 = new EventInvitation();
+        EventInvitation invitation2 = new EventInvitation();
+        invitation1.setEventId(testEvent.getId()).setUser(testUser1).setUserRole("Member");
+        invitation2.setEventId(testEvent.getId()).setUser(testUser2).setUserRole("Organizer");
+        invitationsList.add(invitation1);
+        invitationsList.add(invitation2);
+        return invitationsList;
     }
 
     public static EventMedia createTestMedia() {
@@ -143,64 +138,14 @@ public class TestHelper {
         return recType;
     }
 
-    //common methods
-    public static int insertTestCategory(EventCategory testCategory) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        int id = 0;
-        try {
-            conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "INSERT INTO event_category "
-                    + "(title, description) VALUES (?, ?)";
-            stmt = conn.prepareStatement(sqlStr, Statement.RETURN_GENERATED_KEYS);
-            stmt.setString(1, testCategory.getTitle());
-            stmt.setString(2, testCategory.getDescription());
-            stmt.executeUpdate();
-
-            rs = stmt.getGeneratedKeys();
-            if(rs.next()) {
-                id = rs.getInt(1);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-            System.out.println("PropertyVetoException " + e.getMessage());
-        } finally {
-            closeResources(rs, stmt, conn);
-        }
-        return id;
+    public static EventRecurrence createTestEventRecurrence() {
+        EventRecurrence eventRecurrence = new EventRecurrence();
+        eventRecurrence.setRepeatInterval(2).setRepeatOn("Test RepeatOn string").setRepeatEndDate(new java.util.Date());
+        return eventRecurrence;
     }
 
-    public static void deleteTestCategory(int id) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        try {
-            conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "DELETE FROM event_category WHERE id = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-            System.out.println("PropertyVetoException " + e.getMessage());
-        } finally {
-            closeResources(stmt, conn);
-        }
-    }
-
-    public static int insertTestUser(User testUser) {
+    //inserting test objects to db
+    public static int insertTestUserToDB(User testUser) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -211,7 +156,7 @@ public class TestHelper {
                     + "(first_name, last_name, username, password, "
                     + "email, phone_number, avatar_path, verified, registration_date) VALUES "
                     + "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            stmt = conn.prepareStatement(sqlStr, Statement.RETURN_GENERATED_KEYS);
+            stmt = conn.prepareStatement(sqlStr, PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setString(1, testUser.getFirstName());
             stmt.setString(2, testUser.getLastName());
             stmt.setString(3, testUser.getUsername());
@@ -227,15 +172,8 @@ public class TestHelper {
             if(rs.next()) {
                 id = rs.getInt(1);
             }
-        } catch (IOException e) {
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -243,7 +181,7 @@ public class TestHelper {
 
     }
 
-    public static void deleteTestUser(int id) {
+    public static void deleteTestUserFromDB(int id) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -252,21 +190,56 @@ public class TestHelper {
             PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-        } catch (IOException e) {
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(stmt, conn);
         }
     }
 
-    public static int insertTestRecurrenceType(RecurrenceType recType) {
+    public static int insertTestCategoryToDB(EventCategory testCategory) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        int id = 0;
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+            String sqlStr = "INSERT INTO event_category "
+                    + "(title, description) VALUES (?, ?)";
+            stmt = conn.prepareStatement(sqlStr, PreparedStatement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, testCategory.getTitle());
+            stmt.setString(2, testCategory.getDescription());
+            stmt.executeUpdate();
+
+            rs = stmt.getGeneratedKeys();
+            if(rs.next()) {
+                id = rs.getInt(1);
+            }
+        } catch (SQLException | IOException | PropertyVetoException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources(rs, stmt, conn);
+        }
+        return id;
+    }
+
+    public static void deleteTestCategoryFromDB(int id) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+            String sqlStr = "DELETE FROM event_category WHERE id = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException | IOException | PropertyVetoException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources(stmt, conn);
+        }
+    }
+
+    public static int insertTestRecurrenceTypeToDB(RecurrenceType recType) {
         Connection conn = null;
         PreparedStatement stmtRecType = null;
         PreparedStatement stmtRepeatOn = null;
@@ -277,7 +250,7 @@ public class TestHelper {
             conn.setAutoCommit(false);
             String sqlStr = "INSERT INTO recurrence_type"
                     + "(title, interval_unit) VALUES (?, ?)";
-            stmtRecType = conn.prepareStatement(sqlStr, Statement.RETURN_GENERATED_KEYS);
+            stmtRecType = conn.prepareStatement(sqlStr, PreparedStatement.RETURN_GENERATED_KEYS);
             stmtRecType.setString(1, recType.getTitle());
             stmtRecType.setString(2, recType.getIntervalUnit());
             stmtRecType.executeUpdate();
@@ -301,16 +274,8 @@ public class TestHelper {
                 stmtRepeatOn.executeBatch();
             }
             conn.commit();
-
-        } catch (IOException e) {
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(rs);
             closeResources(stmtRecType);
@@ -320,7 +285,7 @@ public class TestHelper {
         return id;
     }
 
-    public static void deleteTestRecurrenceType(int id) {
+    public static void deleteTestRecurrenceTypeFromDB(int id) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -329,21 +294,14 @@ public class TestHelper {
             PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-        } catch (IOException e) {
+        } catch (IOException | SQLException | PropertyVetoException e) {
             e.printStackTrace();
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(stmt, conn);
         }
     }
 
-    public static int insertTestEvent(Event testEvent) {
+    public static int insertTestEventToDB(Event testEvent) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -354,7 +312,7 @@ public class TestHelper {
                     + "(title, short_desc, full_desc, location, lat, lng, file_path, image_path, "
                     + "category_id, public_accessed, guests_allowed) VALUES "
                     + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            stmt = conn.prepareStatement(insertEvent, Statement.RETURN_GENERATED_KEYS);
+            stmt = conn.prepareStatement(insertEvent, PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setString(1, testEvent.getTitle());
             stmt.setString(2, testEvent.getShortDesc());
             stmt.setString(3, testEvent.getFullDesc());
@@ -372,22 +330,15 @@ public class TestHelper {
             if(rs.next()) {
                 id = rs.getInt(1);
             }
-        } catch (IOException e) {
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(rs, stmt, conn);
         }
         return id;
     }
 
-    public static void deleteTestEvent(int eventId) {
+    public static void deleteTestEventFromDB(int eventId) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -396,21 +347,14 @@ public class TestHelper {
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, eventId);
             stmt.executeUpdate();
-        } catch (IOException e) {
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(stmt, conn);
         }
     }
 
-    public static int insertTestMedia(EventMedia testMedia) {
+    public static int insertTestMediaToDB(EventMedia testMedia) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -420,7 +364,7 @@ public class TestHelper {
             String sqlStr = "INSERT INTO event_media "
                     + "(event_id, path, type, description, uploader_id, upload_date) "
                     + "VALUES (?, ?, ?, ?, ?, ?)";
-            stmt = conn.prepareStatement(sqlStr, Statement.RETURN_GENERATED_KEYS);
+            stmt = conn.prepareStatement(sqlStr, PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, testMedia.getEventId());
             stmt.setString(2, testMedia.getPath());
             stmt.setString(3, testMedia.getType());
@@ -433,22 +377,15 @@ public class TestHelper {
             if(rs.next()) {
                 id = rs.getInt(1);
             }
-        } catch (IOException e) {
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(rs, stmt, conn);
         }
         return id;
     }
 
-    public static void deleteTestMedia(int mediaId) {
+    public static void deleteTestMediaFromDB(int mediaId) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -457,21 +394,14 @@ public class TestHelper {
             PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
             preparedStatement.setInt(1, mediaId);
             preparedStatement.executeUpdate();
-        } catch (IOException e) {
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(stmt, conn);
         }
     }
 
-    public static int insertTestInvitation(EventInvitation testInvitation) {
+    public static int insertTestInvitationToDB(EventInvitation testInvitation) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -481,7 +411,7 @@ public class TestHelper {
             String sqlStr = "INSERT INTO event_invitation "
                     + "(event_id, user_id, user_role, user_response, attendees_count, participated) "
                     + "VALUES (?, ?, ?, ?, ?, ?)";
-            stmt = conn.prepareStatement(sqlStr, Statement.RETURN_GENERATED_KEYS);
+            stmt = conn.prepareStatement(sqlStr, PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, testInvitation.getEventId());
             stmt.setInt(2, testInvitation.getUser().getId());
             stmt.setString(3, testInvitation.getUserRole());
@@ -494,22 +424,15 @@ public class TestHelper {
             if(rs.next()) {
                 id = rs.getInt(1);
             }
-        } catch (IOException e) {
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(rs, stmt, conn);
         }
         return id;
     }
 
-    public static void deleteTestInvitation(int id) {
+    public static void deleteTestInvitationFromDB(int id) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -518,17 +441,57 @@ public class TestHelper {
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, id);
             stmt.executeUpdate();
-        } catch (IOException e) {
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(stmt, conn);
         }
     }
-}
+
+    public static int insertTestEventRecurrenceToDB(EventRecurrence recurrence) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        int id = 0;
+        String sqlStr = "INSERT INTO event_recurrence "
+                + "(event_id, recurrence_type_id, repeat_on, repeat_interval, repeat_end) "
+                + "VALUES (?, ?, ?, ?, ?)";
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+            stmt = conn.prepareStatement(sqlStr, PreparedStatement.RETURN_GENERATED_KEYS);
+            stmt.setInt(1, recurrence.getEventId());
+            stmt.setInt(2, recurrence.getRecurrenceType().getId());
+            stmt.setString(3, recurrence.getRepeatOn());
+            stmt.setInt(4, recurrence.getRepeatInterval());
+            if(recurrence.getRepeatEndDate()!= null) {
+                stmt.setTimestamp(5, new Timestamp(recurrence.getRepeatEndDate().getTime()));
+            } else {
+                stmt.setTimestamp(5, null);
+            }
+            stmt.executeUpdate();
+            rs = stmt.getGeneratedKeys();
+            if(rs.next()) {
+                id = rs.getInt(1);
+            }
+        } catch (SQLException | IOException | PropertyVetoException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources(rs, stmt, conn);
+        }
+        return id;    }
+
+    public static void deleteTestEventRecurrenceFromDB(int id) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+            String sqlStr = "DELETE FROM event_recurrence WHERE id = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+        } catch (IOException | SQLException | PropertyVetoException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources(stmt, conn);
+        }
+    }}

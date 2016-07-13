@@ -41,28 +41,28 @@ public class TestEventMediaDAOImpl {
         testEvent = TestHelper.createTestEvent();
         testMedia = TestHelper.createTestMedia();
 
-        int userId = TestHelper.insertTestUser(testUser);
+        int userId = TestHelper.insertTestUserToDB(testUser);
         testUser.setId(userId);
 
-        int categoryId = TestHelper.insertTestCategory(testCategory);
+        int categoryId = TestHelper.insertTestCategoryToDB(testCategory);
         testCategory.setId(categoryId);
 
         testEvent.setCategory(testCategory);
-        int eventId = TestHelper.insertTestEvent(testEvent);
+        int eventId = TestHelper.insertTestEventToDB(testEvent);
         testEvent.setId(eventId);
 
         testMedia.setUploaderId(testUser.getId());
         testMedia.setEventId(testEvent.getId());
-        int mediaId = TestHelper.insertTestMedia(testMedia);
+        int mediaId = TestHelper.insertTestMediaToDB(testMedia);
         testMedia.setId(mediaId);
     }
 
     @After
     public void tearDown() {
-        TestHelper.deleteTestMedia(testMedia.getId());
-        TestHelper.deleteTestEvent(testEvent.getId());
-        TestHelper.deleteTestUser(testUser.getId());
-        TestHelper.deleteTestCategory(testCategory.getId());
+        TestHelper.deleteTestMediaFromDB(testMedia.getId());
+        TestHelper.deleteTestEventFromDB(testEvent.getId());
+        TestHelper.deleteTestUserFromDB(testUser.getId());
+        TestHelper.deleteTestCategoryFromDB(testCategory.getId());
         testUser = null;
         testCategory = null;
         testEvent = null;
@@ -71,41 +71,28 @@ public class TestEventMediaDAOImpl {
 
     @Test
     public void testInsertMedia() {
-        TestHelper.deleteTestMedia(testMedia.getId());
-        mediaDAO.insertMedia(testMedia);
+        TestHelper.deleteTestMediaFromDB(testMedia.getId());
+        int newMediaId = mediaDAO.insertMedia(testMedia);
+        EventMedia actualMedia = getTestMediaFromDB(newMediaId);
 
-        EventMedia actualMedia = getTestMedia(testMedia.getId()+1);
         try {
             assertEquals(actualMedia.getUploaderId(), testMedia.getUploaderId());
             assertEquals(actualMedia.getPath(), testMedia.getPath());
             assertEquals(actualMedia.getType(), testMedia.getType());
             assertEquals(actualMedia.getDescription(), testMedia.getDescription());
         }finally {
-            TestHelper.deleteTestMedia(testMedia.getId() + 1);
+            TestHelper.deleteTestMediaFromDB(newMediaId);
         }
     }
 
     @Test //---
     public void testInsertMediaList() {
-//       // List<EventMedia> testMediaList = TestHelper.createTestMediaList();
-//        mediaDAO.insertMediaList(testMediaList);
-//        List<EventMedia> actualMediaList = getTestMediaList();
-//        try {
-//            assertEquals(actualMediaList.size(), testMediaList.size());
-//            for (int i = 0; i < actualMediaList.size(); i++) {
-//                assertEquals(actualMediaList.get(i).getDescription(), testMediaList.get(i).getDescription());
-//                assertEquals(actualMediaList.get(i).getPath(), testMediaList.get(i).getPath());
-//            }
-//        } finally {
-//
-//           // TestHelper.deleteTestMedia(testUser1.getId());
-//           // TestHelper.deleteTestUser(testUser2.getId());
-//        }
+
     }
 
     @Test
     public void testGetAllMedia() {
-        List<EventMedia> expectedMedia = getAllMedia();
+        List<EventMedia> expectedMedia = getAllMediaFromDB();
         List<EventMedia> actualMedia = mediaDAO.getAllMedia();
         assertEquals(expectedMedia.size(), actualMedia.size());
         for (int i = 0; i < actualMedia.size(); i++) {
@@ -121,6 +108,7 @@ public class TestEventMediaDAOImpl {
     @Test
     public void testGetMediaById() {
         EventMedia actualMedia = getTestMediaByField("id", testMedia.getId()).get(0);
+
         assertEquals(actualMedia.getUploaderId(), testMedia.getUploaderId());
         assertEquals(actualMedia.getPath(), testMedia.getPath());
         assertEquals(actualMedia.getType(), testMedia.getType());
@@ -162,7 +150,7 @@ public class TestEventMediaDAOImpl {
     public void testUpdateMediaDescription() {
         String changedDesc = "changed description";
         mediaDAO.updateMediaDescription(testMedia.getId(), "changed description");
-        EventMedia actualMedia = getTestMedia(testMedia.getId());
+        EventMedia actualMedia = getTestMediaFromDB(testMedia.getId());
         assertEquals(actualMedia.getUploaderId(), testMedia.getUploaderId());
         assertEquals(actualMedia.getPath(), testMedia.getPath());
         assertEquals(actualMedia.getType(), testMedia.getType());
@@ -172,11 +160,11 @@ public class TestEventMediaDAOImpl {
     @Test
     public void testDeleteMedia() {
         mediaDAO.deleteMedia(testMedia.getId());
-        assertNull(getTestMedia(testMedia.getId()));
+        assertNull(getTestMediaFromDB(testMedia.getId()));
     }
 
     //helper methods
-    private EventMedia getTestMedia(int mediaId){
+    private EventMedia getTestMediaFromDB(int mediaId){
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -197,19 +185,15 @@ public class TestEventMediaDAOImpl {
                         .setUploaderId(rs.getInt("uploader_id"))
                         .setUploadDate(rs.getTimestamp("upload_date"));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
+        } catch (SQLException | IOException | PropertyVetoException e) {
+                e.printStackTrace();
         } finally {
             TestHelper.closeResources(rs, stmt, conn);
         }
         return testMedia;
     }
 
-    private List<EventMedia> getTestMediaList() {
+    private List<EventMedia> getTestMediaListFromDB() {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -231,11 +215,7 @@ public class TestEventMediaDAOImpl {
                         .setUploadDate(rs.getTimestamp("upload_date"));
                 mediaList.add(media);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (PropertyVetoException e) {
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
         } finally {
             TestHelper.closeResources(rs, stmt, conn);
@@ -243,7 +223,7 @@ public class TestEventMediaDAOImpl {
         return mediaList;
     }
 
-    private List<EventMedia> getAllMedia(){
+    private List<EventMedia> getAllMediaFromDB(){
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -264,11 +244,7 @@ public class TestEventMediaDAOImpl {
                         .setUploadDate(rs.getTimestamp("upload_date"));
                 mediaList.add(media);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (PropertyVetoException e) {
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
         } finally {
             TestHelper.closeResources(rs, stmt, conn);
@@ -298,15 +274,8 @@ public class TestEventMediaDAOImpl {
                         .setUploadDate(rs.getTimestamp("upload_date"));
                 mediaList.add(media);
             }
-        } catch (IOException e) {
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             TestHelper.closeResources(rs, stmt, conn);
         }

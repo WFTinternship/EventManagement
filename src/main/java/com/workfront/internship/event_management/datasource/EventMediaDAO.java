@@ -10,7 +10,7 @@ import java.util.List;
 public interface EventMediaDAO {
 
      //create
-     boolean insertMedia(EventMedia media);
+     int insertMedia(EventMedia media);
      boolean insertMediaList(List<EventMedia> mediaList);
 
      //read

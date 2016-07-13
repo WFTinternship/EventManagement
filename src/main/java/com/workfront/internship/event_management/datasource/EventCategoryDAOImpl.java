@@ -23,7 +23,7 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
             String sqlStr = "INSERT INTO event_category "
                     + "(title, description, creation_date) VALUES "
                     + "(?, ?, ?)";
-            stmt = conn.prepareStatement(sqlStr, Statement.RETURN_GENERATED_KEYS);
+            stmt = conn.prepareStatement(sqlStr, PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setString(1, category.getTitle());
             stmt.setString(2, category.getDescription());
             if(category.getCreationDate() != null) {
@@ -37,15 +37,8 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
             if(rs.next()) {
                 id = rs.getInt(1);
             }
-        } catch (IOException e) {
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -63,15 +56,8 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
             stmt = conn.prepareStatement(query);
             rs = stmt.executeQuery();
             categoriesList = createEventCategoryListFromRS(rs);
-        } catch (IOException e) {
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -85,18 +71,13 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
         EventCategory category = null;
         try {
             conn = DataSourceManager.getInstance().getConnection();
-            String query = "SELECT * FROM event_category "
-                    + "where id = ?";
+            String query = "SELECT * FROM event_category where id = ?";
             stmt = conn.prepareStatement(query);
             stmt.setInt(1, id);
             rs = stmt.executeQuery();
             category = createEventCategoryListFromRS(rs).get(0);
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            System.out.println("PropertyVetoException " + e.getMessage());
+        } catch (SQLException | IOException | PropertyVetoException e) {
+            e.printStackTrace();
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -115,12 +96,8 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
             stmt.setString(2, category.getDescription());
             stmt.setInt(3, category.getId());
             affectedRows = stmt.executeUpdate();
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            System.out.println("PropertyVetoException " + e.getMessage());
+        } catch (SQLException | IOException | PropertyVetoException e) {
+            e.printStackTrace();
         } finally {
             closeResources(stmt, conn);
         }
@@ -137,15 +114,8 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, categoryId);
             affectedRows = stmt.executeUpdate();
-        } catch (IOException e) {
+        } catch (SQLException | IOException | PropertyVetoException e) {
             e.printStackTrace();
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(stmt, conn);
         }
