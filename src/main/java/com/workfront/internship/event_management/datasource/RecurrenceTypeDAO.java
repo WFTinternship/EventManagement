@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface RecurrenceTypeDAO {
 
-     boolean insertRecurrenceType(RecurrenceType recurrenceType);
+     int insertRecurrenceType(RecurrenceType recurrenceType);
      List<RecurrenceType> getAllRecurrenceTypes();
      RecurrenceType getRecurrenceTypeById(int id);
      boolean deleteRecurrenceType(int id);

@@ -8,7 +8,7 @@ import java.util.List;
  * Created by hermine on 7/1/16.
  */
 public interface EventCategoryDAO  {
-     boolean insertCategory(EventCategory category);
+     int insertCategory(EventCategory category);
      List<EventCategory> getAllCategories();
      EventCategory getCategoryById(int id);
      boolean updateCategory(EventCategory category);

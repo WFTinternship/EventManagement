@@ -46,7 +46,7 @@ public class TestEventCategoryDAOImpl {
     }
 
     @Test
-    public void testInsertCategory() throws SQLException {
+    public void testInsertCategory(){
         TestHelper.deleteTestCategory(testCategory.getId());
         categoryDAO.insertCategory(testCategory);
         EventCategory actualCategory = getTestCategory(testCategory.getId() + 1);
@@ -59,7 +59,7 @@ public class TestEventCategoryDAOImpl {
     }
 
     @Test
-    public void testGetAllCategories() throws SQLException {
+    public void testGetAllCategories(){
         List<EventCategory> expectedCategories = getAllCategories();
         List<EventCategory> actualCategories = categoryDAO.getAllCategories();
 
@@ -73,33 +73,31 @@ public class TestEventCategoryDAOImpl {
     }
 
     @Test
-    public void testGetCategoryById() throws SQLException {
+    public void testGetCategoryById() {
         EventCategory actualCategory = categoryDAO.getCategoryById(testCategory.getId());
-
         assertEquals(actualCategory.getId(), testCategory.getId());
         assertEquals(actualCategory.getTitle(), testCategory.getTitle());
         assertEquals(actualCategory.getDescription(), testCategory.getDescription());
     }
 
     @Test
-    public void testUpdateCategory() throws SQLException {
+    public void testUpdateCategory()  {
         testCategory.setDescription("New test description");
         categoryDAO.updateCategory(testCategory);
         EventCategory actualCategory = getTestCategory(testCategory.getId());
-
         assertEquals(actualCategory.getId(), testCategory.getId());
         assertEquals(actualCategory.getTitle(), testCategory.getTitle());
         assertEquals(actualCategory.getDescription(), testCategory.getDescription());
     }
 
     @Test
-    public void testDeleteCategory() throws SQLException {
+    public void testDeleteCategory() {
         categoryDAO.deleteCategory(testCategory.getId());
         assertNull(getTestCategory(testCategory.getId()));
     }
 
     //helper methods
-    private EventCategory getTestCategory(int id) throws SQLException {
+    private EventCategory getTestCategory(int id){
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -129,7 +127,7 @@ public class TestEventCategoryDAOImpl {
         return category;
     }
 
-    private List<EventCategory> getAllCategories() throws SQLException {
+    private List<EventCategory> getAllCategories(){
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;

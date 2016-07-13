@@ -15,7 +15,7 @@ public class TestHelper {
 
     public static void closeResources(ResultSet rs, Statement stmt, Connection conn) {
         try {
-            if (rs != null) {
+            if(rs != null) {
                 rs.close();
             }
         } catch (SQLException e) {
@@ -23,7 +23,7 @@ public class TestHelper {
         }
 
         try {
-            if (stmt != null) {
+            if(stmt != null) {
                 stmt.close();
             }
         } catch (SQLException e) {
@@ -31,7 +31,7 @@ public class TestHelper {
         }
 
         try {
-            if (conn != null) {
+            if(conn != null) {
                 conn.close();
             }
         } catch (SQLException e) {
@@ -45,6 +45,18 @@ public class TestHelper {
 
     public static void closeResources(Connection conn) {
         closeResources(null, conn);
+    }
+
+    public static void closeResources(Statement stmt) {
+        closeResources(null, stmt, null);
+    }
+    public static void closeResources(ResultSet rs) {
+        closeResources(rs, null, null);
+    }
+
+
+    protected void closeResources(ResultSet rs, Statement stmt) {
+        closeResources(rs, stmt, null);
     }
 
     //test object creation
@@ -122,8 +134,12 @@ public class TestHelper {
     }
 
     public static RecurrenceType createTestRecurrenceType() {
+        List<String> repeatOn = new ArrayList<String>();
+        repeatOn.add("Test reoeat on 1");
+        repeatOn.add("Test reoeat on 2");
+
         RecurrenceType recType = new RecurrenceType();
-        recType.setTitle("Test recurrence type").setIntervalUnit("test unit");
+        recType.setTitle("Test recurrence type").setIntervalUnit("test unit").setRepeatOnValues(repeatOn);
         return recType;
     }
 
@@ -131,29 +147,32 @@ public class TestHelper {
     public static int insertTestCategory(EventCategory testCategory) {
         Connection conn = null;
         PreparedStatement stmt = null;
+        ResultSet rs = null;
         int id = 0;
         try {
             conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "INSERT INTO event_category "
                     + "(title, description) VALUES (?, ?)";
-            stmt = conn.prepareStatement(sqlStr);
+            stmt = conn.prepareStatement(sqlStr, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, testCategory.getTitle());
             stmt.setString(2, testCategory.getDescription());
             stmt.executeUpdate();
 
-            stmt = conn.prepareStatement("SELECT LAST_INSERT_ID() as id");
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                id = rs.getInt("id");
+            rs = stmt.getGeneratedKeys();
+            if(rs.next()) {
+                id = rs.getInt(1);
             }
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("SQLException " + e.getMessage());
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(null, stmt, conn);
+            closeResources(rs, stmt, conn);
         }
         return id;
     }
@@ -169,18 +188,22 @@ public class TestHelper {
             preparedStatement.executeUpdate();
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("SQLException " + e.getMessage());
         } catch (PropertyVetoException e) {
             e.printStackTrace();
+            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(null, stmt, conn);
+            closeResources(stmt, conn);
         }
     }
 
     public static int insertTestUser(User testUser) {
         Connection conn = null;
         PreparedStatement stmt = null;
+        ResultSet rs = null;
         int id = 0;
         try {
             conn = DataSourceManager.getInstance().getConnection();
@@ -188,7 +211,7 @@ public class TestHelper {
                     + "(first_name, last_name, username, password, "
                     + "email, phone_number, avatar_path, verified, registration_date) VALUES "
                     + "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            stmt = conn.prepareStatement(sqlStr);
+            stmt = conn.prepareStatement(sqlStr, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, testUser.getFirstName());
             stmt.setString(2, testUser.getLastName());
             stmt.setString(3, testUser.getUsername());
@@ -200,17 +223,21 @@ public class TestHelper {
             stmt.setTimestamp(9, new Timestamp(testUser.getRegistrationDate().getTime()));
             stmt.executeUpdate();
 
-            stmt = conn.prepareStatement("SELECT LAST_INSERT_ID() as id");
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                id = rs.getInt("id");
+            rs = stmt.getGeneratedKeys();
+            if(rs.next()) {
+                id = rs.getInt(1);
             }
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("SQLException " + e.getMessage());
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+            System.out.println("PropertyVetoException " + e.getMessage());
+        } finally {
+            closeResources(rs, stmt, conn);
         }
         return id;
 
@@ -225,41 +252,70 @@ public class TestHelper {
             PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("SQLException " + e.getMessage());
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+            System.out.println("PropertyVetoException " + e.getMessage());
+        } finally {
+            closeResources(stmt, conn);
         }
     }
 
-    public static int insertTestRecurrenceType() {
-        RecurrenceType recType = createTestRecurrenceType();
+    public static int insertTestRecurrenceType(RecurrenceType recType) {
         Connection conn = null;
-        PreparedStatement stmt = null;
+        PreparedStatement stmtRecType = null;
+        PreparedStatement stmtRepeatOn = null;
+        ResultSet rs = null;
         int id = 0;
         try {
             conn = DataSourceManager.getInstance().getConnection();
+            conn.setAutoCommit(false);
             String sqlStr = "INSERT INTO recurrence_type"
                     + "(title, interval_unit) VALUES (?, ?)";
-            stmt = conn.prepareStatement(sqlStr);
-            stmt.setString(1, recType.getTitle());
-            stmt.setString(2, recType.getIntervalUnit());
-            stmt.executeUpdate();
-            stmt = conn.prepareStatement("SELECT LAST_INSERT_ID() as id");
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                id = rs.getInt("id");
+            stmtRecType = conn.prepareStatement(sqlStr, Statement.RETURN_GENERATED_KEYS);
+            stmtRecType.setString(1, recType.getTitle());
+            stmtRecType.setString(2, recType.getIntervalUnit());
+            stmtRecType.executeUpdate();
+
+            rs = stmtRecType.getGeneratedKeys();
+            if(rs.next()) {
+                id = rs.getInt(1);
             }
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
+
+            if(recType.getRepeatOnValues() != null) {
+                String insertRepeatOnValues = "INSERT INTO repeat_on_value "
+                        + "(recurrence_type_id, title) VALUES "
+                        + "(?, ?)";
+                stmtRepeatOn = conn.prepareStatement(insertRepeatOnValues);
+                List<String> values = recType.getRepeatOnValues();
+                for (String value : values) {
+                    stmtRepeatOn.setInt(1, id);
+                    stmtRepeatOn.setString(2, value);
+                    stmtRepeatOn.addBatch();
+                }
+                stmtRepeatOn.executeBatch();
+            }
+            conn.commit();
+
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("SQLException " + e.getMessage());
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(null, stmt, conn);
+            closeResources(rs);
+            closeResources(stmtRecType);
+            closeResources(stmtRepeatOn);
+            closeResources(conn);
         }
         return id;
     }
@@ -275,18 +331,22 @@ public class TestHelper {
             preparedStatement.executeUpdate();
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("SQLException " + e.getMessage());
         } catch (PropertyVetoException e) {
             e.printStackTrace();
+            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(null, stmt, conn);
+            closeResources(stmt, conn);
         }
     }
 
     public static int insertTestEvent(Event testEvent) {
         Connection conn = null;
         PreparedStatement stmt = null;
+        ResultSet rs = null;
         int id = 0;
         try {
             conn = DataSourceManager.getInstance().getConnection();
@@ -294,7 +354,7 @@ public class TestHelper {
                     + "(title, short_desc, full_desc, location, lat, lng, file_path, image_path, "
                     + "category_id, public_accessed, guests_allowed) VALUES "
                     + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            stmt = conn.prepareStatement(insertEvent);
+            stmt = conn.prepareStatement(insertEvent, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, testEvent.getTitle());
             stmt.setString(2, testEvent.getShortDesc());
             stmt.setString(3, testEvent.getFullDesc());
@@ -308,19 +368,21 @@ public class TestHelper {
             stmt.setBoolean(11, testEvent.isGuestsAllowed());
             stmt.executeUpdate();
 
-            stmt = conn.prepareStatement("SELECT LAST_INSERT_ID() as id");
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                id = rs.getInt("id");
+            rs = stmt.getGeneratedKeys();
+            if(rs.next()) {
+                id = rs.getInt(1);
             }
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("SQLException " + e.getMessage());
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(null, stmt, conn);
+            closeResources(rs, stmt, conn);
         }
         return id;
     }
@@ -331,23 +393,27 @@ public class TestHelper {
         try {
             conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "DELETE FROM event WHERE id = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
-            preparedStatement.setInt(1, eventId);
-            preparedStatement.executeUpdate();
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setInt(1, eventId);
+            stmt.executeUpdate();
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("SQLException " + e.getMessage());
         } catch (PropertyVetoException e) {
             e.printStackTrace();
+            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(null, stmt, conn);
+            closeResources(stmt, conn);
         }
     }
 
     public static int insertTestMedia(EventMedia testMedia) {
         Connection conn = null;
         PreparedStatement stmt = null;
+        ResultSet rs = null;
         int id = 0;
         try {
             conn = DataSourceManager.getInstance().getConnection();
@@ -363,18 +429,21 @@ public class TestHelper {
             stmt.setTimestamp(6, new Timestamp(testMedia.getUploadDate().getTime()));
             stmt.executeUpdate();
 
-            ResultSet rs = stmt.getGeneratedKeys();
-            rs.next();
-            id = rs.getInt(1);
-
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
+            rs = stmt.getGeneratedKeys();
+            if(rs.next()) {
+                id = rs.getInt(1);
+            }
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("SQLException " + e.getMessage());
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(null, stmt, conn);
+            closeResources(rs, stmt, conn);
         }
         return id;
     }
@@ -390,25 +459,29 @@ public class TestHelper {
             preparedStatement.executeUpdate();
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("SQLException " + e.getMessage());
         } catch (PropertyVetoException e) {
             e.printStackTrace();
+            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(null, stmt, conn);
+            closeResources(stmt, conn);
         }
     }
 
     public static int insertTestInvitation(EventInvitation testInvitation) {
         Connection conn = null;
         PreparedStatement stmt = null;
+        ResultSet rs = null;
         int id = 0;
         try {
             conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "INSERT INTO event_invitation "
                     + "(event_id, user_id, user_role, user_response, attendees_count, participated) "
                     + "VALUES (?, ?, ?, ?, ?, ?)";
-            stmt = conn.prepareStatement(sqlStr);
+            stmt = conn.prepareStatement(sqlStr, Statement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, testInvitation.getEventId());
             stmt.setInt(2, testInvitation.getUser().getId());
             stmt.setString(3, testInvitation.getUserRole());
@@ -416,36 +489,46 @@ public class TestHelper {
             stmt.setInt(5, testInvitation.getAttendeesCount());
             stmt.setBoolean(6, testInvitation.isParticipated());
             stmt.executeUpdate();
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
+
+            rs = stmt.getGeneratedKeys();
+            if(rs.next()) {
+                id = rs.getInt(1);
+            }
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("SQLException " + e.getMessage());
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(null, stmt, conn);
+            closeResources(rs, stmt, conn);
         }
         return id;
     }
 
-    public static void deleteTestInvitation(int eventId, int userId) {
+    public static void deleteTestInvitation(int id) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
             conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "DELETE FROM event_invitation WHERE event_id = ? AND user_id = ?";
+            String sqlStr = "DELETE FROM event_invitation WHERE id = ?";
             stmt = conn.prepareStatement(sqlStr);
-            stmt.setInt(1, eventId);
-            stmt.setInt(2, userId);
+            stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("SQLException " + e.getMessage());
         } catch (PropertyVetoException e) {
             e.printStackTrace();
+            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(null, stmt, conn);
+            closeResources(stmt, conn);
         }
     }
 }

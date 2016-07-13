@@ -40,7 +40,7 @@ public class TestUserDAOImpl {
     }
 
     @Test
-    public void testInsertUser() throws SQLException {
+    public void testInsertUser() {
         TestHelper.deleteTestUser(testUser.getId());
         userDAO.insertUser(testUser);
         User actualUser = getTestUser(testUser.getId() + 1);
@@ -58,7 +58,7 @@ public class TestUserDAOImpl {
     }
 
     @Test
-    public void testGetAllUsers() throws SQLException {
+    public void testGetAllUsers() {
         List<User> expectedUsers = getAllUsersFromDB();
         List<User> actualUsers = userDAO.getAllUsers();
         assertEquals(actualUsers.size(), expectedUsers.size());
@@ -77,7 +77,7 @@ public class TestUserDAOImpl {
     }
 
     @Test
-    public void testGetUserById() throws SQLException {
+    public void testGetUserById() {
         User actualUser = userDAO.getUserById(testUser.getId());
         assertEquals(actualUser.getId(), testUser.getId());
         assertEquals(actualUser.getFirstName(), testUser.getFirstName());
@@ -88,7 +88,7 @@ public class TestUserDAOImpl {
     }
 
     @Test
-    public void testGetUserByUsername() throws SQLException {
+    public void testGetUserByUsername() {
         User actualUser = userDAO.getUserByUsername(testUser.getUsername());
         assertEquals(actualUser.getId(), testUser.getId());
         assertEquals(actualUser.getFirstName(), testUser.getFirstName());
@@ -99,7 +99,7 @@ public class TestUserDAOImpl {
     }
 
     @Test
-    public void testGetUserByEmail() throws SQLException {
+    public void testGetUserByEmail(){
         User actualUser = userDAO.getUserByEmail(testUser.getEmail());
         assertEquals(actualUser.getId(), testUser.getId());
         assertEquals(actualUser.getFirstName(), testUser.getFirstName());
@@ -110,14 +110,14 @@ public class TestUserDAOImpl {
     }
 
     @Test
-    public void testSetVerified() throws SQLException {
+    public void testSetVerified() {
         userDAO.setVerified(testUser.getId());
         User actualUser = getTestUser(testUser.getId());
         assertTrue(actualUser.isVerified());
     }
 
     @Test
-    public void testUpdateUser() throws SQLException {
+    public void testUpdateUser() {
         User newUser = new User(testUser);
         newUser.setEmail("new_email@test.com");
         newUser.setPassword("nes_password");
@@ -135,13 +135,13 @@ public class TestUserDAOImpl {
     }
 
     @Test
-    public void testDeleteUser() throws SQLException {
+    public void testDeleteUser() {
         userDAO.deleteUser(testUser.getId());
         assertNull(getTestUser(testUser.getId()));
     }
 
     //helper methods
-    private User getTestUser(int id) throws SQLException {
+    private User getTestUser(int id) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -177,7 +177,7 @@ public class TestUserDAOImpl {
         return actualUser;
     }
 
-    private List<User> getAllUsersFromDB() throws SQLException {
+    private List<User> getAllUsersFromDB(){
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;

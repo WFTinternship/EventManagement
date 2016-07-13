@@ -70,7 +70,7 @@ public class TestEventMediaDAOImpl {
     }
 
     @Test
-    public void testInsertMedia() throws SQLException {
+    public void testInsertMedia() {
         TestHelper.deleteTestMedia(testMedia.getId());
         mediaDAO.insertMedia(testMedia);
 
@@ -86,7 +86,7 @@ public class TestEventMediaDAOImpl {
     }
 
     @Test //---
-    public void testInsertMediaList() throws SQLException {
+    public void testInsertMediaList() {
 //       // List<EventMedia> testMediaList = TestHelper.createTestMediaList();
 //        mediaDAO.insertMediaList(testMediaList);
 //        List<EventMedia> actualMediaList = getTestMediaList();
@@ -104,7 +104,7 @@ public class TestEventMediaDAOImpl {
     }
 
     @Test
-    public void testGetAllMedia() throws SQLException {
+    public void testGetAllMedia() {
         List<EventMedia> expectedMedia = getAllMedia();
         List<EventMedia> actualMedia = mediaDAO.getAllMedia();
         assertEquals(expectedMedia.size(), actualMedia.size());
@@ -116,6 +116,15 @@ public class TestEventMediaDAOImpl {
             assertEquals(actualMedia.get(i).getDescription(), expectedMedia.get(i).getDescription());
             assertEquals(actualMedia.get(i).getUploadDate(), expectedMedia.get(i).getUploadDate());
         }
+    }
+
+    @Test
+    public void testGetMediaById() {
+        EventMedia actualMedia = getTestMediaByField("id", testMedia.getId()).get(0);
+        assertEquals(actualMedia.getUploaderId(), testMedia.getUploaderId());
+        assertEquals(actualMedia.getPath(), testMedia.getPath());
+        assertEquals(actualMedia.getType(), testMedia.getType());
+        assertEquals(actualMedia.getDescription(), testMedia.getDescription());
     }
 
     @Test
@@ -150,7 +159,7 @@ public class TestEventMediaDAOImpl {
     }
 
     @Test
-    public void testUpdateMediaDescription() throws SQLException {
+    public void testUpdateMediaDescription() {
         String changedDesc = "changed description";
         mediaDAO.updateMediaDescription(testMedia.getId(), "changed description");
         EventMedia actualMedia = getTestMedia(testMedia.getId());
@@ -161,13 +170,13 @@ public class TestEventMediaDAOImpl {
     }
 
     @Test
-    public void testDeleteMedia() throws SQLException {
+    public void testDeleteMedia() {
         mediaDAO.deleteMedia(testMedia.getId());
         assertNull(getTestMedia(testMedia.getId()));
     }
 
     //helper methods
-    private EventMedia getTestMedia(int mediaId) throws SQLException {
+    private EventMedia getTestMedia(int mediaId){
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -200,7 +209,7 @@ public class TestEventMediaDAOImpl {
         return testMedia;
     }
 
-    private List<EventMedia> getTestMediaList() throws SQLException {
+    private List<EventMedia> getTestMediaList() {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -234,7 +243,7 @@ public class TestEventMediaDAOImpl {
         return mediaList;
     }
 
-    private List<EventMedia> getAllMedia() throws SQLException {
+    private List<EventMedia> getAllMedia(){
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;

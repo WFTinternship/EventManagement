@@ -17,7 +17,6 @@ public class User {
     private boolean verified;
     private Date registrationDate;
 
-
     public User() {
     }
 

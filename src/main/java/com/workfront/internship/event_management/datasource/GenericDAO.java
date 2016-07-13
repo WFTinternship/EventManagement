@@ -43,6 +43,19 @@ public class GenericDAO {
         closeResources(null, conn);
     }
 
+    protected void closeResources(Statement stmt) {
+        closeResources(null, stmt, null);
+    }
+    protected void closeResources(ResultSet rs) {
+        closeResources(rs, null, null);
+    }
+
+
+    protected void closeResources(ResultSet rs, Statement stmt) {
+        closeResources(rs, stmt, null);
+    }
+
+
     public boolean deleteEntryById(String tableName, int id) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -54,13 +67,16 @@ public class GenericDAO {
             stmt.setInt(1, id);
             affectedRows = stmt.executeUpdate();
         } catch (IOException e) {
+            e.printStackTrace();
             System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
+            e.printStackTrace();
             System.out.println("SQLException " + e.getMessage());
         } catch (PropertyVetoException e) {
+            e.printStackTrace();
             System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(null, stmt, conn);
+            closeResources(stmt, conn);
         }
         return affectedRows != 0;
     }

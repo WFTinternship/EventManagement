@@ -16,11 +16,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
 
 /**
  * Created by hermine on 7/9/16.
@@ -58,12 +57,13 @@ public class TestEventInvitationDAOImpl {
 
         testInvitation.setUser(testUser);
         testInvitation.setEventId(testEvent.getId());
-        TestHelper.insertTestInvitation(testInvitation);
+        int invId = TestHelper.insertTestInvitation(testInvitation);
+        testInvitation.setId(invId);
     }
 
     @After
     public void tearDown() {
-        TestHelper.deleteTestInvitation(testEvent.getId(), testUser.getId());
+        TestHelper.deleteTestInvitation(testInvitation.getId());
         TestHelper.deleteTestEvent(testEvent.getId());
         TestHelper.deleteTestUser(testUser.getId());
         TestHelper.deleteTestCategory(testCategory.getId());
@@ -75,9 +75,9 @@ public class TestEventInvitationDAOImpl {
 
     @Test
     public void testInsertInvitation() throws SQLException {
-        TestHelper.deleteTestInvitation(testInvitation.getEventId(), testUser.getId());
+        TestHelper.deleteTestInvitation(testInvitation.getId());
         invitationDAO.insertInvitation(testInvitation);
-        EventInvitation actualInvitation = getTestInvitations().get(0);
+        EventInvitation actualInvitation = getTestInvitationFromDB(testInvitation.getId() + 1);
         try {
             assertEquals(actualInvitation.getEventId(), testInvitation.getEventId());
             assertEquals(actualInvitation.getUserRole(), testInvitation.getUserRole());
@@ -85,7 +85,7 @@ public class TestEventInvitationDAOImpl {
             assertEquals(actualInvitation.getAttendeesCount(), testInvitation.getAttendeesCount());
             assertEquals(actualInvitation.isParticipated(), testInvitation.isParticipated());
         } finally {
-            TestHelper.deleteTestInvitation(testInvitation.getEventId(), testUser.getId());
+            TestHelper.deleteTestInvitation(testInvitation.getId() + 1);
         }
     }
 
@@ -131,10 +131,21 @@ public class TestEventInvitationDAOImpl {
     }
 
     @Test
+    public void testGetInvitationById() {
+        EventInvitation actualInvitation = invitationDAO.getInvitationById(testInvitation.getId());
+        assertEquals(actualInvitation.getEventId(), testInvitation.getEventId());
+        assertEquals(actualInvitation.getUser().getId(), testInvitation.getUser().getId());
+        assertEquals(actualInvitation.getUserRole(), testInvitation.getUserRole());
+        assertEquals(actualInvitation.getUserResponse(), testInvitation.getUserResponse());
+        assertEquals(actualInvitation.getAttendeesCount(), testInvitation.getAttendeesCount());
+        assertEquals(actualInvitation.isParticipated(), testInvitation.isParticipated());
+    }
+
+    @Test
     public void testUpdateInvitation() throws SQLException {
         testInvitation.setUserResponse("Yes").setAttendeesCount(2).setParticipated(true);
         invitationDAO.updateInvitation(testInvitation);
-        EventInvitation actualInvitation = getTestInvitations().get(0);
+        EventInvitation actualInvitation = getTestInvitationFromDB(testInvitation.getId());
         assertEquals(actualInvitation.getEventId(), testInvitation.getEventId());
         assertEquals(actualInvitation.getUserRole(), testInvitation.getUserRole());
         assertEquals(actualInvitation.getUserResponse(), testInvitation.getUserResponse());
@@ -144,37 +155,37 @@ public class TestEventInvitationDAOImpl {
 
     @Test
     public void testDeleteInvitation() throws SQLException {
-        invitationDAO.deleteInvitation(testInvitation.getEventId(), testInvitation.getUser().getId());
-        assertTrue(getTestInvitations().isEmpty());
+        invitationDAO.deleteInvitation(testInvitation.getId());
+        assertNull(getTestInvitationFromDB(testInvitation.getId()));
     }
 
     @Test
     public void testDeleteInvitationsByEventId() throws SQLException {
         invitationDAO.deleteInvitationsByEventId(testInvitation.getEventId());
-        assertTrue(getTestInvitations().isEmpty());
+        assertNull(getTestInvitationFromDB(testInvitation.getId()));
     }
 
     //helper methods
-    private List<EventInvitation> getTestInvitations() throws SQLException {
+    private EventInvitation getTestInvitationFromDB(int id) throws SQLException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        List<EventInvitation> invitationsList = new ArrayList<EventInvitation>();
+        EventInvitation invitation = null;
         try {
             conn = DataSourceManager.getInstance().getConnection();
 
-            String sqlStr = "SELECT * FROM event_invitation WHERE event_id  = ?";
+            String sqlStr = "SELECT * FROM event_invitation WHERE id  = ?";
             stmt = conn.prepareStatement(sqlStr);
-            stmt.setInt(1, testInvitation.getEventId());
+            stmt.setInt(1,id);
             rs = stmt.executeQuery();
             while (rs.next()) {
-                EventInvitation invitation = new EventInvitation();
-                invitation.setEventId(rs.getInt("event_id"))
+                invitation = new EventInvitation();
+                invitation.setId(rs.getInt("id"))
+                        .setEventId(rs.getInt("event_id"))
                         .setUserRole(rs.getString("user_role"))
                         .setUserResponse(rs.getString("user_response"))
                         .setAttendeesCount(rs.getInt("attendees_count"))
                         .setParticipated(rs.getBoolean("participated"));
-                invitationsList.add(invitation);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -185,7 +196,8 @@ public class TestEventInvitationDAOImpl {
         } finally {
             TestHelper.closeResources(rs, stmt, conn);
         }
-        return invitationsList;
+        return invitation;
     }
+
 
 }

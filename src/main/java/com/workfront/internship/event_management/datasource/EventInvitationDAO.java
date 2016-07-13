@@ -13,9 +13,10 @@ public interface EventInvitationDAO {
      boolean insertInvitation(EventInvitation invitation);
      boolean insertInvitations(List<EventInvitation> invitations, Connection conn);
      boolean insertInvitations(List<EventInvitation> invitations);
+     EventInvitation getInvitationById(int invId);
      List<EventInvitation> getInvitationsByEventId(int eventId);
      boolean updateInvitation(EventInvitation invitation);
-     boolean deleteInvitation(int eventId, int userId);
+     boolean deleteInvitation(int invId);
      boolean deleteInvitationsByEventId(int eventId);
 
 }

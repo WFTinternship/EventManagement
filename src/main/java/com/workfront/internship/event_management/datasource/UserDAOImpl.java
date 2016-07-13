@@ -14,17 +14,18 @@ import java.util.List;
 public class UserDAOImpl extends GenericDAO implements UserDAO {
 
     //CREATE
-    public boolean insertUser(User user) {
+    public int insertUser(User user) {
         Connection conn = null;
         PreparedStatement stmt = null;
-        int affectedRows = 0;
+        ResultSet rs = null;
+        int id = 0;
         try {
             conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "INSERT INTO user "
                     + "(first_name, last_name, username, password, email, phone_number, " +
                     "avatar_path, verified, registration_date) VALUES "
                     + "(?, ?, ?, ?, ?, ?, ?, ?, ? )";
-            stmt = conn.prepareStatement(sqlStr);
+            stmt = conn.prepareStatement(sqlStr, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, user.getFirstName());
             stmt.setString(2, user.getLastName());
             stmt.setString(3, user.getUsername());
@@ -38,17 +39,24 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             } else {
                 stmt.setTimestamp(9, null);
             }
-            affectedRows = stmt.executeUpdate();
+            stmt.executeUpdate();
+            rs = stmt.getGeneratedKeys();
+            if(rs.next()) {
+                id = rs.getInt(1);
+            }
         } catch (IOException e) {
+            e.printStackTrace();
             System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
+            e.printStackTrace();
             System.out.println("SQLException " + e.getMessage());
         } catch (PropertyVetoException e) {
-            System.out.println("SQLException " + e.getMessage());
+            e.printStackTrace();
+            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(null, stmt, conn);
+            closeResources(rs, stmt, conn);
         }
-        return affectedRows != 0;
+        return id;
     }
 
     //READ
@@ -64,10 +72,13 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             rs = stmt.executeQuery();
             usersList = createUsersListFromRS(rs);
         } catch (IOException e) {
+            e.printStackTrace();
             System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
+            e.printStackTrace();
             System.out.println("SQLException " + e.getMessage());
         } catch (PropertyVetoException e) {
+            e.printStackTrace();
             System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(rs, stmt, conn);
@@ -99,13 +110,16 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             stmt.setInt(1, userId);
             affectedRows = stmt.executeUpdate();
         } catch (IOException e) {
+            e.printStackTrace();
             System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
+            e.printStackTrace();
             System.out.println("SQLException " + e.getMessage());
         } catch (PropertyVetoException e) {
+            e.printStackTrace();
             System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(null, stmt, conn);
+            closeResources(stmt, conn);
         }
         return affectedRows != 0;
     }
@@ -129,21 +143,44 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             stmt.setInt(8, user.getId());
             affectedRows = stmt.executeUpdate();
         } catch (IOException e) {
+            e.printStackTrace();
             System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
+            e.printStackTrace();
             System.out.println("SQLException " + e.getMessage());
         } catch (PropertyVetoException e) {
+            e.printStackTrace();
             System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(null, stmt, conn);
+            closeResources(stmt, conn);
         }
         return affectedRows != 0;
     }
 
     //DELETE
     public boolean deleteUser(int userId) {
-        return deleteEntryById("user", userId);
-    }
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        int affectedRows = 0;
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+            String sqlStr = "DELETE FROM user WHERE id = ?";
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setInt(1, userId);
+            affectedRows = stmt.executeUpdate();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("IOException " + e.getMessage());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("SQLException " + e.getMessage());
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+            System.out.println("PropertyVetoException " + e.getMessage());
+        } finally {
+            closeResources(stmt, conn);
+        }
+        return affectedRows != 0;    }
 
     //helper methods
     private User getUserByField(String columnName, Object columnValue) {
@@ -157,32 +194,18 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             stmt = conn.prepareStatement(sqlStr);
             stmt.setObject(1, columnValue);
             rs = stmt.executeQuery();
-            user = createUserFromRS(rs);
+            user = createUsersListFromRS(rs).get(0);
         } catch (IOException e) {
+            e.printStackTrace();
             System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
+            e.printStackTrace();
             System.out.println("SQLException " + e.getMessage());
         } catch (PropertyVetoException e) {
-            System.out.println("SQLException " + e.getMessage());
+            e.printStackTrace();
+            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(rs, stmt, conn);
-        }
-        return user;
-    }
-
-    private User createUserFromRS(ResultSet rs) throws SQLException {
-        User user = new User();
-        while (rs.next()) {
-            user.setId(rs.getInt("id"))
-                    .setFirstName(rs.getString("first_name"))
-                    .setLastName(rs.getString("last_name"))
-                    .setUsername(rs.getString("username"))
-                    .setPassword(rs.getString("password"))
-                    .setEmail(rs.getString("email"))
-                    .setAvatarPath(rs.getString("avatar_path"))
-                    .setPhoneNumber(rs.getString("phone_number"))
-                    .setVerified(rs.getBoolean("verified"))
-                    .setRegistrationDate(rs.getTimestamp("registration_date"));
         }
         return user;
     }

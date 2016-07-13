@@ -13,16 +13,17 @@ import java.util.List;
  */
 public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDAO {
 
-    public boolean insertCategory(EventCategory category) {
+    public int insertCategory(EventCategory category) {
         Connection conn = null;
         PreparedStatement stmt = null;
-        int affectedRows = 0;
+        ResultSet rs = null;
+        int id = 0;
         try {
             conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "INSERT INTO event_category "
                     + "(title, description, creation_date) VALUES "
                     + "(?, ?, ?)";
-            stmt = conn.prepareStatement(sqlStr);
+            stmt = conn.prepareStatement(sqlStr, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, category.getTitle());
             stmt.setString(2, category.getDescription());
             if(category.getCreationDate() != null) {
@@ -30,7 +31,12 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
             } else {
                 stmt.setTimestamp(3, null);
             }
-            affectedRows = stmt.executeUpdate();
+            stmt.executeUpdate();
+
+            rs = stmt.getGeneratedKeys();
+            if(rs.next()) {
+                id = rs.getInt(1);
+            }
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("IOException " + e.getMessage());
@@ -41,9 +47,9 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
             e.printStackTrace();
             System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(stmt, conn);
+            closeResources(rs, stmt, conn);
         }
-        return affectedRows != 0;
+        return id;
     }
 
     public List<EventCategory> getAllCategories() {
@@ -64,7 +70,7 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
             e.printStackTrace();
             System.out.println("SQLException " + e.getMessage());
         } catch (PropertyVetoException e) {
-
+            e.printStackTrace();
             System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(rs, stmt, conn);
@@ -84,7 +90,7 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
             stmt = conn.prepareStatement(query);
             stmt.setInt(1, id);
             rs = stmt.executeQuery();
-            category = createEventCategoryFromRS(rs);
+            category = createEventCategoryListFromRS(rs).get(0);
         } catch (IOException e) {
             System.out.println("IOException " + e.getMessage());
         } catch (SQLException e) {
@@ -116,27 +122,37 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
         } catch (PropertyVetoException e) {
             System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
-            closeResources(null, stmt, conn);
+            closeResources(stmt, conn);
         }
         return affectedRows != 0;
     }
 
     public boolean deleteCategory(int categoryId) {
-        return deleteEntryById("event_category", categoryId);
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        int affectedRows = 0;
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+            String sqlStr = "DELETE FROM event_category WHERE id = ?";
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setInt(1, categoryId);
+            affectedRows = stmt.executeUpdate();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("IOException " + e.getMessage());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("SQLException " + e.getMessage());
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+            System.out.println("PropertyVetoException " + e.getMessage());
+        } finally {
+            closeResources(stmt, conn);
+        }
+        return affectedRows != 0;
     }
 
     //helper methods
-    private EventCategory createEventCategoryFromRS(ResultSet rs) throws SQLException {
-        EventCategory category = new EventCategory();
-        while (rs.next()) {
-            category.setId(rs.getInt("id"))
-                    .setTitle(rs.getString("title"))
-                    .setDescription(rs.getString("description"))
-                    .setCreationDate(rs.getTimestamp("creation_date"));
-        }
-        return category;
-    }
-
     private List<EventCategory> createEventCategoryListFromRS(ResultSet rs) throws SQLException {
         List<EventCategory> categoryList = new ArrayList<EventCategory>();
         while (rs.next()) {

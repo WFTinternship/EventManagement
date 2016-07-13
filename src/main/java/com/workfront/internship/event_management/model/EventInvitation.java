@@ -2,6 +2,7 @@ package com.workfront.internship.event_management.model;
 
 public class EventInvitation{
 
+    private int id;
     private int eventId;
     private User user;
     private String userRole;
@@ -19,6 +20,16 @@ public class EventInvitation{
     }
 
     public EventInvitation() { }
+
+
+    public int getId() {
+        return id;
+    }
+
+    public EventInvitation setId(int id) {
+        this.id = id;
+        return this;
+    }
 
     public int getEventId() {
         return eventId;
