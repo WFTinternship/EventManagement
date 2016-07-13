@@ -9,14 +9,15 @@ import java.util.List;
  */
 public interface RecurrenceTypeDAO {
 
-     //Create
+     //insert data into db
      int insertRecurrenceType(RecurrenceType recurrenceType);
 
-     //Read
+     //read data from db
      List<RecurrenceType> getAllRecurrenceTypes();
      RecurrenceType getRecurrenceTypeById(int id);
 
-     //Delete
+     //delete data from db
      boolean deleteRecurrenceType(int id);
+     boolean deleteAllRecurrenceTypes();
 
 }

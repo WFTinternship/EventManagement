@@ -15,6 +15,7 @@ import java.util.Map;
 public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeDAO {
 
     //Create
+    @Override
     public int insertRecurrenceType(RecurrenceType recurrenceType) {
         Connection conn = null;
         PreparedStatement stmtInsertRecType = null;
@@ -53,12 +54,12 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
             }
             conn.commit();
         } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("Exception ", e);
         } catch (SQLException e) {
             try {
                 conn.rollback();
             } catch (SQLException re) {
-                e.printStackTrace();
+                logger.error("Exception ", e);
             }
         } finally {
             closeResources(rs);
@@ -69,6 +70,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
     }
 
    //Read
+   @Override
    public List<RecurrenceType> getAllRecurrenceTypes() {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -84,13 +86,14 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
             rs = stmt.executeQuery();
             recurrenceTypeList = createRecurrenceTypesFromRS(rs);
         } catch (IOException | SQLException e) {
-                e.printStackTrace();
+                logger.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
         return recurrenceTypeList;
     }
 
+    @Override
     public RecurrenceType getRecurrenceTypeById(int id) {
 
         Connection conn = null;
@@ -98,7 +101,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
         ResultSet rs = null;
 
         RecurrenceType recurrenceType = null;
-        
+
         try {
             conn = DataSourceManager.getInstance().getConnection();
             String query = "SELECT * FROM recurrence_type LEFT JOIN repeat_on_value "
@@ -109,29 +112,21 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
             rs = stmt.executeQuery();
             recurrenceType = createRecurrenceTypeFromRS(rs);
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            logger.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
         return recurrenceType;
     }
 
+    @Override
     public boolean deleteRecurrenceType(int id) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        int affectedRows = 0;
-        try {
-            conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "DELETE FROM recurrence_type WHERE id = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
-            preparedStatement.setInt(1, id);
-            affectedRows = preparedStatement.executeUpdate();
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
-        } finally {
-            closeResources(null, stmt, conn);
-        }
-        return affectedRows != 0;
+        return deleteRecordById("recurrence_type", id);
+    }
+
+    @Override
+    public boolean deleteAllRecurrenceTypes() {
+        return deleteAllRecords("recurrence_type");
     }
 
     //helper methods

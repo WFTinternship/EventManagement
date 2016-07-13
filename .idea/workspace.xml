@@ -4,13 +4,45 @@
     <bookmark url="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventRecurrenceDAO.java" description="    public boolean insertEventRecurrence(EventRecu..." line="16" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="54981ee0-1517-46d0-8cc0-b92649ad1315" name="Default" comment="" />
+    <list default="true" id="54981ee0-1517-46d0-8cc0-b92649ad1315" name="Default" comment="Add log4j framework, exception handling with log4j logger. Replace JDBC config java class with  property file. Some corrections in all DAO classes&#10;&#10;      &#10;">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__log4j_log4j_1_2_12.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
+    <list id="ed1db1be-06eb-4a08-9c11-714bb0f701d2" name="Rejected commit: Default" comment="Add log4j framework, exception handling with log4j logger. Replace JDBC config java class with  property file. Some corrections in all DAO classes&#10;&#10;      &#10;">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/config.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/log4j.properties" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/DAOTest.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/DBConfig.java" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EventManagement.iml" afterPath="$PROJECT_DIR$/EventManagement.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/DataSourceManager.java" afterPath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/DataSourceManager.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventCategoryDAO.java" afterPath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventCategoryDAO.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventCategoryDAOImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventCategoryDAOImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventDAOImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventDAOImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventInvitationDAOImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventInvitationDAOImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventMediaDAO.java" afterPath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventMediaDAO.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventMediaDAOImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventMediaDAOImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventRecurrenceDAOImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventRecurrenceDAOImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/GenericDAO.java" afterPath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/GenericDAO.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceTypeDAO.java" afterPath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceTypeDAO.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceTypeDAOImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceTypeDAOImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/UserDAO.java" afterPath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/UserDAO.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/UserDAOImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/UserDAOImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/TestUserDAOImpl.java" afterPath="$PROJECT_DIR$/src/test/java/TestUserDAOImpl.java" />
+    </list>
     <ignored path="EventManagement.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
     <ignored path=".idea/dataSources.local.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <file path="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/GenericDAO.java" ignored="true" />
+    <file path="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/UserDAO.java" ignored="true" />
+    <file path="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/UserDAOImpl.java" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/java/TestUserDAOImpl.java" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,88 +65,83 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="UserDAOImpl.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/UserDAOImpl.java">
+      <file leaf-file-name="UserDAO.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/UserDAO.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="149">
-              <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+            <state relative-caret-position="165">
+              <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RecurrenceTypeDAOImpl.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceTypeDAOImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="173">
+              <caret line="128" column="31" selection-start-line="128" selection-start-column="15" selection-end-line="128" selection-end-column="31" />
               <folding>
-                <element signature="method#insertUser#0;class#UserDAOImpl#0" expanded="false" />
-                <element signature="method#getAllUsers#0;class#UserDAOImpl#0" expanded="false" />
-                <element signature="method#deleteUser#0;class#UserDAOImpl#0" expanded="false" />
-                <element signature="e#6173#6179#0" expanded="true" />
-                <marker date="1468415055000" expanded="true" signature="696:712" ph="INSERT INTO user... " />
-                <marker date="1468415055000" expanded="true" signature="696:851" ph="INSERT INTO user... " />
-                <marker date="1468415055000" expanded="true" signature="696:897" ph="INSERT INTO user... " />
-                <marker date="1468415055000" expanded="true" signature="696:905" ph="INSERT INTO user... " />
-                <marker date="1468415055000" expanded="true" signature="2242:2260" ph="SELECT * FRO... user" />
-                <marker date="1468415055000" expanded="true" signature="3175:3216" ph="UPDATE user " />
-                <marker date="1468415055000" expanded="true" signature="3807:3964" ph="UPDATE user " />
-                <marker date="1468415055000" expanded="true" signature="4932:4961" ph="DELETE FROM " />
-                <marker date="1468415055000" expanded="true" signature="5626:5650" ph="SELECT * FRO... user" />
-                <marker date="1468415055000" expanded="true" signature="5626:5651" ph="SELECT * FRO... user" />
-                <marker date="1468415055000" expanded="true" signature="5626:5673" ph="SELECT * FRO... user" />
+                <element signature="method#insertRecurrenceType#0;class#RecurrenceTypeDAOImpl#0" expanded="false" />
+                <element signature="method#getRecurrenceTypeById#0;class#RecurrenceTypeDAOImpl#0" expanded="false" />
+                <element signature="e#4413#4414#0" expanded="true" />
+                <element signature="e#4475#4476#0" expanded="true" />
+                <element signature="e#4538#4539#0" expanded="true" />
+                <element signature="e#4596#4597#0" expanded="true" />
+                <element signature="method#createRecurrenceTypesFromRS#0;class#RecurrenceTypeDAOImpl#0" expanded="false" />
+                <marker date="1468446442000" expanded="true" signature="869:958" ph="INSERT INTO recurrence_type... " />
+                <marker date="1468446442000" expanded="true" signature="869:959" ph="INSERT INTO event... " />
+                <marker date="1468446442000" expanded="true" signature="1513:1640" ph="INSERT INTO event_invitation... " />
+                <marker date="1468446442000" expanded="true" signature="2933:2988" ph="SELECT * FRO... recurrence_type" />
+                <marker date="1468446442000" expanded="true" signature="2933:3072" ph="SELECT * FRO... recurrence_type" />
+                <marker date="1468446442000" expanded="true" signature="3771:3910" ph="SELECT * FRO... recurrence_type" />
+                <marker date="1468446442000" expanded="true" signature="3771:3911" ph="SELECT * FRO... recurrence_type" />
+                <marker date="1468446442000" expanded="true" signature="3771:3964" ph="SELECT * FRO... recurrence_type" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="User.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/User.java">
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="log4j.properties" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/log4j.properties">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RecurrenceTypeDAO.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceTypeDAO.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="270">
-              <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+              <caret line="20" column="8" selection-start-line="20" selection-start-column="8" selection-end-line="20" selection-end-column="8" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DataSourceManager.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/DataSourceManager.java">
+      <file leaf-file-name="GenericDAO.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/GenericDAO.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="16" column="64" selection-start-line="16" selection-start-column="64" selection-end-line="16" selection-end-column="64" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EventDAOImpl.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventDAOImpl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="30" column="37" selection-start-line="30" selection-start-column="37" selection-end-line="30" selection-end-column="37" />
+            <state relative-caret-position="600">
+              <caret line="40" column="5" selection-start-line="40" selection-start-column="5" selection-end-line="40" selection-end-column="5" />
               <folding>
-                <marker date="1468416202000" expanded="true" signature="2331:2340" ph="SELECT * mis... " />
-                <marker date="1468416202000" expanded="true" signature="2331:2441" ph="SELECT * FRO... event" />
-                <marker date="1468416202000" expanded="true" signature="2331:2442" ph="SELECT * FRO... event" />
-                <marker date="1468416202000" expanded="true" signature="2331:2443" ph="SELECT * FRO... event" />
-                <marker date="1468416202000" expanded="true" signature="3187:3299" ph="SELECT * FRO... event" />
-                <marker date="1468416202000" expanded="true" signature="3187:3300" ph="SELECT * FRO... event" />
-                <marker date="1468416202000" expanded="true" signature="3187:3318" ph="SELECT * FRO... event" />
-                <marker date="1468416202000" expanded="true" signature="4710:4827" ph="SELECT * FRO... event" />
-                <marker date="1468416202000" expanded="true" signature="4710:4875" ph="SELECT * FRO... event" />
-                <marker date="1468416202000" expanded="true" signature="4710:4877" ph="SELECT * FRO... event" />
-                <marker date="1468416202000" expanded="true" signature="5571:5578" ph="SELECT * FRO... event" />
-                <marker date="1468416202000" expanded="true" signature="5571:5691" ph="SELECT * fro... event" />
-                <marker date="1468416202000" expanded="true" signature="5571:5716" ph="SELECT event... event_participant" />
-                <marker date="1468416202000" expanded="true" signature="5571:5757" ph="SELECT event... event" />
-                <marker date="1468416202000" expanded="true" signature="5571:5872" ph="SELECT event... event" />
-                <marker date="1468416202000" expanded="true" signature="5571:5933" ph="SELECT * fro... event" />
-                <marker date="1468416202000" expanded="true" signature="6721:6816" ph="SELECT event... event" />
-                <marker date="1468416202000" expanded="true" signature="6721:7010" ph="SELECT event... event" />
-                <marker date="1468416202000" expanded="true" signature="6721:7014" ph="SELECT event... event" />
-                <marker date="1468416202000" expanded="true" signature="6721:7015" ph="SELECT * FRO... event_participant" />
-                <marker date="1468416202000" expanded="true" signature="7702:8066" ph="SELECT event... event" />
-                <marker date="1468416202000" expanded="true" signature="7702:8067" ph="SELECT event... event" />
-                <marker date="1468416202000" expanded="true" signature="7702:8072" ph="SELECT event... event" />
-                <marker date="1468416202000" expanded="true" signature="7702:8074" ph="SELECT event... event" />
-                <marker date="1468416202000" expanded="true" signature="7702:8075" ph="SELECT event... event" />
-                <marker date="1468416202000" expanded="true" signature="8732:8904" ph="UPDATE event... " />
-                <marker date="1468416202000" expanded="true" signature="8732:9080" ph="UPDATE user " />
-                <marker date="1468416202000" expanded="true" signature="11242:11272" ph="DELETE FROM " />
-                <marker date="1468416202000" expanded="true" signature="11868:12158" ph="INSERT INTO event... " />
-                <marker date="1468416202000" expanded="true" signature="13851:13880" ph="SELECT LAST_... " />
+                <element signature="imports" expanded="true" />
+                <element signature="method#getInsertedId#0;class#GenericDAO#0" expanded="false" />
+                <marker date="1468447495000" expanded="true" signature="2023:2064" ph="DELETE FROM " />
+                <marker date="1468447495000" expanded="true" signature="2756:2768" ph="DELETE FROM " />
+                <marker date="1468447495000" expanded="true" signature="2756:2780" ph="DELETE FROM " />
               </folding>
             </state>
           </provider>
@@ -123,8 +150,8 @@
       <file leaf-file-name="TestUserDAOImpl.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/java/TestUserDAOImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="237">
-              <caret line="144" column="9" selection-start-line="144" selection-start-column="9" selection-end-line="144" selection-end-column="9" />
+            <state relative-caret-position="225">
+              <caret line="49" column="26" selection-start-line="49" selection-start-column="26" selection-end-line="49" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -132,64 +159,52 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GenericDAO.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/GenericDAO.java">
+      <file leaf-file-name="UserDAOImpl.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/UserDAOImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="405">
-              <caret line="66" column="5" selection-start-line="58" selection-start-column="68" selection-end-line="66" selection-end-column="5" />
+            <state relative-caret-position="-177">
+              <caret line="200" column="0" selection-start-line="200" selection-start-column="0" selection-end-line="200" selection-end-column="0" />
               <folding>
-                <marker date="1468412558000" expanded="true" signature="1980:2021" ph="DELETE FROM " />
+                <element signature="imports" expanded="true" />
+                <element signature="method#updateUser#0;class#UserDAOImpl#0" expanded="false" />
+                <element signature="e#5140#5141#0" expanded="true" />
+                <element signature="e#5195#5196#0" expanded="true" />
+                <element signature="e#5248#5249#0" expanded="true" />
+                <element signature="e#5295#5296#0" expanded="true" />
+                <element signature="e#6322#6328#0" expanded="true" />
+                <marker date="1468447710000" expanded="true" signature="698:714" ph="INSERT INTO user... " />
+                <marker date="1468447710000" expanded="true" signature="698:853" ph="INSERT INTO user... " />
+                <marker date="1468447710000" expanded="true" signature="698:899" ph="INSERT INTO user... " />
+                <marker date="1468447710000" expanded="true" signature="698:907" ph="INSERT INTO user... " />
+                <marker date="1468447710000" expanded="true" signature="2313:2331" ph="SELECT * FRO... user" />
+                <marker date="1468447710000" expanded="true" signature="3427:3468" ph="UPDATE user " />
+                <marker date="1468447710000" expanded="true" signature="4188:4345" ph="UPDATE user " />
+                <marker date="1468447710000" expanded="true" signature="5707:5731" ph="SELECT * FRO... user" />
+                <marker date="1468447710000" expanded="true" signature="5707:5732" ph="SELECT * FRO... user" />
+                <marker date="1468447710000" expanded="true" signature="5707:5754" ph="SELECT * FRO... user" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UserDAO.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/UserDAO.java">
+      <file leaf-file-name="DataSourceManager.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/DataSourceManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="27" column="11" selection-start-line="27" selection-start-column="11" selection-end-line="27" selection-end-column="11" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EventCategoryDAO.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventCategoryDAO.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="21" column="8" selection-start-line="21" selection-start-column="8" selection-end-line="21" selection-end-column="8" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EventDAO.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventDAO.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="15" column="31" selection-start-line="15" selection-start-column="31" selection-end-line="15" selection-end-column="31" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TestEventMediaDAOImpl.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/TestEventMediaDAOImpl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="736">
-              <caret line="145" column="2" selection-start-line="145" selection-start-column="2" selection-end-line="145" selection-end-column="2" />
+            <state relative-caret-position="315">
+              <caret line="21" column="96" selection-start-line="21" selection-start-column="96" selection-end-line="21" selection-end-column="96" />
               <folding>
-                <marker date="1468414399000" expanded="false" signature="310:321" ph=" { " />
-                <marker date="1468414399000" expanded="false" signature="356:362" ph=" }" />
-                <marker date="1468414399000" expanded="false" signature="1206:1567" ph="{...}" />
-                <marker date="1468414399000" expanded="false" signature="2322:3155" ph="{...}" />
-                <marker date="1468414399000" expanded="false" signature="3638:4032" ph="{...}" />
-                <marker date="1468414399000" expanded="false" signature="4081:4417" ph="{...}" />
-                <marker date="1468414399000" expanded="false" signature="4470:4870" ph="{...}" />
-                <marker date="1468414399000" expanded="false" signature="4927:5416" ph="{...}" />
-                <marker date="1468414399000" expanded="false" signature="5462:5577" ph="{...}" />
+                <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FileInputStream.java" pinned="false" current-in-tab="false">
+        <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/src.zip!/java/io/FileInputStream.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="125">
+              <caret line="194" column="0" selection-start-line="194" selection-start-column="0" selection-end-line="194" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -222,12 +237,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/Month.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/FrequencyType.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/Event.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/DayOfWeek.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/RepeatOnMonthly.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/recurrence/FrequencyType.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/recurrence/RepeatOnMonthly.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/recurrence/DateRange.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/datehelpers/DateRange.java" />
@@ -250,29 +259,35 @@
         <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/EventMedia.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/EventInvitation.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/User.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/DataSourceManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventInvitationDAO.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventMediaDAO.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceTypeDAO.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceTypeDAOImpl.java" />
         <option value="$PROJECT_DIR$/src/test/java/TestHelper.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventCategoryDAOImpl.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventCategoryDAO.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventInvitationDAOImpl.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventMediaDAOImpl.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventRecurrenceDAOImpl.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/GenericDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventRecurrenceDAO.java" />
         <option value="$PROJECT_DIR$/src/test/java/TestEventCategoryDAOImpl.java" />
         <option value="$PROJECT_DIR$/src/test/java/TestEventInvitationDAOImpl.java" />
         <option value="$PROJECT_DIR$/src/test/java/TestEventMediaDAOImpl.java" />
         <option value="$PROJECT_DIR$/src/test/java/TestEventRecurrenceDAOImpl.java" />
         <option value="$PROJECT_DIR$/src/test/java/TestRecurrenceTypeDAOImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventDAOImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventRecurrenceDAOImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventInvitationDAOImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/log4j.properties" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventCategoryDAO.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventCategoryDAOImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventMediaDAO.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventMediaDAOImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/DBConfig.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/jdbc.properties" />
+        <option value="$PROJECT_DIR$/src/main/resources/config.properties" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/DataSourceManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceTypeDAO.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceTypeDAOImpl.java" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/GenericDAO.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/UserDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/UserDAOImpl.java" />
         <option value="$PROJECT_DIR$/src/test/java/TestUserDAOImpl.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/UserDAO.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventDAOImpl.java" />
       </list>
     </option>
   </component>
@@ -317,27 +332,15 @@
             <id />
           </State>
           <State>
-            <id>Android Lint</id>
+            <id>Java</id>
           </State>
           <State>
-            <id>Gradle</id>
-          </State>
-          <State>
-            <id>JPA issues</id>
-          </State>
-          <State>
-            <id>Maven</id>
-          </State>
-          <State>
-            <id>OSGi</id>
-          </State>
-          <State>
-            <id>Probable bugsGradle</id>
+            <id>Probable bugsJava</id>
           </State>
         </expanded-state>
         <selected-state>
           <State>
-            <id>JpaQueryApiInspection</id>
+            <id>Inheritance issuesJava</id>
           </State>
         </selected-state>
       </profile-state>
@@ -398,6 +401,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="target" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="EventManagement" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="EventManagement" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -427,30 +444,8 @@
               <option name="myItemId" value="main" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-          </PATH>
-          <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="EventManagement" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="EventManagement" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="event_management" />
+              <option name="myItemId" value="resources" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -477,10 +472,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="event_management" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="model" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -534,7 +525,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="SQL Dialects" />
+    <property name="settings.editor.selected.configurable" value="editing.templates" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -562,31 +553,12 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources" />
+      <recent name="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
   <component name="RunManager" selected="JUnit.TestUserDAOImpl">
-    <configuration default="false" name="TestEventRecurrenceDAOImpl.insertEventRecurrences" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="EventManagement" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="TestEventRecurrenceDAOImpl" />
-      <option name="METHOD_NAME" value="insertEventRecurrences" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-      <method />
-    </configuration>
     <configuration default="false" name="TestEventRecurrenceDAOImpl.testInsertEventRecurrence" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="EventManagement" />
@@ -659,6 +631,27 @@
       <option name="MAIN_CLASS_NAME" value="TestUserDAOImpl" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="TestUserDAOImpl.testDeleteUser" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="EventManagement" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="TestUserDAOImpl" />
+      <option name="METHOD_NAME" value="testDeleteUser" />
+      <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -1095,19 +1088,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="JUnit.TestEventRecurrenceDAOImpl.insertEventRecurrences" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.TestEventRecurrenceDAOImpl.testInsertEventRecurrence" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.TestEventRecurrenceDAOImpl.testUpdateEventRecurrence" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.TestEventRecurrenceDAOImpl.testDeleteEventRecurrece" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.TestUserDAOImpl" />
+      <item index="0" class="java.lang.String" itemvalue="JUnit.TestEventRecurrenceDAOImpl.testInsertEventRecurrence" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.TestEventRecurrenceDAOImpl.testUpdateEventRecurrence" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.TestEventRecurrenceDAOImpl.testDeleteEventRecurrece" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.TestUserDAOImpl" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.TestUserDAOImpl.testDeleteUser" />
     </list>
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="JUnit.TestUserDAOImpl" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.TestEventRecurrenceDAOImpl.testDeleteEventRecurrece" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.TestEventRecurrenceDAOImpl.testUpdateEventRecurrence" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.TestEventRecurrenceDAOImpl.testInsertEventRecurrence" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.TestEventRecurrenceDAOImpl.insertEventRecurrences" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.TestUserDAOImpl.testDeleteUser" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.TestEventRecurrenceDAOImpl.testDeleteEventRecurrece" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.TestEventRecurrenceDAOImpl.testUpdateEventRecurrence" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.TestEventRecurrenceDAOImpl.testInsertEventRecurrence" />
       </list>
     </recent_temporary>
   </component>
@@ -1137,7 +1130,7 @@
       <workItem from="1467742571887" duration="109928000" />
       <workItem from="1468142462597" duration="21372000" />
       <workItem from="1468177426634" duration="38806000" />
-      <workItem from="1468265372056" duration="66575000" />
+      <workItem from="1468265372056" duration="78643000" />
     </task>
     <task id="LOCAL-00001" summary="test commit">
       <created>1467188821268</created>
@@ -1255,39 +1248,39 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="TestUserDAOImpl - 2016.07.13 at 17h 00m 12s.xml">
+    <history-entry file="TestUserDAOImpl - 2016.07.14 at 02h 06m 16s.xml">
       <configuration name="TestUserDAOImpl" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TestUserDAOImpl - 2016.07.13 at 17h 01m 03s.xml">
+    <history-entry file="TestUserDAOImpl - 2016.07.14 at 02h 06m 28s.xml">
       <configuration name="TestUserDAOImpl" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TestUserDAOImpl - 2016.07.13 at 17h 01m 19s.xml">
+    <history-entry file="TestUserDAOImpl - 2016.07.14 at 02h 07m 02s.xml">
       <configuration name="TestUserDAOImpl" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TestUserDAOImpl - 2016.07.13 at 17h 02m 36s.xml">
+    <history-entry file="TestUserDAOImpl - 2016.07.14 at 02h 08m 19s.xml">
       <configuration name="TestUserDAOImpl" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TestUserDAOImpl - 2016.07.13 at 17h 03m 17s.xml">
+    <history-entry file="TestUserDAOImpl - 2016.07.14 at 02h 08m 42s.xml">
       <configuration name="TestUserDAOImpl" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TestUserDAOImpl - 2016.07.13 at 17h 03m 43s.xml">
+    <history-entry file="TestUserDAOImpl - 2016.07.14 at 02h 09m 26s.xml">
       <configuration name="TestUserDAOImpl" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TestUserDAOImpl - 2016.07.13 at 17h 04m 17s.xml">
-      <configuration name="TestUserDAOImpl" configurationId="JUnit" />
+    <history-entry file="TestUserDAOImpl_testDeleteUser - 2016.07.14 at 01h 41m 28s.xml">
+      <configuration name="TestUserDAOImpl.testDeleteUser" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TestUserDAOImpl - 2016.07.13 at 17h 06m 54s.xml">
-      <configuration name="TestUserDAOImpl" configurationId="JUnit" />
+    <history-entry file="TestUserDAOImpl_testDeleteUser - 2016.07.14 at 01h 42m 47s.xml">
+      <configuration name="TestUserDAOImpl.testDeleteUser" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TestUserDAOImpl - 2016.07.13 at 17h 23m 24s.xml">
-      <configuration name="TestUserDAOImpl" configurationId="JUnit" />
+    <history-entry file="TestUserDAOImpl_testDeleteUser - 2016.07.14 at 01h 47m 26s.xml">
+      <configuration name="TestUserDAOImpl.testDeleteUser" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TestUserDAOImpl - 2016.07.13 at 17h 24m 11s.xml">
-      <configuration name="TestUserDAOImpl" configurationId="JUnit" />
+    <history-entry file="TestUserDAOImpl_testDeleteUser - 2016.07.14 at 02h 05m 55s.xml">
+      <configuration name="TestUserDAOImpl.testDeleteUser" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="301955000" />
+    <option name="totallyTimeSpent" value="314023000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1303,8 +1296,8 @@
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32253313" sideWeight="0.43705294" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32842416" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31369662" sideWeight="0.43705294" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32842416" sideWeight="0.50572246" order="7" side_tool="true" content_ui="tabs" />
@@ -1315,7 +1308,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19145803" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25894135" sideWeight="0.59351987" order="4" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28540772" sideWeight="0.59351987" order="4" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32842416" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26108727" sideWeight="0.4064801" order="5" side_tool="true" content_ui="tabs" />
@@ -1386,17 +1379,12 @@
     <MESSAGE value="Added test methods for EventRecurrenceTypeDAOImpl and some changes in all DAO classes" />
     <MESSAGE value="Test for EventRecurrenceDAOImpl is partially done" />
     <MESSAGE value="Some corrections in DAO classes.&#10;Changed TestUserDAOImpl class" />
-    <option name="LAST_COMMIT_MESSAGE" value="Some corrections in DAO classes.&#10;Changed TestUserDAOImpl class" />
+    <MESSAGE value="Add log4j framework, exception handling with log4j logger. Replace JDBC config java class with  property file. Some corrections in all DAO classes&#10;&#10;      &#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add log4j framework, exception handling with log4j logger. Replace JDBC config java class with  property file. Some corrections in all DAO classes&#10;&#10;      &#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/DAOTest.java</url>
-          <line>59</line>
-          <properties />
-          <option name="timeStamp" value="184" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/TestEventRecurrenceDAOImpl.java</url>
           <line>19</line>
@@ -1404,7 +1392,7 @@
           <option name="timeStamp" value="275" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="279" />
+      <option name="time" value="282" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1413,22 +1401,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/Event.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="25" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="25" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/datehelpers/DailyRecurrence.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/datehelpers/WeekdayRecurrence.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/datehelpers/WeekendRecurrence.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/datehelpers/YearlyRecurrence.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/datehelpers/MonthlyRecurrence.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/datehelpers/WeeklyRecurrence.java" />
     <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/src.zip!/java/sql/Timestamp.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-332">
@@ -1452,10 +1424,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="735">
           <caret line="49" column="26" selection-start-line="49" selection-start-column="26" selection-end-line="49" selection-end-column="26" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#1053#1070#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1624,147 +1593,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventCategoryDAOImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="114" column="58" selection-start-line="114" selection-start-column="58" selection-end-line="114" selection-end-column="58" />
-          <folding>
-            <element signature="method#insertCategory#0;class#EventCategoryDAOImpl#0" expanded="false" />
-            <element signature="method#getAllCategories#0;class#EventCategoryDAOImpl#0" expanded="false" />
-            <element signature="method#getCategoryById#0;class#EventCategoryDAOImpl#0" expanded="false" />
-            <element signature="method#updateCategory#0;class#EventCategoryDAOImpl#0" expanded="false" />
-            <element signature="method#deleteCategory#0;class#EventCategoryDAOImpl#0" expanded="false" />
-            <element signature="method#createEventCategoryListFromRS#0;class#EventCategoryDAOImpl#0" expanded="false" />
-            <marker date="1468405984000" expanded="true" signature="728:832" ph="INSERT INTO event_category... " />
-            <marker date="1468405984000" expanded="true" signature="1972:2000" ph="SELECT * FRO... event_category" />
-            <marker date="1468405984000" expanded="true" signature="2792:2820" ph="SELECT * FRO... event_category" />
-            <marker date="1468405984000" expanded="true" signature="2792:2821" ph="SELECT * FRO... event_category" />
-            <marker date="1468405984000" expanded="true" signature="2792:2833" ph="SELECT * FRO... event_category" />
-            <marker date="1468405984000" expanded="true" signature="3625:3690" ph="UPDATE event... " />
-            <marker date="1468405984000" expanded="true" signature="4534:4573" ph="DELETE FROM " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventInvitationDAOImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1437">
-          <caret line="177" column="71" selection-start-line="177" selection-start-column="71" selection-end-line="177" selection-end-column="71" />
-          <folding>
-            <element signature="method#insertInvitation#0;class#EventInvitationDAOImpl#0" expanded="false" />
-            <element signature="method#insertInvitation#1;class#EventInvitationDAOImpl#0" expanded="false" />
-            <element signature="e#4887#4888#0" expanded="true" />
-            <element signature="e#4947#4948#0" expanded="true" />
-            <element signature="e#5008#5009#0" expanded="true" />
-            <element signature="e#5076#5077#0" expanded="true" />
-            <element signature="method#createInvitationsFromRS#0;class#EventInvitationDAOImpl#0" expanded="false" />
-            <element signature="method#deleteInvitationsByField#0;class#EventInvitationDAOImpl#0" expanded="false" />
-            <marker date="1468411997000" expanded="true" signature="1159:1341" ph="INSERT INTO event_invitation... " />
-            <marker date="1468411997000" expanded="true" signature="2412:2575" ph="SELECT * FRO... event_invitation" />
-            <marker date="1468411997000" expanded="true" signature="3291:3321" ph="SELECT * FRO... event_invitation" />
-            <marker date="1468411997000" expanded="true" signature="3291:3460" ph="SELECT * FRO... event_invitation" />
-            <marker date="1468411997000" expanded="true" signature="4035:4173" ph="UPDATE event... " />
-            <marker date="1468411997000" expanded="true" signature="6731:6789" ph="DELETE FROM " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventInvitationDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="17" column="56" selection-start-line="17" selection-start-column="56" selection-end-line="17" selection-end-column="56" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventMediaDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="15" column="28" selection-start-line="15" selection-start-column="16" selection-end-line="15" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventMediaDAOImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-168">
-          <caret line="203" column="31" selection-start-line="203" selection-start-column="22" selection-end-line="203" selection-end-column="31" />
-          <folding>
-            <element signature="e#2576#2577#0" expanded="true" />
-            <element signature="e#2649#2650#0" expanded="true" />
-            <element signature="e#2708#2709#0" expanded="true" />
-            <element signature="e#2760#2761#0" expanded="true" />
-            <element signature="e#2825#2826#0" expanded="true" />
-            <element signature="e#2878#2879#0" expanded="true" />
-            <marker date="1468412445000" expanded="true" signature="723:808" ph="INSERT INTO event_media... " />
-            <marker date="1468412445000" expanded="true" signature="723:840" ph="INSERT INTO event_media... " />
-            <marker date="1468412445000" expanded="true" signature="723:859" ph="INSERT INTO event_media... " />
-            <marker date="1468412445000" expanded="true" signature="2111:2136" ph="SELECT * FRO... event_media" />
-            <marker date="1468412445000" expanded="true" signature="3279:3323" ph="SELECT * FRO... event_media" />
-            <marker date="1468412445000" expanded="true" signature="4129:4180" ph="UPDATE event... " />
-            <marker date="1468412445000" expanded="true" signature="4942:4978" ph="DELETE FROM " />
-            <marker date="1468412445000" expanded="true" signature="5762:5816" ph="SELECT * FRO... event_media" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventRecurrenceDAOImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="204" column="0" selection-start-line="204" selection-start-column="0" selection-end-line="204" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#6977#6994#0" expanded="true" />
-            <marker date="1468412558000" expanded="true" signature="1089:1253" ph="INSERT INTO event_recurrence... " />
-            <marker date="1468412558000" expanded="true" signature="2800:2972" ph="INSERT INTO event_recurrence... " />
-            <marker date="1468412558000" expanded="true" signature="4230:4391" ph="SELECT * FRO... event_recurrence" />
-            <marker date="1468412558000" expanded="true" signature="5074:5228" ph="UPDATE event... " />
-            <marker date="1468412558000" expanded="true" signature="6393:6434" ph="DELETE FROM " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceTypeDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="15" column="25" selection-start-line="15" selection-start-column="25" selection-end-line="15" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceTypeDAOImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="244">
-          <caret line="136" column="15" selection-start-line="136" selection-start-column="15" selection-end-line="136" selection-end-column="15" />
-          <folding>
-            <element signature="method#insertRecurrenceType#0;class#RecurrenceTypeDAOImpl#0" expanded="false" />
-            <element signature="method#getAllRecurrenceTypes#0;class#RecurrenceTypeDAOImpl#0" expanded="false" />
-            <element signature="method#getRecurrenceTypeById#0;class#RecurrenceTypeDAOImpl#0" expanded="false" />
-            <element signature="method#deleteRecurrenceType#0;class#RecurrenceTypeDAOImpl#0" expanded="false" />
-            <element signature="method#createRecurrenceTypesFromRS#0;class#RecurrenceTypeDAOImpl#0" expanded="false" />
-            <marker date="1468404029000" expanded="true" signature="855:944" ph="INSERT INTO recurrence_type... " />
-            <marker date="1468404029000" expanded="true" signature="855:945" ph="INSERT INTO event... " />
-            <marker date="1468404029000" expanded="true" signature="1499:1626" ph="INSERT INTO event_invitation... " />
-            <marker date="1468404029000" expanded="true" signature="2886:2941" ph="SELECT * FRO... recurrence_type" />
-            <marker date="1468404029000" expanded="true" signature="2886:3025" ph="SELECT * FRO... recurrence_type" />
-            <marker date="1468404029000" expanded="true" signature="3708:3847" ph="SELECT * FRO... recurrence_type" />
-            <marker date="1468404029000" expanded="true" signature="3708:3848" ph="SELECT * FRO... recurrence_type" />
-            <marker date="1468404029000" expanded="true" signature="3708:3901" ph="SELECT * FRO... recurrence_type" />
-            <marker date="1468404029000" expanded="true" signature="4540:4580" ph="DELETE FROM " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventRecurrenceDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="16" column="15" selection-start-line="16" selection-start-column="15" selection-end-line="16" selection-end-column="15" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/TestEventCategoryDAOImpl.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="312">
@@ -1831,111 +1659,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="15" column="31" selection-start-line="15" selection-start-column="31" selection-end-line="15" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventCategoryDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="21" column="8" selection-start-line="21" selection-start-column="8" selection-end-line="21" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventDAOImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="30" column="37" selection-start-line="30" selection-start-column="37" selection-end-line="30" selection-end-column="37" />
-          <folding>
-            <marker date="1468416202000" expanded="true" signature="2331:2340" ph="SELECT * mis... " />
-            <marker date="1468416202000" expanded="true" signature="2331:2441" ph="SELECT * FRO... event" />
-            <marker date="1468416202000" expanded="true" signature="2331:2442" ph="SELECT * FRO... event" />
-            <marker date="1468416202000" expanded="true" signature="2331:2443" ph="SELECT * FRO... event" />
-            <marker date="1468416202000" expanded="true" signature="3187:3299" ph="SELECT * FRO... event" />
-            <marker date="1468416202000" expanded="true" signature="3187:3300" ph="SELECT * FRO... event" />
-            <marker date="1468416202000" expanded="true" signature="3187:3318" ph="SELECT * FRO... event" />
-            <marker date="1468416202000" expanded="true" signature="4710:4827" ph="SELECT * FRO... event" />
-            <marker date="1468416202000" expanded="true" signature="4710:4875" ph="SELECT * FRO... event" />
-            <marker date="1468416202000" expanded="true" signature="4710:4877" ph="SELECT * FRO... event" />
-            <marker date="1468416202000" expanded="true" signature="5571:5578" ph="SELECT * FRO... event" />
-            <marker date="1468416202000" expanded="true" signature="5571:5691" ph="SELECT * fro... event" />
-            <marker date="1468416202000" expanded="true" signature="5571:5716" ph="SELECT event... event_participant" />
-            <marker date="1468416202000" expanded="true" signature="5571:5757" ph="SELECT event... event" />
-            <marker date="1468416202000" expanded="true" signature="5571:5872" ph="SELECT event... event" />
-            <marker date="1468416202000" expanded="true" signature="5571:5933" ph="SELECT * fro... event" />
-            <marker date="1468416202000" expanded="true" signature="6721:6816" ph="SELECT event... event" />
-            <marker date="1468416202000" expanded="true" signature="6721:7010" ph="SELECT event... event" />
-            <marker date="1468416202000" expanded="true" signature="6721:7014" ph="SELECT event... event" />
-            <marker date="1468416202000" expanded="true" signature="6721:7015" ph="SELECT * FRO... event_participant" />
-            <marker date="1468416202000" expanded="true" signature="7702:8066" ph="SELECT event... event" />
-            <marker date="1468416202000" expanded="true" signature="7702:8067" ph="SELECT event... event" />
-            <marker date="1468416202000" expanded="true" signature="7702:8072" ph="SELECT event... event" />
-            <marker date="1468416202000" expanded="true" signature="7702:8074" ph="SELECT event... event" />
-            <marker date="1468416202000" expanded="true" signature="7702:8075" ph="SELECT event... event" />
-            <marker date="1468416202000" expanded="true" signature="8732:8904" ph="UPDATE event... " />
-            <marker date="1468416202000" expanded="true" signature="8732:9080" ph="UPDATE user " />
-            <marker date="1468416202000" expanded="true" signature="11242:11272" ph="DELETE FROM " />
-            <marker date="1468416202000" expanded="true" signature="11868:12158" ph="INSERT INTO event... " />
-            <marker date="1468416202000" expanded="true" signature="13851:13880" ph="SELECT LAST_... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/GenericDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="66" column="5" selection-start-line="58" selection-start-column="68" selection-end-line="66" selection-end-column="5" />
-          <folding>
-            <marker date="1468412558000" expanded="true" signature="1980:2021" ph="DELETE FROM " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/UserDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="27" column="11" selection-start-line="27" selection-start-column="11" selection-end-line="27" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/DataSourceManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="16" column="64" selection-start-line="16" selection-start-column="64" selection-end-line="16" selection-end-column="64" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/UserDAOImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding>
-            <element signature="method#insertUser#0;class#UserDAOImpl#0" expanded="false" />
-            <element signature="method#getAllUsers#0;class#UserDAOImpl#0" expanded="false" />
-            <element signature="method#deleteUser#0;class#UserDAOImpl#0" expanded="false" />
-            <element signature="e#6173#6179#0" expanded="true" />
-            <marker date="1468415055000" expanded="true" signature="696:712" ph="INSERT INTO user... " />
-            <marker date="1468415055000" expanded="true" signature="696:851" ph="INSERT INTO user... " />
-            <marker date="1468415055000" expanded="true" signature="696:897" ph="INSERT INTO user... " />
-            <marker date="1468415055000" expanded="true" signature="696:905" ph="INSERT INTO user... " />
-            <marker date="1468415055000" expanded="true" signature="2242:2260" ph="SELECT * FRO... user" />
-            <marker date="1468415055000" expanded="true" signature="3175:3216" ph="UPDATE user " />
-            <marker date="1468415055000" expanded="true" signature="3807:3964" ph="UPDATE user " />
-            <marker date="1468415055000" expanded="true" signature="4932:4961" ph="DELETE FROM " />
-            <marker date="1468415055000" expanded="true" signature="5626:5650" ph="SELECT * FRO... user" />
-            <marker date="1468415055000" expanded="true" signature="5626:5651" ph="SELECT * FRO... user" />
-            <marker date="1468415055000" expanded="true" signature="5626:5673" ph="SELECT * FRO... user" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/User.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
@@ -1944,10 +1667,315 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventRecurrenceDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="149">
+          <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventDAOImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-975">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding>
+            <marker date="1468442087000" expanded="true" signature="2369:2378" ph="SELECT * mis... " />
+            <marker date="1468442087000" expanded="true" signature="2369:2479" ph="SELECT * FRO... event" />
+            <marker date="1468442087000" expanded="true" signature="2369:2480" ph="SELECT * FRO... event" />
+            <marker date="1468442087000" expanded="true" signature="2369:2481" ph="SELECT * FRO... event" />
+            <marker date="1468442087000" expanded="true" signature="3249:3361" ph="SELECT * FRO... event" />
+            <marker date="1468442087000" expanded="true" signature="3249:3362" ph="SELECT * FRO... event" />
+            <marker date="1468442087000" expanded="true" signature="3249:3380" ph="SELECT * FRO... event" />
+            <marker date="1468442087000" expanded="true" signature="4796:4913" ph="SELECT * FRO... event" />
+            <marker date="1468442087000" expanded="true" signature="4796:4961" ph="SELECT * FRO... event" />
+            <marker date="1468442087000" expanded="true" signature="4796:4963" ph="SELECT * FRO... event" />
+            <marker date="1468442087000" expanded="true" signature="5681:5688" ph="SELECT * FRO... event" />
+            <marker date="1468442087000" expanded="true" signature="5681:5801" ph="SELECT * fro... event" />
+            <marker date="1468442087000" expanded="true" signature="5681:5826" ph="SELECT event... event_participant" />
+            <marker date="1468442087000" expanded="true" signature="5681:5867" ph="SELECT event... event" />
+            <marker date="1468442087000" expanded="true" signature="5681:5982" ph="SELECT event... event" />
+            <marker date="1468442087000" expanded="true" signature="5681:6043" ph="SELECT * fro... event" />
+            <marker date="1468442087000" expanded="true" signature="6855:6950" ph="SELECT event... event" />
+            <marker date="1468442087000" expanded="true" signature="6855:7144" ph="SELECT event... event" />
+            <marker date="1468442087000" expanded="true" signature="6855:7148" ph="SELECT event... event" />
+            <marker date="1468442087000" expanded="true" signature="6855:7149" ph="SELECT * FRO... event_participant" />
+            <marker date="1468442087000" expanded="true" signature="7860:8224" ph="SELECT event... event" />
+            <marker date="1468442087000" expanded="true" signature="7860:8225" ph="SELECT event... event" />
+            <marker date="1468442087000" expanded="true" signature="7860:8230" ph="SELECT event... event" />
+            <marker date="1468442087000" expanded="true" signature="7860:8232" ph="SELECT event... event" />
+            <marker date="1468442087000" expanded="true" signature="7860:8233" ph="SELECT event... event" />
+            <marker date="1468442087000" expanded="true" signature="8914:9086" ph="UPDATE event... " />
+            <marker date="1468442087000" expanded="true" signature="8914:9262" ph="UPDATE user " />
+            <marker date="1468442087000" expanded="true" signature="11448:11478" ph="DELETE FROM " />
+            <marker date="1468442087000" expanded="true" signature="12084:12374" ph="INSERT INTO event... " />
+            <marker date="1468442087000" expanded="true" signature="14067:14096" ph="SELECT LAST_... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventRecurrenceDAOImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-931">
+          <caret line="17" column="33" selection-start-line="17" selection-start-column="33" selection-end-line="17" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#7145#7162#0" expanded="true" />
+            <marker date="1468442087000" expanded="true" signature="1127:1291" ph="INSERT INTO event_recurrence... " />
+            <marker date="1468442087000" expanded="true" signature="2886:3058" ph="INSERT INTO event_recurrence... " />
+            <marker date="1468442087000" expanded="true" signature="4340:4501" ph="SELECT * FRO... event_recurrence" />
+            <marker date="1468442087000" expanded="true" signature="5208:5362" ph="UPDATE event... " />
+            <marker date="1468442087000" expanded="true" signature="6551:6592" ph="DELETE FROM " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/log4j/log4j/1.2.12/log4j-1.2.12.jar!/org/apache/log4j/Category.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="149">
+          <caret line="121" column="16" selection-start-line="121" selection-start-column="16" selection-end-line="121" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventCategoryDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="23" column="32" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventCategoryDAOImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="9" column="3" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
+          <folding>
+            <element signature="method#insertCategory#0;class#EventCategoryDAOImpl#0" expanded="false" />
+            <element signature="method#getAllCategories#0;class#EventCategoryDAOImpl#0" expanded="false" />
+            <element signature="method#getCategoryById#0;class#EventCategoryDAOImpl#0" expanded="false" />
+            <element signature="method#updateCategory#0;class#EventCategoryDAOImpl#0" expanded="false" />
+            <element signature="method#createEventCategoryListFromRS#0;class#EventCategoryDAOImpl#0" expanded="false" />
+            <marker date="1468443226000" expanded="true" signature="716:743" ph="INSERT INTO event_category... " />
+            <marker date="1468443226000" expanded="true" signature="716:821" ph="INSERT INTO event_category... " />
+            <marker date="1468443226000" expanded="true" signature="1964:1992" ph="SELECT * FRO... event_category" />
+            <marker date="1468443226000" expanded="true" signature="2805:2833" ph="SELECT * FRO... event_category" />
+            <marker date="1468443226000" expanded="true" signature="2805:2834" ph="SELECT * FRO... event_category" />
+            <marker date="1468443226000" expanded="true" signature="2805:2846" ph="SELECT * FRO... event_category" />
+            <marker date="1468443226000" expanded="true" signature="3658:3723" ph="UPDATE event... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventInvitationDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventInvitationDAOImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="36" column="26" selection-start-line="36" selection-start-column="26" selection-end-line="36" selection-end-column="26" />
+          <folding>
+            <element signature="method#insertInvitation#0;class#EventInvitationDAOImpl#0" expanded="false" />
+            <element signature="method#insertInvitation#1;class#EventInvitationDAOImpl#0" expanded="false" />
+            <element signature="method#createInvitationsFromRS#0;class#EventInvitationDAOImpl#0" expanded="false" />
+            <element signature="method#deleteInvitationsByField#0;class#EventInvitationDAOImpl#0" expanded="false" />
+            <marker date="1468442087000" expanded="true" signature="1197:1379" ph="INSERT INTO event_invitation... " />
+            <marker date="1468442087000" expanded="true" signature="2474:2637" ph="SELECT * FRO... event_invitation" />
+            <marker date="1468442087000" expanded="true" signature="3377:3407" ph="SELECT * FRO... event_invitation" />
+            <marker date="1468442087000" expanded="true" signature="3377:3546" ph="SELECT * FRO... event_invitation" />
+            <marker date="1468442087000" expanded="true" signature="4145:4283" ph="UPDATE event... " />
+            <marker date="1468442087000" expanded="true" signature="6879:6937" ph="DELETE FROM " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventMediaDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="15" column="28" selection-start-line="15" selection-start-column="16" selection-end-line="15" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventMediaDAOImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="87" column="39" selection-start-line="87" selection-start-column="39" selection-end-line="87" selection-end-column="39" />
+          <folding>
+            <element signature="method#insertMedia#0;class#EventMediaDAOImpl#0" expanded="false" />
+            <element signature="method#getAllMedia#0;class#EventMediaDAOImpl#0" expanded="false" />
+            <element signature="method#getMediaByEventId#0;class#EventMediaDAOImpl#0" expanded="false" />
+            <element signature="method#updateMediaDescription#0;class#EventMediaDAOImpl#0" expanded="false" />
+            <element signature="method#getMediaByField#0;class#EventMediaDAOImpl#0" expanded="false" />
+            <element signature="method#createMediaListFromRS#0;class#EventMediaDAOImpl#0" expanded="false" />
+            <marker date="1468443622000" expanded="true" signature="690:775" ph="INSERT INTO event_media... " />
+            <marker date="1468443622000" expanded="true" signature="690:807" ph="INSERT INTO event_media... " />
+            <marker date="1468443622000" expanded="true" signature="690:826" ph="INSERT INTO event_media... " />
+            <marker date="1468443622000" expanded="true" signature="2085:2110" ph="SELECT * FRO... event_media" />
+            <marker date="1468443622000" expanded="true" signature="3304:3348" ph="SELECT * FRO... event_media" />
+            <marker date="1468443622000" expanded="true" signature="4159:4210" ph="UPDATE event... " />
+            <marker date="1468443622000" expanded="true" signature="5270:5324" ph="SELECT * FRO... event_media" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/DBConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="0" selection-start-line="6" selection-start-column="3" selection-end-line="9" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/config.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="118" selection-start-line="0" selection-start-column="118" selection-end-line="0" selection-end-column="118" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="291">
+          <caret line="91" column="38" selection-start-line="91" selection-start-column="38" selection-end-line="91" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="9" column="17" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/src.zip!/java/io/FileInputStream.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="125">
+          <caret line="194" column="0" selection-start-line="194" selection-start-column="0" selection-end-line="194" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/DataSourceManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="96" selection-start-line="21" selection-start-column="96" selection-end-line="21" selection-end-column="96" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceTypeDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="20" column="8" selection-start-line="20" selection-start-column="8" selection-end-line="20" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceTypeDAOImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="173">
+          <caret line="128" column="31" selection-start-line="128" selection-start-column="15" selection-end-line="128" selection-end-column="31" />
+          <folding>
+            <element signature="method#insertRecurrenceType#0;class#RecurrenceTypeDAOImpl#0" expanded="false" />
+            <element signature="method#getRecurrenceTypeById#0;class#RecurrenceTypeDAOImpl#0" expanded="false" />
+            <element signature="e#4413#4414#0" expanded="true" />
+            <element signature="e#4475#4476#0" expanded="true" />
+            <element signature="e#4538#4539#0" expanded="true" />
+            <element signature="e#4596#4597#0" expanded="true" />
+            <element signature="method#createRecurrenceTypesFromRS#0;class#RecurrenceTypeDAOImpl#0" expanded="false" />
+            <marker date="1468446442000" expanded="true" signature="869:958" ph="INSERT INTO recurrence_type... " />
+            <marker date="1468446442000" expanded="true" signature="869:959" ph="INSERT INTO event... " />
+            <marker date="1468446442000" expanded="true" signature="1513:1640" ph="INSERT INTO event_invitation... " />
+            <marker date="1468446442000" expanded="true" signature="2933:2988" ph="SELECT * FRO... recurrence_type" />
+            <marker date="1468446442000" expanded="true" signature="2933:3072" ph="SELECT * FRO... recurrence_type" />
+            <marker date="1468446442000" expanded="true" signature="3771:3910" ph="SELECT * FRO... recurrence_type" />
+            <marker date="1468446442000" expanded="true" signature="3771:3911" ph="SELECT * FRO... recurrence_type" />
+            <marker date="1468446442000" expanded="true" signature="3771:3964" ph="SELECT * FRO... recurrence_type" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/log4j.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/GenericDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="600">
+          <caret line="40" column="5" selection-start-line="40" selection-start-column="5" selection-end-line="40" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#getInsertedId#0;class#GenericDAO#0" expanded="false" />
+            <marker date="1468447495000" expanded="true" signature="2023:2064" ph="DELETE FROM " />
+            <marker date="1468447495000" expanded="true" signature="2756:2768" ph="DELETE FROM " />
+            <marker date="1468447495000" expanded="true" signature="2756:2780" ph="DELETE FROM " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/UserDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/UserDAOImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-177">
+          <caret line="200" column="0" selection-start-line="200" selection-start-column="0" selection-end-line="200" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#updateUser#0;class#UserDAOImpl#0" expanded="false" />
+            <element signature="e#5140#5141#0" expanded="true" />
+            <element signature="e#5195#5196#0" expanded="true" />
+            <element signature="e#5248#5249#0" expanded="true" />
+            <element signature="e#5295#5296#0" expanded="true" />
+            <element signature="e#6322#6328#0" expanded="true" />
+            <marker date="1468447710000" expanded="true" signature="698:714" ph="INSERT INTO user... " />
+            <marker date="1468447710000" expanded="true" signature="698:853" ph="INSERT INTO user... " />
+            <marker date="1468447710000" expanded="true" signature="698:899" ph="INSERT INTO user... " />
+            <marker date="1468447710000" expanded="true" signature="698:907" ph="INSERT INTO user... " />
+            <marker date="1468447710000" expanded="true" signature="2313:2331" ph="SELECT * FRO... user" />
+            <marker date="1468447710000" expanded="true" signature="3427:3468" ph="UPDATE user " />
+            <marker date="1468447710000" expanded="true" signature="4188:4345" ph="UPDATE user " />
+            <marker date="1468447710000" expanded="true" signature="5707:5731" ph="SELECT * FRO... user" />
+            <marker date="1468447710000" expanded="true" signature="5707:5732" ph="SELECT * FRO... user" />
+            <marker date="1468447710000" expanded="true" signature="5707:5754" ph="SELECT * FRO... user" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/TestUserDAOImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="237">
-          <caret line="144" column="9" selection-start-line="144" selection-start-column="9" selection-end-line="144" selection-end-column="9" />
+        <state relative-caret-position="225">
+          <caret line="49" column="26" selection-start-line="49" selection-start-column="26" selection-end-line="49" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

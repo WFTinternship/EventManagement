@@ -9,16 +9,17 @@ import java.util.List;
  */
 public interface EventCategoryDAO  {
 
-     //create methods
+     //insert data into db
      int insertCategory(EventCategory category);
 
-     //read methods
+     //read data from db
      List<EventCategory> getAllCategories();
      EventCategory getCategoryById(int categoryId);
 
-     //update methods
+     //update data in db
      boolean updateCategory(EventCategory category);
 
-     //delete methods
+     //delete data from db
      boolean deleteCategory(int categoryId);
+     boolean deleteAllCategories();
 }

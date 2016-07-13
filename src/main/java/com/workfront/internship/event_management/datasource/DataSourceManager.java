@@ -5,9 +5,10 @@ import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Properties;
 
 /**
- * Created by hermine on 7/1/16.
+ * Created by Hermine Turshujyan 7/1/16.
  */
 public class DataSourceManager {
 
@@ -15,10 +16,15 @@ public class DataSourceManager {
     private BasicDataSource ds;
 
     private DataSourceManager() throws IOException, SQLException {
+
+        //loading db property list
+        Properties props = new Properties();
+        props.load(ClassLoader.getSystemClassLoader().getResourceAsStream("config.properties"));
+
         ds = new BasicDataSource();
-        ds.setUsername(DBConfig.USERNAME);
-        ds.setPassword(DBConfig.PASSWORD);
-        ds.setUrl(DBConfig.CONN_STRING);
+        ds.setUsername(props.getProperty("jdbc.username"));
+        ds.setPassword(props.getProperty("jdbc.password"));
+        ds.setUrl(props.getProperty("jdbc.url"));
     }
 
     public static DataSourceManager getInstance() throws IOException, SQLException {

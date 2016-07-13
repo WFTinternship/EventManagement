@@ -15,6 +15,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
 
     //CREATE
+    @Override
     public boolean insertEvent(Event event, int organizerId) {
 
         Connection conn = null;
@@ -55,7 +56,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
-            e.printStackTrace();
+            logger.error("Exception ", e);
         } finally {
             closeResources(conn);
         }
@@ -63,6 +64,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     //READ
+    @Override
     public List<Event> getAllEvents() {
 
         Connection conn = null;
@@ -83,13 +85,14 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             eventsList = createEventsListFromRS(rs);
 
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            logger.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
         return eventsList;
     }
 
+    @Override
     public Event getEventById(int eventId) {
 
         Connection conn = null;
@@ -127,13 +130,14 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             event.setMedia(media);
 
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            logger.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
         return event;
     }
 
+    @Override
     public List<Event> getEventsByCategory(int categoryId) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -149,13 +153,14 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             rs = stmt.executeQuery();
             eventsList = createEventsListFromRS(rs);
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            logger.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
         return eventsList;
     }
 
+    @Override
     public List<Event> getEventsByUserId(String userRole, int userId) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -181,13 +186,14 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             eventsList = createEventsListFromRS(rs);
 
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            logger.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
         return eventsList;
     }
 
+    @Override
     public List<Event> getParticipatedEventsByUserId(int userId) {
 
         Connection conn = null;
@@ -208,13 +214,14 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
             eventsList = createEventsListFromRS(rs);
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            logger.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
         return eventsList;
     }
 
+    @Override
     public List<Event> getAcceptedEventsByUserId(int userId) {
 
         Connection conn = null;
@@ -238,7 +245,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
             eventsList = createEventsListFromRS(rs);
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            logger.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -247,6 +254,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
     //UPDATE
     //????????
+    @Override
     public boolean updateEvent(Event event) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -303,7 +311,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             affectedRows = stmt.executeUpdate();
 
         } catch (IOException | SQLException e) {
-                e.printStackTrace();
+                logger.error("Exception ", e);
         } finally {
             closeResources(null, stmt, conn);
         }
@@ -311,6 +319,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     //DELETE
+    @Override
     public boolean deleteEvent(int eventId) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -323,7 +332,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             stmt.setInt(1, eventId);
             affectedRows = stmt.executeUpdate();
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            logger.error("Exception ", e);
         } finally {
             closeResources(stmt, conn);
         }
@@ -382,7 +391,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                 eventId = rs.getInt("id");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Exception ", e);
         } finally {
 
         }

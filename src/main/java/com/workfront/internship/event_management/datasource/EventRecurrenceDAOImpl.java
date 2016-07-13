@@ -14,6 +14,7 @@ import java.util.List;
 public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenceDAO {
 
     //Create
+    @Override
     public int insertEventRecurrence(EventRecurrence recurrence) {
         Connection conn = null;
         int id = 0;
@@ -21,13 +22,14 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
             conn = DataSourceManager.getInstance().getConnection();
             id = insertEventRecurrence(recurrence, conn);
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            logger.error("Exception ", e);
         } finally {
             closeResources(conn);
         }
         return id;
     }
 
+    @Override
     public int insertEventRecurrence(EventRecurrence recurrence, Connection conn) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -52,13 +54,14 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
                 id = rs.getInt(1);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Exception ", e);
         } finally {
             closeResources(rs, stmt);
         }
         return id;
     }
 
+    @Override
     public boolean insertEventRecurrences(List<EventRecurrence> recurrences) {
         Connection conn = null;
         boolean success = false;
@@ -66,13 +69,14 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
             conn = DataSourceManager.getInstance().getConnection();
             success = insertEventRecurrences(recurrences, conn);
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            logger.error("Exception ", e);
         } finally {
             closeResources(conn);
         }
         return success;
     }
 
+    @Override
     public boolean insertEventRecurrences(List<EventRecurrence> recurrences, Connection conn) {
         PreparedStatement stmt = null;
         int affectedRows = 0;
@@ -95,7 +99,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
             }
             affectedRows = stmt.executeBatch().length;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Exception ", e);
         } finally {
             closeResources(stmt);
         }
@@ -103,6 +107,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
     }
 
     //READ
+    @Override
     public List<EventRecurrence> getEventRecurrencesByEventId(int eventId) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -117,7 +122,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
             rs = stmt.executeQuery();
             recurrencesList = createEventRecurrencesFromRS(rs);
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            logger.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -125,6 +130,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
     }
 
     //UPDATE
+    @Override
     public boolean updateEventRecurrence(EventRecurrence recurrence) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -146,13 +152,14 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
             stmt.setInt(6, recurrence.getId());
             affectedRows = stmt.executeUpdate();
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            logger.error("Exception ", e);
         } finally {
             closeResources(stmt, conn);
         }
         return affectedRows != 0;    }
 
     //Delete
+    @Override
     public boolean deleteEventRecurrece(int id) {
 
         Connection conn = null;
@@ -171,7 +178,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
             //execute statement
             affectedRows = stmt.executeUpdate();
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            logger.error("Exception ", e);
         } finally {
             closeResources(stmt, conn);
         }

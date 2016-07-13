@@ -16,6 +16,7 @@ import java.util.List;
  */
 public class EventInvitationDAOImpl extends GenericDAO implements EventInvitationDAO {
 
+    @Override
     public int insertInvitation(EventInvitation invitation) {
 
         Connection conn = null;
@@ -25,13 +26,14 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
             conn = DataSourceManager.getInstance().getConnection();
             id = insertInvitation(invitation, conn);
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            logger.error("Exception ", e);
         } finally {
             closeResources(conn);
         }
         return id;
     }
 
+    @Override
     public int insertInvitation(EventInvitation invitation, Connection conn) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -53,13 +55,14 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
                 id = rs.getInt(1);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Exception ", e);
         } finally {
             closeResources(rs, stmt);
         }
         return id;
     }
 
+    @Override
     public EventInvitation getInvitationById(int invId) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -75,13 +78,14 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
             rs = stmt.executeQuery();
             invitation = createInvitationsFromRS(rs).get(0);
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            logger.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
         return invitation;
     }
 
+    @Override
     public List<EventInvitation> getInvitationsByEventId(int eventId) {
 
         Connection conn = null;
@@ -99,13 +103,14 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
             rs = stmt.executeQuery();
             invitationsList = createInvitationsFromRS(rs);
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            logger.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
         return invitationsList;
     }
 
+    @Override
     public boolean updateInvitation(EventInvitation invitation) {
 
         Connection conn = null;
@@ -126,17 +131,19 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
 
             affectedRows = stmt.executeUpdate();
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            logger.error("Exception ", e);
         } finally {
             closeResources(stmt, conn);
         }
         return affectedRows != 0;
     }
 
+    @Override
     public boolean deleteInvitation(int invId) {
         return deleteInvitationsByField("id", invId);
     }
 
+    @Override
     public boolean deleteInvitationsByEventId(int eventId){
         return deleteInvitationsByField("event_id", eventId);
     }
@@ -191,7 +198,7 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
             affectedRows = stmt.executeUpdate();
 
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            logger.error("Exception ", e);
         } finally {
             closeResources(stmt, conn);
         }

@@ -9,21 +9,21 @@ import java.util.List;
  */
 public interface UserDAO {
 
-    //insert  to db
+    //insert record into db
     int insertUser(User user);
 
-    //read from db
+    //read data from db
     List<User> getAllUsers();
     User getUserById(int userId);
     User getUserByUsername(String username);
     User getUserByEmail(String email);
 
-    //update record
+    //update record in db
     boolean setVerified(int userId);
     boolean updateUser(User user);
 
-    //delete from db
+    //delete record from db
     boolean deleteUser(int userId);
-
+    boolean deleteAllUsers();
     //todo add deleteAll method
 }

@@ -7,7 +7,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * Created by hermine on 7/8/16.
@@ -24,13 +25,14 @@ public class TestUserDAOImpl {
 
     @Before
     public void setUp() {
+
         //create test user
         testUser = TestHelper.createTestUser();
 
         //insert into db
         int userId = userDAO.insertUser(testUser);
 
-        //set inserted id
+        //set generated id ro test user object
         testUser.setId(userId);
     }
 
@@ -45,6 +47,7 @@ public class TestUserDAOImpl {
     @Test
     public void testInsertUser() {
         //already inserted into db
+        User actualUser = userDAO.getUserById(testUser.getId());
         assertNotEquals(testUser.getId(), 0);
     }
 
