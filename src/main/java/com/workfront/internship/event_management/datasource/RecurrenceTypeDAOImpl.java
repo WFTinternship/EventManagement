@@ -2,7 +2,6 @@ package com.workfront.internship.event_management.datasource;
 
 import com.workfront.internship.event_management.model.datehelpers.RecurrenceType;
 
-import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,6 +14,7 @@ import java.util.Map;
  */
 public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeDAO {
 
+    //Create
     public int insertRecurrenceType(RecurrenceType recurrenceType) {
         Connection conn = null;
         PreparedStatement stmtInsertRecType = null;
@@ -53,16 +53,13 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
             }
             conn.commit();
         } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
+                e.printStackTrace();
         } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
             try {
                 conn.rollback();
             } catch (SQLException re) {
-                System.out.println("SQLException " + e.getMessage());
+                e.printStackTrace();
             }
-        } catch (PropertyVetoException e) {
-            System.out.println("PropertyVetoException " + e.getMessage());
         } finally {
             closeResources(rs);
             closeResources(stmtInsertRepeatOn);
@@ -71,11 +68,14 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
         return recTypeId;
     }
 
-    public List<RecurrenceType> getAllRecurrenceTypes() {
+   //Read
+   public List<RecurrenceType> getAllRecurrenceTypes() {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
+
         List<RecurrenceType> recurrenceTypeList = null;
+
         try {
             conn = DataSourceManager.getInstance().getConnection();
             String query = "SELECT * FROM recurrence_type LEFT JOIN repeat_on_value "
@@ -83,12 +83,8 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
             stmt = conn.prepareStatement(query);
             rs = stmt.executeQuery();
             recurrenceTypeList = createRecurrenceTypesFromRS(rs);
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            System.out.println("PropertyVetoException " + e.getMessage());
+        } catch (IOException | SQLException e) {
+                e.printStackTrace();
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -96,10 +92,13 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
     }
 
     public RecurrenceType getRecurrenceTypeById(int id) {
+
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
+
         RecurrenceType recurrenceType = null;
+        
         try {
             conn = DataSourceManager.getInstance().getConnection();
             String query = "SELECT * FROM recurrence_type LEFT JOIN repeat_on_value "
@@ -109,12 +108,8 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
             stmt.setInt(1, id);
             rs = stmt.executeQuery();
             recurrenceType = createRecurrenceTypeFromRS(rs);
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            System.out.println("PropertyVetoException " + e.getMessage());
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -131,12 +126,8 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
             PreparedStatement preparedStatement = conn.prepareStatement(sqlStr);
             preparedStatement.setInt(1, id);
             affectedRows = preparedStatement.executeUpdate();
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            System.out.println("PropertyVetoException " + e.getMessage());
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
         } finally {
             closeResources(null, stmt, conn);
         }

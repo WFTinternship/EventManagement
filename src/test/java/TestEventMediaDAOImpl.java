@@ -1,27 +1,8 @@
-import com.workfront.internship.event_management.datasource.DataSourceManager;
-import com.workfront.internship.event_management.datasource.EventMediaDAO;
-import com.workfront.internship.event_management.datasource.EventMediaDAOImpl;
-import com.workfront.internship.event_management.model.*;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import java.beans.PropertyVetoException;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.*;
-
 /**
  * Created by hermine on 7/9/16.
  */
 public class TestEventMediaDAOImpl {
+  /*
     private static EventMediaDAO mediaDAO;
     private EventMedia testMedia;
     private User testUser;
@@ -162,124 +143,6 @@ public class TestEventMediaDAOImpl {
         mediaDAO.deleteMedia(testMedia.getId());
         assertNull(getTestMediaFromDB(testMedia.getId()));
     }
-
-    //helper methods
-    private EventMedia getTestMediaFromDB(int mediaId){
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        EventMedia testMedia = null;
-        try {
-            conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "SELECT * FROM event_media where id = ?";
-            stmt = conn.prepareStatement(sqlStr);
-            stmt.setInt(1, mediaId);
-            rs = stmt.executeQuery();
-            while (rs.next()) {
-                testMedia = new EventMedia();
-                testMedia.setId(rs.getInt("id"))
-                        .setEventId(rs.getInt("event_id"))
-                        .setType(rs.getString("type"))
-                        .setPath(rs.getString("path"))
-                        .setDescription(rs.getString("description"))
-                        .setUploaderId(rs.getInt("uploader_id"))
-                        .setUploadDate(rs.getTimestamp("upload_date"));
-            }
-        } catch (SQLException | IOException | PropertyVetoException e) {
-                e.printStackTrace();
-        } finally {
-            TestHelper.closeResources(rs, stmt, conn);
-        }
-        return testMedia;
-    }
-
-    private List<EventMedia> getTestMediaListFromDB() {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        List<EventMedia> mediaList = new ArrayList<EventMedia>();
-        try {
-            conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "SELECT * FROM event_media where event_id = ?";
-            stmt = conn.prepareStatement(sqlStr);
-            stmt.setInt(1, testEvent.getId());
-            rs = stmt.executeQuery();
-            while (rs.next()) {
-                EventMedia media = new EventMedia();
-                media.setId(rs.getInt("id"))
-                        .setEventId(rs.getInt("event_id"))
-                        .setType(rs.getString("type"))
-                        .setPath(rs.getString("path"))
-                        .setDescription(rs.getString("description"))
-                        .setUploaderId(rs.getInt("uploader_id"))
-                        .setUploadDate(rs.getTimestamp("upload_date"));
-                mediaList.add(media);
-            }
-        } catch (SQLException | IOException | PropertyVetoException e) {
-            e.printStackTrace();
-        } finally {
-            TestHelper.closeResources(rs, stmt, conn);
-        }
-        return mediaList;
-    }
-
-    private List<EventMedia> getAllMediaFromDB(){
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        List<EventMedia> mediaList = new ArrayList<EventMedia>();
-        try {
-            conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "SELECT * FROM event_media";
-            stmt = conn.prepareStatement(sqlStr);
-            rs = stmt.executeQuery();
-            while (rs.next()) {
-                EventMedia media = new EventMedia();
-                media.setId(rs.getInt("id"))
-                        .setEventId(rs.getInt("event_id"))
-                        .setType(rs.getString("type"))
-                        .setPath(rs.getString("path"))
-                        .setDescription(rs.getString("description"))
-                        .setUploaderId(rs.getInt("uploader_id"))
-                        .setUploadDate(rs.getTimestamp("upload_date"));
-                mediaList.add(media);
-            }
-        } catch (SQLException | IOException | PropertyVetoException e) {
-            e.printStackTrace();
-        } finally {
-            TestHelper.closeResources(rs, stmt, conn);
-        }
-        return mediaList;
-    }
-
-    private List<EventMedia> getTestMediaByField(String columnName, Object columnValue) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        List<EventMedia> mediaList = new ArrayList<EventMedia>();
-        try {
-            conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "SELECT * FROM event_media where " + columnName + " = ?";
-            stmt = conn.prepareStatement(sqlStr);
-            stmt.setObject(1, columnValue);
-            rs = stmt.executeQuery();
-            while (rs.next()) {
-                EventMedia media = new EventMedia();
-                media.setId(rs.getInt("id"))
-                        .setEventId(rs.getInt("event_id"))
-                        .setType(rs.getString("type"))
-                        .setPath(rs.getString("path"))
-                        .setDescription(rs.getString("description"))
-                        .setUploaderId(rs.getInt("uploader_id"))
-                        .setUploadDate(rs.getTimestamp("upload_date"));
-                mediaList.add(media);
-            }
-        } catch (SQLException | IOException | PropertyVetoException e) {
-            e.printStackTrace();
-        } finally {
-            TestHelper.closeResources(rs, stmt, conn);
-        }
-        return mediaList;
-    }
+*/
 
 }

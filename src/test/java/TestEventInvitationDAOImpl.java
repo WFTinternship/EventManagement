@@ -1,32 +1,9 @@
-import com.workfront.internship.event_management.datasource.DataSourceManager;
-import com.workfront.internship.event_management.datasource.EventInvitationDAO;
-import com.workfront.internship.event_management.datasource.EventInvitationDAOImpl;
-import com.workfront.internship.event_management.model.Event;
-import com.workfront.internship.event_management.model.EventCategory;
-import com.workfront.internship.event_management.model.EventInvitation;
-import com.workfront.internship.event_management.model.User;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import java.beans.PropertyVetoException;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
 /**
  * Created by hermine on 7/9/16.
  */
 public class TestEventInvitationDAOImpl {
 
-    private static EventInvitationDAO invitationDAO;
+  /*  private static EventInvitationDAO invitationDAO;
     private EventInvitation testInvitation;
     private User testUser;
     private Event testEvent;
@@ -146,40 +123,5 @@ public class TestEventInvitationDAOImpl {
         invitationDAO.deleteInvitationsByEventId(testInvitation.getEventId());
         assertNull(getTestInvitationFromDB(testInvitation.getId()));
     }
-
-    //helper methods
-    private EventInvitation getTestInvitationFromDB(int id) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        EventInvitation invitation = null;
-        try {
-            conn = DataSourceManager.getInstance().getConnection();
-
-            String sqlStr = "SELECT * FROM event_invitation WHERE id  = ?";
-            stmt = conn.prepareStatement(sqlStr);
-            stmt.setInt(1,id);
-            rs = stmt.executeQuery();
-            while (rs.next()) {
-                invitation = new EventInvitation();
-                invitation.setId(rs.getInt("id"))
-                        .setEventId(rs.getInt("event_id"))
-                        .setUserRole(rs.getString("user_role"))
-                        .setUserResponse(rs.getString("user_response"))
-                        .setAttendeesCount(rs.getInt("attendees_count"))
-                        .setParticipated(rs.getBoolean("participated"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-        } finally {
-            TestHelper.closeResources(rs, stmt, conn);
-        }
-        return invitation;
-    }
-
-
+*/
 }

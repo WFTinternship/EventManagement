@@ -3,7 +3,6 @@ package com.workfront.internship.event_management.datasource;
 import com.workfront.internship.event_management.model.EventRecurrence;
 import com.workfront.internship.event_management.model.datehelpers.RecurrenceType;
 
-import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,14 +13,14 @@ import java.util.List;
  */
 public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenceDAO {
 
-    //CREATE
+    //Create
     public int insertEventRecurrence(EventRecurrence recurrence) {
         Connection conn = null;
         int id = 0;
         try {
             conn = DataSourceManager.getInstance().getConnection();
             id = insertEventRecurrence(recurrence, conn);
-        } catch (SQLException | IOException | PropertyVetoException e) {
+        } catch (SQLException | IOException e) {
             e.printStackTrace();
         } finally {
             closeResources(conn);
@@ -66,7 +65,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
         try {
             conn = DataSourceManager.getInstance().getConnection();
             success = insertEventRecurrences(recurrences, conn);
-        } catch (SQLException | IOException | PropertyVetoException e) {
+        } catch (SQLException | IOException e) {
             e.printStackTrace();
         } finally {
             closeResources(conn);
@@ -117,7 +116,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
             stmt.setInt(1, eventId);
             rs = stmt.executeQuery();
             recurrencesList = createEventRecurrencesFromRS(rs);
-        } catch (SQLException | IOException | PropertyVetoException e) {
+        } catch (SQLException | IOException e) {
             e.printStackTrace();
         } finally {
             closeResources(rs, stmt, conn);
@@ -146,25 +145,32 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
             }
             stmt.setInt(6, recurrence.getId());
             affectedRows = stmt.executeUpdate();
-        } catch (SQLException | IOException | PropertyVetoException e) {
+        } catch (SQLException | IOException e) {
             e.printStackTrace();
         } finally {
             closeResources(stmt, conn);
         }
         return affectedRows != 0;    }
 
-    //DELETE
+    //Delete
     public boolean deleteEventRecurrece(int id) {
+
         Connection conn = null;
         PreparedStatement stmt = null;
         int affectedRows = 0;
+
         try {
+            //acquire connection
             conn = DataSourceManager.getInstance().getConnection();
+
+            //create and initialize statement
             String sqlStr = "DELETE FROM event_recurrence WHERE id = ?";
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, id);
+
+            //execute statement
             affectedRows = stmt.executeUpdate();
-        } catch (SQLException | IOException | PropertyVetoException e) {
+        } catch (SQLException | IOException e) {
             e.printStackTrace();
         } finally {
             closeResources(stmt, conn);
@@ -175,22 +181,28 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
     //helper methods
 
     private List<EventRecurrence> createEventRecurrencesFromRS(ResultSet rs) throws SQLException {
+
         List<EventRecurrence> recurrencesList = new ArrayList<EventRecurrence>();
         RecurrenceType recType = null;
+
         while (rs.next()) {
-            EventRecurrence recurrence = new EventRecurrence();
+
+
             if (recType == null) {
                 recType = new RecurrenceType();
                 recType.setTitle(rs.getString("recurrence_type.title"))
                         .setIntervalUnit(rs.getString("recurrence_type.interval_unit"))
                         .setId(rs.getInt(rs.getInt("recurrence_type.id")));
             }
+
+            EventRecurrence recurrence = new EventRecurrence();
             recurrence.setId(rs.getInt("event_recurrence.id"))
                     .setEventId(rs.getInt("event_recurrence.event_id"))
                     .setRepeatInterval(rs.getInt("event_recurrence.repeat_interval"))
                     .setRepeatOn(rs.getString("event_recurrence.repeat_on"))
                     .setRepeatEndDate(rs.getTimestamp("event_recurrence.repeat_end"))
                     .setRecurrenceType(recType);
+
             recurrencesList.add(recurrence);
         }
         return recurrencesList;

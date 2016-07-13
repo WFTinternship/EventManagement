@@ -1,8 +1,9 @@
 package com.workfront.internship.event_management.datasource;
 
-import java.beans.PropertyVetoException;
-import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * Created by hermine on 7/1/16.
@@ -55,23 +56,33 @@ public class GenericDAO {
         closeResources(rs, stmt, null);
     }
 
+    protected int getInsertedId(Statement stmt) throws  SQLException{
 
-    public boolean deleteEntryById(String tableName, int id) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        int affectedRows = 0;
-        try {
-            conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "DELETE FROM "+ tableName + " WHERE id = ?";
-            stmt = conn.prepareStatement(sqlStr);
-            stmt.setInt(1, id);
-            affectedRows = stmt.executeUpdate();
-        } catch (SQLException | IOException | PropertyVetoException e) {
-            e.printStackTrace();
-        } finally {
-            closeResources(stmt, conn);
+        int id = 0;
+        ResultSet rs = stmt.getGeneratedKeys();
+        if (rs.next()) {
+            id = rs.getInt(1);
         }
-        return affectedRows != 0;
+        return id;
     }
+
+//
+//    public boolean deleteEntryById(String tableName, int id) {
+//        Connection conn = null;
+//        PreparedStatement stmt = null;
+//        int affectedRows = 0;
+//        try {
+//            conn = DataSourceManager.getInstance().getConnection();
+//            String sqlStr = "DELETE FROM "+ tableName + " WHERE id = ?";
+//            stmt = conn.prepareStatement(sqlStr);
+//            stmt.setInt(1, id);
+//            affectedRows = stmt.executeUpdate();
+//        } catch (SQLException | IOException | PropertyVetoException e) {
+//            e.printStackTrace();
+//        } finally {
+//            closeResources(stmt, conn);
+//        }
+//        return affectedRows != 0;
+//    }
 
 }

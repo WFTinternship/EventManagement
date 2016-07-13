@@ -1,30 +1,9 @@
-import com.workfront.internship.event_management.datasource.DataSourceManager;
-import com.workfront.internship.event_management.datasource.EventCategoryDAO;
-import com.workfront.internship.event_management.datasource.EventCategoryDAOImpl;
-import com.workfront.internship.event_management.model.EventCategory;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import java.beans.PropertyVetoException;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
 /**
  * Created by hermine on 7/9/16.
  */
 public class TestEventCategoryDAOImpl {
 
-    private static EventCategoryDAO categoryDAO;
+  /*  private static EventCategoryDAO categoryDAO;
     private EventCategory testCategory;
 
     @BeforeClass
@@ -35,13 +14,13 @@ public class TestEventCategoryDAOImpl {
     @Before
     public void setUp() {
         testCategory = TestHelper.createTestCategory();
-        int categoryId = TestHelper.insertTestCategoryToDB(testCategory);
+        int categoryId = categoryDAO.insertCategory(testCategory);
         testCategory.setId(categoryId);
     }
 
     @After
     public void tearDown() {
-        TestHelper.deleteTestCategoryFromDB(testCategory.getId());
+        categoryDAO.deleteCategory(testCategory.getId());
         testCategory = null;
     }
 
@@ -94,68 +73,11 @@ public class TestEventCategoryDAOImpl {
 
     @Test
     public void testDeleteCategory() {
+        //test method
         categoryDAO.deleteCategory(testCategory.getId());
+
         assertNull(getTestCategory(testCategory.getId()));
     }
+*/
 
-    //helper methods
-    private EventCategory getTestCategory(int id){
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        EventCategory category = null;
-        try {
-            conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "SELECT * FROM event_category WHERE id  = ?";
-            stmt = conn.prepareStatement(sqlStr);
-            stmt.setInt(1, id);
-            rs = stmt.executeQuery();
-            while (rs.next()) {
-                category = new EventCategory();
-                category.setId(rs.getInt("id"))
-                        .setTitle(rs.getString("title"))
-                        .setDescription(rs.getString("description"))
-                        .setCreationDate(rs.getTimestamp("creation_date"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-        } finally {
-            TestHelper.closeResources(rs, stmt, conn);
-        }
-        return category;
-    }
-
-    private List<EventCategory> getAllCategories(){
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        List<EventCategory> categoriesList = new ArrayList<EventCategory>();
-        try {
-            conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "SELECT * FROM event_category";
-            stmt = conn.prepareStatement(sqlStr);
-            rs = stmt.executeQuery();
-            while (rs.next()) {
-                EventCategory category = new EventCategory();
-                category.setId(rs.getInt("id"))
-                        .setTitle(rs.getString("title"))
-                        .setDescription(rs.getString("description"))
-                        .setCreationDate(rs.getTimestamp("creation_date"));
-                categoriesList.add(category);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-        } finally {
-            TestHelper.closeResources(rs, stmt, conn);
-        }
-        return categoriesList;
-    }
 }

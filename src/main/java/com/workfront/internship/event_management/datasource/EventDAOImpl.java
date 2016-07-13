@@ -3,7 +3,6 @@ package com.workfront.internship.event_management.datasource;
 import com.workfront.internship.event_management.model.*;
 import com.workfront.internship.event_management.model.datehelpers.DateRange;
 
-import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,23 +16,25 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
     //CREATE
     public boolean insertEvent(Event event, int organizerId) {
+
         Connection conn = null;
         int affectedRows = 0;
+
         try {
+            //acquire connection
             conn = DataSourceManager.getInstance().getConnection();
+
+            //start transaction
             conn.setAutoCommit(false);
 
             //insert event main info and get inserted event id
             int eventId = insertEventMainInfo(event, conn);
             event.setId(eventId);
 
-            //insert event invitations
-            if (event.getInvitations() != null) {
-                for (EventInvitation invitation : event.getInvitations()) {
-                    invitation.setEventId(eventId);
-                }
+            //insert event organizer
+            if (event.getInvitations() != null & event.getInvitations().size() == 1) {
                 EventInvitationDAO invitationDAO = new EventInvitationDAOImpl();
-                invitationDAO.insertInvitations(event.getInvitations(), conn);
+                invitationDAO.insertInvitation(event.getInvitations().get(0), conn);
             }
 
             //insert event recurrence info
@@ -44,47 +45,45 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                 EventRecurrenceDAO recurrenceDAO = new EventRecurrenceDAOImpl();
                 recurrenceDAO.insertEventRecurrences(event.getRecurrences(), conn);
             }
+
+            //commit transaction
             conn.commit();
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
+
+        } catch (IOException | SQLException e) { //todo add log4j
             try {
-
                 conn.rollback();
-            } catch (SQLException re) {
-                System.out.println("SQLException " + e.getMessage());
-
+            } catch (SQLException e1) {
+                e1.printStackTrace();
             }
-        } catch (PropertyVetoException e) {
-            System.out.println("PropertyVetoException " + e.getMessage());
+            e.printStackTrace();
         } finally {
-            closeResources(null, null, conn);
+            closeResources(conn);
         }
         return affectedRows != 0;
     }
 
     //READ
     public List<Event> getAllEvents() {
+
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
+
         List<Event> eventsList = null;
+
         try {
             conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "SELECT * " +
-                    "FROM event " +
-                    "LEFT JOIN event_category " +
-                    "ON event.category_id = event_category.id ";
+            String sqlStr = "SELECT * FROM event " +
+                    "LEFT JOIN event_category ON event.category_id = event_category.id ";
             stmt = conn.prepareStatement(sqlStr);
+
+            //execute query
             rs = stmt.executeQuery();
+            //get results
             eventsList = createEventsListFromRS(rs);
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            System.out.println("PropertyVetoException " + e.getMessage());
+
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -92,19 +91,23 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     public Event getEventById(int eventId) {
+
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
+
         Event event = null;
+
         try {
+            //acquire connection
             conn = DataSourceManager.getInstance().getConnection();
+
             //get event main info
-            String sqlStr = "SELECT * " +
-                    "FROM (event LEFT JOIN event_category " +
-                    "ON event.category_id = event_category.id) " +
-                    "WHERE event.id = ?";
+            String sqlStr = "SELECT * FROM (event LEFT JOIN event_category " +
+                    "ON event.category_id = event_category.id) WHERE event.id = ?";
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, eventId);
+
             rs = stmt.executeQuery();
             event = createEventFromRS(rs);
 
@@ -123,12 +126,8 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             List<EventMedia> media = mediaDAO.getMediaByEventId(eventId);
             event.setMedia(media);
 
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            System.out.println("PropertyVetoException " + e.getMessage());
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -142,20 +141,15 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         List<Event> eventsList = null;
         try {
             conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "SELECT * " +
-                    "FROM (event LEFT JOIN event_category " +
+            String sqlStr = "SELECT * FROM (event LEFT JOIN event_category " +
                     "ON event.category_id = event_category.id) " +
                     "WHERE event.category_id = ?";
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, categoryId);
             rs = stmt.executeQuery();
             eventsList = createEventsListFromRS(rs);
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            System.out.println("PropertyVetoException " + e.getMessage());
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -179,14 +173,15 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, userId);
             stmt.setString(2, userRole);
+
+            //execute query
             rs = stmt.executeQuery();
+
+            //get results
             eventsList = createEventsListFromRS(rs);
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            System.out.println("PropertyVetoException " + e.getMessage());
+
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -194,29 +189,26 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     public List<Event> getParticipatedEventsByUserId(int userId) {
+
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         List<Event> eventsList = null;
+
         try {
             conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "SELECT event.*, event_category.* " +
-                    "FROM event " +
-                    "LEFT JOIN event_invitation " +
-                    "ON event_invitation.event_id = event.id " +
-                    "LEFT JOIN event_category " +
-                    "ON event.category_id = event_category.id " +
+            String sqlStr = "SELECT event.*, event_category.* FROM event " +
+                    "LEFT JOIN event_invitation ON event_invitation.event_id = event.id " +
+                    "LEFT JOIN event_category ON event.category_id = event_category.id " +
                     "WHERE user_id = ? AND participated = true ";
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, userId);
+
             rs = stmt.executeQuery();
+
             eventsList = createEventsListFromRS(rs);
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            System.out.println("PropertyVetoException " + e.getMessage());
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -224,10 +216,12 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     public List<Event> getAcceptedEventsByUserId(int userId) {
+
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         List<Event> eventsList = null;
+
         try {
             conn = DataSourceManager.getInstance().getConnection();
             String sqlStr = "SELECT event.*, event_category.* " +
@@ -239,14 +233,12 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                     "WHERE user_id = ? AND user_response = \"Yes\"";
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, userId);
+
             rs = stmt.executeQuery();
+
             eventsList = createEventsListFromRS(rs);
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            System.out.println("PropertyVetoException " + e.getMessage());
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -306,13 +298,12 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                 stmt.setObject(14, null);
             }
             stmt.setInt(15, event.getId());
+
+            //execute query
             affectedRows = stmt.executeUpdate();
-        } catch (IOException e) {
-            System.out.println("IOException " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
-        } catch (PropertyVetoException e) {
-            System.out.println("PropertyVetoException " + e.getMessage());
+
+        } catch (IOException | SQLException e) {
+                e.printStackTrace();
         } finally {
             closeResources(null, stmt, conn);
         }
@@ -321,7 +312,22 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
     //DELETE
     public boolean deleteEvent(int eventId) {
-        return deleteEntryById("event", eventId);
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        int affectedRows = 0;
+
+        try {
+            conn = DataSourceManager.getInstance().getConnection();
+            String sqlStr = "DELETE FROM event WHERE id = ?";
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setInt(1, eventId);
+            affectedRows = stmt.executeUpdate();
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources(stmt, conn);
+        }
+        return affectedRows != 0;
     }
 
     //helper methods
@@ -377,6 +383,8 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+
         }
         return eventId;
     }
@@ -386,12 +394,14 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         EventCategory category = null;
         while (rs.next()) {
             if (event == null) {
+
                 category = new EventCategory();
                 category.setId(rs.getInt("event_category.id"))
                         .setTitle(rs.getString("event_category.title"))
                         .setDescription(rs.getString("event_category.description"))
                         .setCreationDate(rs.getTimestamp("event_category.creation_date"));
                 event = new Event();
+
                 event.setId(rs.getInt("event.id"))
                         .setTitle(rs.getString("event.title"))
                         .setShortDesc(rs.getString("short_desc"))
@@ -408,6 +418,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                         .setDateRange(new DateRange(rs.getTimestamp("start"), rs.getTimestamp("end")));
                 event.setCategory(category);
             }
+
             EventRecurrence eventRecurrence = new EventRecurrence();
             eventRecurrence.setEventId(rs.getInt("event_id"));
         }
@@ -417,11 +428,13 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     private List<Event> createEventsListFromRS(ResultSet rs) throws SQLException {
         List<Event> eventsList = new ArrayList<Event>();
         while (rs.next()) {
+
             EventCategory category = new EventCategory();
             category.setId(rs.getInt("event_category.id"))
                     .setTitle(rs.getString("event_category.title"))
                     .setDescription(rs.getString("event_category.description"))
                     .setCreationDate(rs.getTimestamp("event_category.creation_date"));
+
             Event event = new Event();
             event.setId(rs.getInt("event.id"))
                     .setTitle(rs.getString("event.title"))
