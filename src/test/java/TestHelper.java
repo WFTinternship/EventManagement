@@ -1,5 +1,5 @@
 import com.workfront.internship.event_management.model.*;
-import com.workfront.internship.event_management.model.datehelpers.RecurrenceType;
+import com.workfront.internship.event_management.model.RecurrenceType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +69,7 @@ public class TestHelper {
         repeatOn.add("Test reoeat on 2");
 
         RecurrenceType recType = new RecurrenceType();
-        recType.setTitle("Test recurrence type").setIntervalUnit("test unit").setRepeatOnValues(repeatOn);
+       // recType.setTitle("Test recurrence type").setIntervalUnit("test unit").setRepeatOptions(repeatOn);
         return recType;
     }
 

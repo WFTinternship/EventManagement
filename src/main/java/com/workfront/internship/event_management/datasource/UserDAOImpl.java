@@ -39,7 +39,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             stmt.setString(7, user.getAvatarPath());
             stmt.setBoolean(8, user.isVerified());
 
-            if(user.getRegistrationDate() != null) {
+            if (user.getRegistrationDate() != null) {
                 stmt.setTimestamp(9, new Timestamp(user.getRegistrationDate().getTime()));
             } else {
                 stmt.setTimestamp(9, null);
@@ -53,6 +53,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
         } catch (SQLException | IOException e) {
             logger.error("Exception...", e);
+            throw new RuntimeException();
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -197,7 +198,10 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             rs = stmt.executeQuery();
 
             //get results
-            user = createUsersListFromRS(rs).get(0);
+            List<User> users = createUsersListFromRS(rs);
+            if (users != null) {
+                user = users.get(0);
+            }
 
         } catch (SQLException | IOException e) {
             logger.error("Exception...", e);
@@ -209,10 +213,12 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
     private List<User> createUsersListFromRS(ResultSet rs) throws SQLException {
 
-        List<User> usersList =  new ArrayList<User>();;
+        List<User> usersList = null;
 
         while (rs.next()) {
-
+            if (usersList == null) {
+                usersList = new ArrayList<>();
+            }
             User user = new User();
             user.setId(rs.getInt("id"))
                     .setFirstName(rs.getString("first_name"))

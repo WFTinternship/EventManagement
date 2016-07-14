@@ -1,4 +1,4 @@
-package com.workfront.internship.event_management.model.datehelpers;
+package com.workfront.internship.event_management.model;
 
 import java.util.Date;
 

@@ -9,6 +9,7 @@ import org.junit.Test;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Created by hermine on 7/8/16.
@@ -25,53 +26,41 @@ public class TestUserDAOImpl {
 
     @Before
     public void setUp() {
-
         //create test user
         testUser = TestHelper.createTestUser();
-
-        //insert into db
-        int userId = userDAO.insertUser(testUser);
-
-        //set generated id ro test user object
-        testUser.setId(userId);
     }
 
     @After
     public void tearDown() {
-        //delete test user from db
-        userDAO.deleteUser(testUser.getId());
+        //delete test users from db
+        userDAO.deleteAllUsers();
 
         testUser = null;
     }
 
     @Test
-    public void testInsertUser() {
-        //already inserted into db
+    public void insertUser_Unique_Success() {
+        //Testing method
+        int userId = userDAO.insertUser(testUser);
+        testUser.setId(userId);
+
         User actualUser = userDAO.getUserById(testUser.getId());
         assertNotEquals(testUser.getId(), 0);
     }
 
-    @Test //-
-    public void testGetAllUsers() {
-       /* List<User> expectedUsers = getAllUsersFromDB();
-        List<User> actualUsers = userDAO.getAllUsers();
-        assertEquals(actualUsers.size(), expectedUsers.size());
-        for (int i = 0; i < actualUsers.size(); i++) {
-            assertEquals(expectedUsers.get(i).getId(), actualUsers.get(i).getId());
-            assertEquals(expectedUsers.get(i).getFirstName(), actualUsers.get(i).getFirstName());
-            assertEquals(expectedUsers.get(i).getLastName(), actualUsers.get(i).getLastName());
-            assertEquals(expectedUsers.get(i).getUsername(), actualUsers.get(i).getUsername());
-            assertEquals(expectedUsers.get(i).getPassword(), actualUsers.get(i).getPassword());
-            assertEquals(expectedUsers.get(i).getEmail(), actualUsers.get(i).getEmail());
-            assertEquals(expectedUsers.get(i).getPhoneNumber(), actualUsers.get(i).getPhoneNumber());
-            assertEquals(expectedUsers.get(i).getAvatarPath(), actualUsers.get(i).getAvatarPath());
-            assertEquals(expectedUsers.get(i).isVerified(), actualUsers.get(i).isVerified());
-            assertEquals(expectedUsers.get(i).getRegistrationDate(), actualUsers.get(i).getRegistrationDate());
-        }*/
+    @Test(expected=RuntimeException.class)
+    public void insertUser_Dublicate_ExceptionThrown() {
+
+        //testing method
+        int userId = userDAO.insertUser(testUser);
+        testUser.setId(userId);
+
+        //insert user with the same unique fields
+        userDAO.insertUser(testUser);
     }
 
     @Test
-    public void testGetUserById() {
+    public void testGetUserById_ValidId_Found() {
         //testing method
          User actualUser = userDAO.getUserById(testUser.getId());
 
@@ -83,6 +72,15 @@ public class TestUserDAOImpl {
         assertEquals(actualUser.getPassword(), testUser.getPassword());
         assertEquals(actualUser.getEmail(), testUser.getEmail());
     }
+
+    @Test
+    public void testGetUserById_InvalidId_NotFound() {
+        //testing method
+        User actualUser = userDAO.getUserById(123);
+
+        assertNull(actualUser);
+    }
+
 
     @Test
     public void testGetUserByUsername() {

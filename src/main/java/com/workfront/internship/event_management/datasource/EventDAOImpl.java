@@ -1,7 +1,7 @@
 package com.workfront.internship.event_management.datasource;
 
 import com.workfront.internship.event_management.model.*;
-import com.workfront.internship.event_management.model.datehelpers.DateRange;
+import com.workfront.internship.event_management.model.DateRange;
 
 import java.io.IOException;
 import java.sql.*;

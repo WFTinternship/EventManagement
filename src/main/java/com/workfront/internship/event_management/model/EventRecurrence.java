@@ -1,7 +1,5 @@
 package com.workfront.internship.event_management.model;
 
-import com.workfront.internship.event_management.model.datehelpers.RecurrenceType;
-
 import java.util.Date;
 
 

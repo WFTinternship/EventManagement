@@ -1,7 +1,7 @@
 package com.workfront.internship.event_management.datasource;
 
 import com.workfront.internship.event_management.model.EventRecurrence;
-import com.workfront.internship.event_management.model.datehelpers.RecurrenceType;
+import com.workfront.internship.event_management.model.RecurrenceType;
 
 import java.io.IOException;
 import java.sql.*;

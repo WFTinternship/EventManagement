@@ -1,6 +1,7 @@
 package com.workfront.internship.event_management.datasource;
 
-import com.workfront.internship.event_management.model.datehelpers.RecurrenceType;
+import com.workfront.internship.event_management.model.RecurrenceType;
+import com.workfront.internship.event_management.model.RepeatOption;
 
 import java.io.IOException;
 import java.sql.*;
@@ -14,7 +15,6 @@ import java.util.Map;
  */
 public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeDAO {
 
-    //Create
     @Override
     public int insertRecurrenceType(RecurrenceType recurrenceType) {
         Connection conn = null;
@@ -39,15 +39,15 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
                 recTypeId = rs.getInt(1);
             }
 
-            if (recurrenceType.getRepeatOnValues() != null) {
+            if (recurrenceType.getRepeatOptions() != null) {
                 String insertRepeatOnValues = "INSERT INTO repeat_on_value "
                         + "(recurrence_type_id, title) VALUES "
                         + "(?, ?)";
                 stmtInsertRepeatOn = conn.prepareStatement(insertRepeatOnValues);
-                List<String> values = recurrenceType.getRepeatOnValues();
-                for (String value : values) {
+                List<RepeatOption> values = recurrenceType.getRepeatOptions();
+                for (RepeatOption option : values) {
                     stmtInsertRepeatOn.setInt(1, recTypeId);
-                    stmtInsertRepeatOn.setString(2, value);
+                 //   stmtInsertRepeatOn.setString(2, option);
                     stmtInsertRepeatOn.addBatch();
                 }
                 stmtInsertRepeatOn.executeBatch();
@@ -69,7 +69,6 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
         return recTypeId;
     }
 
-   //Read
    @Override
    public List<RecurrenceType> getAllRecurrenceTypes() {
         Connection conn = null;
@@ -129,6 +128,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
         return deleteAllRecords("recurrence_type");
     }
 
+
     //helper methods
     private List<RecurrenceType> createRecurrenceTypesFromRS(ResultSet rs) throws SQLException {
         Map<Integer, RecurrenceType> recurrenceTypeMap = new HashMap<Integer, RecurrenceType>();
@@ -144,13 +144,13 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
                 if (rs.getString("repeat_on_value.title") != null) {
                     List<String> repeatOnValues = new ArrayList<String>();
                     repeatOnValues.add(rs.getString("repeat_on_value.title"));
-                    recType.setRepeatOnValues(repeatOnValues);
+                  //  recType.setRepeatOptions(repeatOnValues);
                 }
 
                 recurrenceTypeMap.put(recTypeId, recType);
             } else {
                 RecurrenceType recType = recurrenceTypeMap.get(recTypeId);
-                recType.getRepeatOnValues().add(rs.getString("repeat_on_value.title"));
+              //  recType.getRepeatOptions().add(rs.getString("repeat_on_value.title"));
             }
         }
         return new ArrayList<RecurrenceType>(recurrenceTypeMap.values());
@@ -167,10 +167,10 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
                 if (rs.getString("repeat_on_value.title") != null) {
                     List<String> repeatOnValues = new ArrayList<String>();
                     repeatOnValues.add(rs.getString("repeat_on_value.title"));
-                    recType.setRepeatOnValues(repeatOnValues);
+                   // recType.setRepeatOptions(repeatOnValues);
                 }
             } else {
-                recType.getRepeatOnValues().add(rs.getString("repeat_on_value.title"));
+              //  recType.getRepeatOptions().add(rs.getString("repeat_on_value.title"));
             }
         }
         return recType;

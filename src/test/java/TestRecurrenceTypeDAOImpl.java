@@ -32,7 +32,7 @@ public class TestRecurrenceTypeDAOImpl {
         try {
             assertEquals(testRecurrenceType.getTitle(), testRecurrenceType.getTitle());
             assertEquals(testRecurrenceType.getIntervalUnit(), testRecurrenceType.getIntervalUnit());
-            assertNotNull(testRecurrenceType.getRepeatOnValues());
+            assertNotNull(testRecurrenceType.getRepeatOptions());
         } finally {
             TestHelper.deleteTestRecurrenceTypeFromDB(newRecTypeId);
         }
@@ -55,7 +55,7 @@ public class TestRecurrenceTypeDAOImpl {
         RecurrenceType actualRecType = recTypeDAO.getRecurrenceTypeById(testRecurrenceType.getId());
         assertEquals(testRecurrenceType.getTitle(), testRecurrenceType.getTitle());
         assertEquals(testRecurrenceType.getIntervalUnit(), testRecurrenceType.getIntervalUnit());
-        assertNotNull(testRecurrenceType.getRepeatOnValues());
+        assertNotNull(testRecurrenceType.getRepeatOptions());
     }
 
     @Test
