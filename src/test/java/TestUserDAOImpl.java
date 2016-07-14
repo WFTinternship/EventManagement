@@ -47,8 +47,7 @@ public class TestUserDAOImpl {
     }
 
     @Test
-    public void insertUser_Inserted() {
-
+    public void insertUser_Sucess() {
         //test user already inserted in setup, read record by userId
         User user = userDAO.getUserById(testUser.getId());
 
@@ -58,12 +57,11 @@ public class TestUserDAOImpl {
     @Test(expected = RuntimeException.class)
     public void insertUser_Dublicate_Entry() {
         //test user already inserted into db, insert dublicate user
-        userDAO.insertUser(testUser);
+        userDAO.insertUser(testUser); //username, email fields are unique
     }
 
     @Test
     public void getAllUsers_Found() {
-
         //insert second user into db
         User testUser1 = TestHelper.createTestUser();
         int userId = userDAO.insertUser(testUser1);
@@ -79,7 +77,6 @@ public class TestUserDAOImpl {
 
     @Test
     public void getAllUsers_Empty_List() {
-
         //delete inserted user from db
         userDAO.deleteUser(testUser.getId());
 
@@ -89,19 +86,19 @@ public class TestUserDAOImpl {
     }
 
     @Test
-    public void getUserById_Not_Found() {
-        //testing method
-        User user = userDAO.getUserById(TestHelper.NON_EXISTING_ID);
-
-        assertNull(user);
-    }
-
-    @Test
     public void getUserById_Found() {
         //testing method
         User user = userDAO.getUserById(testUser.getId());
 
         assertUsers(user, testUser);
+    }
+
+    @Test
+    public void getUserById_Not_Found() {
+        //testing method
+        User user = userDAO.getUserById(TestHelper.NON_EXISTING_ID);
+
+        assertNull(user);
     }
 
     @Test

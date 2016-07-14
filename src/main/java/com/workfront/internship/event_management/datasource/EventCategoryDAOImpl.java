@@ -58,7 +58,7 @@ public class EventCategoryDAOImpl extends GenericDAO implements EventCategoryDAO
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        List<EventCategory> categoriesList = null;
+        List<EventCategory> categoriesList = new ArrayList<>();
 
         try {
             //get connection

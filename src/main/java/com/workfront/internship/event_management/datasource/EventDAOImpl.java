@@ -30,7 +30,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             eventId = insertEventMainInfo(event, conn);
             event.setId(eventId);
 
-            //insert event organizer
+       /*     //insert event organizer
             if (event.getInvitations() != null & event.getInvitations().size() == 1) {
                 EventInvitationDAO invitationDAO = new EventInvitationDAOImpl();
                 invitationDAO.insertInvitation(event.getInvitations().get(0), conn);
@@ -43,7 +43,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                 }
                 EventRecurrenceDAO recurrenceDAO = new EventRecurrenceDAOImpl();
                 recurrenceDAO.insertEventRecurrences(event.getRecurrences(), conn);
-            }
+            }*/
 
             //commit transaction
             conn.commit();

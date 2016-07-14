@@ -27,13 +27,11 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
             String sqlStr = "INSERT INTO event_media (event_id, path, type, description, uploader_id, upload_date) "
                     + "VALUES (?, ?, ?, ?, ?, ?)";
             stmt = conn.prepareStatement(sqlStr, PreparedStatement.RETURN_GENERATED_KEYS);
-
             stmt.setInt(1, media.getEventId());
             stmt.setString(2, media.getPath());
             stmt.setString(3, media.getType());
             stmt.setString(4, media.getDescription());
             stmt.setInt(5, media.getUploaderId());
-
             if(media.getUploadDate() != null) {
                 stmt.setTimestamp(6, new Timestamp(media.getUploadDate().getTime()));
             } else {
@@ -48,6 +46,7 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
 
         } catch (SQLException | IOException e) {
             logger.error("Exception...", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(stmt, conn);
         }
@@ -55,38 +54,15 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
     }
 
     @Override
-    public List<EventMedia> getAllMedia() {
-
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        List<EventMedia> mediaList = null;
-
-        try {
-            //acquire connection
-            conn = DataSourceManager.getInstance().getConnection();
-
-            //create statement
-            String sqlStr = "SELECT * FROM event_media";
-            stmt = conn.prepareStatement(sqlStr);
-
-            //execute statement
-            rs = stmt.executeQuery();
-
-            //get results
-            mediaList = createMediaListFromRS(rs);
-
-        } catch (SQLException | IOException e) {
-            logger.error("Exception...", e);
-        } finally {
-            closeResources(rs, stmt, conn);
-        }
-        return mediaList;
-    }
-
-    @Override
     public EventMedia getMediaById(int mediaId) {
-        return getMediaByField("id", mediaId).get(0);
+
+        List<EventMedia> mediaList = getMediaByField("id", mediaId);
+
+        if (!mediaList.isEmpty()) {
+            return mediaList.get(0);
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -106,7 +82,7 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
-        List<EventMedia> mediaList = null;
+        List<EventMedia> mediaList = new ArrayList<>();
 
         try {
             //get connection
@@ -118,6 +94,36 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
             stmt.setInt(1, eventId);
 
             //execute query
+            rs = stmt.executeQuery();
+
+            //get results
+            mediaList = createMediaListFromRS(rs);
+
+        } catch (SQLException | IOException e) {
+            logger.error("Exception...", e);
+        } finally {
+            closeResources(rs, stmt, conn);
+        }
+        return mediaList;
+    }
+
+    @Override
+    public List<EventMedia> getAllMedia() {
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<EventMedia> mediaList = new ArrayList<>();
+
+        try {
+            //acquire connection
+            conn = DataSourceManager.getInstance().getConnection();
+
+            //create statement
+            String sqlStr = "SELECT * FROM event_media";
+            stmt = conn.prepareStatement(sqlStr);
+
+            //execute statement
             rs = stmt.executeQuery();
 
             //get results
@@ -176,9 +182,10 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
-        List<EventMedia> mediaList = null;
+        List<EventMedia> mediaList = new ArrayList<>();
 
         try {
+            //get connection
             conn = DataSourceManager.getInstance().getConnection();
 
             //create and initialize statement

@@ -66,7 +66,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        List<User> usersList = null;
+        List<User> usersList = new ArrayList<>();
 
         try {
             //get connection

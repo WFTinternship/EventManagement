@@ -55,11 +55,12 @@ public class TestEventCategoryDAOImpl {
     @Test(expected = RuntimeException.class)
     public void insertCategory_Dublicate_Entry() {
         //test category already inserted into db, insert dublicate category
-        categoryDAO.insertCategory(testCategory);
+        categoryDAO.insertCategory(testCategory);  //event_category.title field is unique
     }
 
     @Test
     public void getAllCategories_Found() {
+
         //test category inserted in setup, insert another user
         EventCategory testCategory1 = TestHelper.createTestCategory();
         int categoryID = categoryDAO.insertCategory(testCategory1);

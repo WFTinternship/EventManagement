@@ -62,10 +62,10 @@ public class TestHelper {
 
     public static EventMedia createTestMedia() {
         EventMedia media = new EventMedia();
-        media.setPath("/event/111/test_path.jpg")
+        media.setPath("/event/111/test_path" + uuid() + ".jpg")
                 .setType("Image")
                 .setDescription("Test description")
-                .setUploadDate(new java.util.Date());
+                .setUploadDate(new Date());
         return media;
     }
 
@@ -81,7 +81,7 @@ public class TestHelper {
 
     public static EventRecurrence createTestEventRecurrence() {
         EventRecurrence eventRecurrence = new EventRecurrence();
-        eventRecurrence.setRepeatInterval(2).setRepeatOn("Test RepeatOn string").setRepeatEndDate(new java.util.Date());
+        eventRecurrence.setRepeatInterval(2).setRepeatOn("Test RepeatOn string").setRepeatEndDate(new Date());
         return eventRecurrence;
     }
 
