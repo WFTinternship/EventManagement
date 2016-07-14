@@ -1,34 +1,40 @@
 import com.workfront.internship.event_management.model.*;
-import com.workfront.internship.event_management.model.RecurrenceType;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by hermine on 7/10/16.
  */
 public class TestHelper {
 
+    public static final String NON_EXISTING_USERNAME = "nonExistingUsername";
+    public static final String NON_EXISTING_EMAIL = "nonExistingEmail@test.com";
+    public static int NON_EXISTING_ID = 12345;
+
+
     //test object creation
     public static User createTestUser() {
         User testUser = new User();
-        java.util.Date currentDate = new java.util.Date();
         testUser.setFirstName("Test FirstName")
                 .setLastName("Test LastName")
-                .setUsername("Test Username")
-                .setPassword("Test Password")
-                .setEmail("test-test@test.com")
+                .setUsername("testUsername" + uuid())
+                .setPassword("testPassword")
+                .setEmail("test" + uuid() + "@test.com")
                 .setPhoneNumber("1111111")
-                .setAvatarPath("/users/test_user_av.jpg")
+                .setAvatarPath("/users/test_user_av" + uuid() + ".jpg")
                 .setVerified(false)
-                .setRegistrationDate(currentDate);
+                .setRegistrationDate(new Date());
         return testUser;
     }
 
     public static EventCategory createTestCategory() {
         EventCategory category = new EventCategory();
-        category.setTitle("Test Category")
-                .setDescription("Test Description");
+        category.setTitle("Test Category" + uuid())
+                .setDescription("Test Description")
+                .setCreationDate(new Date());
         return category;
     }
 
@@ -77,6 +83,12 @@ public class TestHelper {
         EventRecurrence eventRecurrence = new EventRecurrence();
         eventRecurrence.setRepeatInterval(2).setRepeatOn("Test RepeatOn string").setRepeatEndDate(new java.util.Date());
         return eventRecurrence;
+    }
+
+    //helper methods
+    private static String uuid() {
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString();
     }
 
 }

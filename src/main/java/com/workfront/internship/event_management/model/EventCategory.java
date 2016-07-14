@@ -3,7 +3,7 @@ package com.workfront.internship.event_management.model;
 import java.util.Date;
 
 /**
- * Created by hermine on 7/1/16.
+ * Created by Hermine Turshujyan 7/1/16.
  */
 public class EventCategory {
 
@@ -11,17 +11,6 @@ public class EventCategory {
     private String title;
     private String description;
     private Date creationDate;
-
-    public EventCategory(EventCategory category) {
-        this.id = category.id;
-        this.title = category.title;
-        this.description = category.description;
-        this.creationDate = category.creationDate;
-    }
-
-    public EventCategory() {
-
-    }
 
     public int getId() {
         return id;

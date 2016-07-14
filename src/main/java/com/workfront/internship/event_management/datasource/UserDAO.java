@@ -25,5 +25,4 @@ public interface UserDAO {
     //delete record from db
     boolean deleteUser(int userId);
     boolean deleteAllUsers();
-    //todo add deleteAll method
 }

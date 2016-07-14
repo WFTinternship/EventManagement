@@ -5,14 +5,14 @@ import com.workfront.internship.event_management.model.Event;
 import java.util.List;
 
 /**
- * Created by hermine on 7/2/16.
+ * Created by Hermine Turshujyan 7/2/16.
  */
 public interface EventDAO {
 
-    //Create
-    boolean insertEvent(Event event, int organizerId);
+    //insert into db
+    int insertEvent(Event event, int organizerId);
 
-    //Read
+    //read data from db
     List<Event> getAllEvents();
     Event getEventById(int eventId);
     List<Event> getEventsByCategory(int categoryId);
@@ -20,9 +20,12 @@ public interface EventDAO {
     List<Event> getParticipatedEventsByUserId(int userId);
     List<Event> getAcceptedEventsByUserId(int userId);
 
-    //Update
+    //update record in db
     boolean updateEvent(Event event);
 
-    //Delete
+    //delete record from db
     boolean deleteEvent(int eventId);
+
+    boolean deleteAllEvents();
+
 }

@@ -6,13 +6,15 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.List;
+
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 /**
- * Created by hermine on 7/8/16.
+ * Created by Hermine Turshujyan 7/8/16.
  */
 public class TestUserDAOImpl {
 
@@ -28,6 +30,12 @@ public class TestUserDAOImpl {
     public void setUp() {
         //create test user
         testUser = TestHelper.createTestUser();
+
+        //insert test user into db, get generated id
+        int userId = userDAO.insertUser(testUser);
+
+        //set id to test user
+        testUser.setId(userId);
     }
 
     @After
@@ -39,77 +47,96 @@ public class TestUserDAOImpl {
     }
 
     @Test
-    public void insertUser_Unique_Success() {
-        //Testing method
-        int userId = userDAO.insertUser(testUser);
-        testUser.setId(userId);
+    public void insertUser_Inserted() {
 
-        User actualUser = userDAO.getUserById(testUser.getId());
-        assertNotEquals(testUser.getId(), 0);
+        //test user already inserted in setup, read record by userId
+        User user = userDAO.getUserById(testUser.getId());
+
+        assertUsers(user, testUser);
     }
 
-    @Test(expected=RuntimeException.class)
-    public void insertUser_Dublicate_ExceptionThrown() {
-
-        //testing method
-        int userId = userDAO.insertUser(testUser);
-        testUser.setId(userId);
-
-        //insert user with the same unique fields
+    @Test(expected = RuntimeException.class)
+    public void insertUser_Dublicate_Entry() {
+        //test user already inserted into db, insert dublicate user
         userDAO.insertUser(testUser);
     }
 
     @Test
-    public void testGetUserById_ValidId_Found() {
-        //testing method
-         User actualUser = userDAO.getUserById(testUser.getId());
+    public void getAllUsers_Found() {
 
-        assertEquals(actualUser.getId(), testUser.getId());
-        assertEquals(actualUser.getId(), testUser.getId());
-        assertEquals(actualUser.getFirstName(), testUser.getFirstName());
-        assertEquals(actualUser.getLastName(), testUser.getLastName());
-        assertEquals(actualUser.getUsername(), testUser.getUsername());
-        assertEquals(actualUser.getPassword(), testUser.getPassword());
-        assertEquals(actualUser.getEmail(), testUser.getEmail());
+        //insert second user into db
+        User testUser1 = TestHelper.createTestUser();
+        int userId = userDAO.insertUser(testUser1);
+        testUser1.setId(userId);
+
+        //test method
+        List<User> userList = userDAO.getAllUsers();
+
+        assertEquals(userList.size(), 2);
+        assertUsers(userList.get(0), testUser);
+        assertUsers(userList.get(1), testUser1);
     }
 
     @Test
-    public void testGetUserById_InvalidId_NotFound() {
-        //testing method
-        User actualUser = userDAO.getUserById(123);
+    public void getAllUsers_Empty_List() {
 
-        assertNull(actualUser);
-    }
+        //delete inserted user from db
+        userDAO.deleteUser(testUser.getId());
 
-
-    @Test
-    public void testGetUserByUsername() {
-        //testing method
-        User actualUser = userDAO.getUserByUsername(testUser.getUsername());
-
-        assertEquals(actualUser.getId(), testUser.getId());
-        assertEquals(actualUser.getFirstName(), testUser.getFirstName());
-        assertEquals(actualUser.getLastName(), testUser.getLastName());
-        assertEquals(actualUser.getUsername(), testUser.getUsername());
-        assertEquals(actualUser.getPassword(), testUser.getPassword());
-        assertEquals(actualUser.getEmail(), testUser.getEmail());
+        //test method
+        List<User> userList = userDAO.getAllUsers();
+        assertTrue(userList.isEmpty());
     }
 
     @Test
-    public void testGetUserByEmail(){
+    public void getUserById_Not_Found() {
         //testing method
-        User actualUser = userDAO.getUserByEmail(testUser.getEmail());
+        User user = userDAO.getUserById(TestHelper.NON_EXISTING_ID);
 
-        assertEquals(actualUser.getId(), testUser.getId());
-        assertEquals(actualUser.getFirstName(), testUser.getFirstName());
-        assertEquals(actualUser.getLastName(), testUser.getLastName());
-        assertEquals(actualUser.getUsername(), testUser.getUsername());
-        assertEquals(actualUser.getPassword(), testUser.getPassword());
-        assertEquals(actualUser.getEmail(), testUser.getEmail());
+        assertNull(user);
     }
 
     @Test
-    public void testSetVerified() {
+    public void getUserById_Found() {
+        //testing method
+        User user = userDAO.getUserById(testUser.getId());
+
+        assertUsers(user, testUser);
+    }
+
+    @Test
+    public void getUserByUsername_Found() {
+        //testing method
+        User user = userDAO.getUserByUsername(testUser.getUsername());
+        assertUsers(user, testUser);
+    }
+
+    @Test
+    public void getUserByUsername_Not_Found() {
+        //testing method
+        User user = userDAO.getUserByUsername(TestHelper.NON_EXISTING_USERNAME);
+
+        assertNull(user);
+    }
+
+    @Test
+    public void getUserByEmail_Found() {
+        //testing method
+        User user = userDAO.getUserByEmail(testUser.getEmail());
+
+        assertUsers(user, testUser);
+    }
+
+    @Test
+    public void getUserByEmail_Not_Fount() {
+        //testing method
+        User user = userDAO.getUserByEmail(TestHelper.NON_EXISTING_EMAIL);
+
+        assertNull(user);
+    }
+
+    @Test
+    public void setVerified() {
         //testing method
         userDAO.setVerified(testUser.getId());
 
@@ -120,34 +147,49 @@ public class TestUserDAOImpl {
     }
 
     @Test
-    public void testUpdateUser() {
-        //create new user
-        User updatedUser = new User(testUser);
-        updatedUser.setEmail("new_email@test.com");
-        updatedUser.setPassword("nes_password");
+    public void updateUser() {
+        //create new user with the same id
+        User updatedUser = TestHelper.createTestUser();
+        updatedUser.setId(testUser.getId());
 
-        //testing method
+        //test method
         userDAO.updateUser(updatedUser);
 
         //read updated record from db
-        User actualUser = userDAO.getUserById(testUser.getId());
+        User user = userDAO.getUserById(updatedUser.getId());
 
-        assertEquals(actualUser.getId(), updatedUser.getId());
-        assertEquals(actualUser.getFirstName(), updatedUser.getFirstName());
-        assertEquals(actualUser.getLastName(), updatedUser.getLastName());
-        assertEquals(actualUser.getUsername(), updatedUser.getUsername());
-        assertEquals(actualUser.getPassword(), updatedUser.getPassword());
-        assertEquals(actualUser.getEmail(), updatedUser.getEmail());
-        assertEquals(actualUser.getPhoneNumber(), updatedUser.getPhoneNumber());
-        assertEquals(actualUser.getAvatarPath(), updatedUser.getAvatarPath());
-        assertEquals(actualUser.isVerified(), updatedUser.isVerified());
+        assertUsers(user, updatedUser);
     }
 
     @Test
-    public void testDeleteUser() {
+    public void deleteUser() {
         //testing method
-        boolean deleted = userDAO.deleteUser(testUser.getId());
+        userDAO.deleteUser(testUser.getId());
 
-        assertTrue(deleted);
+        User user = userDAO.getUserById(testUser.getId());
+        assertNull(user);
+    }
+
+    @Test
+    public void deleteAllUsers() {
+        //testing method
+        userDAO.deleteAllUsers();
+
+        List<User> userList = userDAO.getAllUsers();
+        assertTrue(userList.isEmpty());
+    }
+
+    //helper methods
+    private void assertUsers(User expectedUser, User actualUser) {
+        assertEquals(expectedUser.getId(), actualUser.getId());
+        assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
+        assertEquals(expectedUser.getLastName(), actualUser.getLastName());
+        assertEquals(expectedUser.getUsername(), actualUser.getUsername());
+        assertEquals(expectedUser.getPassword(), actualUser.getPassword());
+        assertEquals(expectedUser.getPhoneNumber(), actualUser.getPhoneNumber());
+        assertEquals(expectedUser.getAvatarPath(), actualUser.getAvatarPath());
+        assertEquals(expectedUser.isVerified(), actualUser.isVerified());
+        assertEquals(expectedUser.getEmail(), actualUser.getEmail());
+        assertNotNull(expectedUser.getEmail());
     }
 }

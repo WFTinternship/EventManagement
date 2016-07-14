@@ -17,7 +17,7 @@ public class TestEventInvitationDAOImpl {
     @Before
     public void setUp() {
 
-        testUser = TestHelper.createTestUser();
+        testUser = TestHelper.createRandomUser();
         testCategory = TestHelper.createTestCategory();
         testEvent = TestHelper.createTestEvent();
         testInvitation = TestHelper.createTestInvitation();

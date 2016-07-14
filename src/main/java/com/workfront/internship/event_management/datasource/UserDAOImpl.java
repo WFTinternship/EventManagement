@@ -199,7 +199,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
             //get results
             List<User> users = createUsersListFromRS(rs);
-            if (users != null) {
+            if (!users.isEmpty()) {
                 user = users.get(0);
             }
 
@@ -213,12 +213,9 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
     private List<User> createUsersListFromRS(ResultSet rs) throws SQLException {
 
-        List<User> usersList = null;
+        List<User> usersList = new ArrayList<>();
 
         while (rs.next()) {
-            if (usersList == null) {
-                usersList = new ArrayList<>();
-            }
             User user = new User();
             user.setId(rs.getInt("id"))
                     .setFirstName(rs.getString("first_name"))

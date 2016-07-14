@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by Hermine Turshujyan 7/1/16.
  */
-public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDAO {
+public class EventCategoryDAOImpl extends GenericDAO implements EventCategoryDAO {
 
     @Override
     public int insertCategory(EventCategory category) {
@@ -24,7 +24,7 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
             conn = DataSourceManager.getInstance().getConnection();
 
             //create and initialize statement
-            String query = "INSERT INTO events_category " +
+            String query = "INSERT INTO event_category " +
                     "(title, description, creation_date) VALUES (?, ?, ?)";
             stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
 
@@ -45,6 +45,7 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
 
         } catch (SQLException | IOException e) {
             logger.error("Exception...", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(stmt, conn);
         }
@@ -102,8 +103,10 @@ public class EventCategoryDAOImpl extends GenericDAO implements  EventCategoryDA
             rs = stmt.executeQuery();
 
             //get results
-            category = createEventCategoryListFromRS(rs).get(0);
-
+            List<EventCategory> categoryList = createEventCategoryListFromRS(rs);
+            if (!categoryList.isEmpty()) {
+                category = categoryList.get(0);
+            }
         } catch (SQLException | IOException e) {
             logger.error("Exception...", e);
         } finally {

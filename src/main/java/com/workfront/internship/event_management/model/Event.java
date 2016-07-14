@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by hermine on 7/1/16.
+ * Created by Hermine Turshujyan 7/1/16.
  */
 public class Event {
     private int id;

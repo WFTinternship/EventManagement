@@ -13,23 +13,21 @@ import java.util.List;
  */
 public class EventDAOImpl extends GenericDAO implements EventDAO {
 
-
-    //CREATE
     @Override
-    public boolean insertEvent(Event event, int organizerId) {
+    public int insertEvent(Event event, int organizerId) {
 
         Connection conn = null;
-        int affectedRows = 0;
+        int eventId = 0;
 
         try {
-            //acquire connection
+            //get connection
             conn = DataSourceManager.getInstance().getConnection();
 
             //start transaction
             conn.setAutoCommit(false);
 
-            //insert event main info and get inserted event id
-            int eventId = insertEventMainInfo(event, conn);
+            //insert event main info and get generated event id
+            eventId = insertEventMainInfo(event, conn);
             event.setId(eventId);
 
             //insert event organizer
@@ -54,16 +52,15 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             try {
                 conn.rollback();
             } catch (SQLException e1) {
-                e1.printStackTrace();
+                logger.error("Commit/rollback exception...", e);
             }
-            logger.error("Exception ", e);
+            logger.error("Exception...", e);
         } finally {
             closeResources(conn);
         }
-        return affectedRows != 0;
+        return eventId;
     }
 
-    //READ
     @Override
     public List<Event> getAllEvents() {
 
@@ -74,18 +71,22 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         List<Event> eventsList = null;
 
         try {
+            //get connection
             conn = DataSourceManager.getInstance().getConnection();
+
+            //create and initialize statement
             String sqlStr = "SELECT * FROM event " +
                     "LEFT JOIN event_category ON event.category_id = event_category.id ";
             stmt = conn.prepareStatement(sqlStr);
 
             //execute query
             rs = stmt.executeQuery();
+
             //get results
             eventsList = createEventsListFromRS(rs);
 
         } catch (SQLException | IOException e) {
-            logger.error("Exception ", e);
+            logger.error("Exception...", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -102,17 +103,18 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         Event event = null;
 
         try {
-            //acquire connection
+            //get connection
             conn = DataSourceManager.getInstance().getConnection();
 
-            //get event main info
+            //create
             String sqlStr = "SELECT * FROM (event LEFT JOIN event_category " +
                     "ON event.category_id = event_category.id) WHERE event.id = ?";
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, eventId);
 
+            //execute query
             rs = stmt.executeQuery();
-            event = createEventFromRS(rs);
+            //  event = createEventFromRS(rs);
 
             //get invitations list
             EventInvitationDAO invitationDAO = new EventInvitationDAOImpl();
@@ -339,6 +341,11 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         return affectedRows != 0;
     }
 
+    @Override
+    public boolean deleteAllEvents() {
+        return deleteAllRecords("event");
+    }
+
     //helper methods
     private int insertEventMainInfo(Event event, Connection conn) {
         int eventId = 0;
@@ -398,44 +405,9 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         return eventId;
     }
 
-    private Event createEventFromRS(ResultSet rs) throws SQLException {
-        Event event = null;
-        EventCategory category = null;
-        while (rs.next()) {
-            if (event == null) {
-
-                category = new EventCategory();
-                category.setId(rs.getInt("event_category.id"))
-                        .setTitle(rs.getString("event_category.title"))
-                        .setDescription(rs.getString("event_category.description"))
-                        .setCreationDate(rs.getTimestamp("event_category.creation_date"));
-                event = new Event();
-
-                event.setId(rs.getInt("event.id"))
-                        .setTitle(rs.getString("event.title"))
-                        .setShortDesc(rs.getString("short_desc"))
-                        .setFullDesc(rs.getString("full_desc"))
-                        .setLocation(rs.getString("location"))
-                        .setLat(rs.getFloat("lat"))
-                        .setLng(rs.getFloat("lng"))
-                        .setFilePath(rs.getString("file_path"))
-                        .setImagePath(rs.getString("image_path"))
-                        .setPublicAccessed(rs.getBoolean("public_accessed"))
-                        .setGuestsAllowed(rs.getBoolean("guests_allowed"))
-                        .setCreationDate(rs.getTimestamp("event.creation_date"))
-                        .setLastModifiedDate(rs.getTimestamp("last_modified"))
-                        .setDateRange(new DateRange(rs.getTimestamp("start"), rs.getTimestamp("end")));
-                event.setCategory(category);
-            }
-
-            EventRecurrence eventRecurrence = new EventRecurrence();
-            eventRecurrence.setEventId(rs.getInt("event_id"));
-        }
-        return event;
-    }
-
     private List<Event> createEventsListFromRS(ResultSet rs) throws SQLException {
         List<Event> eventsList = new ArrayList<Event>();
+
         while (rs.next()) {
 
             EventCategory category = new EventCategory();
@@ -460,6 +432,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                     .setLastModifiedDate(rs.getTimestamp("event.last_modified"))
                     .setDateRange(new DateRange(rs.getTimestamp("start"), rs.getTimestamp("end")))
                     .setCategory(category);
+
             eventsList.add(event);
         }
         return eventsList;

@@ -3,7 +3,7 @@ package com.workfront.internship.event_management.model;
 import java.util.Date;
 
 /**
- * Created by hermine on 7/1/16.
+ * Created by Hermine Turshujyan 7/1/16.
  */
 public class EventMedia {
 
@@ -11,17 +11,6 @@ public class EventMedia {
     private String type;
     private String path;
     private String description;
-
-    public EventMedia() {
-
-    }
-    public EventMedia(EventMedia media) {
-        this.id = media.id;
-        this.type = media.type;
-        this.path = media.path;
-        this.description = media.description;
-    }
-
     private int eventId;
     private int uploaderId;
     private Date uploadDate;

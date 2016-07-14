@@ -3,7 +3,7 @@ package com.workfront.internship.event_management.model;
 import java.util.Date;
 
 /**
- * Created by hermine on 7/1/16.
+ * Created by Hermine Turshujyan 7/1/16.
  */
 public class User {
     private int id;
@@ -16,22 +16,6 @@ public class User {
     private String avatarPath;
     private boolean verified;
     private Date registrationDate;
-
-    public User() {
-    }
-
-    public User(User user) {
-        this.id = user.id;
-        this.firstName = user.firstName;
-        this.lastName = user.lastName;
-        this.username = user.username;
-        this.password = user.password;
-        this.email = user.email;
-        this.phoneNumber = user.phoneNumber;
-        this.avatarPath = user.avatarPath;
-        this.verified = user.verified;
-        this.registrationDate = user.registrationDate;
-    }
 
     public int getId() {
         return id;

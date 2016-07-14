@@ -5,8 +5,6 @@ import java.util.List;
 /**
  * Created by hermine on 7/10/16.
  */
-
-
 public class RecurrenceType {
 
     private int id;

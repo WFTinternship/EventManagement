@@ -3,10 +3,8 @@ package com.workfront.internship.event_management.model;
 import java.util.Date;
 
 /**
- * Created by hermine on 7/4/16.
+ * Created by Hermine Turshujyan 7/1/16.
  */
-
-
 public class DateRange {
 
     private Date start;

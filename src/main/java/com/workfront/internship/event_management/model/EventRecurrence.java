@@ -2,9 +2,8 @@ package com.workfront.internship.event_management.model;
 
 import java.util.Date;
 
-
 /**
- * Created by hermine on 7/10/16.
+ * Created by Hermine Turshujyan 7/1/16.
  */
 public class EventRecurrence {
     private int id;
