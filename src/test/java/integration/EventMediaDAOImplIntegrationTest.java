@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 /**
  * Created by hermine on 7/9/16.
  */
-public class TestEventMediaDAOImpl {
+public class EventMediaDAOImplIntegrationTest {
 
     private static UserDAO userDAO;
     private static EventCategoryDAO categoryDAO;
@@ -42,42 +42,14 @@ public class TestEventMediaDAOImpl {
 
     @Before
     public void setUp() {
-
-        //create test objects
-        testUser = TestHelper.createTestUser();
-        testCategory = TestHelper.createTestCategory();
-        testEvent = TestHelper.createTestEvent();
-        testMedia = TestHelper.createTestMedia();
-
-        //insert user into db and get generated id
-        int userId = userDAO.insertUser(testUser);
-        testUser.setId(userId);
-
-        //insert category into db and get generated id
-        int categoryId = categoryDAO.insertCategory(testCategory);
-        testCategory.setId(categoryId);
-
-        //insert event into db and get generated id
-        testEvent.setCategory(testCategory);
-        int eventId = eventDAO.insertEvent(testEvent, testUser.getId());
-        testEvent.setId(eventId);
-
-        //insert media into db and get generated id
-        testMedia.setUploaderId(testUser.getId());
-        testMedia.setEventId(testEvent.getId());
-        int mediaId = mediaDAO.insertMedia(testMedia);
-        testMedia.setId(mediaId);
+        createTestObjects();
+        insertTestObjectsIntoDB();
     }
 
     @After
     public void tearDown() {
-        //delete inserted records drom db
-        deleteAllTestInsertions();
-
-        testUser = null;
-        testCategory = null;
-        testEvent = null;
-        testMedia = null;
+        deleteAllTestInsertionsFromDB();
+        deleteTestObjects();
     }
 
     @Test
@@ -85,15 +57,16 @@ public class TestEventMediaDAOImpl {
         //test media already inserted in setup, read record by mediId
         EventMedia media = mediaDAO.getMediaById(testMedia.getId());
 
+        assertNotNull(media);
         assertMedia(media, testMedia);
-
     }
 
     @Test(expected = RuntimeException.class)
     public void insertMedia_Dublicate_Entry() {
-        mediaDAO.insertMedia(testMedia);  //media.path field is unique
+        mediaDAO.addMedia(testMedia);  //media.path field is unique
     }
 
+    @Test
     public void getAllMedia_Found() {
         //create test media list and insert into db
         List<EventMedia> testMediaList = createTestMediaList();
@@ -101,6 +74,8 @@ public class TestEventMediaDAOImpl {
         //testing method
         List<EventMedia> mediaList = mediaDAO.getAllMedia();
 
+        assertNotNull(mediaList);
+        assertFalse(mediaList.isEmpty());
         assertMediaLists(mediaList, testMediaList);
     }
 
@@ -112,15 +87,16 @@ public class TestEventMediaDAOImpl {
         //test method
         List<EventMedia> mediaList = mediaDAO.getAllMedia();
 
+        assertNotNull(mediaList);
         assertTrue(mediaList.isEmpty());
     }
-
 
     @Test
     public void getMediaById_Found() {
         //testing method
         EventMedia media = mediaDAO.getMediaById(testMedia.getId());
 
+        assertNotNull(media);
         assertMedia(media, testMedia);
     }
 
@@ -140,6 +116,8 @@ public class TestEventMediaDAOImpl {
         //testing method
         List<EventMedia> mediaList = mediaDAO.getMediaByEventId(testEvent.getId());
 
+        assertNotNull(mediaList);
+        assertFalse(mediaList.isEmpty());
         assertMediaLists(mediaList, testMediaList);
     }
 
@@ -148,9 +126,9 @@ public class TestEventMediaDAOImpl {
         //testing method
         List<EventMedia> mediaList = mediaDAO.getMediaByEventId(TestHelper.NON_EXISTING_ID);
 
+        assertNotNull(mediaList);
         assertTrue(mediaList.isEmpty());
     }
-
 
     @Test
     public void getMediaByType_Found() {
@@ -160,6 +138,8 @@ public class TestEventMediaDAOImpl {
         //testing method
         List<EventMedia> mediaList = mediaDAO.getMediaByType(testMedia.getType());
 
+        assertNotNull(mediaList);
+        assertFalse(mediaList.isEmpty());
         assertMediaLists(mediaList, testMediaList);
     }
 
@@ -168,6 +148,7 @@ public class TestEventMediaDAOImpl {
         //testing method
         List<EventMedia> mediaList = mediaDAO.getMediaByType(TestHelper.NON_EXISTING_MEDIA_TYPE);
 
+        assertNotNull(mediaList);
         assertTrue(mediaList.isEmpty());
     }
 
@@ -179,6 +160,8 @@ public class TestEventMediaDAOImpl {
         //testing method
         List<EventMedia> mediaList = mediaDAO.getMediaByUploaderId(testMedia.getUploaderId());
 
+        assertNotNull(mediaList);
+        assertFalse(mediaList.isEmpty());
         assertMediaLists(mediaList, testMediaList);
     }
 
@@ -187,11 +170,12 @@ public class TestEventMediaDAOImpl {
         //testing method
         List<EventMedia> mediaList = mediaDAO.getMediaByUploaderId(TestHelper.NON_EXISTING_ID);
 
+        assertNotNull(mediaList);
         assertTrue(mediaList.isEmpty());
     }
 
     @Test
-    public void updateMediaDescription() {
+    public void updateMediaDescription_Found() {
         String description = "Updated description";
         //update expected media description
         testMedia.setDescription(description);
@@ -202,33 +186,104 @@ public class TestEventMediaDAOImpl {
         //read updated record from db
         EventMedia media = mediaDAO.getMediaById(testMedia.getId());
 
+        assertNotNull(media);
         assertMedia(media, testMedia);
     }
 
     @Test
-    public void deleteMedia() {
+    public void updateMediaDescription_Not_Found() {
+        String description = "Updated description";
+
+        //test method
+        boolean updated = mediaDAO.updateMediaDescription(TestHelper.NON_EXISTING_ID, description);
+
+        assertFalse(updated);
+    }
+
+    @Test
+    public void deleteMedia_Found() {
         //testing method
-        mediaDAO.deleteMedia(testMedia.getId());
+        boolean deleted = mediaDAO.deleteMedia(testMedia.getId());
 
         EventMedia media = mediaDAO.getMediaById(testMedia.getId());
+
+        assertTrue(deleted);
         assertNull(media);
     }
 
     @Test
-    public void deleteAllMedia() {
+    public void deleteMedia_Not_Found() {
         //testing method
-        mediaDAO.deleteAllMedia();
+        boolean deleted = mediaDAO.deleteMedia(TestHelper.NON_EXISTING_ID);
 
-        List<EventMedia> mediaList = mediaDAO.getAllMedia();
-        assertTrue(mediaList.isEmpty());
+        assertFalse(deleted);
     }
 
+    @Test
+    public void deleteAllMedia_Found() {
+        //testing method
+        boolean deleted = mediaDAO.deleteAllMedia();
+
+        List<EventMedia> mediaList = mediaDAO.getAllMedia();
+
+        assertNotNull(mediaList);
+        assertTrue(mediaList.isEmpty());
+        assertTrue(deleted);
+    }
+
+    @Test
+    public void deleteAllMedia_Not_Found() {
+        //delete inserted test media
+        mediaDAO.deleteMedia(testMedia.getId());
+
+        //testing method
+        boolean deleted = mediaDAO.deleteAllMedia();
+
+        assertFalse(deleted);
+    }
+
+
     //helper methods
-    private void deleteAllTestInsertions() {
+    private void createTestObjects() {
+        testUser = TestHelper.createTestUser();
+        testCategory = TestHelper.createTestCategory();
+        testEvent = TestHelper.createTestEvent();
+        testMedia = TestHelper.createTestMedia();
+    }
+
+    private void insertTestObjectsIntoDB() {
+        //insert user into db and get generated id
+        int userId = userDAO.addUser(testUser);
+        testUser.setId(userId);
+
+        //insert category into db and get generated id
+        int categoryId = categoryDAO.addCategory(testCategory);
+        testCategory.setId(categoryId);
+
+        //insert event into db and get generated id
+        testEvent.setCategory(testCategory);
+        int eventId = eventDAO.insertEvent(testEvent, testUser.getId());
+        testEvent.setId(eventId);
+
+        //insert media into db and get generated id
+        testMedia.setUploaderId(testUser.getId());
+        testMedia.setEventId(testEvent.getId());
+        int mediaId = mediaDAO.addMedia(testMedia);
+        testMedia.setId(mediaId);
+    }
+
+    private void deleteAllTestInsertionsFromDB() {
         mediaDAO.deleteAllMedia();
         eventDAO.deleteAllEvents();
         categoryDAO.deleteAllCategories();
         userDAO.getAllUsers();
+    }
+
+    private void deleteTestObjects() {
+        testUser = null;
+        testCategory = null;
+        testEvent = null;
+        testMedia = null;
     }
 
     private void assertMedia(EventMedia expectedMedia, EventMedia actualMedia) {
@@ -255,7 +310,7 @@ public class TestEventMediaDAOImpl {
                         .setUploaderId(testUser.getId());
 
         //insert second media into db
-        int mediaId = mediaDAO.insertMedia(secondTestMedia);
+        int mediaId = mediaDAO.addMedia(secondTestMedia);
         secondTestMedia.setId(mediaId);
 
         //create test media list

@@ -10,7 +10,7 @@ import java.util.List;
 public interface EventMediaDAO {
 
      //insert media into db
-     int insertMedia(EventMedia media);
+     int addMedia(EventMedia media);
 
      //read data from db
      EventMedia getMediaById(int mediaId);

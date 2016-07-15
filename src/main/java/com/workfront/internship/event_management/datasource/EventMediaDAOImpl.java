@@ -13,7 +13,7 @@ import java.util.List;
 public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
 
     @Override
-    public int insertMedia(EventMedia media) {
+    public int addMedia(EventMedia media) {
 
         Connection conn = null;
         PreparedStatement stmt = null;
