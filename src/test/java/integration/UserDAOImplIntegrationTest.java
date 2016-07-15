@@ -53,7 +53,7 @@ public class UserDAOImplIntegrationTest {
         User user = userDAO.getUserById(testUser.getId());
 
         assertNotNull(user);
-        assertUsers(user, testUser);
+        assertEqualUsers(user, testUser);
     }
 
     @Test(expected = RuntimeException.class)
@@ -93,7 +93,7 @@ public class UserDAOImplIntegrationTest {
         User user = userDAO.getUserById(testUser.getId());
 
         assertNotNull(user);
-        assertUsers(user, testUser);
+        assertEqualUsers(user, testUser);
     }
 
     @Test
@@ -110,7 +110,7 @@ public class UserDAOImplIntegrationTest {
         User user = userDAO.getUserByUsername(testUser.getUsername());
 
         assertNotNull(user);
-        assertUsers(user, testUser);
+        assertEqualUsers(user, testUser);
     }
 
     @Test
@@ -127,7 +127,7 @@ public class UserDAOImplIntegrationTest {
         User user = userDAO.getUserByEmail(testUser.getEmail());
 
         assertNotNull(user);
-        assertUsers(user, testUser);
+        assertEqualUsers(user, testUser);
     }
 
     @Test
@@ -139,19 +139,28 @@ public class UserDAOImplIntegrationTest {
     }
 
     @Test
-    public void setVerified() {
+    public void setVerified_Success() {
         //testing method
-        userDAO.setVerified(testUser.getId());
+        boolean updated = userDAO.setVerified(testUser.getId());
 
         //read updated record from db
         User user = userDAO.getUserById(testUser.getId());
 
         assertNotNull(user);
         assertTrue(user.isVerified());
+        assertTrue(updated);
     }
 
     @Test
-    public void updateUser() {
+    public void setVerified_Not_Found() {
+        //testing method
+        boolean updated = userDAO.setVerified(TestHelper.NON_EXISTING_ID);
+
+        assertFalse(updated);
+    }
+
+    @Test
+    public void updateUser_Success() {
         //create new user with the same id
         User updatedUser = TestHelper.createTestUser();
         updatedUser.setId(testUser.getId());
@@ -163,12 +172,23 @@ public class UserDAOImplIntegrationTest {
         User user = userDAO.getUserById(updatedUser.getId());
 
         assertNotNull(user);
-        assertUsers(user, updatedUser);
+        assertEqualUsers(user, updatedUser);
+    }
+
+    @Test
+    public void updateUser_Not_Found() {
+        //create new user without id
+        User updatedUser = TestHelper.createTestUser();
+
+        //test method
+        boolean updated = userDAO.updateUser(updatedUser);
+
+        assertFalse(updated);
     }
 
     @Test
     public void deleteUser_Success() {
-        //testing method
+        //test method
         boolean deleted = userDAO.deleteUser(testUser.getId());
 
         User user = userDAO.getUserById(testUser.getId());
@@ -177,9 +197,19 @@ public class UserDAOImplIntegrationTest {
         assertNull(user);
     }
 
+
     @Test
-    public void deleteAllUsers() {
-        //testing method
+    public void deleteUser_Not_Found() {
+        //test method
+        boolean deleted = userDAO.deleteUser(TestHelper.NON_EXISTING_ID);
+
+        assertFalse(deleted);
+    }
+
+
+    @Test
+    public void deleteAllUsers_Success() {
+        //test method
         boolean deleted = userDAO.deleteAllUsers();
 
         List<User> userList = userDAO.getAllUsers();
@@ -187,8 +217,19 @@ public class UserDAOImplIntegrationTest {
         assertTrue(deleted);
     }
 
+    @Test
+    public void deleteAllUsers_Not_Found() {
+        //delete inserted user
+        userDAO.deleteUser(testUser.getId());
+
+        //test method
+        boolean deleted = userDAO.deleteAllUsers();
+
+        assertFalse(deleted);
+    }
+
     //helper methods
-    private void assertUsers(User expectedUser, User actualUser) {
+    private void assertEqualUsers(User expectedUser, User actualUser) {
         assertEquals(expectedUser.getId(), actualUser.getId());
         assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
         assertEquals(expectedUser.getLastName(), actualUser.getLastName());
@@ -204,7 +245,7 @@ public class UserDAOImplIntegrationTest {
     private void assertUserLists(List<User> expectedList, List<User> actualList) {
         assertEquals(actualList.size(), expectedList.size());
         for(int i = 0; i < actualList.size(); i++) {
-            assertUsers(actualList.get(i), expectedList.get(i));
+            assertEqualUsers(actualList.get(i), expectedList.get(i));
         }
     }
 

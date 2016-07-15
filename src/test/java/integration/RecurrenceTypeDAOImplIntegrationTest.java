@@ -3,7 +3,7 @@ package integration;
 /**
  * Created by hermine on 7/11/16.
  */
-public class TestRecurrenceTypeDAOImpl {
+public class RecurrenceTypeDAOImplIntegrationTest {
 
   /*  private static RecurrenceTypeDAO recTypeDAO = null;
     RecurrenceType testRecurrenceType = null;
@@ -29,7 +29,7 @@ public class TestRecurrenceTypeDAOImpl {
     @Test
     public void  testInsertRecurrenceType(){
         integration.TestHelper.deleteTestRecurrenceTypeFromDB(testRecurrenceType.getId());
-        int newRecTypeId = recTypeDAO.insertRecurrenceType(testRecurrenceType);
+        int newRecTypeId = recTypeDAO.addRecurrenceType(testRecurrenceType);
         RecurrenceType actualRecType = getTestRecurrenceType(newRecTypeId);
         try {
             assertEquals(testRecurrenceType.getTitle(), testRecurrenceType.getTitle());

@@ -3,7 +3,7 @@ package integration;
 /**
  * Created by hermine on 7/13/16.
  */
-public class TestEventRecurrenceDAOImpl {
+public class EventRecurrenceDAOImplIntegrationTest {
 
   /*  private static EventRecurrenceDAO eventRecurrenceDAO;
     private EventCategory testCategory;
@@ -58,7 +58,7 @@ public class TestEventRecurrenceDAOImpl {
     @Test
     public void testInsertEventRecurrence(){
         integration.TestHelper.deleteTestEventRecurrenceFromDB(testEventRecurrence.getId());
-        int newEvRecId = eventRecurrenceDAO.insertEventRecurrence(testEventRecurrence);
+        int newEvRecId = eventRecurrenceDAO.addEventRecurrence(testEventRecurrence);
         EventRecurrence actualRecurrence = getTestEventRecurrenceFromDB(newEvRecId);
 
         try {
@@ -74,7 +74,7 @@ public class TestEventRecurrenceDAOImpl {
     @Test //---
     public void testInsertEventRecurrences(){
 //        integration.TestHelper.deleteTestEventRecurrenceFromDB(testEventRecurrence.getId());
-//        int newEvRecId = eventRecurrenceDAO.insertEventRecurrence(testEventRecurrence);
+//        int newEvRecId = eventRecurrenceDAO.addEventRecurrence(testEventRecurrence);
 //        EventRecurrence actualRecurrence = getTestEventRecurrenceFromDB(newEvRecId);
 //
 //        try {

@@ -11,13 +11,12 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.*;
 
 /**
  * Created by Hermine Turshujyan 7/9/16.
  */
-public class TestEventCategoryDAOImpl {
+public class EventCategoryDAOImplIntegrationTest {
 
     private static EventCategoryDAO categoryDAO;
     private EventCategory testCategory;
@@ -33,7 +32,7 @@ public class TestEventCategoryDAOImpl {
         testCategory = TestHelper.createTestCategory();
 
         //insert test user into db, get generated id
-        int categoryId = categoryDAO.insertCategory(testCategory);
+        int categoryId = categoryDAO.addCategory(testCategory);
 
         //set id to test category
         testCategory.setId(categoryId);
@@ -44,21 +43,23 @@ public class TestEventCategoryDAOImpl {
         //delete test categories from db
         categoryDAO.deleteAllCategories();
 
-        // testCategory = null; //todo check
+        //delete test object
+        testCategory = null;
     }
 
     @Test
-    public void insertCategory_Success() {
+    public void addCategory_Success() {
         //test category already inserted in setup, read record by categoryId
         EventCategory category = categoryDAO.getCategoryById(testCategory.getId());
 
-        assertCategories(category, testCategory);
+        assertNotNull(category);
+        assertEqualCategories(category, testCategory);
     }
 
     @Test(expected = RuntimeException.class)
-    public void insertCategory_Dublicate_Entry() {
+    public void addCategory_Dublicate_Entry() {
         //test category already inserted into db, insert dublicate category
-        categoryDAO.insertCategory(testCategory);  //event_category.title field in db is unique
+        categoryDAO.addCategory(testCategory);  //event_category.title field in db is unique
     }
 
     @Test
@@ -69,6 +70,8 @@ public class TestEventCategoryDAOImpl {
         //test method
         List<EventCategory> categoryList = categoryDAO.getAllCategories();
 
+        assertNotNull(categoryList);
+        assertFalse(categoryList.isEmpty());
         assertCategoryLists(categoryList, testCategoryList);
     }
 
@@ -80,6 +83,7 @@ public class TestEventCategoryDAOImpl {
         //test method
         List<EventCategory> categoryList = categoryDAO.getAllCategories();
 
+        assertNotNull(categoryList);
         assertTrue(categoryList.isEmpty());
     }
 
@@ -88,7 +92,8 @@ public class TestEventCategoryDAOImpl {
         //test method
         EventCategory category = categoryDAO.getCategoryById(testCategory.getId());
 
-        assertCategories(category, testCategory);
+        assertNotNull(category);
+        assertEqualCategories(category, testCategory);
     }
 
     @Test
@@ -100,7 +105,7 @@ public class TestEventCategoryDAOImpl {
     }
 
     @Test
-    public void updateCategory() {
+    public void updateCategory_Found() {
         //create new category with the same id
         EventCategory updatedCategory = TestHelper.createTestCategory();
         updatedCategory.setId(testCategory.getId());
@@ -111,30 +116,66 @@ public class TestEventCategoryDAOImpl {
         //read updated record from db
         EventCategory category = categoryDAO.getCategoryById(updatedCategory.getId());
 
-        assertCategories(category, updatedCategory);
+        assertNotNull(category);
+        assertEqualCategories(category, updatedCategory);
     }
 
     @Test
-    public void deleteCategory() {
+    public void updateCategory_Not_Found() {
+        //create new category with non-existing id
+        EventCategory updatedCategory = TestHelper.createTestCategory();
+
+        //test method
+        boolean updated = categoryDAO.updateCategory(updatedCategory);
+
+        assertFalse(updated);
+    }
+
+    @Test
+    public void deleteCategory_Found() {
         //testing method
-        categoryDAO.deleteCategory(testCategory.getId());
+        boolean deleted = categoryDAO.deleteCategory(testCategory.getId());
 
         EventCategory category = categoryDAO.getCategoryById(testCategory.getId());
+
+        assertTrue(deleted);
         assertNull(category);
     }
 
     @Test
-    public void deleteAllCategories() {
+    public void deleteCategory_NotFound() {
         //testing method
-        categoryDAO.deleteAllCategories();
+        boolean deleted = categoryDAO.deleteCategory(TestHelper.NON_EXISTING_ID);
+
+        assertFalse(deleted);
+    }
+
+    @Test
+    public void deleteAllCategories_Found() {
+        //testing method
+        boolean deleted = categoryDAO.deleteAllCategories();
 
         List<EventCategory> categoryList = categoryDAO.getAllCategories();
+
+        assertNotNull(categoryList);
         assertTrue(categoryList.isEmpty());
+        assertTrue(deleted);
+    }
+
+    @Test
+    public void deleteAllCategories_Not_Found() {
+        //delete inserted category
+        categoryDAO.deleteCategory(testCategory.getId());
+
+        //testing method
+        boolean deleted = categoryDAO.deleteAllCategories();
+
+        assertFalse(deleted);
     }
 
 
     //helper methods
-    private void assertCategories(EventCategory expectedCategory, EventCategory actualCategory) {
+    private void assertEqualCategories(EventCategory expectedCategory, EventCategory actualCategory) {
         assertEquals(expectedCategory.getId(), actualCategory.getId());
         assertEquals(expectedCategory.getTitle(), actualCategory.getTitle());
         assertEquals(expectedCategory.getDescription(), actualCategory.getDescription());
@@ -144,7 +185,7 @@ public class TestEventCategoryDAOImpl {
     private void assertCategoryLists(List<EventCategory> expectedList, List<EventCategory> actualList) {
         assertEquals(actualList.size(), expectedList.size());
         for(int i = 0; i < actualList.size(); i++) {
-            assertCategories(actualList.get(i), expectedList.get(i));
+            assertEqualCategories(actualList.get(i), expectedList.get(i));
         }
     }
 
@@ -153,7 +194,7 @@ public class TestEventCategoryDAOImpl {
         EventCategory secondTestCategory = TestHelper.createTestCategory();
 
         //insert second category into db
-        int categoryId = categoryDAO.insertCategory(secondTestCategory);
+        int categoryId = categoryDAO.addCategory(secondTestCategory);
         secondTestCategory.setId(categoryId);
 
         //create test media list
