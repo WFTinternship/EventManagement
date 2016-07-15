@@ -71,32 +71,10 @@ class GenericDAO {
     }
 
      boolean deleteRecordById(String tableName, int id) {
+         return deleteRecord(tableName, "id", id);
+     }
 
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        int affectedRows = 0;
-
-        try {
-            //get connection
-            conn = DataSourceManager.getInstance().getConnection();
-
-            //create and initialize statement
-            String sqlStr = "DELETE FROM "+ tableName + " WHERE id = ?";
-            stmt = conn.prepareStatement(sqlStr);
-            stmt.setInt(1, id);
-
-            //execute query
-            affectedRows = stmt.executeUpdate();
-
-        } catch (IOException | SQLException e) {
-            logger.error("Exception ", e);
-        } finally {
-            closeResources(stmt, conn);
-        }
-        return affectedRows != 0;
-    }
-
-     boolean deleteAllRecords(String tableName) {
+    boolean deleteAllRecords(String tableName) {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -107,7 +85,7 @@ class GenericDAO {
             conn = DataSourceManager.getInstance().getConnection();
 
             //create statement
-            String sqlStr = "DELETE FROM "+ tableName;
+            String sqlStr = "DELETE FROM " + tableName;
             stmt = conn.prepareStatement(sqlStr);
 
             //execute query
@@ -115,6 +93,32 @@ class GenericDAO {
 
         } catch (IOException | SQLException e) {
             logger.error("Exception...", e);
+        } finally {
+            closeResources(stmt, conn);
+        }
+        return affectedRows != 0;
+    }
+
+    public boolean deleteRecord(String tableName, String columnName, int id) {
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        int affectedRows = 0;
+
+        try {
+            //get connection
+            conn = DataSourceManager.getInstance().getConnection();
+
+            //create and initialize statement
+            String sqlStr = "DELETE FROM " + tableName + " WHERE " + columnName + " = ?";
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setInt(1, id);
+
+            //execute query
+            affectedRows = stmt.executeUpdate();
+
+        } catch (SQLException | IOException e) {
+            logger.error("Exception ", e);
         } finally {
             closeResources(stmt, conn);
         }

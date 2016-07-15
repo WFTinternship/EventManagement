@@ -16,7 +16,7 @@ import java.util.Map;
 public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeDAO {
 
     @Override
-    public int insertRecurrenceType(RecurrenceType recurrenceType) {
+    public int addRecurrenceType(RecurrenceType recurrenceType) {
         Connection conn = null;
         PreparedStatement stmtInsertRecType = null;
         PreparedStatement stmtInsertRepeatOn = null;

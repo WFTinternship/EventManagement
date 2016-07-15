@@ -10,7 +10,7 @@ import java.util.List;
 public interface EventCategoryDAO  {
 
      //insert data into db
-     int insertCategory(EventCategory category);
+     int addCategory(EventCategory category);
 
      //read data from db
      List<EventCategory> getAllCategories();

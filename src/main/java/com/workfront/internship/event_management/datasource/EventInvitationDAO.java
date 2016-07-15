@@ -10,19 +10,28 @@ import java.util.List;
  */
 public interface EventInvitationDAO {
 
-     //Create
-     int insertInvitation(EventInvitation invitation, Connection conn);
-     int insertInvitation(EventInvitation invitation);
+     //insert invitation into db
+     int addInvitation(EventInvitation invitation, Connection conn);
 
-     //Read
+     int addInvitation(EventInvitation invitation);
+
+     //get records from db
      EventInvitation getInvitationById(int invitationId);
      List<EventInvitation> getInvitationsByEventId(int eventId);
 
-     //Update
+     List<EventInvitation> getInvitationsByUserId(int userId);
+
+
+     //update record in db
      boolean updateInvitation(EventInvitation invitation);
 
-     //Delete
-     boolean deleteInvitation(int invId);
+     //delete records from db
+     boolean deleteInvitation(int invitationId);
      boolean deleteInvitationsByEventId(int eventId);
+
+     boolean deleteInvitationsByUserId(int userId);
+
+     boolean deleteAllInvitations();
+
 
 }

@@ -30,19 +30,19 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             eventId = insertEventMainInfo(event, conn);
             event.setId(eventId);
 
-       /*     //insert event organizer
-            if (event.getInvitations() != null & event.getInvitations().size() == 1) {
+            //insert event organizer
+/*            if (event.getInvitations() != null & event.getInvitations().size() == 1) {
                 EventInvitationDAO invitationDAO = new EventInvitationDAOImpl();
-                invitationDAO.insertInvitation(event.getInvitations().get(0), conn);
+                invitationDAO.addInvitation(event.getInvitations().get(0), conn);
             }
-
+/*
             //insert event recurrence info
             if (event.getRecurrences() != null) {
                 for (EventRecurrence recurrence : event.getRecurrences()) {
                     recurrence.setEventId(eventId);
                 }
                 EventRecurrenceDAO recurrenceDAO = new EventRecurrenceDAOImpl();
-                recurrenceDAO.insertEventRecurrences(event.getRecurrences(), conn);
+                recurrenceDAO.addEventRecurrences(event.getRecurrences(), conn);
             }*/
 
             //commit transaction

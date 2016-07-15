@@ -11,10 +11,13 @@ import java.util.List;
 public interface EventRecurrenceDAO {
 
      //CREATE
-     boolean insertEventRecurrences(List<EventRecurrence> recurrences, Connection conn);
-     boolean insertEventRecurrences(List<EventRecurrence> recurrences);
-     int insertEventRecurrence(EventRecurrence recurrence, Connection conn);
-     int insertEventRecurrence(EventRecurrence recurrence);
+     boolean addEventRecurrences(List<EventRecurrence> recurrences, Connection conn);
+
+     boolean addEventRecurrences(List<EventRecurrence> recurrences);
+
+     int addEventRecurrence(EventRecurrence recurrence, Connection conn);
+
+     int addEventRecurrence(EventRecurrence recurrence);
 
      //READ
      List<EventRecurrence> getEventRecurrencesByEventId(int eventId);

@@ -17,14 +17,17 @@ import java.util.List;
 public class EventInvitationDAOImpl extends GenericDAO implements EventInvitationDAO {
 
     @Override
-    public int insertInvitation(EventInvitation invitation) {
+    public int addInvitation(EventInvitation invitation) {
 
         Connection conn = null;
         int id = 0;
 
         try {
+            //get connection
             conn = DataSourceManager.getInstance().getConnection();
-            id = insertInvitation(invitation, conn);
+
+            //insert invitation and get generated id
+            id = addInvitation(invitation, conn);
         } catch (SQLException | IOException e) {
             logger.error("Exception ", e);
         } finally {
@@ -34,14 +37,18 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
     }
 
     @Override
-    public int insertInvitation(EventInvitation invitation, Connection conn) {
+    public int addInvitation(EventInvitation invitation, Connection conn) {
+
         PreparedStatement stmt = null;
         ResultSet rs = null;
+
         int id = 0;
+        String sqlStr = "INSERT INTO event_invitation "
+                + "(event_id, user_id, user_role, user_response, attendees_count, participated) VALUES "
+                + "(?, ?, ?, ?, ?, ? )";
+
         try {
-            String sqlStr = "INSERT INTO event_invitation "
-                    + "(event_id, user_id, user_role, user_response, attendees_count, participated) VALUES "
-                    + "(?, ?, ?, ?, ?, ? )";
+            //create and initialize statement
             stmt = conn.prepareStatement(sqlStr, PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, invitation.getEventId());
             stmt.setInt(2, invitation.getUser().getId());
@@ -49,13 +56,16 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
             stmt.setString(4, invitation.getUserResponse());
             stmt.setInt(5, invitation.getAttendeesCount());
             stmt.setBoolean(6, invitation.isParticipated());
+
+            //execute query
             stmt.executeUpdate();
-            rs = stmt.getGeneratedKeys();
-            if(rs.next()) {
-                id = rs.getInt(1);
-            }
+
+            //get generated id
+            id = getInsertedId(stmt);
+
         } catch (SQLException e) {
             logger.error("Exception ", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt);
         }
@@ -63,20 +73,33 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
     }
 
     @Override
-    public EventInvitation getInvitationById(int invId) {
+    public EventInvitation getInvitationById(int invitationId) {
+
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
+
         EventInvitation invitation = null;
+        String sqlStr = "SELECT * FROM event_invitation LEFT JOIN user " +
+                "ON event_invitation.user_id = user.id " +
+                "WHERE event_invitation.id = ?";
+
         try {
+            //get connection
             conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "SELECT * FROM event_invitation LEFT JOIN user " +
-                    "ON event_invitation.user_id = user.id " +
-                    "WHERE event_invitation.id = ?";
+
+            //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);
-            stmt.setInt(1, invId);
+            stmt.setInt(1, invitationId);
+
+            //execute query
             rs = stmt.executeQuery();
-            invitation = createInvitationsFromRS(rs).get(0);
+
+            //get results
+            List<EventInvitation> invitationList = createInvitationsFromRS(rs);
+            if (!invitationList.isEmpty()) {
+                invitation = invitationList.get(0);
+            }
         } catch (SQLException | IOException e) {
             logger.error("Exception ", e);
         } finally {
@@ -93,15 +116,57 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
         ResultSet rs = null;
 
         List<EventInvitation> invitationsList = null;
+        String sqlStr = "SELECT * FROM event_invitation LEFT JOIN user " +
+                "ON event_invitation.user_id = user.id " +
+                "WHERE event_invitation.event_id = ?";
+
         try {
+            //get connection
             conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "SELECT * FROM event_invitation LEFT JOIN user " +
-                    "ON event_invitation.user_id = user.id " +
-                    "WHERE event_invitation.event_id = ?";
+
+            //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, eventId);
+
+            //execute query
             rs = stmt.executeQuery();
+
+            //get results
             invitationsList = createInvitationsFromRS(rs);
+        } catch (SQLException | IOException e) {
+            logger.error("Exception ", e);
+        } finally {
+            closeResources(rs, stmt, conn);
+        }
+        return invitationsList;
+    }
+
+    @Override
+    public List<EventInvitation> getInvitationsByUserId(int userId) {
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        List<EventInvitation> invitationsList = null;
+        String sqlStr = "SELECT * FROM event_invitation LEFT JOIN user " +
+                "ON event_invitation.user_id = user.id " +
+                "WHERE event_invitation.user_id = ?";
+
+        try {
+            //get connection
+            conn = DataSourceManager.getInstance().getConnection();
+
+            //create and initialize statement
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setInt(1, userId);
+
+            //execute query
+            rs = stmt.executeQuery();
+
+            //get results
+            invitationsList = createInvitationsFromRS(rs);
+
         } catch (SQLException | IOException e) {
             logger.error("Exception ", e);
         } finally {
@@ -120,8 +185,10 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
                     "participated = ? WHERE id = ?";
 
         try {
+            //get connection
             conn = DataSourceManager.getInstance().getConnection();
 
+            //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);
             stmt.setString(1, invitation.getUserRole());
             stmt.setString(2, invitation.getUserResponse());
@@ -129,7 +196,9 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
             stmt.setBoolean(4, invitation.isParticipated());
             stmt.setInt(5, invitation.getId());
 
+            //execute query
             affectedRows = stmt.executeUpdate();
+
         } catch (SQLException | IOException e) {
             logger.error("Exception ", e);
         } finally {
@@ -139,13 +208,23 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
     }
 
     @Override
-    public boolean deleteInvitation(int invId) {
-        return deleteInvitationsByField("id", invId);
+    public boolean deleteInvitation(int invitationId) {
+        return deleteRecordById("event_invitation", invitationId);
     }
 
     @Override
     public boolean deleteInvitationsByEventId(int eventId){
-        return deleteInvitationsByField("event_id", eventId);
+        return deleteRecord("event_invitation", "event_id", eventId);
+    }
+
+    @Override
+    public boolean deleteInvitationsByUserId(int userId) {
+        return deleteRecord("event_invitation", "user_id", userId);
+    }
+
+    @Override
+    public boolean deleteAllInvitations() {
+        return deleteAllRecords("event_invitation");
     }
 
     //helper methods
@@ -154,7 +233,6 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
         List<EventInvitation> invitationsList = new ArrayList<EventInvitation>();
 
         while (rs.next()) {
-
 
             User user = new User();
             user.setId(rs.getInt("user.id"))
@@ -180,28 +258,5 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
             invitationsList.add(invitation);
         }
         return invitationsList;
-    }
-
-    private boolean deleteInvitationsByField(String columnName, int id){
-
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        int affectedRows = 0;
-        String sqlStr = "DELETE FROM event_invitation WHERE " + columnName  + " = ?";
-
-        try {
-            conn = DataSourceManager.getInstance().getConnection();
-
-            stmt = conn.prepareStatement(sqlStr);
-            stmt.setInt(1, id);
-
-            affectedRows = stmt.executeUpdate();
-
-        } catch (SQLException | IOException e) {
-            logger.error("Exception ", e);
-        } finally {
-            closeResources(stmt, conn);
-        }
-        return affectedRows != 0;
     }
 }

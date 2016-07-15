@@ -10,7 +10,7 @@ import java.util.List;
 public interface RecurrenceTypeDAO {
 
      //insert data into db
-     int insertRecurrenceType(RecurrenceType recurrenceType);
+     int addRecurrenceType(RecurrenceType recurrenceType);
 
      //read data from db
      List<RecurrenceType> getAllRecurrenceTypes();

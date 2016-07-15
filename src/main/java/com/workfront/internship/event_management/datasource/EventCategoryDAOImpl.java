@@ -13,7 +13,7 @@ import java.util.List;
 public class EventCategoryDAOImpl extends GenericDAO implements EventCategoryDAO {
 
     @Override
-    public int insertCategory(EventCategory category) {
+    public int addCategory(EventCategory category) {
 
         Connection conn = null;
         PreparedStatement stmt = null;

@@ -15,12 +15,12 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
 
     //Create
     @Override
-    public int insertEventRecurrence(EventRecurrence recurrence) {
+    public int addEventRecurrence(EventRecurrence recurrence) {
         Connection conn = null;
         int id = 0;
         try {
             conn = DataSourceManager.getInstance().getConnection();
-            id = insertEventRecurrence(recurrence, conn);
+            id = addEventRecurrence(recurrence, conn);
         } catch (SQLException | IOException e) {
             logger.error("Exception ", e);
         } finally {
@@ -30,7 +30,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
     }
 
     @Override
-    public int insertEventRecurrence(EventRecurrence recurrence, Connection conn) {
+    public int addEventRecurrence(EventRecurrence recurrence, Connection conn) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         int id = 0;
@@ -62,12 +62,12 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
     }
 
     @Override
-    public boolean insertEventRecurrences(List<EventRecurrence> recurrences) {
+    public boolean addEventRecurrences(List<EventRecurrence> recurrences) {
         Connection conn = null;
         boolean success = false;
         try {
             conn = DataSourceManager.getInstance().getConnection();
-            success = insertEventRecurrences(recurrences, conn);
+            success = addEventRecurrences(recurrences, conn);
         } catch (SQLException | IOException e) {
             logger.error("Exception ", e);
         } finally {
@@ -77,7 +77,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
     }
 
     @Override
-    public boolean insertEventRecurrences(List<EventRecurrence> recurrences, Connection conn) {
+    public boolean addEventRecurrences(List<EventRecurrence> recurrences, Connection conn) {
         PreparedStatement stmt = null;
         int affectedRows = 0;
         String sqlStr = "INSERT INTO event_recurrence "
