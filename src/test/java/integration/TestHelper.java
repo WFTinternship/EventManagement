@@ -1,3 +1,5 @@
+package integration;
+
 import com.workfront.internship.event_management.model.*;
 
 import java.util.ArrayList;
@@ -12,6 +14,8 @@ public class TestHelper {
 
     public static final String NON_EXISTING_USERNAME = "nonExistingUsername";
     public static final String NON_EXISTING_EMAIL = "nonExistingEmail@test.com";
+    public static final String NON_EXISTING_MEDIA_TYPE = "Video";
+
     public static int NON_EXISTING_ID = 12345;
 
 

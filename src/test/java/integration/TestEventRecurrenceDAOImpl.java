@@ -1,3 +1,5 @@
+package integration;
+
 /**
  * Created by hermine on 7/13/16.
  */
@@ -17,35 +19,35 @@ public class TestEventRecurrenceDAOImpl {
     @Before
     public void setUp() {
         //creating test objects
-        testCategory = TestHelper.createTestCategory();
-        testEvent = TestHelper.createTestEvent();
-        testRecurrenceType = TestHelper.createTestRecurrenceType();
-        testEventRecurrence = TestHelper.createTestEventRecurrence();
+        testCategory = integration.TestHelper.createTestCategory();
+        testEvent = integration.TestHelper.createTestEvent();
+        testRecurrenceType = integration.TestHelper.createTestRecurrenceType();
+        testEventRecurrence = integration.TestHelper.createTestEventRecurrence();
 
         //inserting test objects to db
-        int categoryId = TestHelper.insertTestCategoryToDB(testCategory);
+        int categoryId = integration.TestHelper.insertTestCategoryToDB(testCategory);
         testCategory.setId(categoryId);
 
         testEvent.setCategory(testCategory);
-        int eventId = TestHelper.insertTestEventToDB(testEvent);
+        int eventId = integration.TestHelper.insertTestEventToDB(testEvent);
         testEvent.setId(eventId);
 
-        testRecurrenceType = TestHelper.createTestRecurrenceType();
-        int recTypeId = TestHelper.insertTestRecurrenceTypeToDB(testRecurrenceType);
+        testRecurrenceType = integration.TestHelper.createTestRecurrenceType();
+        int recTypeId = integration.TestHelper.insertTestRecurrenceTypeToDB(testRecurrenceType);
         testRecurrenceType.setId(recTypeId);
 
         testEventRecurrence.setEventId(testEvent.getId()).setRecurrenceType(testRecurrenceType);
-        int evRecId = TestHelper.insertTestEventRecurrenceToDB(testEventRecurrence);
+        int evRecId = integration.TestHelper.insertTestEventRecurrenceToDB(testEventRecurrence);
         testEventRecurrence.setId(evRecId);
 
     }
 
     @After
     public void tearDown() {
-        TestHelper.deleteTestEventRecurrenceFromDB(testEventRecurrence.getId());
-        TestHelper.deleteTestRecurrenceTypeFromDB(testRecurrenceType.getId());
-        TestHelper.deleteTestEventFromDB(testEvent.getId());
-        TestHelper.deleteTestCategoryFromDB(testCategory.getId());
+        integration.TestHelper.deleteTestEventRecurrenceFromDB(testEventRecurrence.getId());
+        integration.TestHelper.deleteTestRecurrenceTypeFromDB(testRecurrenceType.getId());
+        integration.TestHelper.deleteTestEventFromDB(testEvent.getId());
+        integration.TestHelper.deleteTestCategoryFromDB(testCategory.getId());
 
         testRecurrenceType = null;
         testEventRecurrence = null;
@@ -55,7 +57,7 @@ public class TestEventRecurrenceDAOImpl {
 
     @Test
     public void testInsertEventRecurrence(){
-        TestHelper.deleteTestEventRecurrenceFromDB(testEventRecurrence.getId());
+        integration.TestHelper.deleteTestEventRecurrenceFromDB(testEventRecurrence.getId());
         int newEvRecId = eventRecurrenceDAO.insertEventRecurrence(testEventRecurrence);
         EventRecurrence actualRecurrence = getTestEventRecurrenceFromDB(newEvRecId);
 
@@ -65,13 +67,13 @@ public class TestEventRecurrenceDAOImpl {
             assertEquals(actualRecurrence.getRepeatInterval(), testEventRecurrence.getRepeatInterval());
             assertNotNull(actualRecurrence.getRepeatEndDate());
         } finally {
-            TestHelper.deleteTestEventRecurrenceFromDB(newEvRecId);
+            integration.TestHelper.deleteTestEventRecurrenceFromDB(newEvRecId);
         }
     }
 
     @Test //---
     public void testInsertEventRecurrences(){
-//        TestHelper.deleteTestEventRecurrenceFromDB(testEventRecurrence.getId());
+//        integration.TestHelper.deleteTestEventRecurrenceFromDB(testEventRecurrence.getId());
 //        int newEvRecId = eventRecurrenceDAO.insertEventRecurrence(testEventRecurrence);
 //        EventRecurrence actualRecurrence = getTestEventRecurrenceFromDB(newEvRecId);
 //
@@ -81,7 +83,7 @@ public class TestEventRecurrenceDAOImpl {
 //            assertEquals(actualRecurrence.getRepeatInterval(), testEventRecurrence.getRepeatInterval());
 //            assertNotNull(actualRecurrence.getRepeatEndDate());
 //        } finally {
-//            TestHelper.deleteTestEventRecurrenceFromDB(newEvRecId);
+//            integration.TestHelper.deleteTestEventRecurrenceFromDB(newEvRecId);
 //        }
     }
 

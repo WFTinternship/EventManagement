@@ -71,8 +71,8 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
     }
 
     @Override
-    public List<EventMedia> getMediaByUploaderId(int eventId) {
-        return getMediaByField("id", eventId);
+    public List<EventMedia> getMediaByUploaderId(int uploaderId) {
+        return getMediaByField("uploader_id", uploaderId);
     }
 
     @Override

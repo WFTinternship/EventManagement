@@ -1,3 +1,5 @@
+package integration;
+
 import com.workfront.internship.event_management.datasource.UserDAO;
 import com.workfront.internship.event_management.datasource.UserDAOImpl;
 import com.workfront.internship.event_management.model.User;
@@ -6,12 +8,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * Created by Hermine Turshujyan 7/8/16.
@@ -40,7 +41,7 @@ public class TestUserDAOImpl {
 
     @After
     public void tearDown() {
-        //delete test users from db
+        //delete inserted test users from db
         userDAO.deleteAllUsers();
 
         testUser = null;
@@ -57,22 +58,19 @@ public class TestUserDAOImpl {
     @Test(expected = RuntimeException.class)
     public void insertUser_Dublicate_Entry() {
         //test user already inserted into db, insert dublicate user
-        userDAO.insertUser(testUser); //username, email fields are unique
+        userDAO.insertUser(testUser); //username, email fields in db are unique
     }
 
     @Test
     public void getAllUsers_Found() {
-        //insert second user into db
-        User testUser1 = TestHelper.createTestUser();
-        int userId = userDAO.insertUser(testUser1);
-        testUser1.setId(userId);
+        //create test users list, insert into db
+        List<User> testUserList = createTestUserList();
 
         //test method
         List<User> userList = userDAO.getAllUsers();
 
-        assertEquals(userList.size(), 2);
-        assertUsers(userList.get(0), testUser);
-        assertUsers(userList.get(1), testUser1);
+        assertUserLists(userList, testUserList);
+
     }
 
     @Test
@@ -82,6 +80,7 @@ public class TestUserDAOImpl {
 
         //test method
         List<User> userList = userDAO.getAllUsers();
+
         assertTrue(userList.isEmpty());
     }
 
@@ -105,6 +104,7 @@ public class TestUserDAOImpl {
     public void getUserByUsername_Found() {
         //testing method
         User user = userDAO.getUserByUsername(testUser.getUsername());
+
         assertUsers(user, testUser);
     }
 
@@ -188,5 +188,28 @@ public class TestUserDAOImpl {
         assertEquals(expectedUser.isVerified(), actualUser.isVerified());
         assertEquals(expectedUser.getEmail(), actualUser.getEmail());
         assertNotNull(expectedUser.getEmail());
+    }
+
+    private void assertUserLists(List<User> expectedList, List<User> actualList) {
+        assertEquals(actualList.size(), expectedList.size());
+        for(int i = 0; i < actualList.size(); i++) {
+            assertUsers(actualList.get(i), expectedList.get(i));
+        }
+    }
+
+    private List<User> createTestUserList(){
+        //create second test category
+        User secondTestUser = TestHelper.createTestUser();
+
+        //insert second category into db
+        int userId = userDAO.insertUser(secondTestUser);
+        secondTestUser.setId(userId);
+
+        //create test media list
+        List<User> testUserList = new ArrayList<>();
+        testUserList.add(testUser);
+        testUserList.add(secondTestUser);
+
+        return testUserList;
     }
 }

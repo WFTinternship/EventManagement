@@ -1,3 +1,5 @@
+package integration;
+
 /**
  * Created by hermine on 7/9/16.
  */
@@ -17,34 +19,34 @@ public class TestEventInvitationDAOImpl {
     @Before
     public void setUp() {
 
-        testUser = TestHelper.createRandomUser();
-        testCategory = TestHelper.createTestCategory();
-        testEvent = TestHelper.createTestEvent();
-        testInvitation = TestHelper.createTestInvitation();
+        testUser = integration.TestHelper.createRandomUser();
+        testCategory = integration.TestHelper.createTestCategory();
+        testEvent = integration.TestHelper.createTestEvent();
+        testInvitation = integration.TestHelper.createTestInvitation();
 
-        int userId = TestHelper.insertTestUserToDB(testUser);
+        int userId = integration.TestHelper.insertTestUserToDB(testUser);
         testUser.setId(userId);
 
-        int categoryId = TestHelper.insertTestCategoryToDB(testCategory);
+        int categoryId = integration.TestHelper.insertTestCategoryToDB(testCategory);
         testCategory.setId(categoryId);
 
         testEvent.setCategory(testCategory);
-        int eventId = TestHelper.insertTestEventToDB(testEvent);
+        int eventId = integration.TestHelper.insertTestEventToDB(testEvent);
         testEvent.setId(eventId);
 
         testInvitation.setUser(testUser);
         testInvitation.setEventId(testEvent.getId());
-        int invId = TestHelper.insertTestInvitationToDB(testInvitation);
+        int invId = integration.TestHelper.insertTestInvitationToDB(testInvitation);
         testInvitation.setId(invId);
     }
 
     @After
     public void tearDown() {
         //deleting test records from db
-        TestHelper.deleteTestInvitationFromDB(testInvitation.getId());
-        TestHelper.deleteTestEventFromDB(testEvent.getId());
-        TestHelper.deleteTestUserFromDB(testUser.getId());
-        TestHelper.deleteTestCategoryFromDB(testCategory.getId());
+        integration.TestHelper.deleteTestInvitationFromDB(testInvitation.getId());
+        integration.TestHelper.deleteTestEventFromDB(testEvent.getId());
+        integration.TestHelper.deleteTestUserFromDB(testUser.getId());
+        integration.TestHelper.deleteTestCategoryFromDB(testCategory.getId());
 
         testUser = null;
         testCategory = null;
@@ -54,7 +56,7 @@ public class TestEventInvitationDAOImpl {
 
     @Test
     public void testInsertInvitation(){
-        TestHelper.deleteTestInvitationFromDB(testInvitation.getId());
+        integration.TestHelper.deleteTestInvitationFromDB(testInvitation.getId());
         int newInvId = invitationDAO.insertInvitation(testInvitation);
         EventInvitation actualInvitation = getTestInvitationFromDB(newInvId);
 
@@ -65,7 +67,7 @@ public class TestEventInvitationDAOImpl {
             assertEquals(actualInvitation.getAttendeesCount(), testInvitation.getAttendeesCount());
             assertEquals(actualInvitation.isParticipated(), testInvitation.isParticipated());
         } finally {
-            TestHelper.deleteTestInvitationFromDB(newInvId);
+            integration.TestHelper.deleteTestInvitationFromDB(newInvId);
         }
     }
 

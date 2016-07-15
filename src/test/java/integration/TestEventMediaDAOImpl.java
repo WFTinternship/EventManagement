@@ -1,3 +1,5 @@
+package integration;
+
 import com.workfront.internship.event_management.datasource.*;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.EventCategory;
@@ -8,8 +10,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.*;
 
 /**
@@ -90,6 +94,28 @@ public class TestEventMediaDAOImpl {
         mediaDAO.insertMedia(testMedia);  //media.path field is unique
     }
 
+    public void getAllMedia_Found() {
+        //create test media list and insert into db
+        List<EventMedia> testMediaList = createTestMediaList();
+
+        //testing method
+        List<EventMedia> mediaList = mediaDAO.getAllMedia();
+
+        assertMediaLists(mediaList, testMediaList);
+    }
+
+    @Test
+    public void getAllMedia_Empty_List() {
+        //delete inserted media from db
+        mediaDAO.deleteMedia(testMedia.getId());
+
+        //test method
+        List<EventMedia> mediaList = mediaDAO.getAllMedia();
+
+        assertTrue(mediaList.isEmpty());
+    }
+
+
     @Test
     public void getMediaById_Found() {
         //testing method
@@ -108,19 +134,13 @@ public class TestEventMediaDAOImpl {
 
     @Test
     public void getMediaByEventId_Found() {
-        //test media inserted in setup, insert another media
-        EventMedia newTestMedia = TestHelper.createTestMedia();
-        newTestMedia.setEventId(testMedia.getEventId())
-                .setUploaderId(testUser.getId());
-        int mediaId = mediaDAO.insertMedia(newTestMedia);
-        newTestMedia.setId(mediaId);
+        //create test media list and insert into db
+        List<EventMedia> testMediaList = createTestMediaList();
 
         //testing method
         List<EventMedia> mediaList = mediaDAO.getMediaByEventId(testEvent.getId());
 
-        assertEquals(mediaList.size(), 2);
-        assertMedia(mediaList.get(0), testMedia);
-        assertMedia(mediaList.get(1), newTestMedia);
+        assertMediaLists(mediaList, testMediaList);
     }
 
     @Test
@@ -132,87 +152,76 @@ public class TestEventMediaDAOImpl {
     }
 
 
+    @Test
+    public void getMediaByType_Found() {
+        //create test media list and insert into db
+        List<EventMedia> testMediaList = createTestMediaList();
 
+        //testing method
+        List<EventMedia> mediaList = mediaDAO.getMediaByType(testMedia.getType());
 
-/*
-        @Test //---
-        public void testInsertMediaList() {
+        assertMediaLists(mediaList, testMediaList);
+    }
 
-        }
+    @Test
+    public void getMediaByType_Not_Found() {
+        //testing method
+        List<EventMedia> mediaList = mediaDAO.getMediaByType(TestHelper.NON_EXISTING_MEDIA_TYPE);
 
-        @Test
-        public void testGetAllMedia() {
-            List<EventMedia> expectedMedia = getAllMediaFromDB();
-            List<EventMedia> actualMedia = mediaDAO.getAllMedia();
-            assertEquals(expectedMedia.size(), actualMedia.size());
-            for (int i = 0; i < actualMedia.size(); i++) {
-                assertEquals(actualMedia.get(i).getEventId(), expectedMedia.get(i).getEventId());
-                assertEquals(actualMedia.get(i).getUploaderId(), expectedMedia.get(i).getUploaderId());
-                assertEquals(actualMedia.get(i).getPath(), expectedMedia.get(i).getPath());
-                assertEquals(actualMedia.get(i).getType(), expectedMedia.get(i).getType());
-                assertEquals(actualMedia.get(i).getDescription(), expectedMedia.get(i).getDescription());
-                assertEquals(actualMedia.get(i).getUploadDate(), expectedMedia.get(i).getUploadDate());
-            }
-        }
+        assertTrue(mediaList.isEmpty());
+    }
 
-        @Test
-        public void testGetMediaById() {
-            EventMedia actualMedia = getTestMediaByField("id", testMedia.getId()).get(0);
+    @Test
+    public void getMediaByUploader_Found() {
+        //create test media list and insert into db
+        List<EventMedia> testMediaList = createTestMediaList();
 
-            assertEquals(actualMedia.getUploaderId(), testMedia.getUploaderId());
-            assertEquals(actualMedia.getPath(), testMedia.getPath());
-            assertEquals(actualMedia.getType(), testMedia.getType());
-            assertEquals(actualMedia.getDescription(), testMedia.getDescription());
-        }
+        //testing method
+        List<EventMedia> mediaList = mediaDAO.getMediaByUploaderId(testMedia.getUploaderId());
 
-        @Test
-        public void testGetMediaByEventId() {
-            EventMedia actualMedia = getTestMediaByField("event_id", testMedia.getEventId()).get(0);
-            assertEquals(actualMedia.getUploaderId(), testMedia.getUploaderId());
-            assertEquals(actualMedia.getPath(), testMedia.getPath());
-            assertEquals(actualMedia.getType(), testMedia.getType());
-            assertEquals(actualMedia.getDescription(), testMedia.getDescription());
-        }
+        assertMediaLists(mediaList, testMediaList);
+    }
 
-        @Test
-        public void testGetMediaByType() {
-            boolean found = false;
-            List<EventMedia> actualMediaList = getTestMediaByField("type", testMedia.getType());
-            for(EventMedia media: actualMediaList) {
-                if (media.getId() == testMedia.getId()){
-                    found = true;
-                    break;
-                }
-            }
-           assertTrue(found);
-        }
+    @Test
+    public void getMediaByUploader_Not_Found() {
+        //testing method
+        List<EventMedia> mediaList = mediaDAO.getMediaByUploaderId(TestHelper.NON_EXISTING_ID);
 
-        @Test
-        public void testGetMediaByUploader() {
-            EventMedia actualMedia = getTestMediaByField("uploader_id", testMedia.getUploaderId()).get(0);
-            assertEquals(actualMedia.getUploaderId(), testMedia.getUploaderId());
-            assertEquals(actualMedia.getPath(), testMedia.getPath());
-            assertEquals(actualMedia.getType(), testMedia.getType());
-            assertEquals(actualMedia.getDescription(), testMedia.getDescription());
-        }
+        assertTrue(mediaList.isEmpty());
+    }
 
-        @Test
-        public void testUpdateMediaDescription() {
-            String changedDesc = "changed description";
-            mediaDAO.updateMediaDescription(testMedia.getId(), "changed description");
-            EventMedia actualMedia = getTestMediaFromDB(testMedia.getId());
-            assertEquals(actualMedia.getUploaderId(), testMedia.getUploaderId());
-            assertEquals(actualMedia.getPath(), testMedia.getPath());
-            assertEquals(actualMedia.getType(), testMedia.getType());
-            assertEquals(actualMedia.getDescription(), changedDesc);
-        }
+    @Test
+    public void updateMediaDescription() {
+        String description = "Updated description";
+        //update expected media description
+        testMedia.setDescription(description);
 
-        @Test
-        public void testDeleteMedia() {
-            mediaDAO.deleteMedia(testMedia.getId());
-            assertNull(getTestMediaFromDB(testMedia.getId()));
-        }
-    */
+        //test method
+        mediaDAO.updateMediaDescription(testMedia.getId(), description);
+
+        //read updated record from db
+        EventMedia media = mediaDAO.getMediaById(testMedia.getId());
+
+        assertMedia(media, testMedia);
+    }
+
+    @Test
+    public void deleteMedia() {
+        //testing method
+        mediaDAO.deleteMedia(testMedia.getId());
+
+        EventMedia media = mediaDAO.getMediaById(testMedia.getId());
+        assertNull(media);
+    }
+
+    @Test
+    public void deleteAllMedia() {
+        //testing method
+        mediaDAO.deleteAllMedia();
+
+        List<EventMedia> mediaList = mediaDAO.getAllMedia();
+        assertTrue(mediaList.isEmpty());
+    }
 
     //helper methods
     private void deleteAllTestInsertions() {
@@ -232,5 +241,28 @@ public class TestEventMediaDAOImpl {
         assertNotNull(actualMedia.getUploadDate());
     }
 
-    // private void createTestMedia
+    private void assertMediaLists(List<EventMedia> expectedMediaList, List<EventMedia> actualMediaList) {
+        assertEquals(actualMediaList.size(), expectedMediaList.size());
+        for(int i = 0; i < actualMediaList.size(); i++) {
+            assertMedia(actualMediaList.get(i), expectedMediaList.get(i));
+        }
+    }
+
+    private List<EventMedia> createTestMediaList(){
+        //create second test media with the same uploaderId, eventId ant mediaType
+        EventMedia secondTestMedia = TestHelper.createTestMedia();
+        secondTestMedia.setEventId(testMedia.getEventId())
+                        .setUploaderId(testUser.getId());
+
+        //insert second media into db
+        int mediaId = mediaDAO.insertMedia(secondTestMedia);
+        secondTestMedia.setId(mediaId);
+
+        //create test media list
+        List<EventMedia> testMediaList = new ArrayList<>();
+        testMediaList.add(testMedia);
+        testMediaList.add(secondTestMedia);
+
+        return testMediaList;
+    }
 }
