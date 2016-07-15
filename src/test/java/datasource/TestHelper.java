@@ -1,4 +1,4 @@
-package integration;
+package datasource;
 
 import com.workfront.internship.event_management.model.*;
 

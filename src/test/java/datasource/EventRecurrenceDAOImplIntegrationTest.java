@@ -1,4 +1,4 @@
-package integration;
+package datasource;
 
 /**
  * Created by hermine on 7/13/16.
@@ -19,35 +19,35 @@ public class EventRecurrenceDAOImplIntegrationTest {
     @Before
     public void setUp() {
         //creating test objects
-        testCategory = integration.TestHelper.createTestCategory();
-        testEvent = integration.TestHelper.createTestEvent();
-        testRecurrenceType = integration.TestHelper.createTestRecurrenceType();
-        testEventRecurrence = integration.TestHelper.createTestEventRecurrence();
+        testCategory = datasource.TestHelper.createTestCategory();
+        testEvent = datasource.TestHelper.createTestEvent();
+        testRecurrenceType = datasource.TestHelper.createTestRecurrenceType();
+        testEventRecurrence = datasource.TestHelper.createTestEventRecurrence();
 
         //inserting test objects to db
-        int categoryId = integration.TestHelper.insertTestCategoryToDB(testCategory);
+        int categoryId = datasource.TestHelper.insertTestCategoryToDB(testCategory);
         testCategory.setId(categoryId);
 
         testEvent.setCategory(testCategory);
-        int eventId = integration.TestHelper.insertTestEventToDB(testEvent);
+        int eventId = datasource.TestHelper.insertTestEventToDB(testEvent);
         testEvent.setId(eventId);
 
-        testRecurrenceType = integration.TestHelper.createTestRecurrenceType();
-        int recTypeId = integration.TestHelper.insertTestRecurrenceTypeToDB(testRecurrenceType);
+        testRecurrenceType = datasource.TestHelper.createTestRecurrenceType();
+        int recTypeId = datasource.TestHelper.insertTestRecurrenceTypeToDB(testRecurrenceType);
         testRecurrenceType.setId(recTypeId);
 
         testEventRecurrence.setEventId(testEvent.getId()).setRecurrenceType(testRecurrenceType);
-        int evRecId = integration.TestHelper.insertTestEventRecurrenceToDB(testEventRecurrence);
+        int evRecId = datasource.TestHelper.insertTestEventRecurrenceToDB(testEventRecurrence);
         testEventRecurrence.setId(evRecId);
 
     }
 
     @After
     public void tearDown() {
-        integration.TestHelper.deleteTestEventRecurrenceFromDB(testEventRecurrence.getId());
-        integration.TestHelper.deleteTestRecurrenceTypeFromDB(testRecurrenceType.getId());
-        integration.TestHelper.deleteTestEventFromDB(testEvent.getId());
-        integration.TestHelper.deleteTestCategoryFromDB(testCategory.getId());
+        datasource.TestHelper.deleteTestEventRecurrenceFromDB(testEventRecurrence.getId());
+        datasource.TestHelper.deleteTestRecurrenceTypeFromDB(testRecurrenceType.getId());
+        datasource.TestHelper.deleteTestEventFromDB(testEvent.getId());
+        datasource.TestHelper.deleteTestCategoryFromDB(testCategory.getId());
 
         testRecurrenceType = null;
         testEventRecurrence = null;
@@ -57,7 +57,7 @@ public class EventRecurrenceDAOImplIntegrationTest {
 
     @Test
     public void testInsertEventRecurrence(){
-        integration.TestHelper.deleteTestEventRecurrenceFromDB(testEventRecurrence.getId());
+        datasource.TestHelper.deleteTestEventRecurrenceFromDB(testEventRecurrence.getId());
         int newEvRecId = eventRecurrenceDAO.addEventRecurrence(testEventRecurrence);
         EventRecurrence actualRecurrence = getTestEventRecurrenceFromDB(newEvRecId);
 
@@ -67,13 +67,13 @@ public class EventRecurrenceDAOImplIntegrationTest {
             assertEquals(actualRecurrence.getRepeatInterval(), testEventRecurrence.getRepeatInterval());
             assertNotNull(actualRecurrence.getRepeatEndDate());
         } finally {
-            integration.TestHelper.deleteTestEventRecurrenceFromDB(newEvRecId);
+            datasource.TestHelper.deleteTestEventRecurrenceFromDB(newEvRecId);
         }
     }
 
     @Test //---
     public void testInsertEventRecurrences(){
-//        integration.TestHelper.deleteTestEventRecurrenceFromDB(testEventRecurrence.getId());
+//        datasource.TestHelper.deleteTestEventRecurrenceFromDB(testEventRecurrence.getId());
 //        int newEvRecId = eventRecurrenceDAO.addEventRecurrence(testEventRecurrence);
 //        EventRecurrence actualRecurrence = getTestEventRecurrenceFromDB(newEvRecId);
 //
@@ -83,7 +83,7 @@ public class EventRecurrenceDAOImplIntegrationTest {
 //            assertEquals(actualRecurrence.getRepeatInterval(), testEventRecurrence.getRepeatInterval());
 //            assertNotNull(actualRecurrence.getRepeatEndDate());
 //        } finally {
-//            integration.TestHelper.deleteTestEventRecurrenceFromDB(newEvRecId);
+//            datasource.TestHelper.deleteTestEventRecurrenceFromDB(newEvRecId);
 //        }
     }
 

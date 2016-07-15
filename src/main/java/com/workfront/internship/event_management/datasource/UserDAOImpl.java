@@ -12,12 +12,20 @@ import java.util.List;
  */
 public class UserDAOImpl extends GenericDAO implements UserDAO {
 
-   /* private DataSourceManager dataSourceManager;
-   // Connection conn;
+    private DataSourceManager dataSourceManager;
 
     public UserDAOImpl(DataSourceManager dataSourceManager) throws Exception {
         this.dataSourceManager = dataSourceManager;
-    }*/
+    }
+
+    public UserDAOImpl() {
+        try {
+            this.dataSourceManager = DataSourceManager.getInstance();
+        } catch (IOException | SQLException e) {
+            logger.error("Exception...", e);
+        }
+        ;
+    }
 
 
     @Override
@@ -30,7 +38,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             String sql = "INSERT INTO user (first_name, last_name, username, password, email, phone_number, " +
@@ -59,7 +67,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             //get inserted id
             id = getInsertedId(stmt);
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             logger.error("Exception...", e);
             throw new RuntimeException();
         } finally {
@@ -78,7 +86,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create statement
             String sql = "SELECT * FROM user";
@@ -90,7 +98,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             //get results
             usersList = createUsersListFromRS(rs);
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             logger.error("Exception...", e);
         } finally {
             closeResources(rs, stmt, conn);
@@ -122,7 +130,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             String sqlStr = "UPDATE user SET verified = 1 WHERE id = ?";
@@ -132,7 +140,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             //execute query
             affectedRows = stmt.executeUpdate();
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             logger.error("Exception...", e);
         } finally {
             closeResources(stmt, conn);
@@ -149,7 +157,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             String sqlStr = "UPDATE user SET first_name = ?, last_name = ?, username = ?, password = ?, " +
@@ -167,7 +175,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             //execute query
             affectedRows = stmt.executeUpdate();
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             logger.error("Exception...", e);
         } finally {
             closeResources(stmt, conn);
@@ -195,7 +203,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             String sqlStr = "SELECT * FROM user WHERE " + columnName + " = ?";
@@ -211,7 +219,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
                 user = users.get(0);
             }
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             logger.error("Exception...", e);
         } finally {
             closeResources(rs, stmt, conn);

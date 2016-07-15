@@ -1,4 +1,4 @@
-package integration;
+package datasource;
 
 /**
  * Created by hermine on 7/11/16.
@@ -16,19 +16,19 @@ public class RecurrenceTypeDAOImplIntegrationTest {
 
     @Before
     public void setUp() {
-        testRecurrenceType = integration.TestHelper.createTestRecurrenceType();
-        int recTypeId = integration.TestHelper.insertTestRecurrenceTypeToDB(testRecurrenceType);
+        testRecurrenceType = datasource.TestHelper.createTestRecurrenceType();
+        int recTypeId = datasource.TestHelper.insertTestRecurrenceTypeToDB(testRecurrenceType);
         testRecurrenceType.setId(recTypeId);
     }
 
     @After
     public void tearDown() {
-        integration.TestHelper.deleteTestRecurrenceTypeFromDB(testRecurrenceType.getId());
+        datasource.TestHelper.deleteTestRecurrenceTypeFromDB(testRecurrenceType.getId());
     }
 
     @Test
     public void  testInsertRecurrenceType(){
-        integration.TestHelper.deleteTestRecurrenceTypeFromDB(testRecurrenceType.getId());
+        datasource.TestHelper.deleteTestRecurrenceTypeFromDB(testRecurrenceType.getId());
         int newRecTypeId = recTypeDAO.addRecurrenceType(testRecurrenceType);
         RecurrenceType actualRecType = getTestRecurrenceType(newRecTypeId);
         try {
@@ -36,7 +36,7 @@ public class RecurrenceTypeDAOImplIntegrationTest {
             assertEquals(testRecurrenceType.getIntervalUnit(), testRecurrenceType.getIntervalUnit());
             assertNotNull(testRecurrenceType.getRepeatOptions());
         } finally {
-            integration.TestHelper.deleteTestRecurrenceTypeFromDB(newRecTypeId);
+            datasource.TestHelper.deleteTestRecurrenceTypeFromDB(newRecTypeId);
         }
     }
 

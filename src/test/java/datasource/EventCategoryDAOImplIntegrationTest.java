@@ -1,4 +1,4 @@
-package integration;
+package datasource;
 
 import com.workfront.internship.event_management.datasource.EventCategoryDAO;
 import com.workfront.internship.event_management.datasource.EventCategoryDAOImpl;

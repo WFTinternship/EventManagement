@@ -1,4 +1,4 @@
-package integration;
+package datasource;
 
 /**
  * Created by Hermine Turshujyan 7/15/16.
