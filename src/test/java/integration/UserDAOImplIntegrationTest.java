@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 /**
  * Created by Hermine Turshujyan 7/8/16.
  */
-public class TestUserDAOImpl {
+public class UserDAOImplIntegrationTest {
 
     private static UserDAO userDAO;
     private User testUser;
@@ -33,7 +33,7 @@ public class TestUserDAOImpl {
         testUser = TestHelper.createTestUser();
 
         //insert test user into db, get generated id
-        int userId = userDAO.insertUser(testUser);
+        int userId = userDAO.addUser(testUser);
 
         //set id to test user
         testUser.setId(userId);
@@ -52,13 +52,14 @@ public class TestUserDAOImpl {
         //test user already inserted in setup, read record by userId
         User user = userDAO.getUserById(testUser.getId());
 
+        assertNotNull(user);
         assertUsers(user, testUser);
     }
 
     @Test(expected = RuntimeException.class)
     public void insertUser_Dublicate_Entry() {
         //test user already inserted into db, insert dublicate user
-        userDAO.insertUser(testUser); //username, email fields in db are unique
+        userDAO.addUser(testUser); //username, email fields in db are unique
     }
 
     @Test
@@ -69,8 +70,9 @@ public class TestUserDAOImpl {
         //test method
         List<User> userList = userDAO.getAllUsers();
 
+        assertNotNull(userList);
+        assertFalse(userList.isEmpty());
         assertUserLists(userList, testUserList);
-
     }
 
     @Test
@@ -81,6 +83,7 @@ public class TestUserDAOImpl {
         //test method
         List<User> userList = userDAO.getAllUsers();
 
+        assertNotNull(userList);
         assertTrue(userList.isEmpty());
     }
 
@@ -89,6 +92,7 @@ public class TestUserDAOImpl {
         //testing method
         User user = userDAO.getUserById(testUser.getId());
 
+        assertNotNull(user);
         assertUsers(user, testUser);
     }
 
@@ -105,6 +109,7 @@ public class TestUserDAOImpl {
         //testing method
         User user = userDAO.getUserByUsername(testUser.getUsername());
 
+        assertNotNull(user);
         assertUsers(user, testUser);
     }
 
@@ -121,6 +126,7 @@ public class TestUserDAOImpl {
         //testing method
         User user = userDAO.getUserByEmail(testUser.getEmail());
 
+        assertNotNull(user);
         assertUsers(user, testUser);
     }
 
@@ -138,9 +144,10 @@ public class TestUserDAOImpl {
         userDAO.setVerified(testUser.getId());
 
         //read updated record from db
-        User actualUser = userDAO.getUserById(testUser.getId());
+        User user = userDAO.getUserById(testUser.getId());
 
-        assertTrue(actualUser.isVerified());
+        assertNotNull(user);
+        assertTrue(user.isVerified());
     }
 
     @Test
@@ -155,25 +162,29 @@ public class TestUserDAOImpl {
         //read updated record from db
         User user = userDAO.getUserById(updatedUser.getId());
 
+        assertNotNull(user);
         assertUsers(user, updatedUser);
     }
 
     @Test
-    public void deleteUser() {
+    public void deleteUser_Success() {
         //testing method
-        userDAO.deleteUser(testUser.getId());
+        boolean deleted = userDAO.deleteUser(testUser.getId());
 
         User user = userDAO.getUserById(testUser.getId());
+
+        assertTrue(deleted);
         assertNull(user);
     }
 
     @Test
     public void deleteAllUsers() {
         //testing method
-        userDAO.deleteAllUsers();
+        boolean deleted = userDAO.deleteAllUsers();
 
         List<User> userList = userDAO.getAllUsers();
         assertTrue(userList.isEmpty());
+        assertTrue(deleted);
     }
 
     //helper methods
@@ -202,7 +213,7 @@ public class TestUserDAOImpl {
         User secondTestUser = TestHelper.createTestUser();
 
         //insert second category into db
-        int userId = userDAO.insertUser(secondTestUser);
+        int userId = userDAO.addUser(secondTestUser);
         secondTestUser.setId(userId);
 
         //create test media list

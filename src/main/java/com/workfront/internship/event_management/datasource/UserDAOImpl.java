@@ -12,8 +12,16 @@ import java.util.List;
  */
 public class UserDAOImpl extends GenericDAO implements UserDAO {
 
+   /* private DataSourceManager dataSourceManager;
+   // Connection conn;
+
+    public UserDAOImpl(DataSourceManager dataSourceManager) throws Exception {
+        this.dataSourceManager = dataSourceManager;
+    }*/
+
+
     @Override
-    public int insertUser(User user) {
+    public int addUser(User user) {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -28,7 +36,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             String sql = "INSERT INTO user (first_name, last_name, username, password, email, phone_number, " +
                     "avatar_path, verified, registration_date) VALUES " +
                     "(?, ?, ?, ?, ?, ?, ?, ?, ? )";
-            stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
             stmt.setString(1, user.getFirstName());
             stmt.setString(2, user.getLastName());

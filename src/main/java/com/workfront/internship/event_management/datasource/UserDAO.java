@@ -10,7 +10,7 @@ import java.util.List;
 public interface UserDAO {
 
     //insert record into db
-    int insertUser(User user);
+    int addUser(User user);
 
     //read data from db
     List<User> getAllUsers();
