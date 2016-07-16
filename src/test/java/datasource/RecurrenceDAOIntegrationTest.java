@@ -1,19 +1,19 @@
 package datasource;
 
 /**
- * Created by hermine on 7/13/16.
+ * Created by Hermine Turshujyan 7/13/16.
  */
-public class EventRecurrenceDAOImplIntegrationTest {
+public class RecurrenceDAOIntegrationTest {
 
-  /*  private static EventRecurrenceDAO eventRecurrenceDAO;
-    private EventCategory testCategory;
+  /*  private static RecurrenceDAO eventRecurrenceDAO;
+    private Category testCategory;
     private Event testEvent;
     private RecurrenceType testRecurrenceType;
-    private EventRecurrence testEventRecurrence;
+    private Recurrence testEventRecurrence;
 
     @BeforeClass
     public static void setUpClass() {
-        eventRecurrenceDAO = new EventRecurrenceDAOImpl();
+        eventRecurrenceDAO = new RecurrenceDAOImpl();
     }
 
     @Before
@@ -59,7 +59,7 @@ public class EventRecurrenceDAOImplIntegrationTest {
     public void testInsertEventRecurrence(){
         datasource.TestHelper.deleteTestEventRecurrenceFromDB(testEventRecurrence.getId());
         int newEvRecId = eventRecurrenceDAO.addEventRecurrence(testEventRecurrence);
-        EventRecurrence actualRecurrence = getTestEventRecurrenceFromDB(newEvRecId);
+        Recurrence actualRecurrence = getTestEventRecurrenceFromDB(newEvRecId);
 
         try {
             assertEquals(actualRecurrence.getEventId(), testEventRecurrence.getEventId());
@@ -75,7 +75,7 @@ public class EventRecurrenceDAOImplIntegrationTest {
     public void testInsertEventRecurrences(){
 //        datasource.TestHelper.deleteTestEventRecurrenceFromDB(testEventRecurrence.getId());
 //        int newEvRecId = eventRecurrenceDAO.addEventRecurrence(testEventRecurrence);
-//        EventRecurrence actualRecurrence = getTestEventRecurrenceFromDB(newEvRecId);
+//        Recurrence actualRecurrence = getTestEventRecurrenceFromDB(newEvRecId);
 //
 //        try {
 //            assertEquals(actualRecurrence.getEventId(), testEventRecurrence.getEventId());
@@ -96,7 +96,7 @@ public class EventRecurrenceDAOImplIntegrationTest {
     public void testUpdateEventRecurrence(){
         testEventRecurrence.setRepeatInterval(7).setRepeatOn("New test repeat on string");
         eventRecurrenceDAO.updateEventRecurrence(testEventRecurrence);
-        EventRecurrence actualRecurrence = getTestEventRecurrencesFromDB("id", testEventRecurrence.getId()).get(0);
+        Recurrence actualRecurrence = getTestEventRecurrencesFromDB("id", testEventRecurrence.getId()).get(0);
 
         assertEquals(actualRecurrence.getEventId(), testEventRecurrence.getEventId());
         assertEquals(actualRecurrence.getRepeatOn(), testEventRecurrence.getRepeatOn());

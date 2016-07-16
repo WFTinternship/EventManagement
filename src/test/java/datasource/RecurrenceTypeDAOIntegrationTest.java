@@ -1,9 +1,9 @@
 package datasource;
 
 /**
- * Created by hermine on 7/11/16.
+ * Created by Hermine Turshujyan 7/11/16.
  */
-public class RecurrenceTypeDAOImplIntegrationTest {
+public class RecurrenceTypeDAOIntegrationTest {
 
   /*  private static RecurrenceTypeDAO recTypeDAO = null;
     RecurrenceType testRecurrenceType = null;
@@ -16,7 +16,8 @@ public class RecurrenceTypeDAOImplIntegrationTest {
 
     @Before
     public void setUp() {
-        testRecurrenceType = datasource.TestHelper.createTestRecurrenceType();
+        //create test recurrence type
+        testRecurrenceType = TestHelper.createTestRecurrenceType();
         int recTypeId = datasource.TestHelper.insertTestRecurrenceTypeToDB(testRecurrenceType);
         testRecurrenceType.setId(recTypeId);
     }

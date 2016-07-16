@@ -3,7 +3,7 @@ package com.workfront.internship.event_management.model;
 /**
  * Created by Hermine Turshujyan 7/1/16.
  */
-public class EventInvitation{
+public class Invitation {
 
     private int id;
     private int eventId;
@@ -17,7 +17,7 @@ public class EventInvitation{
         return id;
     }
 
-    public EventInvitation setId(int id) {
+    public Invitation setId(int id) {
         this.id = id;
         return this;
     }
@@ -26,7 +26,7 @@ public class EventInvitation{
         return eventId;
     }
 
-    public EventInvitation setEventId(int eventId) {
+    public Invitation setEventId(int eventId) {
         this.eventId = eventId;
         return this;
     }
@@ -35,7 +35,7 @@ public class EventInvitation{
         return attendeesCount;
     }
 
-    public EventInvitation setAttendeesCount(int attendeesCount) {
+    public Invitation setAttendeesCount(int attendeesCount) {
         this.attendeesCount = attendeesCount;
         return this;
     }
@@ -44,7 +44,7 @@ public class EventInvitation{
         return userResponse;
     }
 
-    public EventInvitation setUserResponse(String userResponse) {
+    public Invitation setUserResponse(String userResponse) {
         this.userResponse = userResponse;
         return this;
     }
@@ -54,7 +54,7 @@ public class EventInvitation{
 
     }
 
-    public EventInvitation setParticipated(boolean participated) {
+    public Invitation setParticipated(boolean participated) {
         this.participated = participated;
         return this;
     }
@@ -63,7 +63,7 @@ public class EventInvitation{
         return userRole;
     }
 
-    public EventInvitation setUserRole(String userRole) {
+    public Invitation setUserRole(String userRole) {
         this.userRole = userRole;
         return this;
     }
@@ -73,7 +73,7 @@ public class EventInvitation{
         return user;
     }
 
-    public EventInvitation setUser(User user) {
+    public Invitation setUser(User user) {
         this.user = user;
         return this;
     }

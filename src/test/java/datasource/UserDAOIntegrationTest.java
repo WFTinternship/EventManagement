@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 /**
  * Created by Hermine Turshujyan 7/8/16.
  */
-public class UserDAOImplIntegrationTest {
+public class UserDAOIntegrationTest {
 
     private static UserDAO userDAO;
     private User testUser;

@@ -1,7 +1,7 @@
 package com.workfront.internship.event_management.datasource;
 
 import com.workfront.internship.event_management.model.RecurrenceType;
-import com.workfront.internship.event_management.model.RepeatOption;
+import com.workfront.internship.event_management.model.RecurrenceOption;
 
 import java.io.IOException;
 import java.sql.*;
@@ -44,8 +44,8 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
                         + "(recurrence_type_id, title) VALUES "
                         + "(?, ?)";
                 stmtInsertRepeatOn = conn.prepareStatement(insertRepeatOnValues);
-                List<RepeatOption> values = recurrenceType.getRepeatOptions();
-                for (RepeatOption option : values) {
+                List<RecurrenceOption> values = recurrenceType.getRepeatOptions();
+                for (RecurrenceOption option : values) {
                     stmtInsertRepeatOn.setInt(1, recTypeId);
                  //   stmtInsertRepeatOn.setString(2, option);
                     stmtInsertRepeatOn.addBatch();

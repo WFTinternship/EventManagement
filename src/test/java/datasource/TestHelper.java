@@ -8,19 +8,19 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by hermine on 7/10/16.
+ * Created by Hermine Turshujyan 7/10/16.
  */
-public class TestHelper {
+class TestHelper {
 
-    public static final String NON_EXISTING_USERNAME = "nonExistingUsername";
-    public static final String NON_EXISTING_EMAIL = "nonExistingEmail@test.com";
-    public static final String NON_EXISTING_MEDIA_TYPE = "Video";
+    static final String NON_EXISTING_USERNAME = "nonExistingUsername";
+    static final String NON_EXISTING_EMAIL = "nonExistingEmail@test.com";
+    static final String NON_EXISTING_MEDIA_TYPE = "Video";
 
-    public static int NON_EXISTING_ID = 12345;
+    static int NON_EXISTING_ID = 12345;
 
 
     //test object creation
-    public static User createTestUser() {
+    static User createTestUser() {
         User testUser = new User();
         testUser.setFirstName("Test FirstName")
                 .setLastName("Test LastName")
@@ -34,15 +34,15 @@ public class TestHelper {
         return testUser;
     }
 
-    public static EventCategory createTestCategory() {
-        EventCategory category = new EventCategory();
+    static Category createTestCategory() {
+        Category category = new Category();
         category.setTitle("Test Category" + uuid())
                 .setDescription("Test Description")
                 .setCreationDate(new Date());
         return category;
     }
 
-    public static Event createTestEvent() {
+    static Event createTestEvent() {
         Event testEvent = new Event();
         testEvent.setTitle("Test title")
                 .setShortDesc("Test short description")
@@ -55,8 +55,8 @@ public class TestHelper {
         return testEvent;
     }
 
-    public static EventInvitation createTestInvitation() {
-        EventInvitation invitation = new EventInvitation();
+    static Invitation createTestInvitation() {
+        Invitation invitation = new Invitation();
         invitation.setUserRole("Member")
                 .setAttendeesCount(1)
                 .setParticipated(false)
@@ -64,8 +64,8 @@ public class TestHelper {
         return invitation;
     }
 
-    public static EventMedia createTestMedia() {
-        EventMedia media = new EventMedia();
+    static Media createTestMedia() {
+        Media media = new Media();
         media.setPath("/event/111/test_path" + uuid() + ".jpg")
                 .setType("Image")
                 .setDescription("Test description")
@@ -73,18 +73,22 @@ public class TestHelper {
         return media;
     }
 
-    public static RecurrenceType createTestRecurrenceType() {
-        List<String> repeatOn = new ArrayList<String>();
-        repeatOn.add("Test reoeat on 1");
-        repeatOn.add("Test reoeat on 2");
+    static RecurrenceOption createTestRecurrenceOption() {
+        RecurrenceOption option = new RecurrenceOption();
+        option.setTitle("Test repeat option" + uuid())
+                .setAbbreviation("RO");
+        return option;
+    }
 
+    static RecurrenceType createTestRecurrenceType() {
         RecurrenceType recType = new RecurrenceType();
-       // recType.setTitle("Test recurrence type").setIntervalUnit("test unit").setRepeatOptions(repeatOn);
+        recType.setTitle("Test recurrence type " + uuid())
+                .setIntervalUnit("test unit");
         return recType;
     }
 
-    public static EventRecurrence createTestEventRecurrence() {
-        EventRecurrence eventRecurrence = new EventRecurrence();
+    static Recurrence createTestEventRecurrence() {
+        Recurrence eventRecurrence = new Recurrence();
         eventRecurrence.setRepeatInterval(2).setRepeatOn("Test RepeatOn string").setRepeatEndDate(new Date());
         return eventRecurrence;
     }

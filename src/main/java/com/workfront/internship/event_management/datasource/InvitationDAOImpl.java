@@ -1,6 +1,6 @@
 package com.workfront.internship.event_management.datasource;
 
-import com.workfront.internship.event_management.model.EventInvitation;
+import com.workfront.internship.event_management.model.Invitation;
 import com.workfront.internship.event_management.model.User;
 
 import java.io.IOException;
@@ -14,10 +14,10 @@ import java.util.List;
 /**
  * Created by hermine on 7/8/16.
  */
-public class EventInvitationDAOImpl extends GenericDAO implements EventInvitationDAO {
+public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
     @Override
-    public int addInvitation(EventInvitation invitation) {
+    public int addInvitation(Invitation invitation) {
 
         Connection conn = null;
         int id = 0;
@@ -37,7 +37,7 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
     }
 
     @Override
-    public int addInvitation(EventInvitation invitation, Connection conn) {
+    public int addInvitation(Invitation invitation, Connection conn) {
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -73,13 +73,13 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
     }
 
     @Override
-    public EventInvitation getInvitationById(int invitationId) {
+    public Invitation getInvitationById(int invitationId) {
 
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
-        EventInvitation invitation = null;
+        Invitation invitation = null;
         String sqlStr = "SELECT * FROM event_invitation LEFT JOIN user " +
                 "ON event_invitation.user_id = user.id " +
                 "WHERE event_invitation.id = ?";
@@ -96,7 +96,7 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
             rs = stmt.executeQuery();
 
             //get results
-            List<EventInvitation> invitationList = createInvitationsFromRS(rs);
+            List<Invitation> invitationList = createInvitationsFromRS(rs);
             if (!invitationList.isEmpty()) {
                 invitation = invitationList.get(0);
             }
@@ -109,13 +109,43 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
     }
 
     @Override
-    public List<EventInvitation> getInvitationsByEventId(int eventId) {
+    public List<Invitation> getAllInvitations() {
 
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
-        List<EventInvitation> invitationsList = null;
+        List<Invitation> invitationsList = null;
+        String sqlStr = "SELECT * FROM event_invitation LEFT JOIN user " +
+                "ON event_invitation.user_id = user.id ";
+        try {
+            //get connection
+            conn = DataSourceManager.getInstance().getConnection();
+
+            //create and initialize statement
+            stmt = conn.prepareStatement(sqlStr);
+
+            //execute query
+            rs = stmt.executeQuery();
+
+            //get results
+            invitationsList = createInvitationsFromRS(rs);
+        } catch (SQLException | IOException e) {
+            logger.error("Exception ", e);
+        } finally {
+            closeResources(rs, stmt, conn);
+        }
+        return invitationsList;
+    }
+
+    @Override
+    public List<Invitation> getInvitationsByEventId(int eventId) {
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        List<Invitation> invitationsList = null;
         String sqlStr = "SELECT * FROM event_invitation LEFT JOIN user " +
                 "ON event_invitation.user_id = user.id " +
                 "WHERE event_invitation.event_id = ?";
@@ -142,13 +172,13 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
     }
 
     @Override
-    public List<EventInvitation> getInvitationsByUserId(int userId) {
+    public List<Invitation> getInvitationsByUserId(int userId) {
 
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
-        List<EventInvitation> invitationsList = null;
+        List<Invitation> invitationsList = null;
         String sqlStr = "SELECT * FROM event_invitation LEFT JOIN user " +
                 "ON event_invitation.user_id = user.id " +
                 "WHERE event_invitation.user_id = ?";
@@ -176,7 +206,7 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
     }
 
     @Override
-    public boolean updateInvitation(EventInvitation invitation) {
+    public boolean updateInvitation(Invitation invitation) {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -228,9 +258,9 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
     }
 
     //helper methods
-    private List<EventInvitation> createInvitationsFromRS(ResultSet rs) throws SQLException {
+    private List<Invitation> createInvitationsFromRS(ResultSet rs) throws SQLException {
 
-        List<EventInvitation> invitationsList = new ArrayList<EventInvitation>();
+        List<Invitation> invitationsList = new ArrayList<Invitation>();
 
         while (rs.next()) {
 
@@ -246,7 +276,7 @@ public class EventInvitationDAOImpl extends GenericDAO implements EventInvitatio
                     .setVerified(rs.getBoolean("verified"))
                     .setRegistrationDate(rs.getTimestamp("registration_date"));
 
-            EventInvitation invitation = new EventInvitation();
+            Invitation invitation = new Invitation();
             invitation.setUser(user)
                     .setId(rs.getInt("event_invitation.id"))
                     .setEventId(rs.getInt("event_id"))

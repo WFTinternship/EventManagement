@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 /**
  * Created by Hermine Turshujyan 7/15/16.
  */
-public class UserDAOImplUnitTest {
+public class UserDAOUnitTest {
 
     private DataSourceManager dataSourceManager;
     private UserDAO userDAO;

@@ -1,23 +1,24 @@
 package com.workfront.internship.event_management.datasource;
 
-import com.workfront.internship.event_management.model.EventCategory;
+import com.workfront.internship.event_management.model.Category;
 
 import java.util.List;
 
 /**
  * Created by Hermine Turshujyan 7/1/16.
  */
-public interface EventCategoryDAO  {
+public interface CategoryDAO {
 
      //insert data into db
-     int addCategory(EventCategory category);
+     int addCategory(Category category);
 
      //read data from db
-     List<EventCategory> getAllCategories();
-     EventCategory getCategoryById(int categoryId);
+     List<Category> getAllCategories();
+
+    Category getCategoryById(int categoryId);
 
      //update data in db
-     boolean updateCategory(EventCategory category);
+     boolean updateCategory(Category category);
 
      //delete data from db
      boolean deleteCategory(int categoryId);

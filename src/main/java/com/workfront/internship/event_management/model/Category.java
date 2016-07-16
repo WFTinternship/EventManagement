@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by Hermine Turshujyan 7/1/16.
  */
-public class EventCategory {
+public class Category {
 
     private int id;
     private String title;
@@ -16,7 +16,7 @@ public class EventCategory {
         return id;
     }
 
-    public EventCategory setId(int id) {
+    public Category setId(int id) {
         this.id = id;
         return this;
     }
@@ -25,7 +25,7 @@ public class EventCategory {
         return title;
     }
 
-    public EventCategory setTitle(String title) {
+    public Category setTitle(String title) {
         this.title = title;
         return this;
     }
@@ -34,7 +34,7 @@ public class EventCategory {
         return description;
     }
 
-    public EventCategory setDescription(String description) {
+    public Category setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -43,7 +43,7 @@ public class EventCategory {
         return creationDate;
     }
 
-    public EventCategory setCreationDate(Date creationDate) {
+    public Category setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
         return this;
     }

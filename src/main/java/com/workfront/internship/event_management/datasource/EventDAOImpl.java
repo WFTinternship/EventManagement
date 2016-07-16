@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by hermine on 7/1/16.
+ * Created by Hermine Turshujyan 7/1/16.
  */
 public class EventDAOImpl extends GenericDAO implements EventDAO {
 
@@ -32,16 +32,16 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
             //insert event organizer
 /*            if (event.getInvitations() != null & event.getInvitations().size() == 1) {
-                EventInvitationDAO invitationDAO = new EventInvitationDAOImpl();
+                InvitationDAO invitationDAO = new InvitationDAOImpl();
                 invitationDAO.addInvitation(event.getInvitations().get(0), conn);
             }
 /*
             //insert event recurrence info
             if (event.getRecurrences() != null) {
-                for (EventRecurrence recurrence : event.getRecurrences()) {
+                for (Recurrence recurrence : event.getRecurrences()) {
                     recurrence.setEventId(eventId);
                 }
-                EventRecurrenceDAO recurrenceDAO = new EventRecurrenceDAOImpl();
+                RecurrenceDAO recurrenceDAO = new RecurrenceDAOImpl();
                 recurrenceDAO.addEventRecurrences(event.getRecurrences(), conn);
             }*/
 
@@ -117,18 +117,18 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             //  event = createEventFromRS(rs);
 
             //get invitations list
-            EventInvitationDAO invitationDAO = new EventInvitationDAOImpl();
-            List<EventInvitation> invitations = invitationDAO.getInvitationsByEventId(eventId);
+            InvitationDAO invitationDAO = new InvitationDAOImpl();
+            List<Invitation> invitations = invitationDAO.getInvitationsByEventId(eventId);
             event.setInvitations(invitations);
 
             //get event recurrence info
-            EventRecurrenceDAO recurrenceDAO = new EventRecurrenceDAOImpl();
-            List<EventRecurrence> recurrences = recurrenceDAO.getEventRecurrencesByEventId(eventId);
+            RecurrenceDAO recurrenceDAO = new RecurrenceDAOImpl();
+            List<Recurrence> recurrences = recurrenceDAO.getEventRecurrencesByEventId(eventId);
             event.setRecurrences(recurrences);
 
             //get media list
-            EventMediaDAO mediaDAO = new EventMediaDAOImpl();
-            List<EventMedia> media = mediaDAO.getMediaByEventId(eventId);
+            MediaDAO mediaDAO = new MediaDAOImpl();
+            List<Media> media = mediaDAO.getMediaByEventId(eventId);
             event.setMedia(media);
 
         } catch (SQLException | IOException e) {
@@ -410,7 +410,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         while (rs.next()) {
 
-            EventCategory category = new EventCategory();
+            Category category = new Category();
             category.setId(rs.getInt("event_category.id"))
                     .setTitle(rs.getString("event_category.title"))
                     .setDescription(rs.getString("event_category.description"))

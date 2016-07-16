@@ -1,6 +1,6 @@
 package com.workfront.internship.event_management.datasource;
 
-import com.workfront.internship.event_management.model.EventCategory;
+import com.workfront.internship.event_management.model.Category;
 
 import java.io.IOException;
 import java.sql.*;
@@ -10,10 +10,10 @@ import java.util.List;
 /**
  * Created by Hermine Turshujyan 7/1/16.
  */
-public class EventCategoryDAOImpl extends GenericDAO implements EventCategoryDAO {
+public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
 
     @Override
-    public int addCategory(EventCategory category) {
+    public int addCategory(Category category) {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -53,12 +53,12 @@ public class EventCategoryDAOImpl extends GenericDAO implements EventCategoryDAO
     }
 
     @Override
-    public List<EventCategory> getAllCategories() {
+    public List<Category> getAllCategories() {
 
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        List<EventCategory> categoriesList = new ArrayList<>();
+        List<Category> categoriesList = new ArrayList<>();
 
         try {
             //get connection
@@ -83,12 +83,12 @@ public class EventCategoryDAOImpl extends GenericDAO implements EventCategoryDAO
     }
 
     @Override
-    public EventCategory getCategoryById(int id) {
+    public Category getCategoryById(int id) {
 
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        EventCategory category = null;
+        Category category = null;
 
         try {
             //acquire connection
@@ -103,7 +103,7 @@ public class EventCategoryDAOImpl extends GenericDAO implements EventCategoryDAO
             rs = stmt.executeQuery();
 
             //get results
-            List<EventCategory> categoryList = createEventCategoryListFromRS(rs);
+            List<Category> categoryList = createEventCategoryListFromRS(rs);
             if (!categoryList.isEmpty()) {
                 category = categoryList.get(0);
             }
@@ -116,7 +116,7 @@ public class EventCategoryDAOImpl extends GenericDAO implements EventCategoryDAO
     }
 
     @Override
-    public boolean updateCategory(EventCategory category) {
+    public boolean updateCategory(Category category) {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -155,12 +155,12 @@ public class EventCategoryDAOImpl extends GenericDAO implements EventCategoryDAO
     }
 
     //helper methods
-    private List<EventCategory> createEventCategoryListFromRS(ResultSet rs) throws SQLException {
+    private List<Category> createEventCategoryListFromRS(ResultSet rs) throws SQLException {
 
-        List<EventCategory> categoryList = new ArrayList<EventCategory>();
+        List<Category> categoryList = new ArrayList<Category>();
 
         while (rs.next()) {
-            EventCategory category = new EventCategory();
+            Category category = new Category();
             category.setId(rs.getInt("id"))
                     .setTitle(rs.getString("title"))
                     .setDescription(rs.getString("description"))

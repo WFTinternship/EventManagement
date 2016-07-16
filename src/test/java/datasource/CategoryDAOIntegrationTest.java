@@ -1,8 +1,8 @@
 package datasource;
 
-import com.workfront.internship.event_management.datasource.EventCategoryDAO;
-import com.workfront.internship.event_management.datasource.EventCategoryDAOImpl;
-import com.workfront.internship.event_management.model.EventCategory;
+import com.workfront.internship.event_management.datasource.CategoryDAO;
+import com.workfront.internship.event_management.datasource.CategoryDAOImpl;
+import com.workfront.internship.event_management.model.Category;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -16,14 +16,14 @@ import static org.junit.Assert.*;
 /**
  * Created by Hermine Turshujyan 7/9/16.
  */
-public class EventCategoryDAOImplIntegrationTest {
+public class CategoryDAOIntegrationTest {
 
-    private static EventCategoryDAO categoryDAO;
-    private EventCategory testCategory;
+    private static CategoryDAO categoryDAO;
+    private Category testCategory;
 
     @BeforeClass
     public static void setUpClass() {
-        categoryDAO = new EventCategoryDAOImpl();
+        categoryDAO = new CategoryDAOImpl();
     }
 
     @Before
@@ -50,7 +50,7 @@ public class EventCategoryDAOImplIntegrationTest {
     @Test
     public void addCategory_Success() {
         //test category already inserted in setup, read record by categoryId
-        EventCategory category = categoryDAO.getCategoryById(testCategory.getId());
+        Category category = categoryDAO.getCategoryById(testCategory.getId());
 
         assertNotNull(category);
         assertEqualCategories(category, testCategory);
@@ -65,10 +65,10 @@ public class EventCategoryDAOImplIntegrationTest {
     @Test
     public void getAllCategories_Found() {
         //create test categoryList, insert into db
-        List<EventCategory> testCategoryList = createTestCategoryList();
+        List<Category> testCategoryList = createTestCategoryList();
 
         //test method
-        List<EventCategory> categoryList = categoryDAO.getAllCategories();
+        List<Category> categoryList = categoryDAO.getAllCategories();
 
         assertNotNull(categoryList);
         assertFalse(categoryList.isEmpty());
@@ -81,7 +81,7 @@ public class EventCategoryDAOImplIntegrationTest {
         categoryDAO.deleteCategory(testCategory.getId());
 
         //test method
-        List<EventCategory> categoryList = categoryDAO.getAllCategories();
+        List<Category> categoryList = categoryDAO.getAllCategories();
 
         assertNotNull(categoryList);
         assertTrue(categoryList.isEmpty());
@@ -90,7 +90,7 @@ public class EventCategoryDAOImplIntegrationTest {
     @Test
     public void getCategoryById_Found() {
         //test method
-        EventCategory category = categoryDAO.getCategoryById(testCategory.getId());
+        Category category = categoryDAO.getCategoryById(testCategory.getId());
 
         assertNotNull(category);
         assertEqualCategories(category, testCategory);
@@ -99,7 +99,7 @@ public class EventCategoryDAOImplIntegrationTest {
     @Test
     public void getCategoryById_Not_Found() {
         //test method
-        EventCategory category = categoryDAO.getCategoryById(TestHelper.NON_EXISTING_ID);
+        Category category = categoryDAO.getCategoryById(TestHelper.NON_EXISTING_ID);
 
         assertNull(category);
     }
@@ -107,14 +107,14 @@ public class EventCategoryDAOImplIntegrationTest {
     @Test
     public void updateCategory_Found() {
         //create new category with the same id
-        EventCategory updatedCategory = TestHelper.createTestCategory();
+        Category updatedCategory = TestHelper.createTestCategory();
         updatedCategory.setId(testCategory.getId());
 
         //test method
         categoryDAO.updateCategory(updatedCategory);
 
         //read updated record from db
-        EventCategory category = categoryDAO.getCategoryById(updatedCategory.getId());
+        Category category = categoryDAO.getCategoryById(updatedCategory.getId());
 
         assertNotNull(category);
         assertEqualCategories(category, updatedCategory);
@@ -123,7 +123,7 @@ public class EventCategoryDAOImplIntegrationTest {
     @Test
     public void updateCategory_Not_Found() {
         //create new category with non-existing id
-        EventCategory updatedCategory = TestHelper.createTestCategory();
+        Category updatedCategory = TestHelper.createTestCategory();
 
         //test method
         boolean updated = categoryDAO.updateCategory(updatedCategory);
@@ -136,7 +136,7 @@ public class EventCategoryDAOImplIntegrationTest {
         //testing method
         boolean deleted = categoryDAO.deleteCategory(testCategory.getId());
 
-        EventCategory category = categoryDAO.getCategoryById(testCategory.getId());
+        Category category = categoryDAO.getCategoryById(testCategory.getId());
 
         assertTrue(deleted);
         assertNull(category);
@@ -155,7 +155,7 @@ public class EventCategoryDAOImplIntegrationTest {
         //testing method
         boolean deleted = categoryDAO.deleteAllCategories();
 
-        List<EventCategory> categoryList = categoryDAO.getAllCategories();
+        List<Category> categoryList = categoryDAO.getAllCategories();
 
         assertNotNull(categoryList);
         assertTrue(categoryList.isEmpty());
@@ -175,30 +175,30 @@ public class EventCategoryDAOImplIntegrationTest {
 
 
     //helper methods
-    private void assertEqualCategories(EventCategory expectedCategory, EventCategory actualCategory) {
+    private void assertEqualCategories(Category expectedCategory, Category actualCategory) {
         assertEquals(expectedCategory.getId(), actualCategory.getId());
         assertEquals(expectedCategory.getTitle(), actualCategory.getTitle());
         assertEquals(expectedCategory.getDescription(), actualCategory.getDescription());
         assertNotNull(expectedCategory.getCreationDate());
     }
 
-    private void assertCategoryLists(List<EventCategory> expectedList, List<EventCategory> actualList) {
+    private void assertCategoryLists(List<Category> expectedList, List<Category> actualList) {
         assertEquals(actualList.size(), expectedList.size());
         for(int i = 0; i < actualList.size(); i++) {
             assertEqualCategories(actualList.get(i), expectedList.get(i));
         }
     }
 
-    private List<EventCategory> createTestCategoryList(){
+    private List<Category> createTestCategoryList() {
         //create second test category
-        EventCategory secondTestCategory = TestHelper.createTestCategory();
+        Category secondTestCategory = TestHelper.createTestCategory();
 
         //insert second category into db
         int categoryId = categoryDAO.addCategory(secondTestCategory);
         secondTestCategory.setId(categoryId);
 
         //create test media list
-        List<EventCategory> testCategoryList = new ArrayList<>();
+        List<Category> testCategoryList = new ArrayList<>();
         testCategoryList.add(testCategory);
         testCategoryList.add(secondTestCategory);
 

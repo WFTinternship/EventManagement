@@ -3,14 +3,14 @@ package com.workfront.internship.event_management.model;
 import java.util.List;
 
 /**
- * Created by hermine on 7/10/16.
+ * Created by Hermine Turshujyan 7/10/16.
  */
 public class RecurrenceType {
 
     private int id;
     private String title;
     private String intervalUnit;
-    private List<RepeatOption> repeatOptions;
+    private List<RecurrenceOption> repeatOptions;
 
     public RecurrenceType setId(int id) {
         this.id = id;
@@ -40,12 +40,12 @@ public class RecurrenceType {
     }
 
 
-    public RecurrenceType setRepeatOptions(List<RepeatOption> repeatOptions) {
+    public RecurrenceType setRepeatOptions(List<RecurrenceOption> repeatOptions) {
         this.repeatOptions = repeatOptions;
         return this;
     }
 
-    public List<RepeatOption> getRepeatOptions() {
+    public List<RecurrenceOption> getRepeatOptions() {
         return repeatOptions;
     }
 

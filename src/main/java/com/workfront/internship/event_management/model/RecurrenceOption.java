@@ -3,7 +3,7 @@ package com.workfront.internship.event_management.model;
 /**
  * Created by Hermine Turshujyan 7/14/16.
  */
-public class RepeatOption {
+public class RecurrenceOption {
 
     private int id;
     private int recurrenceTypeId;
@@ -14,7 +14,7 @@ public class RepeatOption {
         return id;
     }
 
-    public RepeatOption setId(int id) {
+    public RecurrenceOption setId(int id) {
         this.id = id;
         return this;
     }
@@ -23,7 +23,7 @@ public class RepeatOption {
         return recurrenceTypeId;
     }
 
-    public RepeatOption setRecurrenceTypeId(int recurrenceTypeId) {
+    public RecurrenceOption setRecurrenceTypeId(int recurrenceTypeId) {
         this.recurrenceTypeId = recurrenceTypeId;
         return this;
     }
@@ -32,7 +32,7 @@ public class RepeatOption {
         return title;
     }
 
-    public RepeatOption setTitle(String title) {
+    public RecurrenceOption setTitle(String title) {
         this.title = title;
         return this;
     }
@@ -41,7 +41,7 @@ public class RepeatOption {
         return abbreviation;
     }
 
-    public RepeatOption setAbbreviation(String abbreviation) {
+    public RecurrenceOption setAbbreviation(String abbreviation) {
         this.abbreviation = abbreviation;
         return this;
     }

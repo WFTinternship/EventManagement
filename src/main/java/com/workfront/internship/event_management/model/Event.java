@@ -16,15 +16,15 @@ public class Event {
     private float lng;
     private String filePath;
     private String imagePath;
-    private EventCategory category;
+    private Category category;
     private DateRange dateRange;
     private boolean publicAccessed;
     private boolean guestsAllowed;
     private Date creationDate;
     private Date lastModifiedDate;
-    private List<EventRecurrence> recurrences;
-    private List<EventInvitation> invitations;
-    private List<EventMedia> media;
+    private List<Recurrence> recurrences;
+    private List<Invitation> invitations;
+    private List<Media> media;
 
     public int getId() {
         return id;
@@ -107,11 +107,11 @@ public class Event {
         return this;
     }
 
-    public EventCategory getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public Event setCategory(EventCategory category) {
+    public Event setCategory(Category category) {
         this.category = category;
         return this;
     }
@@ -124,11 +124,12 @@ public class Event {
         this.dateRange = dateRange;
         return this;
     }
-    public List<EventRecurrence> getRecurrences() {
+
+    public List<Recurrence> getRecurrences() {
         return recurrences;
     }
 
-    public Event setRecurrences(List<EventRecurrence> recurrences) {
+    public Event setRecurrences(List<Recurrence> recurrences) {
         this.recurrences = recurrences;
         return this;
     }
@@ -171,20 +172,20 @@ public class Event {
     }
 
 
-    public List<EventInvitation> getInvitations() {
+    public List<Invitation> getInvitations() {
         return invitations;
     }
 
-    public Event setInvitations(List<EventInvitation> invitations) {
+    public Event setInvitations(List<Invitation> invitations) {
         this.invitations = invitations;
         return this;
     }
 
-    public List<EventMedia> getMedia() {
+    public List<Media> getMedia() {
         return media;
     }
 
-    public Event setMedia(List<EventMedia> media) {
+    public Event setMedia(List<Media> media) {
         this.media = media;
         return this;
     }

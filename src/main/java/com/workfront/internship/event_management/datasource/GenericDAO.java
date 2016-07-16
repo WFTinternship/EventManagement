@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.sql.*;
 
 /**
- * Created by hermine on 7/1/16.
+ * Created by Hermine Turshujyan 7/1/16.
  */
 
 class GenericDAO {
@@ -14,9 +14,9 @@ class GenericDAO {
     protected static final Logger logger = Logger.getLogger(GenericDAO.class);
     // TODO: read more about log4j framework
 
-     void closeResources(ResultSet rs, Statement stmt, Connection conn) {
+    void closeResources(ResultSet rs, Statement stmt, Connection conn) {
         try {
-            if(rs != null) {
+            if (rs != null) {
                 rs.close();
             }
         } catch (SQLException e) {
@@ -24,7 +24,7 @@ class GenericDAO {
         }
 
         try {
-            if(stmt != null) {
+            if (stmt != null) {
                 stmt.close();
             }
         } catch (SQLException e) {
@@ -32,7 +32,7 @@ class GenericDAO {
         }
 
         try {
-            if(conn != null) {
+            if (conn != null) {
                 conn.close();
             }
         } catch (SQLException e) {
@@ -40,27 +40,27 @@ class GenericDAO {
         }
     }
 
-     void closeResources(Statement stmt, Connection conn) {
+    void closeResources(Statement stmt, Connection conn) {
         closeResources(null, stmt, conn);
     }
 
-     void closeResources(Connection conn) {
+    void closeResources(Connection conn) {
         closeResources(null, conn);
     }
 
-     void closeResources(Statement stmt) {
+    void closeResources(Statement stmt) {
         closeResources(null, stmt, null);
     }
 
-     void closeResources(ResultSet rs) {
+    void closeResources(ResultSet rs) {
         closeResources(rs, null, null);
     }
 
-     void closeResources(ResultSet rs, Statement stmt) {
+    void closeResources(ResultSet rs, Statement stmt) {
         closeResources(rs, stmt, null);
     }
 
-     int getInsertedId(Statement stmt) throws  SQLException{
+    int getInsertedId(Statement stmt) throws SQLException {
 
         int id = 0;
         ResultSet rs = stmt.getGeneratedKeys();
@@ -70,9 +70,9 @@ class GenericDAO {
         return id;
     }
 
-     boolean deleteRecordById(String tableName, int id) {
-         return deleteRecord(tableName, "id", id);
-     }
+    boolean deleteRecordById(String tableName, int id) {
+        return deleteRecord(tableName, "id", id);
+    }
 
     boolean deleteAllRecords(String tableName) {
 
@@ -99,7 +99,7 @@ class GenericDAO {
         return affectedRows != 0;
     }
 
-    public boolean deleteRecord(String tableName, String columnName, int id) {
+    boolean deleteRecord(String tableName, String columnName, int id) {
 
         Connection conn = null;
         PreparedStatement stmt = null;

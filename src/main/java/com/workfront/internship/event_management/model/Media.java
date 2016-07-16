@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by Hermine Turshujyan 7/1/16.
  */
-public class EventMedia {
+public class Media {
 
     private int id;
     private String type;
@@ -19,7 +19,7 @@ public class EventMedia {
         return id;
     }
 
-    public EventMedia setId(int id) {
+    public Media setId(int id) {
         this.id = id;
         return this;
     }
@@ -28,7 +28,7 @@ public class EventMedia {
         return type;
     }
 
-    public EventMedia setType(String type) {
+    public Media setType(String type) {
         this.type = type;
         return this;
     }
@@ -37,7 +37,7 @@ public class EventMedia {
         return path;
     }
 
-    public EventMedia setPath(String path) {
+    public Media setPath(String path) {
         this.path = path;
         return this;
     }
@@ -46,7 +46,7 @@ public class EventMedia {
         return description;
     }
 
-    public EventMedia setDescription(String description) {
+    public Media setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -55,7 +55,7 @@ public class EventMedia {
         return eventId;
     }
 
-    public EventMedia setEventId(int eventId) {
+    public Media setEventId(int eventId) {
         this.eventId = eventId;
         return this;
     }
@@ -64,7 +64,7 @@ public class EventMedia {
         return uploaderId;
     }
 
-    public EventMedia setUploaderId(int uploaderId) {
+    public Media setUploaderId(int uploaderId) {
         this.uploaderId = uploaderId;
         return this;
     }
@@ -73,7 +73,7 @@ public class EventMedia {
         return uploadDate;
     }
 
-    public EventMedia setUploadDate(Date uploadDate) {
+    public Media setUploadDate(Date uploadDate) {
         this.uploadDate = uploadDate;
         return this;
     }

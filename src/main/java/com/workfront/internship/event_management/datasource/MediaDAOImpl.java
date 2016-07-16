@@ -1,6 +1,6 @@
 package com.workfront.internship.event_management.datasource;
 
-import com.workfront.internship.event_management.model.EventMedia;
+import com.workfront.internship.event_management.model.Media;
 
 import java.io.IOException;
 import java.sql.*;
@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by hermine on 7/2/16.
+ * Created by Hermine Turshujyan 7/2/16.
  */
-public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
+public class MediaDAOImpl extends GenericDAO implements MediaDAO {
 
     @Override
-    public int addMedia(EventMedia media) {
+    public int addMedia(Media media) {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -54,9 +54,9 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
     }
 
     @Override
-    public EventMedia getMediaById(int mediaId) {
+    public Media getMediaById(int mediaId) {
 
-        List<EventMedia> mediaList = getMediaByField("id", mediaId);
+        List<Media> mediaList = getMediaByField("id", mediaId);
 
         if (!mediaList.isEmpty()) {
             return mediaList.get(0);
@@ -66,23 +66,23 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
     }
 
     @Override
-    public List<EventMedia> getMediaByType(String type) {
+    public List<Media> getMediaByType(String type) {
         return getMediaByField("type", type);
     }
 
     @Override
-    public List<EventMedia> getMediaByUploaderId(int uploaderId) {
+    public List<Media> getMediaByUploaderId(int uploaderId) {
         return getMediaByField("uploader_id", uploaderId);
     }
 
     @Override
-    public List<EventMedia> getMediaByEventId(int eventId) {
+    public List<Media> getMediaByEventId(int eventId) {
 
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
-        List<EventMedia> mediaList = new ArrayList<>();
+        List<Media> mediaList = new ArrayList<>();
 
         try {
             //get connection
@@ -108,12 +108,12 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
     }
 
     @Override
-    public List<EventMedia> getAllMedia() {
+    public List<Media> getAllMedia() {
 
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        List<EventMedia> mediaList = new ArrayList<>();
+        List<Media> mediaList = new ArrayList<>();
 
         try {
             //acquire connection
@@ -176,13 +176,13 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
     }
 
     // helper methods
-    private List<EventMedia> getMediaByField(String columnName, Object columnValue) {
+    private List<Media> getMediaByField(String columnName, Object columnValue) {
 
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
-        List<EventMedia> mediaList = new ArrayList<>();
+        List<Media> mediaList = new ArrayList<>();
 
         try {
             //get connection
@@ -207,13 +207,13 @@ public class EventMediaDAOImpl extends GenericDAO implements EventMediaDAO {
         return mediaList;
     }
 
-    private List<EventMedia> createMediaListFromRS(ResultSet rs) throws SQLException {
+    private List<Media> createMediaListFromRS(ResultSet rs) throws SQLException {
 
-        List<EventMedia> mediaList = new ArrayList<EventMedia>();
+        List<Media> mediaList = new ArrayList<Media>();
 
         while (rs.next()) {
 
-            EventMedia media = new EventMedia();
+            Media media = new Media();
             media.setId(rs.getInt("id"))
                     .setEventId(rs.getInt("event_id"))
                     .setType(rs.getString("type"))
