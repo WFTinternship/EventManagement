@@ -2,9 +2,7 @@ package datasource;
 
 import com.workfront.internship.event_management.model.*;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -81,10 +79,10 @@ class TestHelper {
     }
 
     static RecurrenceType createTestRecurrenceType() {
-        RecurrenceType recType = new RecurrenceType();
-        recType.setTitle("Test recurrence type " + uuid())
+        RecurrenceType recurrenceType = new RecurrenceType();
+        recurrenceType.setTitle("Test recurrence type " + uuid())
                 .setIntervalUnit("test unit");
-        return recType;
+        return recurrenceType;
     }
 
     static Recurrence createTestEventRecurrence() {

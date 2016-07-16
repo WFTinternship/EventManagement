@@ -9,9 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by hermine on 7/11/16.
@@ -22,8 +20,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
     public int addRecurrenceType(RecurrenceType recurrenceType) {
 
         Connection conn = null;
-        PreparedStatement stmtInsertRecType = null;
-        PreparedStatement stmtInsertRepeatOn = null;
+        PreparedStatement stmt = null;
         ResultSet rs = null;
 
         int id = 0;
@@ -31,27 +28,32 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
         try {
             //get connection
             conn = DataSourceManager.getInstance().getConnection();
+
+            //start transaction
             conn.setAutoCommit(false);
 
             //create and initialize statement
-            String insertRecType = "INSERT INTO recurrence_type "
+            String query = "INSERT INTO recurrence_type "
                     + "(title, interval_unit) values (?, ?) ";
-            stmtInsertRecType = conn.prepareStatement(insertRecType, PreparedStatement.RETURN_GENERATED_KEYS);
-            stmtInsertRecType.setString(1, recurrenceType.getTitle());
-            stmtInsertRecType.setString(2, recurrenceType.getIntervalUnit());
+            stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, recurrenceType.getTitle());
+            stmt.setString(2, recurrenceType.getIntervalUnit());
 
             //execute query
-            stmtInsertRecType.executeUpdate();
+            stmt.executeUpdate();
 
             //get generated id
-            id = getInsertedId(stmtInsertRecType);
+            id = getInsertedId(stmt);
 
-            if (recurrenceType.getRepeatOptions() != null) {
+            //add data into recurrence_option table
+            if (recurrenceType.getRecurrenceOptions() != null) {
+
                 RecurrenceOptionDAO recurrenceOptionDAO = new RecurrenceOptionDAOImpl();
-                List<RecurrenceOption> options = recurrenceType.getRepeatOptions();
+                List<RecurrenceOption> options = recurrenceType.getRecurrenceOptions();
                 for (RecurrenceOption option : options) {
-                    recurrenceOptionDAO.addRecurrenceOption(option);
+                    recurrenceOptionDAO.addRecurrenceOption(option, conn);
                 }
+
             }
             conn.commit();
         } catch (IOException e) {
@@ -60,18 +62,17 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
             try {
                 conn.rollback();
             } catch (SQLException re) {
-                logger.error("Exception ", e);
+                logger.error("Transaction failed! ", e);
             }
         } finally {
-            closeResources(rs);
-            closeResources(stmtInsertRepeatOn);
-            closeResources(stmtInsertRecType);
+            closeResources(rs, stmt, conn);
         }
         return id;
     }
 
    @Override
    public List<RecurrenceType> getAllRecurrenceTypes() {
+
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -79,12 +80,19 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
         List<RecurrenceType> recurrenceTypeList = null;
 
         try {
+            //get connection
             conn = DataSourceManager.getInstance().getConnection();
-            String query = "SELECT * FROM recurrence_type LEFT JOIN repeat_on_value "
-                    + "ON recurrence_type.id = repeat_on_value.recurrence_type_id";
+
+            //create and initialize statement
+            String query = "SELECT * FROM recurrence_type ";
             stmt = conn.prepareStatement(query);
+
+            //execute query
             rs = stmt.executeQuery();
-            recurrenceTypeList = createRecurrenceTypesFromRS(rs);
+
+            //get results
+            recurrenceTypeList = createRecurrenceTypeListFromRS(rs);
+
         } catch (IOException | SQLException e) {
                 logger.error("Exception ", e);
         } finally {
@@ -103,20 +111,66 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
         RecurrenceType recurrenceType = null;
 
         try {
+            //get connection
             conn = DataSourceManager.getInstance().getConnection();
-            String query = "SELECT * FROM recurrence_type LEFT JOIN repeat_on_value "
-                    + "ON recurrence_type.id = repeat_on_value.recurrence_type_id "
+
+            //create and initialize statement
+            String query = "SELECT * FROM recurrence_type "
                     + "WHERE recurrence_type.id = ?";
             stmt = conn.prepareStatement(query);
             stmt.setInt(1, id);
+
+            //execute query
             rs = stmt.executeQuery();
-            recurrenceType = createRecurrenceTypeFromRS(rs);
+
+            //get result
+            List<RecurrenceType> recurrenceTypes = createRecurrenceTypeListFromRS(rs);
+            if (recurrenceTypes != null & recurrenceTypes.size() == 1) {
+                recurrenceType = recurrenceTypes.get(0);
+            }
+
+            //read recurrenceType options from another table
+            RecurrenceOptionDAO recurrenceOptionDAO = new RecurrenceOptionDAOImpl();
+            List<RecurrenceOption> recurrenceOptionList = recurrenceOptionDAO.getRecurrenceOptionsByRecurrenceType(id);
+
+            //set result to recurrenceType object
+            recurrenceType.setRecurrenceOptions(recurrenceOptionList);
+
         } catch (SQLException | IOException e) {
             logger.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
         return recurrenceType;
+    }
+
+    @Override
+    public boolean updateRecurrenceType(RecurrenceType recurrenceType) {
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        int affectedRows = 0;
+
+        try {
+            //get connection
+            conn = DataSourceManager.getInstance().getConnection();
+
+            //create and initialize statement
+            String sqlStr = "UPDATE recurrence_type SET title = ?, interval_unit = ? WHERE id = ?";
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setString(1, recurrenceType.getTitle());
+            stmt.setString(2, recurrenceType.getIntervalUnit());
+            stmt.setInt(3, recurrenceType.getId());
+
+            //execute query
+            affectedRows = stmt.executeUpdate();
+
+        } catch (SQLException | IOException e) {
+            logger.error("Exception...", e);
+        } finally {
+            closeResources(stmt, conn);
+        }
+        return affectedRows != 0;
     }
 
     @Override
@@ -131,49 +185,19 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
 
     //helper methods
-    private List<RecurrenceType> createRecurrenceTypesFromRS(ResultSet rs) throws SQLException {
-        Map<Integer, RecurrenceType> recurrenceTypeMap = new HashMap<Integer, RecurrenceType>();
-        while (rs.next()) {
-            Integer recTypeId = rs.getInt("id");
+    private List<RecurrenceType> createRecurrenceTypeListFromRS(ResultSet rs) throws SQLException {
 
-            if (!recurrenceTypeMap.containsKey(recTypeId)) {
-                RecurrenceType recType = new RecurrenceType();
-                recType.setId(rs.getInt("id"))
+        List<RecurrenceType> recurrenceTypeList = new ArrayList<>();
+
+        while (rs.next()) {
+            RecurrenceType recurrenceType = new RecurrenceType();
+            recurrenceType.setId(rs.getInt("id"))
                         .setTitle(rs.getString("title"))
                         .setIntervalUnit(rs.getString("interval_unit"));
 
-                if (rs.getString("repeat_on_value.title") != null) {
-                    List<String> repeatOnValues = new ArrayList<String>();
-                    repeatOnValues.add(rs.getString("repeat_on_value.title"));
-                  //  recType.setRepeatOptions(repeatOnValues);
-                }
-
-                recurrenceTypeMap.put(recTypeId, recType);
-            } else {
-                RecurrenceType recType = recurrenceTypeMap.get(recTypeId);
-              //  recType.getRepeatOptions().add(rs.getString("repeat_on_value.title"));
-            }
+            recurrenceTypeList.add(recurrenceType);
         }
-        return new ArrayList<RecurrenceType>(recurrenceTypeMap.values());
+        return recurrenceTypeList;
     }
 
-    private RecurrenceType createRecurrenceTypeFromRS(ResultSet rs) throws SQLException {
-        RecurrenceType recType = null;
-        while (rs.next()) {
-            if (recType == null) {
-                recType = new RecurrenceType();
-                recType.setId(rs.getInt("id"))
-                        .setTitle(rs.getString("title"))
-                        .setIntervalUnit(rs.getString("interval_unit"));
-                if (rs.getString("repeat_on_value.title") != null) {
-                    List<String> repeatOnValues = new ArrayList<String>();
-                    repeatOnValues.add(rs.getString("repeat_on_value.title"));
-                   // recType.setRepeatOptions(repeatOnValues);
-                }
-            } else {
-              //  recType.getRepeatOptions().add(rs.getString("repeat_on_value.title"));
-            }
-        }
-        return recType;
-    }
 }

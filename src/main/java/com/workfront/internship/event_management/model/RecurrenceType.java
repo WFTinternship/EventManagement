@@ -10,7 +10,7 @@ public class RecurrenceType {
     private int id;
     private String title;
     private String intervalUnit;
-    private List<RecurrenceOption> repeatOptions;
+    private List<RecurrenceOption> recurrenceOptions;
 
     public RecurrenceType setId(int id) {
         this.id = id;
@@ -40,13 +40,13 @@ public class RecurrenceType {
     }
 
 
-    public RecurrenceType setRepeatOptions(List<RecurrenceOption> repeatOptions) {
-        this.repeatOptions = repeatOptions;
+    public RecurrenceType setRecurrenceOptions(List<RecurrenceOption> recurrenceOptions) {
+        this.recurrenceOptions = recurrenceOptions;
         return this;
     }
 
-    public List<RecurrenceOption> getRepeatOptions() {
-        return repeatOptions;
+    public List<RecurrenceOption> getRecurrenceOptions() {
+        return recurrenceOptions;
     }
 
 

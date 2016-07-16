@@ -13,13 +13,16 @@ import java.util.List;
  */
 public class RecurrenceDAOImpl extends GenericDAO implements RecurrenceDAO {
 
-    //Create
     @Override
     public int addEventRecurrence(Recurrence recurrence) {
+
         Connection conn = null;
         int id = 0;
+
         try {
+            //get connection
             conn = DataSourceManager.getInstance().getConnection();
+
             id = addEventRecurrence(recurrence, conn);
         } catch (SQLException | IOException e) {
             logger.error("Exception ", e);

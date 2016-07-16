@@ -16,18 +16,34 @@ import java.util.List;
 public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOptionDAO {
 
     @Override
-    public int addRecurrenceOption(RecurrenceOption option) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
+    public int addRecurrenceOption(RecurrenceOption recurrenceOption) {
 
-        String query = "INSERT INTO repeat_option " +
-                "(recurrence_type_id, title, abbreviation) VALUES (?, ?, ?)";
+        Connection conn = null;
         int id = 0;
 
         try {
             //get connection
             conn = DataSourceManager.getInstance().getConnection();
 
+            //insert recurrenceOption and get generated id
+            id = addRecurrenceOption(recurrenceOption, conn);
+
+        } catch (SQLException | IOException e) {
+            logger.error("Exception ", e);
+        } finally {
+            closeResources(conn);
+        }
+        return id;
+    }
+
+    @Override
+    public int addRecurrenceOption(RecurrenceOption option, Connection conn) {
+
+        PreparedStatement stmt = null;
+        int id = 0;
+        String query = "INSERT INTO recurrence_option " +
+                "(recurrence_type_id, title, abbreviation) VALUES (?, ?, ?)";
+        try {
             //create and initialize statement
             stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, option.getRecurrenceTypeId());
@@ -39,11 +55,12 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
 
             //get generated id
             id = getInsertedId(stmt);
-
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             logger.error("Exception...", e);
+
+            throw new RuntimeException(e);
         } finally {
-            closeResources(stmt, conn);
+            closeResources(stmt);
         }
         return id;
     }
