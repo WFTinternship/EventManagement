@@ -35,6 +35,7 @@ public class RecurrenceOptionDAOIntegrationTest {
 
     @Before
     public void setUp() {
+
         //create test recurrence type and option objects
         testRecurrenceType = TestHelper.createTestRecurrenceType();
         testRecurrenceOption = TestHelper.createTestRecurrenceOption();
@@ -43,6 +44,7 @@ public class RecurrenceOptionDAOIntegrationTest {
         int recurrenceTypeId = recurrenceTypeDAO.addRecurrenceType(testRecurrenceType);
         testRecurrenceType.setId(recurrenceTypeId);
 
+        testRecurrenceOption.setRecurrenceTypeId(recurrenceTypeId);
         int optionId = recurrenceOptionDAO.addRecurrenceOption(testRecurrenceOption);
         testRecurrenceOption.setId(optionId);
     }
@@ -55,11 +57,11 @@ public class RecurrenceOptionDAOIntegrationTest {
 
         //delete test object
         testRecurrenceOption = null;
+        testRecurrenceType = null;
     }
 
     @Test
     public void addRecurrenceOption_Success() {
-
         //test record already inserted in setup, read record from db
         RecurrenceOption recurrenceOption = recurrenceOptionDAO.getRecurrenceOption(testRecurrenceOption.getId());
 
@@ -72,6 +74,29 @@ public class RecurrenceOptionDAOIntegrationTest {
 
         //test record already inserted into db, insert dublicate entry
         recurrenceOptionDAO.addRecurrenceOption(testRecurrenceOption);
+    }
+
+    @Test
+    public void getAllRecurrenceOptions_Found() {
+        //test method
+        List<RecurrenceOption> recurrenceOption = recurrenceOptionDAO.getAllRecurrenceOptions();
+
+        assertNotNull(recurrenceOption);
+        assertFalse(recurrenceOption.isEmpty());
+        assertEquals(recurrenceOption.size(), 1);
+        assertEqualRepeatOptions(recurrenceOption.get(0), testRecurrenceOption);
+    }
+
+    @Test
+    public void getAllRecurrenceOptions_Not_Found() {
+        //delete inserted tet record
+        recurrenceOptionDAO.deleteRecurrenceOption(testRecurrenceOption.getId());
+
+        //test method
+        List<RecurrenceOption> recurrenceOption = recurrenceOptionDAO.getAllRecurrenceOptions();
+
+        assertNotNull(recurrenceOption);
+        assertTrue(recurrenceOption.isEmpty());
     }
 
     @Test
@@ -89,6 +114,26 @@ public class RecurrenceOptionDAOIntegrationTest {
         RecurrenceOption recurrenceOption = recurrenceOptionDAO.getRecurrenceOption(TestHelper.NON_EXISTING_ID);
 
         assertNull(recurrenceOption);
+    }
+
+    @Test
+    public void getRecurrenceOptionsByRecurrenceType_Found() {
+        //test method
+        List<RecurrenceOption> recurrenceOption = recurrenceOptionDAO.getRecurrenceOptionsByRecurrenceType(testRecurrenceType.getId());
+
+        assertNotNull(recurrenceOption);
+        assertFalse(recurrenceOption.isEmpty());
+        assertEquals(recurrenceOption.size(), 1);
+        assertEqualRepeatOptions(recurrenceOption.get(0), testRecurrenceOption);
+    }
+
+    @Test
+    public void getRecurrenceOptionsByRecurrenceType_Not_Found() {
+        //test method
+        List<RecurrenceOption> recurrenceOption = recurrenceOptionDAO.getRecurrenceOptionsByRecurrenceType(TestHelper.NON_EXISTING_ID);
+
+        assertNotNull(recurrenceOption);
+        assertTrue(recurrenceOption.isEmpty());
     }
 
     @Test

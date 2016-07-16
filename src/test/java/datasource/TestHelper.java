@@ -2,7 +2,9 @@ package datasource;
 
 import com.workfront.internship.event_management.model.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -76,6 +78,24 @@ class TestHelper {
         option.setTitle("Test repeat option" + uuid())
                 .setAbbreviation("RO");
         return option;
+    }
+
+    static RecurrenceType createTestRecurrenceTypeWithOptions() {
+
+        //create recurrence type option list
+        RecurrenceOption option1 = createTestRecurrenceOption();
+        RecurrenceOption option2 = createTestRecurrenceOption();
+        List<RecurrenceOption> recurrenceOptionList = new ArrayList<>();
+        recurrenceOptionList.add(option1);
+        recurrenceOptionList.add(option2);
+
+        //create recurrence type
+        RecurrenceType recurrenceType = new RecurrenceType();
+        recurrenceType.setTitle("Test recurrence type " + uuid())
+                .setIntervalUnit("test unit")
+                .setRecurrenceOptions(recurrenceOptionList);
+
+        return recurrenceType;
     }
 
     static RecurrenceType createTestRecurrenceType() {

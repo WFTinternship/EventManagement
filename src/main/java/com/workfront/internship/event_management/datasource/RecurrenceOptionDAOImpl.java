@@ -78,14 +78,14 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
             conn = DataSourceManager.getInstance().getConnection();
 
             //create and initialize statement
-            String query = "SELECT * FROM repeat_option ";
+            String query = "SELECT * FROM recurrence_option ";
             stmt = conn.prepareStatement(query);
 
             //execute query
             rs = stmt.executeQuery();
 
             //get results
-            optionList = createRepeatOptionListFromRS(rs);
+            optionList = createRecurrenceOptionListFromRS(rs);
 
         } catch (SQLException | IOException e) {
             logger.error("Exception...", e);
@@ -107,7 +107,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
             conn = DataSourceManager.getInstance().getConnection();
 
             //create and initialize statement
-            String query = "SELECT * FROM repeat_option WHERE id = ?";
+            String query = "SELECT * FROM recurrence_option WHERE id = ?";
             stmt = conn.prepareStatement(query);
             stmt.setInt(1, optionId);
 
@@ -115,7 +115,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
             rs = stmt.executeQuery();
 
             //get results
-            List<RecurrenceOption> optionsList = createRepeatOptionListFromRS(rs);
+            List<RecurrenceOption> optionsList = createRecurrenceOptionListFromRS(rs);
             if (!optionsList.isEmpty()) {
                 option = optionsList.get(0);
             }
@@ -140,7 +140,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
             conn = DataSourceManager.getInstance().getConnection();
 
             //create and initialize statement
-            String query = "SELECT * FROM repeat_option WHERE recurrence_type_id = ?";
+            String query = "SELECT * FROM recurrence_option WHERE recurrence_type_id = ?";
             stmt = conn.prepareStatement(query);
             stmt.setInt(1, recurrenceTypeId);
 
@@ -148,7 +148,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
             rs = stmt.executeQuery();
 
             //get results
-            optionList = createRepeatOptionListFromRS(rs);
+            optionList = createRecurrenceOptionListFromRS(rs);
 
         } catch (SQLException | IOException e) {
             logger.error("Exception...", e);
@@ -163,7 +163,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
         Connection conn = null;
         PreparedStatement stmt = null;
 
-        String query = "UPDATE  repeat_option SET " +
+        String query = "UPDATE  recurrence_option SET " +
                 "recurrence_type_id = ?,  title = ?,  abbreviation = ? WHERE id = ?";
         int affectedRows = 0;
 
@@ -191,21 +191,21 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
 
     @Override
     public boolean deleteRecurrenceOption(int optionId) {
-        return deleteRecordById("repeat_option", optionId);
+        return deleteRecordById("recurrence_option", optionId);
     }
 
     @Override
     public boolean deleteRecurrenceOptionsByRecurrenceType(int recurrenceTypeId) {
-        return deleteRecord("repeat_option", "recurrence_type_id", recurrenceTypeId);
+        return deleteRecord("recurrence_option", "recurrence_type_id", recurrenceTypeId);
     }
 
     @Override
     public boolean deleteAllRecurrenceOptions() {
-        return deleteAllRecords("repeat_option");
+        return deleteAllRecords("recurrence_option");
     }
 
     //helper methods
-    private List<RecurrenceOption> createRepeatOptionListFromRS(ResultSet rs) throws SQLException {
+    private List<RecurrenceOption> createRecurrenceOptionListFromRS(ResultSet rs) throws SQLException {
 
         List<RecurrenceOption> optionList = new ArrayList<RecurrenceOption>();
 
