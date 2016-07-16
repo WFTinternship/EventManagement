@@ -40,15 +40,17 @@ public class RecurrenceOptionDAOIntegrationTest {
         testRecurrenceOption = TestHelper.createTestRecurrenceOption();
 
         //insert into db
-        int optionId = recurrenceOptionDAO.addRecurrenceOption(testRecurrenceOption);
+        int recurrenceTypeId = recurrenceTypeDAO.addRecurrenceType(testRecurrenceType);
+        testRecurrenceType.setId(recurrenceTypeId);
 
-        //set id to test category
+        int optionId = recurrenceOptionDAO.addRecurrenceOption(testRecurrenceOption);
         testRecurrenceOption.setId(optionId);
     }
 
     @After
     public void tearDown() {
-        //delete test categories from db
+        //delete test records from db
+        recurrenceTypeDAO.deleteAllRecurrenceTypes();
         recurrenceOptionDAO.deleteAllRecurrenceOptions();
 
         //delete test object

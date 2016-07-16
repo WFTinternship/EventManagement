@@ -1,10 +1,13 @@
 package com.workfront.internship.event_management.datasource;
 
-import com.workfront.internship.event_management.model.RecurrenceType;
 import com.workfront.internship.event_management.model.RecurrenceOption;
+import com.workfront.internship.event_management.model.RecurrenceType;
 
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,40 +20,38 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
     @Override
     public int addRecurrenceType(RecurrenceType recurrenceType) {
+
         Connection conn = null;
         PreparedStatement stmtInsertRecType = null;
         PreparedStatement stmtInsertRepeatOn = null;
         ResultSet rs = null;
-        int recTypeId = 0;
+
+        int id = 0;
+
         try {
+            //get connection
             conn = DataSourceManager.getInstance().getConnection();
             conn.setAutoCommit(false);
 
+            //create and initialize statement
             String insertRecType = "INSERT INTO recurrence_type "
                     + "(title, interval_unit) values (?, ?) ";
-            stmtInsertRecType = conn.prepareStatement(insertRecType, Statement.RETURN_GENERATED_KEYS);
+            stmtInsertRecType = conn.prepareStatement(insertRecType, PreparedStatement.RETURN_GENERATED_KEYS);
             stmtInsertRecType.setString(1, recurrenceType.getTitle());
             stmtInsertRecType.setString(2, recurrenceType.getIntervalUnit());
+
+            //execute query
             stmtInsertRecType.executeUpdate();
 
-            rs = stmtInsertRecType.getGeneratedKeys();
-
-            if (rs.next()) {
-                recTypeId = rs.getInt(1);
-            }
+            //get generated id
+            id = getInsertedId(stmtInsertRecType);
 
             if (recurrenceType.getRepeatOptions() != null) {
-                String insertRepeatOnValues = "INSERT INTO repeat_on_value "
-                        + "(recurrence_type_id, title) VALUES "
-                        + "(?, ?)";
-                stmtInsertRepeatOn = conn.prepareStatement(insertRepeatOnValues);
-                List<RecurrenceOption> values = recurrenceType.getRepeatOptions();
-                for (RecurrenceOption option : values) {
-                    stmtInsertRepeatOn.setInt(1, recTypeId);
-                 //   stmtInsertRepeatOn.setString(2, option);
-                    stmtInsertRepeatOn.addBatch();
+                RecurrenceOptionDAO recurrenceOptionDAO = new RecurrenceOptionDAOImpl();
+                List<RecurrenceOption> options = recurrenceType.getRepeatOptions();
+                for (RecurrenceOption option : options) {
+                    recurrenceOptionDAO.addRecurrenceOption(option);
                 }
-                stmtInsertRepeatOn.executeBatch();
             }
             conn.commit();
         } catch (IOException e) {
@@ -66,7 +67,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
             closeResources(stmtInsertRepeatOn);
             closeResources(stmtInsertRecType);
         }
-        return recTypeId;
+        return id;
     }
 
    @Override
