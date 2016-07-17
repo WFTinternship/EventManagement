@@ -262,7 +262,7 @@ public class MediaDAOIntegrationTest {
 
         //insert event into db and get generated id
         testEvent.setCategory(testCategory);
-        int eventId = eventDAO.insertEvent(testEvent, testUser.getId());
+        int eventId = eventDAO.addEvent(testEvent);
         testEvent.setId(eventId);
 
         //insert media into db and get generated id

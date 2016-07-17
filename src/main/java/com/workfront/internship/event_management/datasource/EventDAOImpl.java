@@ -14,7 +14,7 @@ import java.util.List;
 public class EventDAOImpl extends GenericDAO implements EventDAO {
 
     @Override
-    public int insertEvent(Event event, int organizerId) {
+    public int addEvent(Event event) {
 
         Connection conn = null;
         int eventId = 0;
@@ -30,19 +30,19 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             eventId = insertEventMainInfo(event, conn);
             event.setId(eventId);
 
-            //insert event organizer
-/*            if (event.getInvitations() != null & event.getInvitations().size() == 1) {
+         /*   //insert event organizer
+            if (event.getInvitations() != null & event.getInvitations().size() == 1) {
                 InvitationDAO invitationDAO = new InvitationDAOImpl();
                 invitationDAO.addInvitation(event.getInvitations().get(0), conn);
             }
 /*
             //insert event recurrence info
-            if (event.getRecurrences() != null) {
-                for (Recurrence recurrence : event.getRecurrences()) {
+            if (event.getEventRecurrences() != null) {
+                for (EventRecurrence recurrence : event.getEventRecurrences()) {
                     recurrence.setEventId(eventId);
                 }
-                RecurrenceDAO recurrenceDAO = new RecurrenceDAOImpl();
-                recurrenceDAO.addEventRecurrences(event.getRecurrences(), conn);
+                EventRecurrenceDAO recurrenceDAO = new EventRecurrenceDAOImpl();
+                recurrenceDAO.addEventRecurrences(event.getEventRecurrences(), conn);
             }*/
 
             //commit transaction
@@ -75,9 +75,9 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             conn = DataSourceManager.getInstance().getConnection();
 
             //create and initialize statement
-            String sqlStr = "SELECT * FROM event " +
+            String query = "SELECT * FROM event " +
                     "LEFT JOIN event_category ON event.category_id = event_category.id ";
-            stmt = conn.prepareStatement(sqlStr);
+            stmt = conn.prepareStatement(query);
 
             //execute query
             rs = stmt.executeQuery();
@@ -122,9 +122,9 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             event.setInvitations(invitations);
 
             //get event recurrence info
-            RecurrenceDAO recurrenceDAO = new RecurrenceDAOImpl();
-            List<Recurrence> recurrences = recurrenceDAO.getEventRecurrencesByEventId(eventId);
-            event.setRecurrences(recurrences);
+            EventRecurrenceDAO recurrenceDAO = new EventRecurrenceDAOImpl();
+            List<EventRecurrence> recurrences = recurrenceDAO.getEventRecurrencesByEventId(eventId);
+            event.setEventRecurrences(recurrences);
 
             //get media list
             MediaDAO mediaDAO = new MediaDAOImpl();

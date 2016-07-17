@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by Hermine Turshujyan 7/1/16.
  */
-public class Recurrence {
+public class EventRecurrence {
     private int id;
     private RecurrenceType recurrenceType;
     private int eventId;
@@ -17,7 +17,7 @@ public class Recurrence {
         return id;
     }
 
-    public Recurrence setId(int id) {
+    public EventRecurrence setId(int id) {
         this.id = id;
         return this;
     }
@@ -26,7 +26,7 @@ public class Recurrence {
         return recurrenceType;
     }
 
-    public Recurrence setRecurrenceType(RecurrenceType recurrenceType) {
+    public EventRecurrence setRecurrenceType(RecurrenceType recurrenceType) {
         this.recurrenceType = recurrenceType;
         return this;
     }
@@ -35,7 +35,7 @@ public class Recurrence {
         return eventId;
     }
 
-    public Recurrence setEventId(int eventId) {
+    public EventRecurrence setEventId(int eventId) {
         this.eventId = eventId;
         return this;
     }
@@ -44,7 +44,7 @@ public class Recurrence {
         return repeatInterval;
     }
 
-    public Recurrence setRepeatInterval(int repeatInterval) {
+    public EventRecurrence setRepeatInterval(int repeatInterval) {
         this.repeatInterval = repeatInterval;
         return this;
     }
@@ -53,7 +53,7 @@ public class Recurrence {
         return repeatOn;
     }
 
-    public Recurrence setRepeatOn(String repeatOn) {
+    public EventRecurrence setRepeatOn(String repeatOn) {
         this.repeatOn = repeatOn;
         return this;
     }
@@ -62,7 +62,7 @@ public class Recurrence {
         return repeatEndDate;
     }
 
-    public Recurrence setRepeatEndDate(Date repeatEndDate) {
+    public EventRecurrence setRepeatEndDate(Date repeatEndDate) {
         this.repeatEndDate = repeatEndDate;
         return this;
     }

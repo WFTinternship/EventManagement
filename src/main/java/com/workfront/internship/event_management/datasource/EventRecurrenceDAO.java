@@ -12,12 +12,11 @@ public interface EventRecurrenceDAO {
 
     //insert data into db
     int addEventRecurrence(EventRecurrence recurrence, Connection conn);
-
     int addEventRecurrence(EventRecurrence recurrence);
 
     //read data from db
+    EventRecurrence getEventRecurrenceById(int id);
     List<EventRecurrence> getEventRecurrencesByEventId(int eventId);
-
     List<EventRecurrence> getAllEventRecurrences();
 
     //update db record

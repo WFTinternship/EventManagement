@@ -105,9 +105,12 @@ class TestHelper {
         return recurrenceType;
     }
 
-    static Recurrence createTestEventRecurrence() {
-        Recurrence eventRecurrence = new Recurrence();
-        eventRecurrence.setRepeatInterval(2).setRepeatOn("Test RepeatOn string").setRepeatEndDate(new Date());
+    static EventRecurrence createTestEventRecurrence() {
+        EventRecurrence eventRecurrence = new EventRecurrence();
+        eventRecurrence.setRepeatInterval(2)
+                .setRepeatOn("Test RepeatOn string")
+                .setRepeatEndDate(new Date());
+
         return eventRecurrence;
     }
 

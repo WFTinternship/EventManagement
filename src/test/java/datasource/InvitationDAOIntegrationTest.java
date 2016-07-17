@@ -48,7 +48,7 @@ public class InvitationDAOIntegrationTest {
 
     @After
     public void tearDown() {
-        deleteAllTestInsertionsFromDB();
+        deleteAllTestRecordsFromDB();
         deleteTestObjects();
     }
 
@@ -58,7 +58,7 @@ public class InvitationDAOIntegrationTest {
         Invitation invitation = invitationDAO.getInvitationById(testInvitation.getId());
 
         assertNotNull(invitation);
-        assertInvitations(invitation, testInvitation);
+        assertEqualInvitations(invitation, testInvitation);
     }
 
     @Test(expected = RuntimeException.class)
@@ -73,7 +73,7 @@ public class InvitationDAOIntegrationTest {
         Invitation invitation = invitationDAO.getInvitationById(testInvitation.getId());
 
         assertNotNull(invitation);
-        assertInvitations(invitation, testInvitation);
+        assertEqualInvitations(invitation, testInvitation);
     }
 
     @Test
@@ -91,7 +91,7 @@ public class InvitationDAOIntegrationTest {
 
         assertNotNull(invitationList);
         assertEquals(invitationList.size(), 1);
-        assertInvitations(invitationList.get(0), testInvitation);
+        assertEqualInvitations(invitationList.get(0), testInvitation);
     }
 
     @Test
@@ -110,7 +110,7 @@ public class InvitationDAOIntegrationTest {
 
         assertNotNull(invitationList);
         assertEquals(invitationList.size(), 1);
-        assertInvitations(invitationList.get(0), testInvitation);
+        assertEqualInvitations(invitationList.get(0), testInvitation);
     }
 
     @Test
@@ -135,7 +135,7 @@ public class InvitationDAOIntegrationTest {
         Invitation invitation = invitationDAO.getInvitationById(testInvitation.getId());
 
         assertNotNull(invitation);
-        assertInvitations(invitation, testInvitation);
+        assertEqualInvitations(invitation, testInvitation);
         assertTrue(updated);
     }
 
@@ -252,7 +252,7 @@ public class InvitationDAOIntegrationTest {
 
         //insert event into db and get generated id
         testEvent.setCategory(testCategory);
-        int eventId = eventDAO.insertEvent(testEvent, testUser.getId());
+        int eventId = eventDAO.addEvent(testEvent);
         testEvent.setId(eventId);
 
         //insert invitation into db and get generated id
@@ -262,7 +262,7 @@ public class InvitationDAOIntegrationTest {
         testInvitation.setId(invId);
     }
 
-    private void deleteAllTestInsertionsFromDB() {
+    private void deleteAllTestRecordsFromDB() {
         invitationDAO.deleteAllInvitations();
         eventDAO.deleteAllEvents();
         categoryDAO.deleteAllCategories();
@@ -276,7 +276,7 @@ public class InvitationDAOIntegrationTest {
         testInvitation = null;
     }
 
-    private void assertInvitations(Invitation expectedInvitation, Invitation actualInvitation) {
+    private void assertEqualInvitations(Invitation expectedInvitation, Invitation actualInvitation) {
         assertEquals(actualInvitation.getId(), expectedInvitation.getId());
         assertEquals(actualInvitation.getEventId(), expectedInvitation.getEventId());
         assertEquals(actualInvitation.getUser().getId(), expectedInvitation.getUser().getId());
@@ -286,10 +286,10 @@ public class InvitationDAOIntegrationTest {
         assertEquals(actualInvitation.isParticipated(), expectedInvitation.isParticipated());
     }
 
-    private void assertInvitationLists(List<Invitation> expectedList, List<Invitation> actualList) {
+    private void assertEqualInvitationLists(List<Invitation> expectedList, List<Invitation> actualList) {
         assertEquals(actualList.size(), expectedList.size());
         for (int i = 0; i < actualList.size(); i++) {
-            assertInvitations(actualList.get(i), expectedList.get(i));
+            assertEqualInvitations(actualList.get(i), expectedList.get(i));
         }
     }
 

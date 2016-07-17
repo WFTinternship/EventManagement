@@ -33,7 +33,7 @@ public class RecurrenceTypeDAOIntegrationTest {
         //insert test record into db and get generated id
         int recurrenceTypeId = recurrenceTypeDAO.addRecurrenceType(testRecurrenceType);
 
-        //set id to test recurrency type and recurrence type options
+        //set id to test recurrence type and recurrence type options
         testRecurrenceType.setId(recurrenceTypeId);
     }
 

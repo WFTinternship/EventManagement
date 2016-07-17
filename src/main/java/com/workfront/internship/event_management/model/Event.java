@@ -22,7 +22,7 @@ public class Event {
     private boolean guestsAllowed;
     private Date creationDate;
     private Date lastModifiedDate;
-    private List<Recurrence> recurrences;
+    private List<EventRecurrence> eventRecurrences;
     private List<Invitation> invitations;
     private List<Media> media;
 
@@ -125,12 +125,12 @@ public class Event {
         return this;
     }
 
-    public List<Recurrence> getRecurrences() {
-        return recurrences;
+    public List<EventRecurrence> getEventRecurrences() {
+        return eventRecurrences;
     }
 
-    public Event setRecurrences(List<Recurrence> recurrences) {
-        this.recurrences = recurrences;
+    public Event setEventRecurrences(List<EventRecurrence> eventRecurrences) {
+        this.eventRecurrences = eventRecurrences;
         return this;
     }
 

@@ -10,7 +10,7 @@ import java.util.List;
 public interface EventDAO {
 
     //insert into db
-    int insertEvent(Event event, int organizerId);
+    int addEvent(Event event);
 
     //read data from db
     List<Event> getAllEvents();
