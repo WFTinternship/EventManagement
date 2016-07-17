@@ -1,6 +1,6 @@
 package com.workfront.internship.event_management.datasource;
 
-import com.workfront.internship.event_management.model.Recurrence;
+import com.workfront.internship.event_management.model.EventRecurrence;
 import com.workfront.internship.event_management.model.RecurrenceType;
 
 import java.io.IOException;
@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by hermine on 7/11/16.
+ * Created by Hermine Turshujyan 7/11/16.
  */
-public class RecurrenceDAOImpl extends GenericDAO implements RecurrenceDAO {
+public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenceDAO {
 
     @Override
-    public int addEventRecurrence(Recurrence recurrence) {
+    public int addEventRecurrence(EventRecurrence recurrence) {
 
         Connection conn = null;
         int id = 0;
@@ -24,8 +24,10 @@ public class RecurrenceDAOImpl extends GenericDAO implements RecurrenceDAO {
             conn = DataSourceManager.getInstance().getConnection();
 
             id = addEventRecurrence(recurrence, conn);
+
         } catch (SQLException | IOException e) {
             logger.error("Exception ", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(conn);
         }
@@ -33,15 +35,21 @@ public class RecurrenceDAOImpl extends GenericDAO implements RecurrenceDAO {
     }
 
     @Override
-    public int addEventRecurrence(Recurrence recurrence, Connection conn) {
+    public int addEventRecurrence(EventRecurrence recurrence, Connection conn) {
+
         PreparedStatement stmt = null;
         ResultSet rs = null;
+
         int id = 0;
-        String sqlStr = "INSERT INTO event_recurrence "
+        String query = "INSERT INTO event_recurrence "
                 + "(event_id, recurrence_type_id, repeat_on, repeat_interval, repeat_end) "
                 + "VALUES (?, ?, ?, ?, ?)";
+
         try {
-            stmt = conn.prepareStatement(sqlStr, PreparedStatement.RETURN_GENERATED_KEYS);
+            //get connection
+            stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+
+            //create and initialize statement
             stmt.setInt(1, recurrence.getEventId());
             stmt.setInt(2, recurrence.getRecurrenceType().getId());
             stmt.setString(3, recurrence.getRepeatOn());
@@ -51,13 +59,15 @@ public class RecurrenceDAOImpl extends GenericDAO implements RecurrenceDAO {
             } else {
                 stmt.setTimestamp(5, null);
             }
+
+            //execute query
             stmt.executeUpdate();
-            rs = stmt.getGeneratedKeys();
-            if(rs.next()) {
-                id = rs.getInt(1);
-            }
+
+            id = getInsertedId(stmt);
+
         } catch (SQLException e) {
             logger.error("Exception ", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt);
         }
@@ -65,71 +75,30 @@ public class RecurrenceDAOImpl extends GenericDAO implements RecurrenceDAO {
     }
 
     @Override
-    public boolean addEventRecurrences(List<Recurrence> recurrences) {
+    public List<EventRecurrence> getEventRecurrencesByEventId(int eventId) {
 
-        Connection conn = null;
-        boolean success = false;
-
-        try {
-            //get connection
-            conn = DataSourceManager.getInstance().getConnection();
-
-            success = addEventRecurrences(recurrences, conn);
-        } catch (SQLException | IOException e) {
-            logger.error("Exception ", e);
-        } finally {
-            closeResources(conn);
-        }
-        return success;
-    }
-
-    @Override
-    public boolean addEventRecurrences(List<Recurrence> recurrences, Connection conn) {
-        PreparedStatement stmt = null;
-        int affectedRows = 0;
-        String sqlStr = "INSERT INTO event_recurrence "
-                    + "(event_id, recurrence_type_id, repeat_on, repeat_interval, repeat_end) "
-                    + "VALUES (?, ?, ?, ?, ?)";
-        try {
-            //get connection
-            stmt = conn.prepareStatement(sqlStr);
-
-            for (Recurrence recurrence : recurrences) {
-                stmt.setInt(1, recurrence.getEventId());
-                stmt.setInt(2, recurrence.getRecurrenceType().getId());
-                stmt.setString(3, recurrence.getRepeatOn());
-                stmt.setInt(4, recurrence.getRepeatInterval());
-                if (recurrence.getRepeatEndDate() != null) {
-                    stmt.setTimestamp(5, new Timestamp(recurrence.getRepeatEndDate().getTime()));
-                } else {
-                    stmt.setObject(5, null);
-                }
-                stmt.addBatch();
-            }
-            affectedRows = stmt.executeBatch().length;
-        } catch (SQLException e) {
-            logger.error("Exception ", e);
-        } finally {
-            closeResources(stmt);
-        }
-        return affectedRows != 0;
-    }
-
-    //READ
-    @Override
-    public List<Recurrence> getEventRecurrencesByEventId(int eventId) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        List<Recurrence> recurrencesList = null;
+
+        List<EventRecurrence> recurrencesList = null;
+        String sqlStr = "SELECT * FROM  event_recurrence LEFT JOIN recurrence_type ON " +
+                "event_recurrence.recurrence_type_id = recurrence_type.id WHERE event_id = ?";
+
         try {
+            //get connection
             conn = DataSourceManager.getInstance().getConnection();
-             String sqlStr = "SELECT * FROM  event_recurrence LEFT JOIN recurrence_type ON " +
-                    "event_recurrence.recurrence_type_id = recurrence_type.id where event_id = ?";
+
+            //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, eventId);
+
+            //execute query
             rs = stmt.executeQuery();
+
+            //get results
             recurrencesList = createEventRecurrencesFromRS(rs);
+
         } catch (SQLException | IOException e) {
             logger.error("Exception ", e);
         } finally {
@@ -138,27 +107,67 @@ public class RecurrenceDAOImpl extends GenericDAO implements RecurrenceDAO {
         return recurrencesList;
     }
 
-    //UPDATE
     @Override
-    public boolean updateEventRecurrence(Recurrence recurrence) {
+    public List<EventRecurrence> getAllEventRecurrences() {
         Connection conn = null;
         PreparedStatement stmt = null;
-        int affectedRows = 0;
+        ResultSet rs = null;
+
+        List<EventRecurrence> recurrencesList = null;
+        String sqlStr = "SELECT * FROM  event_recurrence LEFT JOIN recurrence_type ON " +
+                "event_recurrence.recurrence_type_id = recurrence_type.id";
+
         try {
+            //get connection
             conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "UPDATE event_recurrence SET event_id = ?, recurrence_type_id = ?, " +
-                    "repeat_on = ?, repeat_interval = ?, repeat_end = ? WHERE id = ?";
+
+            //create statement
             stmt = conn.prepareStatement(sqlStr);
+
+            //execute query
+            rs = stmt.executeQuery();
+
+            //get results
+            recurrencesList = createEventRecurrencesFromRS(rs);
+
+        } catch (SQLException | IOException e) {
+            logger.error("Exception ", e);
+        } finally {
+            closeResources(rs, stmt, conn);
+        }
+        return recurrencesList;
+    }
+
+    @Override
+    public boolean updateEventRecurrence(EventRecurrence recurrence) {
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        int affectedRows = 0;
+        String query = "UPDATE event_recurrence SET event_id = ?, recurrence_type_id = ?, " +
+                "repeat_on = ?, repeat_interval = ?, repeat_end = ? WHERE id = ?";
+
+        try {
+            //get connection
+            conn = DataSourceManager.getInstance().getConnection();
+
+            //create and initialize statement
+            stmt = conn.prepareStatement(query);
             stmt.setInt(1, recurrence.getEventId());
             stmt.setInt(2, recurrence.getRecurrenceType().getId());
             stmt.setString(3, recurrence.getRepeatOn());
             stmt.setInt(4, recurrence.getRepeatInterval());
+
             if(recurrence.getRepeatEndDate()!= null) {
                 stmt.setTimestamp(5, new Timestamp(recurrence.getRepeatEndDate().getTime()));
             } else {
                 stmt.setTimestamp(5, null);
             }
+
             stmt.setInt(6, recurrence.getId());
+
+            //execute query
             affectedRows = stmt.executeUpdate();
         } catch (SQLException | IOException e) {
             logger.error("Exception ", e);
@@ -167,42 +176,24 @@ public class RecurrenceDAOImpl extends GenericDAO implements RecurrenceDAO {
         }
         return affectedRows != 0;    }
 
-    //Delete
     @Override
     public boolean deleteEventRecurrece(int id) {
+        return deleteRecordById("event_recurrence", id);
+    }
 
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        int affectedRows = 0;
-
-        try {
-            //acquire connection
-            conn = DataSourceManager.getInstance().getConnection();
-
-            //create and initialize statement
-            String sqlStr = "DELETE FROM event_recurrence WHERE id = ?";
-            stmt = conn.prepareStatement(sqlStr);
-            stmt.setInt(1, id);
-
-            //execute statement
-            affectedRows = stmt.executeUpdate();
-        } catch (SQLException | IOException e) {
-            logger.error("Exception ", e);
-        } finally {
-            closeResources(stmt, conn);
-        }
-        return affectedRows != 0;
+    @Override
+    public boolean deleteAllEventRecurrences() {
+        return deleteAllRecords("event_recurrence");
     }
 
     //helper methods
 
-    private List<Recurrence> createEventRecurrencesFromRS(ResultSet rs) throws SQLException {
+    private List<EventRecurrence> createEventRecurrencesFromRS(ResultSet rs) throws SQLException {
 
-        List<Recurrence> recurrencesList = new ArrayList<Recurrence>();
+        List<EventRecurrence> recurrencesList = new ArrayList<EventRecurrence>();
         RecurrenceType recType = null;
 
         while (rs.next()) {
-
 
             if (recType == null) {
                 recType = new RecurrenceType();
@@ -211,7 +202,7 @@ public class RecurrenceDAOImpl extends GenericDAO implements RecurrenceDAO {
                         .setId(rs.getInt(rs.getInt("recurrence_type.id")));
             }
 
-            Recurrence recurrence = new Recurrence();
+            EventRecurrence recurrence = new EventRecurrence();
             recurrence.setId(rs.getInt("event_recurrence.id"))
                     .setEventId(rs.getInt("event_recurrence.event_id"))
                     .setRepeatInterval(rs.getInt("event_recurrence.repeat_interval"))
