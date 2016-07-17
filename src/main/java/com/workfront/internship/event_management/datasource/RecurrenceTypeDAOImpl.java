@@ -51,6 +51,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
                 RecurrenceOptionDAO recurrenceOptionDAO = new RecurrenceOptionDAOImpl();
                 List<RecurrenceOption> options = recurrenceType.getRecurrenceOptions();
                 for (RecurrenceOption option : options) {
+                    option.setRecurrenceTypeId(id);
                     recurrenceOptionDAO.addRecurrenceOption(option, conn);
                 }
 
@@ -58,12 +59,14 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
             conn.commit();
         } catch (IOException e) {
                 logger.error("Exception ", e);
+            throw new RuntimeException(e);
         } catch (SQLException e) {
             try {
                 conn.rollback();
             } catch (SQLException re) {
                 logger.error("Transaction failed! ", e);
             }
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -127,14 +130,14 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
             List<RecurrenceType> recurrenceTypes = createRecurrenceTypeListFromRS(rs);
             if (recurrenceTypes != null & recurrenceTypes.size() == 1) {
                 recurrenceType = recurrenceTypes.get(0);
+
+                //read recurrenceType options from another table
+                RecurrenceOptionDAO recurrenceOptionDAO = new RecurrenceOptionDAOImpl();
+                List<RecurrenceOption> recurrenceOptionList = recurrenceOptionDAO.getRecurrenceOptionsByRecurrenceType(id);
+
+                //set result to recurrenceType object
+                recurrenceType.setRecurrenceOptions(recurrenceOptionList);
             }
-
-            //read recurrenceType options from another table
-            RecurrenceOptionDAO recurrenceOptionDAO = new RecurrenceOptionDAOImpl();
-            List<RecurrenceOption> recurrenceOptionList = recurrenceOptionDAO.getRecurrenceOptionsByRecurrenceType(id);
-
-            //set result to recurrenceType object
-            recurrenceType.setRecurrenceOptions(recurrenceOptionList);
 
         } catch (SQLException | IOException e) {
             logger.error("Exception ", e);

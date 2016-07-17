@@ -123,7 +123,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
         int affectedRows = 0;
 
         try {
-            //acquire connection
+            //get connection
             conn = DataSourceManager.getInstance().getConnection();
 
             //create and initialize statement

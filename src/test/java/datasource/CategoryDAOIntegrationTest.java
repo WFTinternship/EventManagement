@@ -143,7 +143,7 @@ public class CategoryDAOIntegrationTest {
     }
 
     @Test
-    public void deleteCategory_NotFound() {
+    public void deleteCategory_Not_Found() {
         //testing method
         boolean deleted = categoryDAO.deleteCategory(TestHelper.NON_EXISTING_ID);
 

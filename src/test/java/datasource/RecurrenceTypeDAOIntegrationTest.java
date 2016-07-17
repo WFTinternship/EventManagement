@@ -20,7 +20,6 @@ public class RecurrenceTypeDAOIntegrationTest {
     private static RecurrenceTypeDAO recurrenceTypeDAO = null;
     RecurrenceType testRecurrenceType = null;
 
-
     @BeforeClass
     public static void setUpClass(){
         recurrenceTypeDAO = new RecurrenceTypeDAOImpl();
@@ -29,10 +28,12 @@ public class RecurrenceTypeDAOIntegrationTest {
     @Before
     public void setUp() {
         //create test recurrence type
-        testRecurrenceType = TestHelper.createTestRecurrenceType();
+        testRecurrenceType = TestHelper.createTestRecurrenceTypeWithOptions();
 
         //insert test record into db and get generated id
         int recurrenceTypeId = recurrenceTypeDAO.addRecurrenceType(testRecurrenceType);
+
+        //set id to test recurrency type and recurrence type options
         testRecurrenceType.setId(recurrenceTypeId);
     }
 
@@ -42,19 +43,34 @@ public class RecurrenceTypeDAOIntegrationTest {
     }
 
     @Test
-    public void addCategory_Success() {
-      /*  //test category already inserted in setup, read record by categoryId
-        Category category = categoryDAO.getCategoryById(testCategory.getId());
+    public void addRecurrenceTypeWithOptions_Success() {
+        //test record already inserted in setup, read record by id
+        RecurrenceType recurrenceType = recurrenceTypeDAO.getRecurrenceTypeById(testRecurrenceType.getId());
 
-        assertNotNull(category);
-        assertEqualCategories(category, testCategory);*/
+        assertNotNull(recurrenceType);
+        assertEqualRecurrenceTypesWithOptions(recurrenceType, testRecurrenceType);
+    }
+
+    @Test
+    public void addRecurrenceTypeWithoutOptions_Success() {
+        //create recurrence type without options
+        RecurrenceType newTestRecurrenceType = TestHelper.createTestRecurrenceType();
+        int id = recurrenceTypeDAO.addRecurrenceType(newTestRecurrenceType);
+        newTestRecurrenceType.setId(id);
+
+        //read inserted record by id
+        RecurrenceType recurrenceType = recurrenceTypeDAO.getRecurrenceTypeById(newTestRecurrenceType.getId());
+
+        assertNotNull(recurrenceType);
+        assertEqualRecurrenceTypes(recurrenceType, newTestRecurrenceType);
     }
 
     @Test(expected = RuntimeException.class)
-    public void addCategory_Dublicate_Entry() {
-       /* //test category already inserted into db, insert dublicate category
-        categoryDAO.addCategory(testCategory);  //event_category.title field in db is unique*/
+    public void addRecurrenceType_Dublicate_Entry() {
+        //test recurrence type inserted in setup, insert dublicate entry
+        recurrenceTypeDAO.addRecurrenceType(testRecurrenceType);
     }
+
 
     @Test
     public void getAllRecurrenceTypes_Found() {
@@ -80,16 +96,16 @@ public class RecurrenceTypeDAOIntegrationTest {
         assertTrue(recurrenceTypeList.isEmpty());
     }
 
-    @Test
+    @Test //+
     public void getRecurrenceTypeById_Found() {
         //test method (test record already inserted in seUp())
         RecurrenceType recurrenceType = recurrenceTypeDAO.getRecurrenceTypeById(testRecurrenceType.getId());
 
         assertNotNull(recurrenceType);
-        assertEqualRecurrenceTypes(recurrenceType, testRecurrenceType);
+        assertEqualRecurrenceTypesWithOptions(recurrenceType, testRecurrenceType);
     }
 
-    @Test
+    @Test //+
     public void getRecurrenceTypeById_Not_Found() {
         //test method
         RecurrenceType recurrenceType = recurrenceTypeDAO.getRecurrenceTypeById(TestHelper.NON_EXISTING_ID);
@@ -99,29 +115,29 @@ public class RecurrenceTypeDAOIntegrationTest {
 
     @Test
     public void updateRecurrenceType_Found() {
-     /*   //create new category with the same id
-        Category updatedCategory = TestHelper.createTestCategory();
-        updatedCategory.setId(testCategory.getId());
+        //update recurrence type info
+        testRecurrenceType.setTitle("updated title")
+                .setIntervalUnit("updated unit");
 
         //test method
-        categoryDAO.updateCategory(updatedCategory);
+        boolean updated = recurrenceTypeDAO.updateRecurrenceType(testRecurrenceType);
 
         //read updated record from db
-        Category category = categoryDAO.getCategoryById(updatedCategory.getId());
+        RecurrenceType recurrenceType = recurrenceTypeDAO.getRecurrenceTypeById(testRecurrenceType.getId());
 
-        assertNotNull(category);
-        assertEqualCategories(category, updatedCategory);*/
+        assertNotNull(recurrenceType);
+        assertEqualRecurrenceTypes(recurrenceType, testRecurrenceType);
     }
 
     @Test
     public void updateRecurrenceType_Not_Found() {
-        //create new category with non-existing id
-     /*   Category updatedCategory = TestHelper.createTestCategory();
+        //create new recurrence type with non-existing id
+        RecurrenceType recurrenceType = TestHelper.createTestRecurrenceType();
 
         //test method
-        boolean updated = categoryDAO.updateCategory(updatedCategory);
+        boolean updated = recurrenceTypeDAO.updateRecurrenceType(recurrenceType);
 
-        assertFalse(updated);*/
+        assertFalse(updated);
     }
 
     @Test
@@ -168,10 +184,20 @@ public class RecurrenceTypeDAOIntegrationTest {
 
 
     //helper methods
+    private void assertEqualRecurrenceTypesWithOptions(RecurrenceType actualRecurrenceType, RecurrenceType expectedRecurrenceType) {
+
+        assertEqualRecurrenceTypes(actualRecurrenceType, expectedRecurrenceType);
+
+        assertNotNull(actualRecurrenceType.getRecurrenceOptions());
+        assertEquals(actualRecurrenceType.getRecurrenceOptions().size(), expectedRecurrenceType.getRecurrenceOptions().size());
+    }
+
     private void assertEqualRecurrenceTypes(RecurrenceType actualRecurrenceType, RecurrenceType expectedRecurrenceType) {
+
         assertEquals(actualRecurrenceType.getTitle(), expectedRecurrenceType.getTitle());
         assertEquals(actualRecurrenceType.getIntervalUnit(), expectedRecurrenceType.getIntervalUnit());
-        assertEquals(actualRecurrenceType.getRecurrenceOptions(), expectedRecurrenceType.getRecurrenceOptions());
+
+        // assertNull(actualRecurrenceType.getRecurrenceOptions());
     }
 
 

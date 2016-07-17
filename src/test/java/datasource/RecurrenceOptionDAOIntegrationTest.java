@@ -225,10 +225,11 @@ public class RecurrenceOptionDAOIntegrationTest {
     }
 
     //helper methods
-    private void assertEqualRepeatOptions(RecurrenceOption actualRecurrenceOption, RecurrenceOption expectedRecurrenceOption) {
+    public void assertEqualRepeatOptions(RecurrenceOption actualRecurrenceOption, RecurrenceOption expectedRecurrenceOption) {
         assertEquals(actualRecurrenceOption.getId(), expectedRecurrenceOption.getId());
         assertEquals(actualRecurrenceOption.getRecurrenceTypeId(), expectedRecurrenceOption.getRecurrenceTypeId());
-        assertEquals(actualRecurrenceOption.getId(), expectedRecurrenceOption.getId());
+        assertEquals(actualRecurrenceOption.getAbbreviation(), expectedRecurrenceOption.getAbbreviation());
+        assertEquals(actualRecurrenceOption.getTitle(), expectedRecurrenceOption.getTitle());
 
     }
 }
