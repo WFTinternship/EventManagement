@@ -33,7 +33,6 @@ public class EventRecurrenceDAOIntegrationTest {
         eventDAO = new EventDAOImpl();
         recurrenceTypeDAO = new RecurrenceTypeDAOImpl();
         eventRecurrenceDAO = new EventRecurrenceDAOImpl();
-
     }
 
     @Before

@@ -139,9 +139,9 @@ public class UserDAOIntegrationTest {
     }
 
     @Test
-    public void setVerified_Success() {
+    public void updateVerifiedStatus_Success() {
         //testing method
-        boolean updated = userDAO.setVerified(testUser.getId());
+        boolean updated = userDAO.updateVerifiedStatus(testUser.getId());
 
         //read updated record from db
         User user = userDAO.getUserById(testUser.getId());
@@ -152,9 +152,9 @@ public class UserDAOIntegrationTest {
     }
 
     @Test
-    public void setVerified_Not_Found() {
+    public void updateVerifiedStatus_Not_Found() {
         //testing method
-        boolean updated = userDAO.setVerified(TestHelper.NON_EXISTING_ID);
+        boolean updated = userDAO.updateVerifiedStatus(TestHelper.NON_EXISTING_ID);
 
         assertFalse(updated);
     }

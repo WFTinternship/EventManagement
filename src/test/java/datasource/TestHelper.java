@@ -45,15 +45,56 @@ class TestHelper {
     static Event createTestEvent() {
         Event testEvent = new Event();
         testEvent.setTitle("Test title")
-                .setShortDesc("Test short description")
-                .setFullDesc("Test full description")
+                .setShortDescription("Test short description")
+                .setFullDescription("Test full description")
                 .setLocation("Test location")
-                .setLat(11111.1f)
-                .setLng(11111.1f)
+                .setLat(11111.0)
+                .setLng(11111.0)
                 .setFilePath("/events/test_event.doc")
-                .setImagePath("events/test_event.jpg");
+                .setImagePath("events/test_event.jpg")
+                .setCreationDate(new Date())
+                .setPublicAccessed(true)
+                .setGuestsAllowed(true);
+
         return testEvent;
     }
+
+    static Event createTestEventWithRecurrencesAndInvitations() {
+        Event testEvent = new Event();
+        testEvent.setTitle("Test title")
+                .setShortDescription("Test short description")
+                .setFullDescription("Test full description")
+                .setLocation("Test location")
+                .setLat(11111.0)
+                .setLng(11111.0)
+                .setFilePath("/events/test_event.doc")
+                .setImagePath("events/test_event.jpg")
+                .setCreationDate(new Date())
+                .setPublicAccessed(true)
+                .setGuestsAllowed(true);
+
+        List<EventRecurrence> recurrenceList = new ArrayList<>();
+        recurrenceList.add(createTestEventRecurrence());
+        recurrenceList.add(createTestEventRecurrence());
+
+        Event event = createTestEvent();
+        User user1 = createTestUser();
+        User user2 = createTestUser();
+        Invitation invitation1 = createTestInvitation();
+        Invitation invitation2 = createTestInvitation();
+        invitation1.setUser(user1);
+        invitation2.setUser(user2);
+
+        List<Invitation> invitationList = new ArrayList<>();
+        //  invitationList.add();
+        invitationList.add(createTestInvitation());
+
+        testEvent.setEventRecurrences(recurrenceList);
+        testEvent.setInvitations(invitationList);
+
+        return testEvent;
+    }
+
 
     static Invitation createTestInvitation() {
         Invitation invitation = new Invitation();

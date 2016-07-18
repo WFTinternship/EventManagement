@@ -45,7 +45,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             id = getInsertedId(stmt);
 
         } catch (SQLException | IOException e) {
-            logger.error("Exception...", e);
+            LOGGER.error("Exception...", e);
             throw new RuntimeException(e);
         } finally {
             closeResources(stmt, conn);
@@ -100,7 +100,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             mediaList = createMediaListFromRS(rs);
 
         } catch (SQLException | IOException e) {
-            logger.error("Exception...", e);
+            LOGGER.error("Exception...", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -130,7 +130,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             mediaList = createMediaListFromRS(rs);
 
         } catch (SQLException | IOException e) {
-            logger.error("Exception...", e);
+            LOGGER.error("Exception...", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -158,7 +158,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             affectedRows = stmt.executeUpdate();
 
         } catch (SQLException | IOException e) {
-            logger.error("Exception...", e);
+            LOGGER.error("Exception...", e);
         } finally {
             closeResources(null, stmt, conn);
         }
@@ -200,7 +200,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             mediaList = createMediaListFromRS(rs);
 
         } catch (SQLException | IOException e) {
-            logger.error("Exception...", e);
+            LOGGER.error("Exception...", e);
         } finally {
             closeResources(rs, stmt, conn);
         }

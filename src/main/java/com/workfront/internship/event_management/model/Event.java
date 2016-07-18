@@ -9,11 +9,11 @@ import java.util.List;
 public class Event {
     private int id;
     private String title;
-    private String shortDesc;
-    private String fullDesc;
+    private String shortDescription;
+    private String fullDescription;
     private String location;
-    private float lat;
-    private float lng;
+    private double lat;
+    private double lng;
     private String filePath;
     private String imagePath;
     private Category category;
@@ -44,21 +44,21 @@ public class Event {
         return this;
     }
 
-    public String getShortDesc() {
-        return shortDesc;
+    public String getShortDescription() {
+        return shortDescription;
     }
 
-    public Event setShortDesc(String shortDesc) {
-        this.shortDesc = shortDesc;
+    public Event setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
         return this;
     }
 
-    public String getFullDesc() {
-        return fullDesc;
+    public String getFullDescription() {
+        return fullDescription;
     }
 
-    public Event setFullDesc(String fullDesc) {
-        this.fullDesc = fullDesc;
+    public Event setFullDescription(String fullDescription) {
+        this.fullDescription = fullDescription;
         return this;
     }
 
@@ -71,20 +71,20 @@ public class Event {
         return this;
     }
 
-    public float getLat() {
+    public double getLat() {
         return lat;
     }
 
-    public Event setLat(float lat) {
+    public Event setLat(double lat) {
         this.lat = lat;
         return this;
     }
 
-    public float getLng() {
+    public double getLng() {
         return lng;
     }
 
-    public Event setLng(float lng) {
+    public Event setLng(double lng) {
         this.lng = lng;
         return this;
     }

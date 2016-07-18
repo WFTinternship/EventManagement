@@ -25,7 +25,6 @@ public interface EventDAO {
 
     //delete record from db
     boolean deleteEvent(int eventId);
-
     boolean deleteAllEvents();
 
 }

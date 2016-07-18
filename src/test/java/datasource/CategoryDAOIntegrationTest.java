@@ -173,7 +173,6 @@ public class CategoryDAOIntegrationTest {
         assertFalse(deleted);
     }
 
-
     //helper methods
     private void assertEqualCategories(Category expectedCategory, Category actualCategory) {
         assertEquals(expectedCategory.getId(), actualCategory.getId());

@@ -4,7 +4,6 @@ import com.workfront.internship.event_management.datasource.DataSourceManager;
 import com.workfront.internship.event_management.datasource.UserDAO;
 import com.workfront.internship.event_management.datasource.UserDAOImpl;
 import com.workfront.internship.event_management.model.User;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -28,8 +27,6 @@ public class UserDAOUnitTest {
     @SuppressWarnings("unchecked")
     @Before
     public void setUp() throws Exception {
-        //create test user object
-        User user = TestHelper.createTestUser();
 
         dataSourceManager = Mockito.mock(DataSourceManager.class);
 
@@ -40,15 +37,50 @@ public class UserDAOUnitTest {
         userDAO = new UserDAOImpl(dataSourceManager);
     }
 
-    @After
-    public void tearDown() {
-
-    }
-
     @Test(expected = RuntimeException.class)
-    public void addUser_Get_Connection() throws SQLException {
+    public void addUser_dbError() throws SQLException {
         userDAO.addUser(new User());
     }
 
+    @Test(expected = RuntimeException.class)
+    public void getAllUsers_dbError() throws SQLException {
+        userDAO.getAllUsers();
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void getUserById_dbError() throws SQLException {
+        userDAO.getUserById(1);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void getUserByUsername_dbError() throws SQLException {
+        userDAO.getUserByUsername("username");
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void getUserByEmail_dbError() throws SQLException {
+        userDAO.getUserByEmail("email");
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void updateVerifiedStatus_dbError() throws SQLException {
+        userDAO.updateVerifiedStatus(1);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void updateUser_dbError() throws SQLException {
+        userDAO.updateUser(new User());
+    }
+
+
+    @Test(expected = RuntimeException.class)
+    public void deleteUser_dbError() throws SQLException {
+        userDAO.deleteUser(1);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void deleteAllUsers_dbError() throws SQLException {
+        userDAO.deleteAllUsers();
+    }
 
 }

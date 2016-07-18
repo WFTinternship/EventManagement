@@ -19,7 +19,7 @@ public interface UserDAO {
     User getUserByEmail(String email);
 
     //update record in db
-    boolean setVerified(int userId);
+    boolean updateVerifiedStatus(int userId);
     boolean updateUser(User user);
 
     //delete record from db

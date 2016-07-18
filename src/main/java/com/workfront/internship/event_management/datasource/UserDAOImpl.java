@@ -22,9 +22,8 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
         try {
             this.dataSourceManager = DataSourceManager.getInstance();
         } catch (IOException | SQLException e) {
-            logger.error("Exception...", e);
+            LOGGER.error("Exception...", e);
         }
-        ;
     }
 
 
@@ -68,7 +67,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             id = getInsertedId(stmt);
 
         } catch (SQLException e) {
-            logger.error("Exception...", e);
+            LOGGER.error("Exception...", e);
             throw new RuntimeException();
         } finally {
             closeResources(rs, stmt, conn);
@@ -99,7 +98,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             usersList = createUsersListFromRS(rs);
 
         } catch (SQLException e) {
-            logger.error("Exception...", e);
+            LOGGER.error("Exception...", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -122,7 +121,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
     }
 
     @Override
-    public boolean setVerified(int userId) {
+    public boolean updateVerifiedStatus(int userId) {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -141,7 +140,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             affectedRows = stmt.executeUpdate();
 
         } catch (SQLException e) {
-            logger.error("Exception...", e);
+            LOGGER.error("Exception...", e);
         } finally {
             closeResources(stmt, conn);
         }
@@ -176,7 +175,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             affectedRows = stmt.executeUpdate();
 
         } catch (SQLException e) {
-            logger.error("Exception...", e);
+            LOGGER.error("Exception...", e);
         } finally {
             closeResources(stmt, conn);
         }
@@ -220,7 +219,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             }
 
         } catch (SQLException e) {
-            logger.error("Exception...", e);
+            LOGGER.error("Exception...", e);
         } finally {
             closeResources(rs, stmt, conn);
         }

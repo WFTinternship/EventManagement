@@ -26,7 +26,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
             id = addEventRecurrence(recurrence, conn);
 
         } catch (SQLException | IOException e) {
-            logger.error("Exception ", e);
+            LOGGER.error("Exception ", e);
             throw new RuntimeException(e);
         } finally {
             closeResources(conn);
@@ -63,7 +63,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
             }
 
         } catch (SQLException | IOException e) {
-            logger.error("Exception ", e);
+            LOGGER.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -102,7 +102,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
             id = getInsertedId(stmt);
 
         } catch (SQLException e) {
-            logger.error("Exception ", e);
+            LOGGER.error("Exception ", e);
             throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt);
@@ -136,7 +136,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
             recurrencesList = createEventRecurrencesFromRS(rs);
 
         } catch (SQLException | IOException e) {
-            logger.error("Exception ", e);
+            LOGGER.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -167,7 +167,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
             recurrencesList = createEventRecurrencesFromRS(rs);
 
         } catch (SQLException | IOException e) {
-            logger.error("Exception ", e);
+            LOGGER.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -211,7 +211,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
             //execute query
             affectedRows = stmt.executeUpdate();
         } catch (SQLException | IOException e) {
-            logger.error("Exception ", e);
+            LOGGER.error("Exception ", e);
         } finally {
             closeResources(stmt, conn);
         }

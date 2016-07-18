@@ -29,7 +29,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             //insert invitation and get generated id
             id = addInvitation(invitation, conn);
         } catch (SQLException | IOException e) {
-            logger.error("Exception ", e);
+            LOGGER.error("Exception ", e);
         } finally {
             closeResources(conn);
         }
@@ -64,7 +64,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             id = getInsertedId(stmt);
 
         } catch (SQLException e) {
-            logger.error("Exception ", e);
+            LOGGER.error("Exception ", e);
             throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt);
@@ -101,7 +101,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
                 invitation = invitationList.get(0);
             }
         } catch (SQLException | IOException e) {
-            logger.error("Exception ", e);
+            LOGGER.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -131,7 +131,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             //get results
             invitationsList = createInvitationsFromRS(rs);
         } catch (SQLException | IOException e) {
-            logger.error("Exception ", e);
+            LOGGER.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -164,7 +164,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             //get results
             invitationsList = createInvitationsFromRS(rs);
         } catch (SQLException | IOException e) {
-            logger.error("Exception ", e);
+            LOGGER.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -198,7 +198,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             invitationsList = createInvitationsFromRS(rs);
 
         } catch (SQLException | IOException e) {
-            logger.error("Exception ", e);
+            LOGGER.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -230,7 +230,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             affectedRows = stmt.executeUpdate();
 
         } catch (SQLException | IOException e) {
-            logger.error("Exception ", e);
+            LOGGER.error("Exception ", e);
         } finally {
             closeResources(stmt, conn);
         }

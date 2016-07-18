@@ -44,7 +44,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
             id = getInsertedId(stmt);
 
         } catch (SQLException | IOException e) {
-            logger.error("Exception...", e);
+            LOGGER.error("Exception...", e);
             throw new RuntimeException(e);
         } finally {
             closeResources(stmt, conn);
@@ -75,7 +75,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
             categoriesList = createEventCategoryListFromRS(rs);
 
         } catch (SQLException | IOException e) {
-            logger.error("Exception...", e);
+            LOGGER.error("Exception...", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -108,7 +108,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
                 category = categoryList.get(0);
             }
         } catch (SQLException | IOException e) {
-            logger.error("Exception...", e);
+            LOGGER.error("Exception...", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -137,7 +137,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
             affectedRows = stmt.executeUpdate();
 
         } catch (SQLException | IOException e) {
-            logger.error("Exception...", e);
+            LOGGER.error("Exception...", e);
         } finally {
             closeResources(stmt, conn);
         }

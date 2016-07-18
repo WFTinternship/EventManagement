@@ -11,8 +11,7 @@ import java.sql.*;
 
 class GenericDAO {
 
-    protected static final Logger logger = Logger.getLogger(GenericDAO.class);
-    // TODO: read more about log4j framework
+    protected static final Logger LOGGER = Logger.getLogger(GenericDAO.class);
 
     void closeResources(ResultSet rs, Statement stmt, Connection conn) {
         try {
@@ -20,7 +19,7 @@ class GenericDAO {
                 rs.close();
             }
         } catch (SQLException e) {
-            logger.error(e);
+            LOGGER.error(e);
         }
 
         try {
@@ -40,6 +39,10 @@ class GenericDAO {
         }
     }
 
+    void closeResources(ResultSet rs, Statement stmt) {
+        closeResources(rs, stmt, null);
+    }
+
     void closeResources(Statement stmt, Connection conn) {
         closeResources(null, stmt, conn);
     }
@@ -49,15 +52,7 @@ class GenericDAO {
     }
 
     void closeResources(Statement stmt) {
-        closeResources(null, stmt, null);
-    }
-
-    void closeResources(ResultSet rs) {
-        closeResources(rs, null, null);
-    }
-
-    void closeResources(ResultSet rs, Statement stmt) {
-        closeResources(rs, stmt, null);
+        closeResources(stmt, null);
     }
 
     int getInsertedId(Statement stmt) throws SQLException {
@@ -92,7 +87,7 @@ class GenericDAO {
             affectedRows = stmt.executeUpdate();
 
         } catch (IOException | SQLException e) {
-            logger.error("Exception...", e);
+            LOGGER.error("Exception...", e);
         } finally {
             closeResources(stmt, conn);
         }
@@ -118,7 +113,7 @@ class GenericDAO {
             affectedRows = stmt.executeUpdate();
 
         } catch (SQLException | IOException e) {
-            logger.error("Exception ", e);
+            LOGGER.error("Exception ", e);
         } finally {
             closeResources(stmt, conn);
         }

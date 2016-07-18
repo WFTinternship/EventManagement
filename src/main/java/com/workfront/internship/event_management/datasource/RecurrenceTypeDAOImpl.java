@@ -58,13 +58,13 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
             }
             conn.commit();
         } catch (IOException e) {
-                logger.error("Exception ", e);
+            LOGGER.error("Exception ", e);
             throw new RuntimeException(e);
         } catch (SQLException e) {
             try {
                 conn.rollback();
             } catch (SQLException re) {
-                logger.error("Transaction failed! ", e);
+                LOGGER.error("Transaction failed! ", e);
             }
             throw new RuntimeException(e);
         } finally {
@@ -97,7 +97,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
             recurrenceTypeList = createRecurrenceTypeListFromRS(rs);
 
         } catch (IOException | SQLException e) {
-                logger.error("Exception ", e);
+            LOGGER.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -140,7 +140,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
             }
 
         } catch (SQLException | IOException e) {
-            logger.error("Exception ", e);
+            LOGGER.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -169,7 +169,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
             affectedRows = stmt.executeUpdate();
 
         } catch (SQLException | IOException e) {
-            logger.error("Exception...", e);
+            LOGGER.error("Exception...", e);
         } finally {
             closeResources(stmt, conn);
         }
