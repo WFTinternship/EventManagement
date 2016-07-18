@@ -105,7 +105,7 @@ public class RecurrenceTypeDAOIntegrationTest {
         assertEqualRecurrenceTypesWithOptions(recurrenceType, testRecurrenceType);
     }
 
-    @Test //+
+    @Test
     public void getRecurrenceTypeById_Not_Found() {
         //test method
         RecurrenceType recurrenceType = recurrenceTypeDAO.getRecurrenceTypeById(TestHelper.NON_EXISTING_ID);

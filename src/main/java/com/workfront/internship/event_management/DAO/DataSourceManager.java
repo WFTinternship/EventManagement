@@ -38,7 +38,4 @@ public class DataSourceManager {
         return this.ds.getConnection();
     }
 
-    public void closeConnection() throws SQLException {
-            this.ds.close();
-    }
 }

@@ -16,6 +16,21 @@ import java.util.List;
  */
 public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeDAO {
 
+    private DataSourceManager dataSourceManager;
+
+    public RecurrenceTypeDAOImpl(DataSourceManager dataSourceManager) throws Exception {
+        super(dataSourceManager);
+        this.dataSourceManager = dataSourceManager;
+    }
+
+    public RecurrenceTypeDAOImpl() {
+        try {
+            this.dataSourceManager = DataSourceManager.getInstance();
+        } catch (IOException | SQLException e) {
+            LOGGER.error("Exception...", e);
+        }
+    }
+
     @Override
     public int addRecurrenceType(RecurrenceType recurrenceType) {
 
@@ -27,7 +42,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //start transaction
             conn.setAutoCommit(false);
@@ -57,9 +72,6 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
             }
             conn.commit();
-        } catch (IOException e) {
-            LOGGER.error("Exception ", e);
-            throw new RuntimeException(e);
         } catch (SQLException e) {
             try {
                 conn.rollback();
@@ -84,7 +96,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             String query = "SELECT * FROM recurrence_type ";
@@ -96,7 +108,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
             //get results
             recurrenceTypeList = createRecurrenceTypeListFromRS(rs);
 
-        } catch (IOException | SQLException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
@@ -115,7 +127,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             String query = "SELECT * FROM recurrence_type "
@@ -139,7 +151,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
                 recurrenceType.setRecurrenceOptions(recurrenceOptionList);
             }
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
@@ -156,7 +168,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             String sqlStr = "UPDATE recurrence_type SET title = ?, interval_unit = ? WHERE id = ?";
@@ -168,7 +180,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
             //execute query
             affectedRows = stmt.executeUpdate();
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception...", e);
         } finally {
             closeResources(stmt, conn);

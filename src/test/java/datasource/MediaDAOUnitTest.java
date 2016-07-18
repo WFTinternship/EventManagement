@@ -1,9 +1,9 @@
 package datasource;
 
 import com.workfront.internship.event_management.DAO.DataSourceManager;
-import com.workfront.internship.event_management.DAO.RecurrenceTypeDAO;
-import com.workfront.internship.event_management.DAO.RecurrenceTypeDAOImpl;
-import com.workfront.internship.event_management.model.RecurrenceType;
+import com.workfront.internship.event_management.DAO.MediaDAO;
+import com.workfront.internship.event_management.DAO.MediaDAOImpl;
+import com.workfront.internship.event_management.model.Media;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -19,10 +19,10 @@ import static org.mockito.Mockito.when;
 /**
  * Created by Hermine Turshujyan 7/18/16.
  */
-public class RecurrenceTypeDAOUnitTest {
+public class MediaDAOUnitTest {
 
     private DataSourceManager dataSourceManager;
-    private RecurrenceTypeDAO recurrenceTypeDAO;
+    private MediaDAO mediaDAO;
 
     @SuppressWarnings("unchecked")
     @Before
@@ -34,37 +34,56 @@ public class RecurrenceTypeDAOUnitTest {
         when(dataSourceManager.getConnection()).thenReturn(connection);
         when(connection.prepareStatement(any(String.class), eq(PreparedStatement.RETURN_GENERATED_KEYS))).thenThrow(SQLException.class);
 
-        recurrenceTypeDAO = new RecurrenceTypeDAOImpl(dataSourceManager);
+        mediaDAO = new MediaDAOImpl(dataSourceManager);
+    }
+
+
+    @Test(expected = RuntimeException.class)
+    public void addMedia_dbError() {
+        mediaDAO.addMedia(new Media());
     }
 
     @Test(expected = RuntimeException.class)
-    public void addRecurrenceType_dbError() {
-        recurrenceTypeDAO.addRecurrenceType(new RecurrenceType());
+    public void getMediaById_dbError() {
+        mediaDAO.getMediaById(1);
     }
 
     @Test(expected = RuntimeException.class)
-    public void getAllRecurrenceTypes_dbError() {
-        recurrenceTypeDAO.getAllRecurrenceTypes();
+    public void getMediaByEventId_dbError() {
+        mediaDAO.getMediaByEventId(1);
+
     }
 
     @Test(expected = RuntimeException.class)
-    public void getRecurrenceTypeById_dbError() {
-        recurrenceTypeDAO.getRecurrenceTypeById(1);
+    public void getMediaByType_dbError() {
+        mediaDAO.getMediaByType("Image");
+
     }
 
     @Test(expected = RuntimeException.class)
-    public void updateRecurrenceType() {
-        recurrenceTypeDAO.updateRecurrenceType(new RecurrenceType());
+    public void getMediaByUploaderId_dbError() {
+        mediaDAO.getMediaByUploaderId(1);
     }
 
     @Test(expected = RuntimeException.class)
-    public void deleteRecurrenceType() {
-        recurrenceTypeDAO.deleteRecurrenceType(1);
+    public void getAllMedia_dbError() {
+        mediaDAO.getAllMedia();
     }
 
     @Test(expected = RuntimeException.class)
-    public void deleteAllRecurrenceTypes() {
-        recurrenceTypeDAO.deleteAllRecurrenceTypes();
+    public void updateMediaDescription_dbError() {
+        mediaDAO.updateMediaDescription(1, "description");
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void deleteMedia_dbError() {
+        mediaDAO.deleteMedia(1);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void deleteAllMedia_dbError() {
+        mediaDAO.deleteAllMedia();
 
     }
+
 }

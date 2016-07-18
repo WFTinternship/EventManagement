@@ -12,6 +12,21 @@ import java.util.List;
  */
 public class MediaDAOImpl extends GenericDAO implements MediaDAO {
 
+    private DataSourceManager dataSourceManager;
+
+    public MediaDAOImpl(DataSourceManager dataSourceManager) throws Exception {
+        super(dataSourceManager);
+        this.dataSourceManager = dataSourceManager;
+    }
+
+    public MediaDAOImpl() {
+        try {
+            this.dataSourceManager = DataSourceManager.getInstance();
+        } catch (IOException | SQLException e) {
+            LOGGER.error("Exception...", e);
+        }
+    }
+
     @Override
     public int addMedia(Media media) {
 
@@ -21,7 +36,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             String sqlStr = "INSERT INTO event_media (event_id, path, type, description, uploader_id, upload_date) "
@@ -44,7 +59,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             //get inserted id
             id = getInsertedId(stmt);
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception...", e);
             throw new RuntimeException(e);
         } finally {
@@ -86,7 +101,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             String sqlStr = "SELECT * FROM event_media WHERE event_id = ?";
@@ -99,7 +114,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             //get results
             mediaList = createMediaListFromRS(rs);
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception...", e);
         } finally {
             closeResources(rs, stmt, conn);
@@ -117,7 +132,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
 
         try {
             //acquire connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create statement
             String sqlStr = "SELECT * FROM event_media";
@@ -129,7 +144,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             //get results
             mediaList = createMediaListFromRS(rs);
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception...", e);
         } finally {
             closeResources(rs, stmt, conn);
@@ -146,7 +161,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             String sqlStr = "UPDATE event_media SET description = ? WHERE id = ?";
@@ -157,7 +172,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             //execute query
             affectedRows = stmt.executeUpdate();
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception...", e);
         } finally {
             closeResources(null, stmt, conn);
@@ -186,7 +201,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             String sqlStr = "SELECT * FROM event_media where " + columnName + " = ?";
@@ -199,7 +214,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             //get results
             mediaList = createMediaListFromRS(rs);
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception...", e);
         } finally {
             closeResources(rs, stmt, conn);
