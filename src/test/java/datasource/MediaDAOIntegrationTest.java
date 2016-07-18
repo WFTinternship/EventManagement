@@ -42,14 +42,37 @@ public class MediaDAOIntegrationTest {
 
     @Before
     public void setUp() {
-        createTestObjects();
-        insertTestObjectsIntoDB();
+        testUser = TestHelper.createTestUser();
+        testCategory = TestHelper.createTestCategory();
+        testEvent = TestHelper.createTestEvent();
+        testMedia = TestHelper.createTestMedia();
+
+        //insert user into db and get generated id
+        int userId = userDAO.addUser(testUser);
+        testUser.setId(userId);
+
+        //insert category into db and get generated id
+        int categoryId = categoryDAO.addCategory(testCategory);
+        testCategory.setId(categoryId);
+
+        //insert event into db and get generated id
+        testEvent.setCategory(testCategory);
+        int eventId = eventDAO.addEvent(testEvent);
+        testEvent.setId(eventId);
+
+        //insert media into db and get generated id
+        testMedia.setUploaderId(testUser.getId());
+        testMedia.setEventId(testEvent.getId());
+        int mediaId = mediaDAO.addMedia(testMedia);
+        testMedia.setId(mediaId);
     }
 
     @After
     public void tearDown() {
-        deleteAllTestInsertionsFromDB();
-        deleteTestObjects();
+        mediaDAO.deleteAllMedia();
+        eventDAO.deleteAllEvents();
+        categoryDAO.deleteAllCategories();
+        userDAO.getAllUsers();
     }
 
     @Test
@@ -244,47 +267,7 @@ public class MediaDAOIntegrationTest {
 
 
     //helper methods
-    private void createTestObjects() {
-        testUser = TestHelper.createTestUser();
-        testCategory = TestHelper.createTestCategory();
-        testEvent = TestHelper.createTestEvent();
-        testMedia = TestHelper.createTestMedia();
-    }
 
-    private void insertTestObjectsIntoDB() {
-        //insert user into db and get generated id
-        int userId = userDAO.addUser(testUser);
-        testUser.setId(userId);
-
-        //insert category into db and get generated id
-        int categoryId = categoryDAO.addCategory(testCategory);
-        testCategory.setId(categoryId);
-
-        //insert event into db and get generated id
-        testEvent.setCategory(testCategory);
-        int eventId = eventDAO.addEvent(testEvent);
-        testEvent.setId(eventId);
-
-        //insert media into db and get generated id
-        testMedia.setUploaderId(testUser.getId());
-        testMedia.setEventId(testEvent.getId());
-        int mediaId = mediaDAO.addMedia(testMedia);
-        testMedia.setId(mediaId);
-    }
-
-    private void deleteAllTestInsertionsFromDB() {
-        mediaDAO.deleteAllMedia();
-        eventDAO.deleteAllEvents();
-        categoryDAO.deleteAllCategories();
-        userDAO.getAllUsers();
-    }
-
-    private void deleteTestObjects() {
-        testUser = null;
-        testCategory = null;
-        testEvent = null;
-        testMedia = null;
-    }
 
     private void assertMedia(Media expectedMedia, Media actualMedia) {
         assertEquals(actualMedia.getId(), expectedMedia.getId());

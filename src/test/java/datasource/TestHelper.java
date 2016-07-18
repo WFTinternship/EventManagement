@@ -2,10 +2,7 @@ package datasource;
 
 import com.workfront.internship.event_management.model.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by Hermine Turshujyan 7/10/16.
@@ -16,7 +13,7 @@ class TestHelper {
     static final String NON_EXISTING_EMAIL = "nonExistingEmail@test.com";
     static final String NON_EXISTING_MEDIA_TYPE = "Video";
 
-    static int NON_EXISTING_ID = 12345;
+    static int NON_EXISTING_ID = 1;
 
 
     //test object creation
@@ -24,11 +21,11 @@ class TestHelper {
         User testUser = new User();
         testUser.setFirstName("Test FirstName")
                 .setLastName("Test LastName")
-                .setUsername("testUsername" + uuid())
+                .setUsername("testUsername" + getRandomNumber())
                 .setPassword("testPassword")
-                .setEmail("test" + uuid() + "@test.com")
+                .setEmail("test" + getRandomNumber() + "@test.com")
                 .setPhoneNumber("1111111")
-                .setAvatarPath("/users/test_user_av" + uuid() + ".jpg")
+                .setAvatarPath("/users/test_user_av" + getRandomNumber() + ".jpg")
                 .setVerified(false)
                 .setRegistrationDate(new Date());
         return testUser;
@@ -36,7 +33,7 @@ class TestHelper {
 
     static Category createTestCategory() {
         Category category = new Category();
-        category.setTitle("Test Category" + uuid())
+        category.setTitle("Test Category" + getRandomNumber())
                 .setDescription("Test Description")
                 .setCreationDate(new Date());
         return category;
@@ -112,7 +109,7 @@ class TestHelper {
 
     static Media createTestMedia() {
         Media media = new Media();
-        media.setPath("/event/111/test_path" + uuid() + ".jpg")
+        media.setPath("/event/111/test_path" + getRandomNumber() + ".jpg")
                 .setType("Image")
                 .setDescription("Test description")
                 .setUploadDate(new Date());
@@ -121,7 +118,7 @@ class TestHelper {
 
     static RecurrenceOption createTestRecurrenceOption() {
         RecurrenceOption option = new RecurrenceOption();
-        option.setTitle("Test repeat option" + uuid())
+        option.setTitle("Test repeat option" + getRandomNumber())
                 .setAbbreviation("RO");
         return option;
     }
@@ -137,7 +134,7 @@ class TestHelper {
 
         //create recurrence type
         RecurrenceType recurrenceType = new RecurrenceType();
-        recurrenceType.setTitle("Test recurrence type " + uuid())
+        recurrenceType.setTitle("Test recurrence type " + getRandomNumber())
                 .setIntervalUnit("test unit")
                 .setRecurrenceOptions(recurrenceOptionList);
 
@@ -146,7 +143,7 @@ class TestHelper {
 
     static RecurrenceType createTestRecurrenceType() {
         RecurrenceType recurrenceType = new RecurrenceType();
-        recurrenceType.setTitle("Test recurrence type " + uuid())
+        recurrenceType.setTitle("Test recurrence type " + getRandomNumber())
                 .setIntervalUnit("test unit");
         return recurrenceType;
     }
@@ -161,9 +158,10 @@ class TestHelper {
     }
 
     //helper methods
-    private static String uuid() {
-        UUID uuid = UUID.randomUUID();
-        return uuid.toString();
+    private static int getRandomNumber() {
+        Random rand = new Random();
+        int n = rand.nextInt(100000) + 1;
+        return n;
     }
 
 }

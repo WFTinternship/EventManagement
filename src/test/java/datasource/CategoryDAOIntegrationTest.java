@@ -33,8 +33,6 @@ public class CategoryDAOIntegrationTest {
 
         //insert test user into db, get generated id
         int categoryId = categoryDAO.addCategory(testCategory);
-
-        //set id to test category
         testCategory.setId(categoryId);
     }
 

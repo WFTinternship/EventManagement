@@ -55,9 +55,6 @@ public class RecurrenceOptionDAOIntegrationTest {
         recurrenceTypeDAO.deleteAllRecurrenceTypes();
         recurrenceOptionDAO.deleteAllRecurrenceOptions();
 
-        //delete test object
-        testRecurrenceOption = null;
-        testRecurrenceType = null;
     }
 
     @Test

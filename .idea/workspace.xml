@@ -1,36 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventRecurrenceDAO.java" description="    public boolean insertEventRecurrence(EventRecu..." line="14" />
+    <bookmark url="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/EventRecurrenceDAO.java" description="    public boolean insertEventRecurrence(EventRecu..." line="14" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="54981ee0-1517-46d0-8cc0-b92649ad1315" name="Default" comment="EventRecurrenceDAOIntegrationTest  completed">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/EventCategoryDAO.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/EventCategoryDAOImpl.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/EventInvitationDAO.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/EventInvitationDAOImpl.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/EventMediaDAO.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/EventMediaDAOImpl.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/RepeatOptionDAO.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/RepeatOptionDAOImpl.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/model/EventCategory.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/model/EventInvitation.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/model/EventMedia.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/model/RepeatOption.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/EventDAO.class" afterPath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/EventDAO.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/EventDAOImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/EventDAOImpl.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/EventRecurrenceDAO.class" afterPath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/EventRecurrenceDAO.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/EventRecurrenceDAOImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/EventRecurrenceDAOImpl.class" />
+    <list default="true" id="54981ee0-1517-46d0-8cc0-b92649ad1315" name="Default" comment="Some chan">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_jetbrains_kotlin_kotlin_runtime_1_0_3.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_jetbrains_kotlin_kotlin_stdlib_1_0_3.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_jetbrains_kotlin_kotlin_test_1_0_3.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/EventDAOImpl.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/EventRecurrenceDAOImpl.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/RecurrenceTypeDAOImpl.class" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db/EventManagementDB_MODEL.mwb" afterPath="$PROJECT_DIR$/db/EventManagementDB_MODEL.mwb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/GenericDAO.class" afterPath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/GenericDAO.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/RecurrenceTypeDAO.class" afterPath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/RecurrenceTypeDAO.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/RecurrenceTypeDAOImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/RecurrenceTypeDAOImpl.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/UserDAO.class" afterPath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/UserDAO.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/UserDAOImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/datasource/UserDAOImpl.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/model/Event.class" afterPath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/model/Event.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/model/RecurrenceType.class" afterPath="$PROJECT_DIR$/target/classes/com/workfront/internship/event_management/model/RecurrenceType.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EventManagement.iml" afterPath="$PROJECT_DIR$/EventManagement.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/datasource/EventRecurrenceDAOIntegrationTest.java" afterPath="$PROJECT_DIR$/src/test/java/datasource/EventRecurrenceDAOIntegrationTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/datasource/CategoryDAOIntegrationTest.java" afterPath="$PROJECT_DIR$/src/test/java/datasource/CategoryDAOIntegrationTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/datasource/InvitationDAOIntegrationTest.java" afterPath="$PROJECT_DIR$/src/test/java/datasource/InvitationDAOIntegrationTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/datasource/MediaDAOIntegrationTest.java" afterPath="$PROJECT_DIR$/src/test/java/datasource/MediaDAOIntegrationTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/datasource/RecurrenceOptionDAOIntegrationTest.java" afterPath="$PROJECT_DIR$/src/test/java/datasource/RecurrenceOptionDAOIntegrationTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/datasource/TestHelper.java" afterPath="$PROJECT_DIR$/src/test/java/datasource/TestHelper.java" />
     </list>
     <list id="ed1db1be-06eb-4a08-9c11-714bb0f701d2" name="Rejected commit: Default" comment="Add log4j framework, exception handling with log4j logger. Replace JDBC config java class with  property file. Some corrections in all DAO classes&#10;&#10;      &#10;" />
     <list id="b3bd42bf-933b-4f46-b0ff-46171e5c68c6" name="Rejected commit: Default (2)" comment="Refactor(rename)  model and dao classes" />
@@ -47,10 +38,65 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/EventManagement$EventRecurrenceDAOIntegrationTest.coverage" NAME="EventRecurrenceDAOIntegrationTest Coverage Results" MODIFIED="1468787546725" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+    <SUITE FILE_PATH="coverage/EventManagement$TestUserDAOImpl__1_.coverage" NAME="TestUserDAOImpl (1) Coverage Results" MODIFIED="1468576327946" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>integration.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/EventManagement$TestEventCategoryDAOImpl__1_.coverage" NAME="TestEventCategoryDAOImpl (1) Coverage Results" MODIFIED="1468580275039" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>integration.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/EventManagement$InvitationDAOIntegrationTest.coverage" NAME="InvitationDAOIntegrationTest Coverage Results" MODIFIED="1468838035173" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>datasource.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/EventManagement$DAOTest.coverage" NAME="DAOTest Coverage Results" MODIFIED="1468264842527" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.workfront.internship.event_management.datasource.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/EventManagement$EventRecurrenceDAOIntegrationTest_deleteAllEventRecurrences_Not_Found.coverage" NAME="EventRecurrenceDAOIntegrationTest.deleteAllEventRecurrences_Not_Found Coverage Results" MODIFIED="1468839122174" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>datasource.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/EventManagement$TestEventCategoryDAOImpl.coverage" NAME="TestEventCategoryDAOImpl Coverage Results" MODIFIED="1468504303300" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/EventManagement$RecurrenceOptionDAOUnitTest.coverage" NAME="RecurrenceOptionDAOUnitTest Coverage Results" MODIFIED="1468832444456" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>datasource.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/EventManagement$UserDAOUnitTest.coverage" NAME="UserDAOUnitTest Coverage Results" MODIFIED="1468837190182" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>datasource.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/EventManagement$CategoryDAOUnitTest.coverage" NAME="CategoryDAOUnitTest Coverage Results" MODIFIED="1468829103180" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>datasource.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/EventManagement$EventDAOIntegrationTest_getAllEvents_Found.coverage" NAME="EventDAOIntegrationTest.getAllEvents_Found Coverage Results" MODIFIED="1468842392132" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>datasource.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/EventManagement$EventDAOIntegrationTest_addEvent_Success.coverage" NAME="EventDAOIntegrationTest.addEvent_Success Coverage Results" MODIFIED="1468841214708" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>datasource.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/EventManagement$TestEventMediaDAOImpl__1_.coverage" NAME="TestEventMediaDAOImpl (1) Coverage Results" MODIFIED="1468576168976" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>integration.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/EventManagement$RecurrenceTypeDAOIntegrationTest_updateRecurrenceType_Found.coverage" NAME="RecurrenceTypeDAOIntegrationTest.updateRecurrenceType_Found Coverage Results" MODIFIED="1468833446847" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>datasource.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/EventManagement$All_in_project.coverage" NAME="All in project Coverage Results" MODIFIED="1468830408545" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.workfront.internship.event_management.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/EventManagement$EventRecurrenceDAOIntegrationTest.coverage" NAME="EventRecurrenceDAOIntegrationTest Coverage Results" MODIFIED="1468842012864" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>datasource.*</FILTER>
     </SUITE>
     <SUITE FILE_PATH="coverage/EventManagement$EventRecurrenceDAOIntegrationTest_deleteEventRecurrence_Not_Found.coverage" NAME="EventRecurrenceDAOIntegrationTest.deleteEventRecurrence_Not_Found Coverage Results" MODIFIED="1468787449296" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>datasource.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/EventManagement$MediaDAOIntegrationTest.coverage" NAME="MediaDAOIntegrationTest Coverage Results" MODIFIED="1468838279843" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>datasource.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/EventManagement$MediaDAOUnitTest.coverage" NAME="MediaDAOUnitTest Coverage Results" MODIFIED="1468838209975" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>datasource.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/EventManagement$EventDAOIntegrationTest_getEventsByCategoryId_Empty_List.coverage" NAME="EventDAOIntegrationTest.getEventsByCategoryId_Empty_List Coverage Results" MODIFIED="1468842506425" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>datasource.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/EventManagement$CategoryDAOUnitTest_getCategoryById_dbError.coverage" NAME="CategoryDAOUnitTest.getCategoryById_dbError Coverage Results" MODIFIED="1468837366963" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>datasource.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/EventManagement$EventRecurrenceDAOUnitTest.coverage" NAME="EventRecurrenceDAOUnitTest Coverage Results" MODIFIED="1468834444311" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>datasource.*</FILTER>
     </SUITE>
     <SUITE FILE_PATH="coverage/EventManagement$EventRecurrenceDAOIntegrationTest_deleteEventRecurrence_Found.coverage" NAME="EventRecurrenceDAOIntegrationTest.deleteEventRecurrence_Found Coverage Results" MODIFIED="1468786681806" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
@@ -59,22 +105,18 @@
     <SUITE FILE_PATH="coverage/EventManagement$datasource_in_EventManagement.coverage" NAME="datasource in EventManagement Coverage Results" MODIFIED="1468787528798" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>datasource.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/EventManagement$TestUserDAOImpl__1_.coverage" NAME="TestUserDAOImpl (1) Coverage Results" MODIFIED="1468576327946" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>integration.*</FILTER>
-    </SUITE>
     <SUITE FILE_PATH="coverage/EventManagement$TestUserDAOImpl.coverage" NAME="TestUserDAOImpl Coverage Results" MODIFIED="1468504272704" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
-    <SUITE FILE_PATH="coverage/EventManagement$TestEventCategoryDAOImpl__1_.coverage" NAME="TestEventCategoryDAOImpl (1) Coverage Results" MODIFIED="1468580275039" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>integration.*</FILTER>
-    </SUITE>
     <SUITE FILE_PATH="coverage/EventManagement$UserDAOImplIntegrationTest.coverage" NAME="UserDAOImplIntegrationTest Coverage Results" MODIFIED="1468622557941" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>integration.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/EventManagement$DAOTest.coverage" NAME="DAOTest Coverage Results" MODIFIED="1468264842527" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.workfront.internship.event_management.datasource.*</FILTER>
+    <SUITE FILE_PATH="coverage/EventManagement$CategoryDAOIntegrationTest.coverage" NAME="CategoryDAOIntegrationTest Coverage Results" MODIFIED="1468836508700" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>datasource.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/EventManagement$TestEventCategoryDAOImpl.coverage" NAME="TestEventCategoryDAOImpl Coverage Results" MODIFIED="1468504303300" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
-    <SUITE FILE_PATH="coverage/EventManagement$TestEventMediaDAOImpl__1_.coverage" NAME="TestEventMediaDAOImpl (1) Coverage Results" MODIFIED="1468576168976" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>integration.*</FILTER>
+    <SUITE FILE_PATH="coverage/EventManagement$RecurrenceTypeDAOUnitTest.coverage" NAME="RecurrenceTypeDAOUnitTest Coverage Results" MODIFIED="1468831131225" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>datasource.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/EventManagement$DAO_layer.coverage" NAME="DAO layer Coverage Results" MODIFIED="1468844020864" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.workfront.internship.event_management.DAO.*</FILTER>
     </SUITE>
   </component>
   <component name="CoverageOptionsProvider">
@@ -82,7 +124,7 @@
   </component>
   <component name="CoverageViewManager">
     <option name="myFlattenPackages" value="true" />
-    <option name="myAutoScrollToSource" value="true" />
+    <option name="myAutoScrollFromSource" value="true" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -104,12 +146,11 @@
       <file leaf-file-name="CategoryDAOIntegrationTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/datasource/CategoryDAOIntegrationTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="301">
-              <caret line="172" column="29" selection-start-line="166" selection-start-column="8" selection-end-line="172" selection-end-column="29" />
+            <state relative-caret-position="90">
+              <caret line="35" column="8" selection-start-line="35" selection-start-column="8" selection-end-line="35" selection-end-column="8" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#addCategory_Dublicate_Entry#0;class#CategoryDAOIntegrationTest#0" expanded="false" />
-                <element signature="method#getAllCategories_Empty_List#0;class#CategoryDAOIntegrationTest#0" expanded="false" />
                 <element signature="method#updateCategory_Not_Found#0;class#CategoryDAOIntegrationTest#0" expanded="false" />
                 <element signature="method#deleteCategory_Not_Found#0;class#CategoryDAOIntegrationTest#0" expanded="false" />
               </folding>
@@ -117,17 +158,16 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="EventRecurrenceDAOIntegrationTest.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="EventRecurrenceDAOIntegrationTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/datasource/EventRecurrenceDAOIntegrationTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-827">
-              <caret line="58" column="0" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
+            <state relative-caret-position="-9">
+              <caret line="204" column="17" selection-start-line="204" selection-start-column="17" selection-end-line="204" selection-end-column="17" />
               <folding>
                 <element signature="method#getEventRecurrenceById_Found#0;class#EventRecurrenceDAOIntegrationTest#0" expanded="false" />
                 <element signature="method#getEventRecurrenceById_Not_Found#0;class#EventRecurrenceDAOIntegrationTest#0" expanded="false" />
                 <element signature="method#getEventRecurrencesByEventId_Found#0;class#EventRecurrenceDAOIntegrationTest#0" expanded="false" />
                 <element signature="method#getAllEventRecurrencesByEventId_Found#0;class#EventRecurrenceDAOIntegrationTest#0" expanded="false" />
-                <element signature="method#getALlEventRecurrencesByEventId__Empty_List#0;class#EventRecurrenceDAOIntegrationTest#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -136,38 +176,8 @@
       <file leaf-file-name="RecurrenceOptionDAOIntegrationTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/datasource/RecurrenceOptionDAOIntegrationTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3210">
-              <caret line="229" column="0" selection-start-line="229" selection-start-column="0" selection-end-line="231" selection-end-column="93" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UserDAOIntegrationTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/datasource/UserDAOIntegrationTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="615">
-              <caret line="61" column="0" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
-              <folding>
-                <element signature="method#insertUser_Sucess#0;class#UserDAOIntegrationTest#0" expanded="false" />
-                <element signature="method#getAllUsers_Found#0;class#UserDAOIntegrationTest#0" expanded="false" />
-                <element signature="method#getAllUsers_Empty_List#0;class#UserDAOIntegrationTest#0" expanded="false" />
-                <element signature="method#getUserById_Found#0;class#UserDAOIntegrationTest#0" expanded="false" />
-                <element signature="method#getUserById_Not_Found#0;class#UserDAOIntegrationTest#0" expanded="false" />
-                <element signature="method#getUserByUsername_Found#0;class#UserDAOIntegrationTest#0" expanded="false" />
-                <element signature="method#getUserByUsername_Not_Found#0;class#UserDAOIntegrationTest#0" expanded="false" />
-                <element signature="method#getUserByEmail_Found#0;class#UserDAOIntegrationTest#0" expanded="false" />
-                <element signature="method#getUserByEmail_Not_Fount#0;class#UserDAOIntegrationTest#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UserDAOUnitTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/datasource/UserDAOUnitTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="27" column="34" selection-start-line="27" selection-start-column="34" selection-end-line="27" selection-end-column="34" />
+            <state relative-caret-position="210">
+              <caret line="56" column="0" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -176,35 +186,13 @@
       <file leaf-file-name="EventDAOIntegrationTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/datasource/EventDAOIntegrationTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RecurrenceTypeDAOIntegrationTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/datasource/RecurrenceTypeDAOIntegrationTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1875">
-              <caret line="139" column="14" selection-start-line="139" selection-start-column="0" selection-end-line="140" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EventRecurrenceDAOImpl.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventRecurrenceDAOImpl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2430">
-              <caret line="196" column="32" selection-start-line="196" selection-start-column="32" selection-end-line="196" selection-end-column="32" />
+            <state relative-caret-position="1710">
+              <caret line="140" column="0" selection-start-line="140" selection-start-column="0" selection-end-line="140" selection-end-column="0" />
               <folding>
-                <element signature="method#getAllEventRecurrences#0;class#EventRecurrenceDAOImpl#0" expanded="false" />
-                <marker date="1468786430000" expanded="true" signature="1218:1386" ph="SELECT * FRO... event_recurrence" />
-                <marker date="1468786430000" expanded="true" signature="2355:2519" ph="INSERT INTO event_recurrence... " />
-                <marker date="1468786430000" expanded="true" signature="3759:3916" ph="SELECT * FRO... event_recurrence" />
-                <marker date="1468786430000" expanded="true" signature="4783:4921" ph="SELECT * FRO... event_recurrence" />
-                <marker date="1468786430000" expanded="true" signature="5694:5844" ph="UPDATE event... " />
+                <element signature="imports" expanded="true" />
+                <element signature="method#deleteEvent_Found#0;class#EventDAOIntegrationTest#0" expanded="false" />
+                <element signature="method#deleteEvent_Not_Found#0;class#EventDAOIntegrationTest#0" expanded="false" />
+                <element signature="method#deleteAllEvents_Found#0;class#EventDAOIntegrationTest#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -213,9 +201,48 @@
       <file leaf-file-name="InvitationDAOIntegrationTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/datasource/InvitationDAOIntegrationTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4125">
-              <caret line="288" column="28" selection-start-line="288" selection-start-column="28" selection-end-line="288" selection-end-column="28" />
+            <state relative-caret-position="395">
+              <caret line="67" column="36" selection-start-line="67" selection-start-column="36" selection-end-line="67" selection-end-column="36" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RecurrenceTypeDAOIntegrationTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/datasource/RecurrenceTypeDAOIntegrationTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1455">
+              <caret line="118" column="25" selection-start-line="118" selection-start-column="25" selection-end-line="118" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TestHelper.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/test/java/datasource/TestHelper.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="240">
+              <caret line="18" column="26" selection-start-line="18" selection-start-column="26" selection-end-line="18" selection-end-column="26" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EventDAOImpl.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/EventDAOImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-6475">
+              <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+              <folding>
+                <marker date="1468843360000" expanded="true" signature="2931:3037" ph="SELECT * FRO... event" />
+                <marker date="1468843360000" expanded="true" signature="3811:3938" ph="SELECT * FRO... event" />
+                <marker date="1468843360000" expanded="true" signature="5857:6014" ph="SELECT * FRO... event" />
+                <marker date="1468843360000" expanded="true" signature="6877:7152" ph="SELECT event... event" />
+                <marker date="1468843360000" expanded="true" signature="7975:8256" ph="SELECT event... event" />
+                <marker date="1468843360000" expanded="true" signature="9055:9403" ph="SELECT event... event" />
+                <marker date="1468843360000" expanded="true" signature="10145:10477" ph="UPDATE event... " />
+                <marker date="1468843360000" expanded="true" signature="12958:13236" ph="INSERT INTO event... " />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -223,9 +250,21 @@
       <file leaf-file-name="MediaDAOIntegrationTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/datasource/MediaDAOIntegrationTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3720">
-              <caret line="264" column="49" selection-start-line="264" selection-start-column="49" selection-end-line="264" selection-end-column="49" />
+            <state relative-caret-position="-820">
+              <caret line="66" column="33" selection-start-line="66" selection-start-column="33" selection-end-line="66" selection-end-column="33" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RecurrenceOptionDAOUnitTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/datasource/RecurrenceOptionDAOUnitTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="26" column="6" selection-start-line="26" selection-start-column="6" selection-end-line="26" selection-end-column="6" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -258,57 +297,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventMediaDAOImpl.java" />
-        <option value="$PROJECT_DIR$/src/test/java/integration/TestEventCategoryDAOImpl.java" />
-        <option value="$PROJECT_DIR$/src/test/java/integration/TestEventInvitationDAOImpl.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/UserDAO.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventCategoryDAO.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventMediaDAO.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventInvitationDAO.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventInvitationDAOImpl.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventCategoryDAOImpl.java" />
-        <option value="$PROJECT_DIR$/src/test/java/integration/EventMediaDAOImplIntegrationTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/integration/EventCategoryDAOImplIntegrationTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/integration/UserDAOImplIntegrationTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/integration/EventInvitationDAOImplIntegrationTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/UserDAOImpl.java" />
-        <option value="$PROJECT_DIR$/src/test/java/unit/UserDAOImplUnitTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/datasource/UserDAOImplUnitTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/datasource/EventCategoryDAOImplIntegrationTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RepeatOptionDAO.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RepeatOptionDAOImpl.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/Repeat.java" />
-        <option value="$PROJECT_DIR$/src/test/java/datasource/RecurrenceTypeDAOImplIntegrationTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/RepeatType.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/Recurrence.java" />
-        <option value="$PROJECT_DIR$/src/test/java/datasource/RepeatOptionDAOIntegrationTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/InvitationDAOImpl.java" />
         <option value="$PROJECT_DIR$/src/test/java/datasource/RecurrenceDAOIntegrationTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/GenericDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/MediaDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/InvitationDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/MediaDAOImpl.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceTypeDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/RecurrenceType.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceOptionDAO.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/CategoryDAOImpl.java" />
-        <option value="$PROJECT_DIR$/src/test/java/datasource/CategoryDAOIntegrationTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceOptionDAOImpl.java" />
-        <option value="$PROJECT_DIR$/src/test/java/datasource/RecurrenceOptionDAOIntegrationTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceTypeDAOImpl.java" />
-        <option value="$PROJECT_DIR$/src/test/java/datasource/RecurrenceTypeDAOIntegrationTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceDAOImpl.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceDAO.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/Event.java" />
-        <option value="$PROJECT_DIR$/src/test/java/datasource/TestHelper.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventRecurrenceDAO.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventDAO.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventDAOImpl.java" />
-        <option value="$PROJECT_DIR$/src/test/java/datasource/MediaDAOIntegrationTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/datasource/InvitationDAOIntegrationTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventRecurrenceDAOImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventDAO.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/Event.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventDAOImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/UserDAO.java" />
+        <option value="$PROJECT_DIR$/src/test/java/datasource/UserDAOIntegrationTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/GenericDAO.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/UserDAOImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/CategoryDAOImpl.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/DataSourceManager.java" />
+        <option value="$PROJECT_DIR$/src/test/java/datasource/RecurrenceTypeDAOIntegrationTest.java" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/CategoryDAO.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/EventRecurrenceDAO.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/InvitationDAO.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/CategoryDAOImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/EventRecurrenceDAOImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/InvitationDAOImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/MediaDAOImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/RecurrenceTypeDAOImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/RecurrenceOptionDAOImpl.java" />
         <option value="$PROJECT_DIR$/src/test/java/datasource/EventRecurrenceDAOIntegrationTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/datasource/EventDAOIntegrationTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/EventDAOImpl.java" />
+        <option value="$PROJECT_DIR$/src/test/java/datasource/EventDAOUnitTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/datasource/CategoryDAOUnitTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/datasource/EventRecurrenceDAOUnitTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/datasource/InvitationDAOUnitTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/datasource/MediaDAOUnitTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/datasource/RecurrenceOptionDAOUnitTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/datasource/RecurrenceTypeDAOUnitTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/datasource/UserDAOUnitTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/datasource/CategoryDAOIntegrationTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/datasource/InvitationDAOIntegrationTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/datasource/MediaDAOIntegrationTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/datasource/RecurrenceOptionDAOIntegrationTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/datasource/TestHelper.java" />
       </list>
     </option>
   </component>
@@ -422,6 +461,32 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="datasource" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="EventManagement" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="EventManagement" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="main" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -466,11 +531,49 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="java" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="datasource" />
+              <option name="myItemId" value="event_management" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="model" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="EventManagement" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="EventManagement" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="event_management" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DAO" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -482,7 +585,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
+    <property name="settings.editor.selected.configurable" value="coverage" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -520,8 +623,8 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.EventRecurrenceDAOIntegrationTest">
-    <configuration default="false" name="RecurrenceOptionDAOIntegrationTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.DAO layer">
+    <configuration default="false" name="EventDAOIntegrationTest.getAllEvents_Found" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
           <option name="PATTERN" value="datasource.*" />
@@ -532,86 +635,8 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="datasource" />
-      <option name="MAIN_CLASS_NAME" value="datasource.RecurrenceOptionDAOIntegrationTest" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-      <method />
-    </configuration>
-    <configuration default="false" name="UserDAOIntegrationTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="datasource.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="EventManagement" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="datasource" />
-      <option name="MAIN_CLASS_NAME" value="datasource.UserDAOIntegrationTest" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-      <method />
-    </configuration>
-    <configuration default="false" name="UserDAOUnitTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="datasource.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="EventManagement" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="datasource" />
-      <option name="MAIN_CLASS_NAME" value="datasource.UserDAOUnitTest" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-      <method />
-    </configuration>
-    <configuration default="false" name="EventRecurrenceDAOIntegrationTest.deleteAllEventRecurrences_Not_Found" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="datasource.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="EventManagement" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="datasource" />
-      <option name="MAIN_CLASS_NAME" value="datasource.EventRecurrenceDAOIntegrationTest" />
-      <option name="METHOD_NAME" value="deleteAllEventRecurrences_Not_Found" />
+      <option name="MAIN_CLASS_NAME" value="datasource.EventDAOIntegrationTest" />
+      <option name="METHOD_NAME" value="getAllEvents_Found" />
       <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
@@ -625,7 +650,7 @@
       <patterns />
       <method />
     </configuration>
-    <configuration default="false" name="EventRecurrenceDAOIntegrationTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration default="false" name="EventDAOIntegrationTest.getEventsByCategoryId_Found" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
           <option name="PATTERN" value="datasource.*" />
@@ -636,9 +661,87 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="datasource" />
-      <option name="MAIN_CLASS_NAME" value="datasource.EventRecurrenceDAOIntegrationTest" />
+      <option name="MAIN_CLASS_NAME" value="datasource.EventDAOIntegrationTest" />
+      <option name="METHOD_NAME" value="getEventsByCategoryId_Found" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="EventDAOIntegrationTest.getEventsByCategoryId_Empty_List" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="datasource.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="EventManagement" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="datasource" />
+      <option name="MAIN_CLASS_NAME" value="datasource.EventDAOIntegrationTest" />
+      <option name="METHOD_NAME" value="getEventsByCategoryId_Empty_List" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="EventDAOUnitTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="datasource.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="EventManagement" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="datasource" />
+      <option name="MAIN_CLASS_NAME" value="datasource.EventDAOUnitTest" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="EventDAOUnitTest.addEvent_dbError" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="datasource.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="EventManagement" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="datasource" />
+      <option name="MAIN_CLASS_NAME" value="datasource.EventDAOUnitTest" />
+      <option name="METHOD_NAME" value="addEvent_dbError" />
+      <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -918,9 +1021,9 @@
       <option name="MAIN_CLASS_NAME" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" />
+      <option name="VM_PARAMETERS" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
       <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
       <option name="TEST_SEARCH_SCOPE">
@@ -1093,20 +1196,55 @@
     <configuration default="true" type="osgi.bnd.run" factoryName="Test Launcher (JUnit)">
       <method />
     </configuration>
-    <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="JUnit.RecurrenceOptionDAOIntegrationTest" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.UserDAOIntegrationTest" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.UserDAOUnitTest" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.EventRecurrenceDAOIntegrationTest.deleteAllEventRecurrences_Not_Found" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.EventRecurrenceDAOIntegrationTest" />
+    <configuration default="false" name="DAO layer" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.*" />
+          <option name="ENABLED" value="false" />
+        </pattern>
+        <pattern>
+          <option name="PATTERN" value="com.workfront.internship.event_management.*" />
+          <option name="ENABLED" value="false" />
+        </pattern>
+        <pattern>
+          <option name="PATTERN" value="com.workfront.internship.event_management.DAO.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="EventManagement" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <list size="6">
+      <item index="0" class="java.lang.String" itemvalue="JUnit.DAO layer" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.EventDAOIntegrationTest.getAllEvents_Found" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.EventDAOIntegrationTest.getEventsByCategoryId_Found" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.EventDAOIntegrationTest.getEventsByCategoryId_Empty_List" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.EventDAOUnitTest" />
+      <item index="5" class="java.lang.String" itemvalue="JUnit.EventDAOUnitTest.addEvent_dbError" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.EventRecurrenceDAOIntegrationTest" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.EventRecurrenceDAOIntegrationTest.deleteAllEventRecurrences_Not_Found" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.UserDAOUnitTest" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.UserDAOIntegrationTest" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.RecurrenceOptionDAOIntegrationTest" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.EventDAOUnitTest.addEvent_dbError" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.EventDAOUnitTest" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.EventDAOIntegrationTest.getEventsByCategoryId_Empty_List" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.EventDAOIntegrationTest.getEventsByCategoryId_Found" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.EventDAOIntegrationTest.getAllEvents_Found" />
       </list>
     </recent_temporary>
   </component>
@@ -1145,7 +1283,7 @@
       <workItem from="1468576659923" duration="351000" />
       <workItem from="1468577529019" duration="38966000" />
       <workItem from="1468782488618" duration="4723000" />
-      <workItem from="1468787239901" duration="950000" />
+      <workItem from="1468787239901" duration="25843000" />
     </task>
     <task id="LOCAL-00001" summary="test commit">
       <created>1467188821268</created>
@@ -1385,43 +1523,85 @@
       <option name="project" value="LOCAL" />
       <updated>1468787863236</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="UserDAOUnitTest completed">
+      <created>1468827955309</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1468827955309</updated>
+    </task>
+    <task id="LOCAL-00036" summary="Some changes in GenericDAO and UserDAOImpl classes (add counstructors and private dataSourceManager property)">
+      <created>1468828543557</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1468828543557</updated>
+    </task>
+    <task id="LOCAL-00037" summary="CategoryDAOUnitTest completed">
+      <created>1468829936884</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1468829936884</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Some changes in MediaDAOImpl. MediaDAOUnitTest complete">
+      <created>1468833615709</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1468833615709</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Some changes in InvitationDAOImpl class. InvitationDAOUnit test completed">
+      <created>1468835538347</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1468835538347</updated>
+    </task>
+    <task id="LOCAL-00040" summary="EventDAOUnit Test partially done">
+      <created>1468843365031</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1468843365031</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="CategoryDAOIntegrationTest - 2016.07.18 at 00h 32m 55s.xml">
-      <configuration name="CategoryDAOIntegrationTest" configurationId="JUnit" />
+    <history-entry file="DAO_layer - 2016.07.18 at 16h 05m 46s.xml">
+      <configuration name="DAO layer" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="EventRecurrenceDAOIntegrationTest - 2016.07.18 at 00h 32m 29s.xml">
-      <configuration name="EventRecurrenceDAOIntegrationTest" configurationId="JUnit" />
+    <history-entry file="DAO_layer - 2016.07.18 at 16h 05m 54s.xml">
+      <configuration name="DAO layer" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="EventRecurrenceDAOIntegrationTest - 2016.07.18 at 00h 35m 28s.xml">
-      <configuration name="EventRecurrenceDAOIntegrationTest" configurationId="JUnit" />
+    <history-entry file="DAO_layer - 2016.07.18 at 16h 05m 57s.xml">
+      <configuration name="DAO layer" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="InvitationDAOIntegrationTest - 2016.07.18 at 00h 33m 04s.xml">
-      <configuration name="InvitationDAOIntegrationTest" configurationId="JUnit" />
+    <history-entry file="DAO_layer - 2016.07.18 at 16h 05m 59s.xml">
+      <configuration name="DAO layer" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="MediaDAOIntegrationTest - 2016.07.18 at 00h 33m 13s.xml">
-      <configuration name="MediaDAOIntegrationTest" configurationId="JUnit" />
+    <history-entry file="DAO_layer - 2016.07.18 at 16h 06m 08s.xml">
+      <configuration name="DAO layer" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="RecurrenceOptionDAOIntegrationTest - 2016.07.18 at 00h 33m 27s.xml">
-      <configuration name="RecurrenceOptionDAOIntegrationTest" configurationId="JUnit" />
+    <history-entry file="DAO_layer - 2016.07.18 at 16h 07m 25s.xml">
+      <configuration name="DAO layer" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="RecurrenceTypeDAOIntegrationTest - 2016.07.18 at 00h 33m 21s.xml">
-      <configuration name="RecurrenceTypeDAOIntegrationTest" configurationId="JUnit" />
+    <history-entry file="DAO_layer - 2016.07.18 at 16h 10m 37s.xml">
+      <configuration name="DAO layer" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="UserDAOIntegrationTest - 2016.07.18 at 00h 33m 32s.xml">
-      <configuration name="UserDAOIntegrationTest" configurationId="JUnit" />
+    <history-entry file="DAO_layer - 2016.07.18 at 16h 10m 53s.xml">
+      <configuration name="DAO layer" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="UserDAOUnitTest - 2016.07.18 at 00h 33m 37s.xml">
-      <configuration name="UserDAOUnitTest" configurationId="JUnit" />
+    <history-entry file="DAO_layer - 2016.07.18 at 16h 11m 13s.xml">
+      <configuration name="DAO layer" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="datasource_in_EventManagement - 2016.07.18 at 00h 32m 13s.xml">
-      <configuration name="datasource in EventManagement" configurationId="JUnit" />
+    <history-entry file="DAO_layer - 2016.07.18 at 16h 13m 44s.xml">
+      <configuration name="DAO layer" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="385291000" />
+    <option name="totallyTimeSpent" value="410184000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1443,14 +1623,15 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30044183" sideWeight="0.50858366" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.04506438" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29749632" sideWeight="0.4914163" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3298969" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29470673" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29749632" sideWeight="0.4914163" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298969" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22532189" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19145803" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29971388" sideWeight="0.59351987" order="4" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28612304" sideWeight="0.59351987" order="4" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32842416" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26108727" sideWeight="0.4064801" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1461,7 +1642,6 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32842416" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1524,12 +1704,6 @@
   <component name="VcsManagerConfiguration">
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Changes in event recurrences saving logic. &#10;Added new  classes (RecurrenceType and EventRecurrence) and approp. DAO-s&#10;Changed Test classes for  CategoryDAO and UserDAO" />
-    <MESSAGE value="DAO Layer almost completed&#10;" />
-    <MESSAGE value="TestInvitationDAO is completed" />
-    <MESSAGE value="Added test methods for EventMediaDAOImpl" />
-    <MESSAGE value="Added test methods for EventRecurrenceTypeDAOImpl and some changes in all DAO classes" />
-    <MESSAGE value="Test for EventRecurrenceDAOImpl is partially done" />
     <MESSAGE value="Some corrections in DAO classes.&#10;Changed TestUserDAOImpl class" />
     <MESSAGE value="Add log4j framework, exception handling with log4j logger. Replace JDBC config java class with  property file. Some corrections in all DAO classes&#10;&#10;      &#10;" />
     <MESSAGE value="gitignore test&#10;      &#10;" />
@@ -1549,7 +1723,13 @@
     <MESSAGE value="Some changes in EventRecurrenceDAO" />
     <MESSAGE value="EventRecurrenceDAO integration partially done" />
     <MESSAGE value="EventRecurrenceDAOIntegrationTest  completed" />
-    <option name="LAST_COMMIT_MESSAGE" value="EventRecurrenceDAOIntegrationTest  completed" />
+    <MESSAGE value="UserDAOUnitTest completed" />
+    <MESSAGE value="Some changes in GenericDAO and UserDAOImpl classes (add counstructors and private dataSourceManager property)" />
+    <MESSAGE value="CategoryDAOUnitTest completed" />
+    <MESSAGE value="Some changes in MediaDAOImpl. MediaDAOUnitTest complete" />
+    <MESSAGE value="Some changes in InvitationDAOImpl class. InvitationDAOUnit test completed" />
+    <MESSAGE value="EventDAOUnit Test partially done" />
+    <option name="LAST_COMMIT_MESSAGE" value="EventDAOUnit Test partially done" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1568,19 +1748,19 @@
           <option name="timeStamp" value="350" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventRecurrenceDAOImpl.java</url>
-          <line>44</line>
+          <url>file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/UserDAOImpl.java</url>
+          <line>92</line>
           <properties />
-          <option name="timeStamp" value="357" />
+          <option name="timeStamp" value="382" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventRecurrenceDAOImpl.java</url>
-          <line>237</line>
+          <url>file://$PROJECT_DIR$/src/test/java/datasource/EventRecurrenceDAOIntegrationTest.java</url>
+          <line>190</line>
           <properties />
-          <option name="timeStamp" value="358" />
+          <option name="timeStamp" value="386" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="361" />
+      <option name="time" value="398" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1589,190 +1769,238 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/test/java/TestHelper.java" />
-    <entry file="file://$PROJECT_DIR$/src/test/java/TestUserDAOImpl.java" />
-    <entry file="file://$PROJECT_DIR$/src/test/java/TestEventCategoryDAOImpl.java" />
-    <entry file="file://$PROJECT_DIR$/src/test/java/TestEventMediaDAOImpl.java" />
-    <entry file="file://$PROJECT_DIR$/pom.xml">
+    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/Assert.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="52" column="21" selection-start-line="52" selection-start-column="21" selection-end-line="52" selection-end-column="21" />
-          <folding />
+        <state relative-caret-position="125">
+          <caret line="237" column="23" selection-start-line="237" selection-start-column="23" selection-end-line="237" selection-end-column="23" />
+          <folding>
+            <element signature="e#8638#8639#0" expanded="true" />
+            <element signature="e#8698#8699#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/User.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="24" column="18" selection-start-line="24" selection-start-column="18" selection-end-line="24" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/internal/runners/statements/InvokeMethod.class">
-      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
-          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/UserDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="15" column="21" selection-start-line="15" selection-start-column="21" selection-end-line="15" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/src.zip!/java/sql/Statement.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
-          <caret line="589" column="10" selection-start-line="589" selection-start-column="10" selection-end-line="589" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/Category.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="29" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="29" />
+          <caret line="17" column="30" selection-start-line="17" selection-start-column="30" selection-end-line="17" selection-end-column="30" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/DateRange.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/UserDAO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="21" selection-start-line="15" selection-start-column="21" selection-end-line="15" selection-end-column="21" />
+        <state relative-caret-position="285">
+          <caret line="21" column="32" selection-start-line="21" selection-start-column="12" selection-end-line="21" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="28" column="35" selection-start-line="28" selection-start-column="35" selection-end-line="28" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/RecurrenceOptionDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="33" column="41" selection-start-line="13" selection-start-column="4" selection-end-line="33" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/MediaDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="365">
+          <caret line="30" column="30" selection-start-line="12" selection-start-column="4" selection-end-line="30" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/DataSourceManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="80">
+          <caret line="23" column="27" selection-start-line="23" selection-start-column="27" selection-end-line="23" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="5" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/CategoryDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="290">
+          <caret line="22" column="43" selection-start-line="22" selection-start-column="43" selection-end-line="22" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/InvitationDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="20" column="34" selection-start-line="20" selection-start-column="34" selection-end-line="20" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/internal/runners/statements/ExpectException.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="243">
+          <caret line="37" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/UserDAOImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="104" column="0" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
+          <folding>
+            <marker date="1468829781000" expanded="true" signature="1119:1328" ph="INSERT INTO user... " />
+            <marker date="1468829781000" expanded="true" signature="2770:2788" ph="SELECT * FRO... user" />
+            <marker date="1468829781000" expanded="true" signature="3908:3949" ph="UPDATE user " />
+            <marker date="1468829781000" expanded="true" signature="4684:4841" ph="UPDATE user " />
+            <marker date="1468829781000" expanded="true" signature="6218:6265" ph="SELECT * FRO... user" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/InvitationDAOImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-144">
+          <caret line="74" column="13" selection-start-line="74" selection-start-column="13" selection-end-line="74" selection-end-column="13" />
+          <folding>
+            <element signature="method#InvitationDAOImpl#1;class#InvitationDAOImpl#0" expanded="false" />
+            <element signature="method#addInvitation#0;class#InvitationDAOImpl#0" expanded="false" />
+            <element signature="method#getAllInvitations#0;class#InvitationDAOImpl#0" expanded="false" />
+            <element signature="e#4282#4283#0" expanded="true" />
+            <element signature="e#4347#4348#0" expanded="true" />
+            <element signature="e#4427#4428#0" expanded="true" />
+            <element signature="e#4490#4491#0" expanded="true" />
+            <element signature="method#createInvitationsFromRS#0;class#InvitationDAOImpl#0" expanded="false" />
+            <marker date="1468843360000" expanded="true" signature="1737:1911" ph="INSERT INTO event_invitation... " />
+            <marker date="1468843360000" expanded="true" signature="3514:3618" ph="SELECT * FRO... event_invitation" />
+            <marker date="1468843360000" expanded="true" signature="3514:3620" ph="SELECT * FRO... event_invitation" />
+            <marker date="1468843360000" expanded="true" signature="4695:4833" ph="UPDATE event... " />
+            <marker date="1468843360000" expanded="true" signature="6480:6611" ph="SELECT * FRO... event_invitation" />
+            <marker date="1468843360000" expanded="true" signature="6480:6612" ph="SELECT * FRO... event_invitation" />
+            <marker date="1468843360000" expanded="true" signature="6480:6634" ph="SELECT * FRO... event_invitation" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/MediaDAOImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-240">
+          <caret line="26" column="40" selection-start-line="26" selection-start-column="40" selection-end-line="26" selection-end-column="40" />
+          <folding>
+            <marker date="1468838190000" expanded="true" signature="1143:1279" ph="INSERT INTO event_media... " />
+            <marker date="1468838190000" expanded="true" signature="3102:3146" ph="SELECT * FRO... event_media" />
+            <marker date="1468838190000" expanded="true" signature="3979:4004" ph="SELECT * FRO... event_media" />
+            <marker date="1468838190000" expanded="true" signature="4797:4848" ph="UPDATE event... " />
+            <marker date="1468838190000" expanded="true" signature="5955:6009" ph="SELECT * FRO... event_media" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/RecurrenceTypeDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="23" column="40" selection-start-line="12" selection-start-column="4" selection-end-line="23" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/RecurrenceTypeDAOImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-130">
+          <caret line="188" column="42" selection-start-line="188" selection-start-column="42" selection-end-line="188" selection-end-column="42" />
+          <folding>
+            <marker date="1468838532000" expanded="true" signature="1483:1572" ph="INSERT INTO recurrence_type... " />
+            <marker date="1468838532000" expanded="true" signature="3251:3280" ph="SELECT * FRO... recurrence_type" />
+            <marker date="1468838532000" expanded="true" signature="3251:3281" ph="SELECT * FRO... recurrence_type" />
+            <marker date="1468838532000" expanded="true" signature="4127:4210" ph="SELECT * FRO... recurrence_type" />
+            <marker date="1468838532000" expanded="true" signature="5624:5692" ph="UPDATE recur... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/RecurrenceOptionDAOImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-220">
+          <caret line="209" column="42" selection-start-line="209" selection-start-column="42" selection-end-line="209" selection-end-column="42" />
+          <folding>
+            <marker date="1468838576000" expanded="true" signature="1729:1838" ph="INSERT INTO recurrence_option... " />
+            <marker date="1468838576000" expanded="true" signature="2916:2947" ph="SELECT * FRO... repeat_option" />
+            <marker date="1468838576000" expanded="true" signature="3633:3677" ph="SELECT * FRO... recurrence_option" />
+            <marker date="1468838576000" expanded="true" signature="4656:4716" ph="SELECT * FRO... recurrence_option" />
+            <marker date="1468838576000" expanded="true" signature="5591:5708" ph="UPDATE repea... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/GenericDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="130" column="35" selection-start-line="130" selection-start-column="26" selection-end-line="130" selection-end-column="35" />
+          <folding>
+            <element signature="method#closeResources#0;class#GenericDAO#0" expanded="false" />
+            <element signature="method#getInsertedId#0;class#GenericDAO#0" expanded="false" />
+            <element signature="e#1997#1998#0" expanded="true" />
+            <element signature="e#2053#2054#0" expanded="true" />
+            <marker date="1468829781000" expanded="true" signature="2366:2378" ph="DELETE FROM " />
+            <marker date="1468829781000" expanded="true" signature="3104:3116" ph="DELETE FROM " />
+            <marker date="1468829781000" expanded="true" signature="3104:3162" ph="DELETE FROM " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/tomcat/dbcp/6.0.45/dbcp-6.0.45.jar!/org/apache/tomcat/dbcp/dbcp/PoolingDataSource.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="155">
+          <caret line="134" column="0" selection-start-line="134" selection-start-column="0" selection-end-line="134" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/runner/JUnitCore.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="77">
+          <caret line="76" column="0" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/EventRecurrence.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="18" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="18" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/Invitation.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/Media.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="19" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/MediaDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/MediaDAOImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/GenericDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="87" column="29" selection-start-line="87" selection-start-column="29" selection-end-line="87" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceOptionDAOImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="64" column="0" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/tomcat/dbcp/6.0.45/dbcp-6.0.45.jar!/org/apache/tomcat/dbcp/dbcp/BasicDataSource.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="155">
-          <caret line="69" column="0" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/DataSourceManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="117">
-          <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceTypeDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/RecurrenceOption.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-100">
-          <caret line="10" column="31" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/RecurrenceType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceOptionDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="18" column="13" selection-start-line="18" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/Event.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="24" column="50" selection-start-line="24" selection-start-column="50" selection-end-line="24" selection-end-column="50" />
+        <state relative-caret-position="180">
+          <caret line="12" column="31" selection-start-line="12" selection-start-column="31" selection-end-line="12" selection-end-column="31" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/datasource/TestHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="585">
-          <caret line="113" column="8" selection-start-line="113" selection-start-column="8" selection-end-line="113" selection-end-column="8" />
-          <folding>
-            <element signature="method#createTestUser#0;class#TestHelper#0" expanded="false" />
-            <element signature="method#createTestCategory#0;class#TestHelper#0" expanded="false" />
-            <element signature="method#createTestEvent#0;class#TestHelper#0" expanded="false" />
-            <element signature="method#createTestInvitation#0;class#TestHelper#0" expanded="false" />
-            <element signature="method#createTestMedia#0;class#TestHelper#0" expanded="false" />
-            <element signature="method#createTestRecurrenceOption#0;class#TestHelper#0" expanded="false" />
-            <element signature="method#createTestRecurrenceTypeWithOptions#0;class#TestHelper#0" expanded="false" />
-            <element signature="method#createTestRecurrenceType#0;class#TestHelper#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/UserDAOImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="233">
-          <caret line="217" column="21" selection-start-line="217" selection-start-column="0" selection-end-line="218" selection-end-column="0" />
-          <folding>
-            <element signature="e#3208#3209#0" expanded="false" />
-            <element signature="e#3259#3260#0" expanded="false" />
-            <marker date="1468623182000" expanded="true" signature="1102:1311" ph="INSERT INTO user... " />
-            <marker date="1468623182000" expanded="true" signature="2753:2771" ph="SELECT * FRO... user" />
-            <marker date="1468623182000" expanded="true" signature="3839:3880" ph="UPDATE user " />
-            <marker date="1468623182000" expanded="true" signature="4572:4729" ph="UPDATE user " />
-            <marker date="1468623182000" expanded="true" signature="6063:6110" ph="SELECT * FRO... user" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/CategoryDAO.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/runners/ParentRunner.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="125">
-          <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
+          <caret line="203" column="0" selection-start-line="203" selection-start-column="0" selection-end-line="203" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1780,20 +2008,39 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="48">
           <caret line="50" column="0" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/runners/ParentRunner.class">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/EventRecurrenceDAO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="174" column="0" selection-start-line="174" selection-start-column="0" selection-end-line="174" selection-end-column="0" />
+        <state relative-caret-position="125">
+          <caret line="13" column="8" selection-start-line="13" selection-start-column="8" selection-end-line="13" selection-end-column="8" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/CategoryDAOImpl.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/EventRecurrenceDAOImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="117">
+          <caret line="102" column="0" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
+          <folding>
+            <element signature="e#7710#7711#0" expanded="true" />
+            <element signature="e#7769#7770#0" expanded="true" />
+            <marker date="1468837428000" expanded="true" signature="1692:1860" ph="SELECT * FRO... event_recurrence" />
+            <marker date="1468837428000" expanded="true" signature="2844:3008" ph="INSERT INTO event_recurrence... " />
+            <marker date="1468837428000" expanded="true" signature="4248:4405" ph="SELECT * FRO... event_recurrence" />
+            <marker date="1468837428000" expanded="true" signature="5287:5425" ph="SELECT * FRO... event_recurrence" />
+            <marker date="1468837428000" expanded="true" signature="6215:6365" ph="UPDATE event... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/internal/runners/model/ReflectiveCallable.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
-          <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1801,154 +2048,118 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="86">
           <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+          <folding>
+            <element signature="e#982#1175#0" expanded="true" />
+            <element signature="e#1174#1175#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/internal/runners/statements/InvokeMethod.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/internal/runners/statements/RunBefores.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="12" column="28" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventDAOImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="953">
-          <caret line="412" column="26" selection-start-line="412" selection-start-column="0" selection-end-line="413" selection-end-column="0" />
-          <folding>
-            <marker date="1468783926000" expanded="true" signature="2403:2513" ph="SELECT * FRO... event" />
-            <marker date="1468783926000" expanded="true" signature="3268:3399" ph="SELECT * FRO... event" />
-            <marker date="1468783926000" expanded="true" signature="4822:4987" ph="SELECT * FRO... event" />
-            <marker date="1468783926000" expanded="true" signature="5707:6069" ph="SELECT event... event" />
-            <marker date="1468783926000" expanded="true" signature="6881:7174" ph="SELECT event... event" />
-            <marker date="1468783926000" expanded="true" signature="7886:8258" ph="SELECT event... event" />
-            <marker date="1468783926000" expanded="true" signature="8940:9288" ph="UPDATE event... " />
-            <marker date="1468783926000" expanded="true" signature="11474:11504" ph="DELETE FROM " />
-            <marker date="1468783926000" expanded="true" signature="12212:12502" ph="INSERT INTO event... " />
-            <marker date="1468783926000" expanded="true" signature="14195:14224" ph="SELECT LAST_... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/InvitationDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/InvitationDAOImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2310">
-          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/model/EventRecurrence.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="16" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/RecurrenceTypeDAOImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="198" column="72" selection-start-line="195" selection-start-column="11" selection-end-line="198" selection-end-column="72" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventRecurrenceDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="17" column="20" selection-start-line="17" selection-start-column="20" selection-end-line="17" selection-end-column="20" />
+        <state relative-caret-position="257">
+          <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/internal/runners/statements/RunAfters.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1005">
+        <state relative-caret-position="125">
           <caret line="75" column="0" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/internal/runners/model/ReflectiveCallable.class">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/CategoryDAOImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/datasource/EventRecurrenceDAOImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2430">
-          <caret line="196" column="32" selection-start-line="196" selection-start-column="32" selection-end-line="196" selection-end-column="32" />
+        <state relative-caret-position="315">
+          <caret line="26" column="42" selection-start-line="26" selection-start-column="42" selection-end-line="26" selection-end-column="42" />
           <folding>
-            <element signature="method#getAllEventRecurrences#0;class#EventRecurrenceDAOImpl#0" expanded="false" />
-            <marker date="1468786430000" expanded="true" signature="1218:1386" ph="SELECT * FRO... event_recurrence" />
-            <marker date="1468786430000" expanded="true" signature="2355:2519" ph="INSERT INTO event_recurrence... " />
-            <marker date="1468786430000" expanded="true" signature="3759:3916" ph="SELECT * FRO... event_recurrence" />
-            <marker date="1468786430000" expanded="true" signature="4783:4921" ph="SELECT * FRO... event_recurrence" />
-            <marker date="1468786430000" expanded="true" signature="5694:5844" ph="UPDATE event... " />
+            <marker date="1468837322000" expanded="true" signature="1018:1118" ph="INSERT INTO event_category... " />
+            <marker date="1468837322000" expanded="true" signature="2424:2452" ph="SELECT * FRO... event_category" />
+            <marker date="1468837322000" expanded="true" signature="3270:3311" ph="SELECT * FRO... event_category" />
+            <marker date="1468837322000" expanded="true" signature="4245:4310" ph="UPDATE event... " />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/datasource/EventDAOIntegrationTest.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/EventDAO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+        <state relative-caret-position="329">
+          <caret line="27" column="30" selection-start-line="11" selection-start-column="3" selection-end-line="27" selection-end-column="30" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/datasource/InvitationDAOIntegrationTest.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/datasource/EventDAOUnitTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4125">
-          <caret line="288" column="28" selection-start-line="288" selection-start-column="28" selection-end-line="288" selection-end-column="28" />
-          <folding />
+        <state relative-caret-position="255">
+          <caret line="26" column="32" selection-start-line="26" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1418#1419#0" expanded="true" />
+            <element signature="e#1464#1465#0" expanded="true" />
+            <element signature="e#1551#1552#0" expanded="true" />
+            <element signature="e#1590#1591#0" expanded="true" />
+            <element signature="e#1677#1678#0" expanded="true" />
+            <element signature="e#1717#1718#0" expanded="true" />
+            <element signature="e#2116#2117#0" expanded="true" />
+            <element signature="e#2173#2174#0" expanded="true" />
+            <element signature="e#2413#2414#0" expanded="true" />
+            <element signature="e#2462#2463#0" expanded="true" />
+            <element signature="e#2548#2549#0" expanded="true" />
+            <element signature="e#2587#2588#0" expanded="true" />
+            <element signature="e#2677#2678#0" expanded="true" />
+            <element signature="e#2719#2720#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/datasource/MediaDAOIntegrationTest.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/datasource/CategoryDAOUnitTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3720">
-          <caret line="264" column="49" selection-start-line="264" selection-start-column="49" selection-end-line="264" selection-end-column="49" />
-          <folding />
+        <state relative-caret-position="135">
+          <caret line="26" column="6" selection-start-line="26" selection-start-column="6" selection-end-line="26" selection-end-column="6" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/datasource/RecurrenceTypeDAOIntegrationTest.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/datasource/MediaDAOUnitTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1875">
-          <caret line="139" column="14" selection-start-line="139" selection-start-column="0" selection-end-line="140" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="140">
+          <caret line="26" column="6" selection-start-line="26" selection-start-column="6" selection-end-line="26" selection-end-column="6" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/datasource/RecurrenceOptionDAOIntegrationTest.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/datasource/RecurrenceTypeDAOUnitTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3210">
-          <caret line="229" column="0" selection-start-line="229" selection-start-column="0" selection-end-line="231" selection-end-column="93" />
-          <folding />
+        <state relative-caret-position="134">
+          <caret line="26" column="6" selection-start-line="26" selection-start-column="6" selection-end-line="26" selection-end-column="6" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1661#1662#0" expanded="true" />
+            <element signature="e#1718#1719#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/datasource/UserDAOIntegrationTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="615">
-          <caret line="61" column="0" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
+        <state relative-caret-position="315">
+          <caret line="38" column="31" selection-start-line="32" selection-start-column="8" selection-end-line="38" selection-end-column="31" />
           <folding>
             <element signature="method#insertUser_Sucess#0;class#UserDAOIntegrationTest#0" expanded="false" />
             <element signature="method#getAllUsers_Found#0;class#UserDAOIntegrationTest#0" expanded="false" />
@@ -1965,37 +2176,135 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/datasource/UserDAOUnitTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="27" column="34" selection-start-line="27" selection-start-column="34" selection-end-line="27" selection-end-column="34" />
+        <state relative-caret-position="135">
+          <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/datasource/EventRecurrenceDAOUnitTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="26" column="6" selection-start-line="26" selection-start-column="6" selection-end-line="26" selection-end-column="6" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/datasource/InvitationDAOUnitTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="26" column="6" selection-start-line="26" selection-start-column="6" selection-end-line="26" selection-end-column="6" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/datasource/CategoryDAOIntegrationTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="301">
-          <caret line="172" column="29" selection-start-line="166" selection-start-column="8" selection-end-line="172" selection-end-column="29" />
+        <state relative-caret-position="90">
+          <caret line="35" column="8" selection-start-line="35" selection-start-column="8" selection-end-line="35" selection-end-column="8" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#addCategory_Dublicate_Entry#0;class#CategoryDAOIntegrationTest#0" expanded="false" />
-            <element signature="method#getAllCategories_Empty_List#0;class#CategoryDAOIntegrationTest#0" expanded="false" />
             <element signature="method#updateCategory_Not_Found#0;class#CategoryDAOIntegrationTest#0" expanded="false" />
             <element signature="method#deleteCategory_Not_Found#0;class#CategoryDAOIntegrationTest#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/datasource/EventDAOIntegrationTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1710">
+          <caret line="140" column="0" selection-start-line="140" selection-start-column="0" selection-end-line="140" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#deleteEvent_Found#0;class#EventDAOIntegrationTest#0" expanded="false" />
+            <element signature="method#deleteEvent_Not_Found#0;class#EventDAOIntegrationTest#0" expanded="false" />
+            <element signature="method#deleteAllEvents_Found#0;class#EventDAOIntegrationTest#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/datasource/EventRecurrenceDAOIntegrationTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-827">
-          <caret line="58" column="0" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
+        <state relative-caret-position="-9">
+          <caret line="204" column="17" selection-start-line="204" selection-start-column="17" selection-end-line="204" selection-end-column="17" />
           <folding>
             <element signature="method#getEventRecurrenceById_Found#0;class#EventRecurrenceDAOIntegrationTest#0" expanded="false" />
             <element signature="method#getEventRecurrenceById_Not_Found#0;class#EventRecurrenceDAOIntegrationTest#0" expanded="false" />
             <element signature="method#getEventRecurrencesByEventId_Found#0;class#EventRecurrenceDAOIntegrationTest#0" expanded="false" />
             <element signature="method#getAllEventRecurrencesByEventId_Found#0;class#EventRecurrenceDAOIntegrationTest#0" expanded="false" />
-            <element signature="method#getALlEventRecurrencesByEventId__Empty_List#0;class#EventRecurrenceDAOIntegrationTest#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/datasource/InvitationDAOIntegrationTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="395">
+          <caret line="67" column="36" selection-start-line="67" selection-start-column="36" selection-end-line="67" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/workfront/internship/event_management/DAO/EventDAOImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-6475">
+          <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+          <folding>
+            <marker date="1468843360000" expanded="true" signature="2931:3037" ph="SELECT * FRO... event" />
+            <marker date="1468843360000" expanded="true" signature="3811:3938" ph="SELECT * FRO... event" />
+            <marker date="1468843360000" expanded="true" signature="5857:6014" ph="SELECT * FRO... event" />
+            <marker date="1468843360000" expanded="true" signature="6877:7152" ph="SELECT event... event" />
+            <marker date="1468843360000" expanded="true" signature="7975:8256" ph="SELECT event... event" />
+            <marker date="1468843360000" expanded="true" signature="9055:9403" ph="SELECT event... event" />
+            <marker date="1468843360000" expanded="true" signature="10145:10477" ph="UPDATE event... " />
+            <marker date="1468843360000" expanded="true" signature="12958:13236" ph="INSERT INTO event... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/datasource/MediaDAOIntegrationTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-820">
+          <caret line="66" column="33" selection-start-line="66" selection-start-column="33" selection-end-line="66" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/datasource/RecurrenceOptionDAOUnitTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="26" column="6" selection-start-line="26" selection-start-column="6" selection-end-line="26" selection-end-column="6" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/datasource/RecurrenceOptionDAOIntegrationTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="56" column="0" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/datasource/RecurrenceTypeDAOIntegrationTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1455">
+          <caret line="118" column="25" selection-start-line="118" selection-start-column="25" selection-end-line="118" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/datasource/TestHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="18" column="26" selection-start-line="18" selection-start-column="26" selection-end-line="18" selection-end-column="26" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2064,7 +2373,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>Maven: mysql:mysql-connector-java:6.0.3</last-edited>
+          <last-edited>Maven: junit:junit:4.12</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
