@@ -15,6 +15,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
     private DataSourceManager dataSourceManager;
 
     public UserDAOImpl(DataSourceManager dataSourceManager) throws Exception {
+        super(dataSourceManager);
         this.dataSourceManager = dataSourceManager;
     }
 
@@ -99,6 +100,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
         } catch (SQLException e) {
             LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -141,6 +143,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
         } catch (SQLException e) {
             LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(stmt, conn);
         }
@@ -176,6 +179,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
         } catch (SQLException e) {
             LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(stmt, conn);
         }
@@ -220,6 +224,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
         } catch (SQLException e) {
             LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }

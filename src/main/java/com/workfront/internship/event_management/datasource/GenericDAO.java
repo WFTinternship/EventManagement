@@ -12,6 +12,20 @@ import java.sql.*;
 class GenericDAO {
 
     protected static final Logger LOGGER = Logger.getLogger(GenericDAO.class);
+    private DataSourceManager dataSourceManager;
+
+    public GenericDAO(DataSourceManager dataSourceManager) throws Exception {
+        this.dataSourceManager = dataSourceManager;
+    }
+
+    public GenericDAO() {
+        try {
+            this.dataSourceManager = DataSourceManager.getInstance();
+        } catch (IOException | SQLException e) {
+            LOGGER.error("Exception...", e);
+        }
+    }
+
 
     void closeResources(ResultSet rs, Statement stmt, Connection conn) {
         try {
@@ -77,7 +91,7 @@ class GenericDAO {
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create statement
             String sqlStr = "DELETE FROM " + tableName;
@@ -86,8 +100,9 @@ class GenericDAO {
             //execute query
             affectedRows = stmt.executeUpdate();
 
-        } catch (IOException | SQLException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(stmt, conn);
         }
@@ -102,7 +117,7 @@ class GenericDAO {
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             String sqlStr = "DELETE FROM " + tableName + " WHERE " + columnName + " = ?";
@@ -112,8 +127,9 @@ class GenericDAO {
             //execute query
             affectedRows = stmt.executeUpdate();
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception ", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(stmt, conn);
         }

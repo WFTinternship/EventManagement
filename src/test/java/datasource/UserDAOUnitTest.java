@@ -29,8 +29,8 @@ public class UserDAOUnitTest {
     public void setUp() throws Exception {
 
         dataSourceManager = Mockito.mock(DataSourceManager.class);
-
         Connection connection = Mockito.mock(Connection.class);
+
         when(dataSourceManager.getConnection()).thenReturn(connection);
         when(connection.prepareStatement(any(String.class), eq(PreparedStatement.RETURN_GENERATED_KEYS))).thenThrow(SQLException.class);
 
