@@ -1,9 +1,9 @@
 package datasource;
 
-import com.workfront.internship.event_management.datasource.CategoryDAO;
-import com.workfront.internship.event_management.datasource.CategoryDAOImpl;
-import com.workfront.internship.event_management.datasource.EventDAO;
-import com.workfront.internship.event_management.datasource.EventDAOImpl;
+import com.workfront.internship.event_management.DAO.CategoryDAO;
+import com.workfront.internship.event_management.DAO.CategoryDAOImpl;
+import com.workfront.internship.event_management.DAO.EventDAO;
+import com.workfront.internship.event_management.DAO.EventDAOImpl;
 import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Event;
 import org.junit.After;

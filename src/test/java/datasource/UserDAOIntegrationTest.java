@@ -1,7 +1,7 @@
 package datasource;
 
-import com.workfront.internship.event_management.datasource.UserDAO;
-import com.workfront.internship.event_management.datasource.UserDAOImpl;
+import com.workfront.internship.event_management.DAO.UserDAO;
+import com.workfront.internship.event_management.DAO.UserDAOImpl;
 import com.workfront.internship.event_management.model.User;
 import org.junit.After;
 import org.junit.Before;

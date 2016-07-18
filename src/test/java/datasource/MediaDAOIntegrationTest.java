@@ -1,6 +1,6 @@
 package datasource;
 
-import com.workfront.internship.event_management.datasource.*;
+import com.workfront.internship.event_management.DAO.*;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Media;

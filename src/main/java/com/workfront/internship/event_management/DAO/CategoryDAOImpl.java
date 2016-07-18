@@ -1,4 +1,4 @@
-package com.workfront.internship.event_management.datasource;
+package com.workfront.internship.event_management.DAO;
 
 import com.workfront.internship.event_management.model.Category;
 
@@ -12,22 +12,37 @@ import java.util.List;
  */
 public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
 
+    private DataSourceManager dataSourceManager;
+
+    public CategoryDAOImpl(DataSourceManager dataSourceManager) throws Exception {
+        super(dataSourceManager);
+        this.dataSourceManager = dataSourceManager;
+    }
+
+    public CategoryDAOImpl() {
+        try {
+            this.dataSourceManager = DataSourceManager.getInstance();
+        } catch (IOException | SQLException e) {
+            LOGGER.error("Exception...", e);
+        }
+    }
+
     @Override
     public int addCategory(Category category) {
 
         Connection conn = null;
         PreparedStatement stmt = null;
+
         int id = 0;
+        String query = "INSERT INTO event_category " +
+                "(title, description, creation_date) VALUES (?, ?, ?)";
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
-            String query = "INSERT INTO event_category " +
-                    "(title, description, creation_date) VALUES (?, ?, ?)";
             stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
-
             stmt.setString(1, category.getTitle());
             stmt.setString(2, category.getDescription());
 
@@ -43,7 +58,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
             //get generated id
             id = getInsertedId(stmt);
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception...", e);
             throw new RuntimeException(e);
         } finally {
@@ -58,11 +73,12 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
+
         List<Category> categoriesList = new ArrayList<>();
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create statement
             String query = "SELECT * FROM event_category";
@@ -74,7 +90,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
             //get results
             categoriesList = createEventCategoryListFromRS(rs);
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception...", e);
         } finally {
             closeResources(rs, stmt, conn);
@@ -92,7 +108,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
 
         try {
             //acquire connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             String query = "SELECT * FROM event_category where id = ?";
@@ -107,7 +123,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
             if (!categoryList.isEmpty()) {
                 category = categoryList.get(0);
             }
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception...", e);
         } finally {
             closeResources(rs, stmt, conn);
@@ -124,7 +140,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             String sqlStr = "UPDATE event_category SET title = ?, description = ? WHERE id = ?";
@@ -136,7 +152,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
             //execute query
             affectedRows = stmt.executeUpdate();
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception...", e);
         } finally {
             closeResources(stmt, conn);

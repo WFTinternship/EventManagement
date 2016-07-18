@@ -1,4 +1,4 @@
-package com.workfront.internship.event_management.datasource;
+package com.workfront.internship.event_management.DAO;
 
 import com.workfront.internship.event_management.model.Media;
 

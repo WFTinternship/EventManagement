@@ -1,9 +1,9 @@
 package datasource;
 
-import com.workfront.internship.event_management.datasource.RecurrenceOptionDAO;
-import com.workfront.internship.event_management.datasource.RecurrenceOptionDAOImpl;
-import com.workfront.internship.event_management.datasource.RecurrenceTypeDAO;
-import com.workfront.internship.event_management.datasource.RecurrenceTypeDAOImpl;
+import com.workfront.internship.event_management.DAO.RecurrenceOptionDAO;
+import com.workfront.internship.event_management.DAO.RecurrenceOptionDAOImpl;
+import com.workfront.internship.event_management.DAO.RecurrenceTypeDAO;
+import com.workfront.internship.event_management.DAO.RecurrenceTypeDAOImpl;
 import com.workfront.internship.event_management.model.RecurrenceOption;
 import com.workfront.internship.event_management.model.RecurrenceType;
 import org.junit.After;
