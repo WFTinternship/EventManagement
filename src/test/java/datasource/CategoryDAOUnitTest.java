@@ -24,7 +24,7 @@ public class CategoryDAOUnitTest {
     private DataSourceManager dataSourceManager;
     private CategoryDAO categoryDAO;
 
-    @SuppressWarnings("unchecked")
+    // @SuppressWarnings("unchecked")
     @Before
     public void setUp() throws Exception {
 
@@ -33,6 +33,7 @@ public class CategoryDAOUnitTest {
 
         when(dataSourceManager.getConnection()).thenReturn(connection);
         when(connection.prepareStatement(any(String.class), eq(PreparedStatement.RETURN_GENERATED_KEYS))).thenThrow(SQLException.class);
+        when(connection.prepareStatement(any(String.class))).thenThrow(SQLException.class);
 
         categoryDAO = new CategoryDAOImpl(dataSourceManager);
     }

@@ -80,6 +80,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
 
         } catch (SQLException e) {
             LOGGER.error("Exception ", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -153,6 +154,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
 
         } catch (SQLException e) {
             LOGGER.error("Exception ", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -183,7 +185,8 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
             recurrencesList = createEventRecurrencesFromRS(rs);
 
         } catch (SQLException e) {
-            LOGGER.error("Exception ", e);
+            LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -228,6 +231,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
             affectedRows = stmt.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error("Exception ", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(stmt, conn);
         }

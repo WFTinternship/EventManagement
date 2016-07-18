@@ -24,6 +24,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
             this.dataSourceManager = DataSourceManager.getInstance();
         } catch (IOException | SQLException e) {
             LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -92,6 +93,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
 
         } catch (SQLException e) {
             LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -125,6 +127,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
             }
         } catch (SQLException e) {
             LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -154,6 +157,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
 
         } catch (SQLException e) {
             LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(stmt, conn);
         }

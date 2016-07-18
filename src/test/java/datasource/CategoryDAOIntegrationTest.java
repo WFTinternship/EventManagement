@@ -42,9 +42,6 @@ public class CategoryDAOIntegrationTest {
     public void tearDown() {
         //delete test categories from db
         categoryDAO.deleteAllCategories();
-
-        //delete test object
-        testCategory = null;
     }
 
     @Test

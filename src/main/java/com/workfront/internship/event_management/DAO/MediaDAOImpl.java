@@ -24,6 +24,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             this.dataSourceManager = DataSourceManager.getInstance();
         } catch (IOException | SQLException e) {
             LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -116,6 +117,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
 
         } catch (SQLException e) {
             LOGGER.error("Exception...", e);
+            throw new RuntimeException();
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -146,6 +148,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
 
         } catch (SQLException e) {
             LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -174,6 +177,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
 
         } catch (SQLException e) {
             LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(null, stmt, conn);
         }
@@ -216,6 +220,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
 
         } catch (SQLException e) {
             LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }

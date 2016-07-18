@@ -28,6 +28,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
             this.dataSourceManager = DataSourceManager.getInstance();
         } catch (IOException | SQLException e) {
             LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -77,6 +78,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
                 conn.rollback();
             } catch (SQLException re) {
                 LOGGER.error("Transaction failed! ", e);
+                throw new RuntimeException(e);
             }
             throw new RuntimeException(e);
         } finally {
@@ -110,6 +112,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
         } catch (SQLException e) {
             LOGGER.error("Exception ", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -153,6 +156,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
         } catch (SQLException e) {
             LOGGER.error("Exception ", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -182,6 +186,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
         } catch (SQLException e) {
             LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(stmt, conn);
         }

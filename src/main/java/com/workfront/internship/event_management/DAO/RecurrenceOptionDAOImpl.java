@@ -46,6 +46,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
 
         } catch (SQLException e) {
             LOGGER.error("Exception ", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(conn);
         }
@@ -73,7 +74,6 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
             id = getInsertedId(stmt);
         } catch (SQLException e) {
             LOGGER.error("Exception...", e);
-
             throw new RuntimeException(e);
         } finally {
             closeResources(stmt);
@@ -141,6 +141,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
             }
         } catch (SQLException e) {
             LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -174,6 +175,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
 
         } catch (SQLException e) {
             LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -205,6 +207,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
 
         } catch (SQLException e) {
             LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(stmt, conn);
         }

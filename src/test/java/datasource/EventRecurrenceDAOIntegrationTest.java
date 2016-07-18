@@ -37,14 +37,22 @@ public class EventRecurrenceDAOIntegrationTest {
 
     @Before
     public void setUp() {
-        createTestObjects();
+        // create test objects
+        testCategory = TestHelper.createTestCategory();
+        testEvent = TestHelper.createTestEvent();
+        testRecurrenceType = TestHelper.createTestRecurrenceType();
+        testEventRecurrence = TestHelper.createTestEventRecurrence();
+
+        //insert test objects data into db
         insertTestObjectsIntoDB();
     }
 
     @After
     public void tearDown() {
-        deleteAllTestRecordsFromDB();
-        deleteTestObjects();
+        categoryDAO.deleteAllCategories();
+        recurrenceTypeDAO.deleteAllRecurrenceTypes();
+        eventRecurrenceDAO.deleteAllEventRecurrences();
+        eventDAO.deleteAllEvents();
     }
 
     @Test
@@ -108,7 +116,7 @@ public class EventRecurrenceDAOIntegrationTest {
     }
 
     @Test
-    public void getALlEventRecurrencesByEventId__Empty_List() {
+    public void getAllEventRecurrencesByEventId__Empty_List() {
         //delete inserted test record
         eventRecurrenceDAO.deleteEventRecurrence(testEventRecurrence.getId());
 
@@ -191,10 +199,7 @@ public class EventRecurrenceDAOIntegrationTest {
 
     //helper methods
     private void createTestObjects() {
-        testCategory = TestHelper.createTestCategory();
-        testEvent = TestHelper.createTestEvent();
-        testRecurrenceType = TestHelper.createTestRecurrenceType();
-        testEventRecurrence = TestHelper.createTestEventRecurrence();
+
     }
 
     private void insertTestObjectsIntoDB() {
@@ -218,19 +223,6 @@ public class EventRecurrenceDAOIntegrationTest {
         testEventRecurrence.setId(eventRecurrenceId);
     }
 
-    private void deleteAllTestRecordsFromDB() {
-        categoryDAO.deleteAllCategories();
-        eventDAO.deleteAllEvents();
-        eventRecurrenceDAO.deleteAllEventRecurrences();
-        recurrenceTypeDAO.deleteAllRecurrenceTypes();
-    }
-
-    private void deleteTestObjects() {
-        testRecurrenceType = null;
-        testEventRecurrence = null;
-        testEvent = null;
-        testCategory = null;
-    }
 
     private void assertEqualEventRecurrences(EventRecurrence actualEventRecurrence, EventRecurrence expectedEventRecurrence) {
         assertEquals(actualEventRecurrence.getEventId(), expectedEventRecurrence.getEventId());

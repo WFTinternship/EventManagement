@@ -1,9 +1,9 @@
 package datasource;
 
 import com.workfront.internship.event_management.DAO.DataSourceManager;
-import com.workfront.internship.event_management.DAO.UserDAO;
-import com.workfront.internship.event_management.DAO.UserDAOImpl;
-import com.workfront.internship.event_management.model.User;
+import com.workfront.internship.event_management.DAO.EventDAO;
+import com.workfront.internship.event_management.DAO.EventDAOImpl;
+import com.workfront.internship.event_management.model.Event;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -13,16 +13,16 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.eq;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by Hermine Turshujyan 7/15/16.
+ * Created by Hermine Turshujyan 7/18/16.
  */
-public class UserDAOUnitTest {
+public class EventDAOUnitTest {
 
     private DataSourceManager dataSourceManager;
-    private UserDAO userDAO;
+    private static EventDAO eventDAO;
 
     // @SuppressWarnings("unchecked")
     @Before
@@ -35,53 +35,59 @@ public class UserDAOUnitTest {
         when(connection.prepareStatement(any(String.class), eq(PreparedStatement.RETURN_GENERATED_KEYS))).thenThrow(SQLException.class);
         when(connection.prepareStatement(any(String.class))).thenThrow(SQLException.class);
 
-        userDAO = new UserDAOImpl(dataSourceManager);
+        eventDAO = new EventDAOImpl(dataSourceManager);
     }
 
     @Test(expected = RuntimeException.class)
-    public void addUser_dbError() throws SQLException {
-        userDAO.addUser(new User());
+    public void addEvent_dbError() {
+        eventDAO.addEvent(new Event());
     }
 
     @Test(expected = RuntimeException.class)
-    public void getAllUsers_dbError() throws SQLException {
-        userDAO.getAllUsers();
+    public void getAllEvents_dbError() {
+        eventDAO.getAllEvents();
     }
 
     @Test(expected = RuntimeException.class)
-    public void getUserById_dbError() throws SQLException {
-        userDAO.getUserById(1);
+    public void getEventById_dbError() {
+        eventDAO.getEventById(1);
     }
 
     @Test(expected = RuntimeException.class)
-    public void getUserByUsername_dbError() throws SQLException {
-        userDAO.getUserByUsername("username");
+    public void getEventsByCategoryId_dbError() {
+        eventDAO.getEventsByCategory(1);
+
     }
 
     @Test(expected = RuntimeException.class)
-    public void getUserByEmail_dbError() throws SQLException {
-        userDAO.getUserByEmail("email");
+    public void getEventsByUserId_dbError() {
+        eventDAO.getEventsByUserId("organizer", 1);
+
     }
 
     @Test(expected = RuntimeException.class)
-    public void updateVerifiedStatus_dbError() throws SQLException {
-        userDAO.updateVerifiedStatus(1);
+    public void getParticipatedEventsByUserId_dbError() {
+        eventDAO.getParticipatedEventsByUserId(1);
     }
 
     @Test(expected = RuntimeException.class)
-    public void updateUser_dbError() throws SQLException {
-        userDAO.updateUser(new User());
-    }
+    public void getAcceptedEventsByUserId_dbError() {
+        eventDAO.getAcceptedEventsByUserId(1);
 
-
-    @Test(expected = RuntimeException.class)
-    public void deleteUser_dbError() throws SQLException {
-        userDAO.deleteUser(1);
     }
 
     @Test(expected = RuntimeException.class)
-    public void deleteAllUsers_dbError() throws SQLException {
-        userDAO.deleteAllUsers();
+    public void updateEvent_dbError() {
+        eventDAO.updateEvent(new Event());
     }
 
+    @Test(expected = RuntimeException.class)
+    public void deleteEvent_dbError() {
+        eventDAO.deleteEvent(1);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void deleteAllEvents_dbError() {
+        eventDAO.deleteAllEvents();
+    }
 }

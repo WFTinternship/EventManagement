@@ -1,44 +1,62 @@
 package datasource;
 
-import com.workfront.internship.event_management.DAO.CategoryDAO;
-import com.workfront.internship.event_management.DAO.CategoryDAOImpl;
-import com.workfront.internship.event_management.DAO.EventDAO;
-import com.workfront.internship.event_management.DAO.EventDAOImpl;
-import com.workfront.internship.event_management.model.Category;
-import com.workfront.internship.event_management.model.Event;
+import com.workfront.internship.event_management.DAO.*;
+import com.workfront.internship.event_management.model.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 /**
  * Created by Hermine Turshujyan 7/15/16.
  */
 public class EventDAOIntegrationTest {
-
+    private static UserDAO userDAO;
     private static EventDAO eventDAO;
     private static CategoryDAO categoryDAO;
+    private static RecurrenceTypeDAO recurrenceTypeDAO;
     private Category testCategory;
     private Event testEvent;
+    private User testUser1;
+    private User testUser2;
+    private RecurrenceType testRecurrenceType;
 
     @BeforeClass
     public static void setUpClass() {
+        userDAO = new UserDAOImpl();
         categoryDAO = new CategoryDAOImpl();
         eventDAO = new EventDAOImpl();
+        recurrenceTypeDAO = new RecurrenceTypeDAOImpl();
     }
 
     @Before
     public void setUp() {
-        //create test category, insert into db and  get generated id
+
+        //create test users, insert into db
+        testUser1 = TestHelper.createTestUser();
+        testUser2 = TestHelper.createTestUser();
+        int id1 = userDAO.addUser(testUser1);
+        testUser1.setId(id1);
+        int id2 = userDAO.addUser(testUser2);
+        testUser2.setId(id2);
+
+        //create test categody, insert into db
         testCategory = TestHelper.createTestCategory();
         int categoryId = categoryDAO.addCategory(testCategory);
         testCategory.setId(categoryId);
 
-        //create test event, insert into db and get generated id
-        testEvent = TestHelper.createTestEvent();
+        //create test recurrence type, insert into db
+        testRecurrenceType = TestHelper.createTestRecurrenceType();
+        int recurrenceTypeId = recurrenceTypeDAO.addRecurrenceType(testRecurrenceType);
+        testRecurrenceType.setId(recurrenceTypeId);
+
+        testEvent = TestHelper.createTestEventWithRecurrencesAndInvitations(testUser1, testUser2, testRecurrenceType);
+
+        //insert event into db
         testEvent.setCategory(testCategory);
         int id = eventDAO.addEvent(testEvent);
         testEvent.setId(id);
@@ -47,12 +65,10 @@ public class EventDAOIntegrationTest {
     @After
     public void tearDown() {
         //delete test records from db
+        userDAO.deleteAllUsers();
+        recurrenceTypeDAO.deleteAllRecurrenceTypes();
         categoryDAO.deleteAllCategories();
         eventDAO.deleteAllEvents();
-
-        //delete test object
-        testCategory = null;
-        testEvent = null;
     }
 
     @Test
@@ -61,24 +77,68 @@ public class EventDAOIntegrationTest {
         Event event = eventDAO.getEventById(testEvent.getId());
 
         assertNotNull(event);
-        assertEqualEvent(event, testEvent);
+        assertEqualEvents(event, testEvent);
+    }
+
+
+    @Test
+    public void getEventById_Found() {
+        //test method
+        Event event = eventDAO.getEventById(testEvent.getId());
+
+        assertNotNull(event);
+        assertEqualEventsWithFullInfo(event, testEvent);
     }
 
     @Test
-    public void addEventWithRecurrencesAndInvitations_Success() {
-        //create new event and insert into db
-        Event newTestEvent = TestHelper.createTestEventWithRecurrencesAndInvitations();
-        int id = eventDAO.addEvent(newTestEvent);
-        newTestEvent.setCategory(testCategory);
-        newTestEvent.setId(id);
+    public void getEventById_Not_Found() {
+        //test method
+        Event event = eventDAO.getEventById(TestHelper.NON_EXISTING_ID);
 
-        //read inserted event data
-        Event event = eventDAO.getEventById(newTestEvent.getId());
-
-        assertNotNull(event);
-        assertEqualEvent(event, newTestEvent);
+        assertNull(event);
     }
-/*
+
+    @Test
+    public void getAllEvents_Found() {
+        //testing method
+        List<Event> eventList = eventDAO.getAllEvents();
+
+        assertNotNull(eventList);
+        assertEquals(eventList.size(), 1);
+        assertEqualEvents(eventList.get(0), testEvent);
+    }
+
+    @Test
+    public void getAllEvents_EmptyList() {
+        //delete inserted test record
+        eventDAO.deleteEvent(testEvent.getId());
+
+        List<Event> eventList = eventDAO.getAllEvents();
+
+        assertNotNull(eventList);
+        assertTrue(eventList.isEmpty());
+    }
+
+    @Test
+    public void getEventsByCategoryId_Found() {
+        //testing method
+        List<Event> eventList = eventDAO.getEventsByCategory(testCategory.getId());
+
+        assertNotNull(eventList);
+        assertEquals(eventList.size(), 1);
+        assertEqualEvents(eventList.get(0), testEvent);
+    }
+
+    @Test
+    public void getEventsByCategoryId_Empty_List() {
+        //delete inserted test record
+        List<Event> eventList = eventDAO.getEventsByCategory(TestHelper.NON_EXISTING_ID);
+
+        assertNotNull(eventList);
+        assertTrue(eventList.isEmpty());
+    }
+
+
     @Test
     public void deleteEvent_Found() {
         //testing method
@@ -119,10 +179,10 @@ public class EventDAOIntegrationTest {
         boolean deleted = eventDAO.deleteAllEvents();
 
         assertFalse(deleted);
-    }*/
+    }
 
     //helper methods
-    private void assertEqualEvent(Event actualEvent, Event expectedEvent) {
+    private void assertEqualEvents(Event actualEvent, Event expectedEvent) {
         assertEquals(actualEvent.getId(), expectedEvent.getId());
         assertEquals(actualEvent.getTitle(), expectedEvent.getTitle());
         assertEquals(actualEvent.getCategory().getId(), expectedEvent.getCategory().getId());
@@ -139,8 +199,8 @@ public class EventDAOIntegrationTest {
         assertEquals(actualEvent.isGuestsAllowed(), expectedEvent.isGuestsAllowed());
     }
 
-    private void assertEqualEventWithRecurrencesAndInvitations(Event actualEvent, Event expectedEvent) {
-        assertEqualEvent(actualEvent, expectedEvent);
+    private void assertEqualEventsWithFullInfo(Event actualEvent, Event expectedEvent) {
+        assertEqualEvents(actualEvent, expectedEvent);
 
         assertNotNull(actualEvent.getInvitations());
         assertNotNull(actualEvent.getEventRecurrences());

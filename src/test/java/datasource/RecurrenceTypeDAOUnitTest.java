@@ -24,7 +24,7 @@ public class RecurrenceTypeDAOUnitTest {
     private DataSourceManager dataSourceManager;
     private RecurrenceTypeDAO recurrenceTypeDAO;
 
-    @SuppressWarnings("unchecked")
+    // @SuppressWarnings("unchecked")
     @Before
     public void setUp() throws Exception {
 
@@ -33,6 +33,7 @@ public class RecurrenceTypeDAOUnitTest {
 
         when(dataSourceManager.getConnection()).thenReturn(connection);
         when(connection.prepareStatement(any(String.class), eq(PreparedStatement.RETURN_GENERATED_KEYS))).thenThrow(SQLException.class);
+        when(connection.prepareStatement(any(String.class))).thenThrow(SQLException.class);
 
         recurrenceTypeDAO = new RecurrenceTypeDAOImpl(dataSourceManager);
     }

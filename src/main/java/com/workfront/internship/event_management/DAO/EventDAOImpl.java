@@ -13,6 +13,22 @@ import java.util.List;
  */
 public class EventDAOImpl extends GenericDAO implements EventDAO {
 
+    private DataSourceManager dataSourceManager;
+
+    public EventDAOImpl(DataSourceManager dataSourceManager) throws Exception {
+        super(dataSourceManager);
+        this.dataSourceManager = dataSourceManager;
+    }
+
+    public EventDAOImpl() {
+        try {
+            this.dataSourceManager = DataSourceManager.getInstance();
+        } catch (IOException | SQLException e) {
+            LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public int addEvent(Event event) {
 
@@ -21,7 +37,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //start transaction
             conn.setAutoCommit(false);
@@ -41,9 +57,9 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
             //insert event recurrence info
             if (event.getEventRecurrences() != null && !event.getInvitations().isEmpty()) {
+                EventRecurrenceDAO recurrenceDAO = new EventRecurrenceDAOImpl();
                 for (EventRecurrence recurrence : event.getEventRecurrences()) {
                     recurrence.setEventId(eventId);
-                    EventRecurrenceDAO recurrenceDAO = new EventRecurrenceDAOImpl();
                     recurrenceDAO.addEventRecurrence(recurrence, conn);
                 }
             }
@@ -51,13 +67,15 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             //commit transaction
             conn.commit();
 
-        } catch (IOException | SQLException e) {
+        } catch (SQLException e) {
             try {
                 conn.rollback();
             } catch (SQLException e1) {
                 LOGGER.error("Commit/rollback exception...", e);
+                throw new RuntimeException(e);
             }
             LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(conn);
         }
@@ -78,7 +96,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create statement
             stmt = conn.prepareStatement(query);
@@ -89,8 +107,9 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             //get results
             eventsList = createEventListFromRS(rs);
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -110,7 +129,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query);
@@ -145,8 +164,9 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                 event.setMedia(media);
             }
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception ", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -165,7 +185,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                 "WHERE event.category_id = ?";
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query);
@@ -177,8 +197,9 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             //get results
             eventsList = createEventListFromRS(rs);
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception ", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -193,17 +214,15 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         ResultSet rs = null;
 
         List<Event> eventsList = null;
+        String query = "SELECT event.*, event_category.* FROM event " +
+                "LEFT JOIN event_invitation ON event_invitation.event_id = event.id " +
+                "LEFT JOIN event_category ON event.category_id = event_category.id " +
+                "WHERE user_id = ? AND user_role = ? ";
 
         try {
-            conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "SELECT event.*, event_category.* " +
-                    "FROM event " +
-                    "LEFT JOIN event_invitation " +
-                    "ON event_invitation.event_id = event.id " +
-                    "LEFT JOIN event_category " +
-                    "ON event.category_id = event_category.id " +
-                    "WHERE user_id = ? AND user_role = ? ";
-            stmt = conn.prepareStatement(sqlStr);
+            conn = dataSourceManager.getConnection();
+
+            stmt = conn.prepareStatement(query);
             stmt.setInt(1, userId);
             stmt.setString(2, userRole);
 
@@ -213,8 +232,9 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             //get results
             eventsList = createEventListFromRS(rs);
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception ", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -227,22 +247,27 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
+
         List<Event> eventsList = null;
+        String sqlStr = "SELECT event.*, event_category.* FROM event " +
+                "LEFT JOIN event_invitation ON event_invitation.event_id = event.id " +
+                "LEFT JOIN event_category ON event.category_id = event_category.id " +
+                "WHERE user_id = ? AND participated = TRUE ";
 
         try {
-            conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "SELECT event.*, event_category.* FROM event " +
-                    "LEFT JOIN event_invitation ON event_invitation.event_id = event.id " +
-                    "LEFT JOIN event_category ON event.category_id = event_category.id " +
-                    "WHERE user_id = ? AND participated = true ";
+            //get connection
+            conn = dataSourceManager.getConnection();
+
+            //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, userId);
 
             rs = stmt.executeQuery();
 
             eventsList = createEventListFromRS(rs);
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception ", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -257,23 +282,28 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         ResultSet rs = null;
         List<Event> eventsList = null;
 
+        String sqlStr = "SELECT event.*, event_category.* " +
+                "FROM event " +
+                "LEFT JOIN event_invitation " +
+                "ON event_invitation.event_id = event.id " +
+                "LEFT JOIN event_category " +
+                "ON event.category_id = event_category.id " +
+                "WHERE user_id = ? AND user_response = \"Yes\"";
+
         try {
-            conn = DataSourceManager.getInstance().getConnection();
-            String sqlStr = "SELECT event.*, event_category.* " +
-                    "FROM event " +
-                    "LEFT JOIN event_invitation " +
-                    "ON event_invitation.event_id = event.id " +
-                    "LEFT JOIN event_category " +
-                    "ON event.category_id = event_category.id " +
-                    "WHERE user_id = ? AND user_response = \"Yes\"";
+            //get connection
+            conn = dataSourceManager.getConnection();
+
+            //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);
             stmt.setInt(1, userId);
 
             rs = stmt.executeQuery();
 
             eventsList = createEventListFromRS(rs);
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception ", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -295,7 +325,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query);
@@ -341,8 +371,9 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             //execute query
             affectedRows = stmt.executeUpdate();
 
-        } catch (IOException | SQLException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception ", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(null, stmt, conn);
         }
@@ -413,6 +444,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         } catch (SQLException e) {
             LOGGER.error("Exception ", e);
+            throw new RuntimeException(e);
         } finally {
             // closeResources(stmt);
         }

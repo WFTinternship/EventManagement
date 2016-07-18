@@ -24,7 +24,7 @@ public class MediaDAOUnitTest {
     private DataSourceManager dataSourceManager;
     private MediaDAO mediaDAO;
 
-    @SuppressWarnings("unchecked")
+    //@SuppressWarnings("unchecked")
     @Before
     public void setUp() throws Exception {
 
@@ -33,6 +33,7 @@ public class MediaDAOUnitTest {
 
         when(dataSourceManager.getConnection()).thenReturn(connection);
         when(connection.prepareStatement(any(String.class), eq(PreparedStatement.RETURN_GENERATED_KEYS))).thenThrow(SQLException.class);
+        when(connection.prepareStatement(any(String.class))).thenThrow(SQLException.class);
 
         mediaDAO = new MediaDAOImpl(dataSourceManager);
     }

@@ -59,7 +59,7 @@ class TestHelper {
         return testEvent;
     }
 
-    static Event createTestEventWithRecurrencesAndInvitations() {
+    static Event createTestEventWithRecurrencesAndInvitations(User user1, User user2, RecurrenceType recurrenceType) {
         Event testEvent = new Event();
         testEvent.setTitle("Test title")
                 .setShortDescription("Test short description")
@@ -73,22 +73,27 @@ class TestHelper {
                 .setPublicAccessed(true)
                 .setGuestsAllowed(true);
 
-        List<EventRecurrence> recurrenceList = new ArrayList<>();
-        recurrenceList.add(createTestEventRecurrence());
-        recurrenceList.add(createTestEventRecurrence());
 
-        Event event = createTestEvent();
-        User user1 = createTestUser();
-        User user2 = createTestUser();
+        //create invitation list
         Invitation invitation1 = createTestInvitation();
         Invitation invitation2 = createTestInvitation();
         invitation1.setUser(user1);
         invitation2.setUser(user2);
 
         List<Invitation> invitationList = new ArrayList<>();
-        //  invitationList.add();
-        invitationList.add(createTestInvitation());
+        invitationList.add(invitation1);
+        invitationList.add(invitation2);
 
+        //create recurrence list
+        EventRecurrence recurrence1 = createTestEventRecurrence();
+        EventRecurrence recurrence2 = createTestEventRecurrence();
+        recurrence1.setRecurrenceType(recurrenceType);
+        recurrence2.setRecurrenceType(recurrenceType);
+
+        List<EventRecurrence> recurrenceList = new ArrayList<>();
+        recurrenceList.add(recurrence1);
+
+        //set to event
         testEvent.setEventRecurrences(recurrenceList);
         testEvent.setInvitations(invitationList);
 
