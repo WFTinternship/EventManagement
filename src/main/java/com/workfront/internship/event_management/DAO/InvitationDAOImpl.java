@@ -16,6 +16,22 @@ import java.util.List;
  */
 public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
+    private DataSourceManager dataSourceManager;
+
+    public InvitationDAOImpl(DataSourceManager dataSourceManager) throws Exception {
+        super(dataSourceManager);
+        this.dataSourceManager = dataSourceManager;
+    }
+
+    public InvitationDAOImpl() {
+        try {
+            this.dataSourceManager = DataSourceManager.getInstance();
+        } catch (IOException | SQLException e) {
+            LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public int addInvitation(Invitation invitation) {
 
@@ -24,12 +40,13 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //insert invitation and get generated id
             id = addInvitation(invitation, conn);
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception ", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(conn);
         }
@@ -86,7 +103,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);
@@ -100,8 +117,9 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             if (!invitationList.isEmpty()) {
                 invitation = invitationList.get(0);
             }
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception ", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -120,7 +138,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
                 "ON event_invitation.user_id = user.id ";
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);
@@ -130,8 +148,9 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
             //get results
             invitationsList = createInvitationsFromRS(rs);
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception ", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -152,7 +171,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);
@@ -163,8 +182,9 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
             //get results
             invitationsList = createInvitationsFromRS(rs);
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception ", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -185,7 +205,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);
@@ -197,8 +217,9 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             //get results
             invitationsList = createInvitationsFromRS(rs);
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception ", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -216,7 +237,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);
@@ -229,8 +250,9 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             //execute query
             affectedRows = stmt.executeUpdate();
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception ", e);
+            throw new RuntimeException(e);
         } finally {
             closeResources(stmt, conn);
         }

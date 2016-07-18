@@ -110,7 +110,7 @@ public class EventRecurrenceDAOIntegrationTest {
     @Test
     public void getALlEventRecurrencesByEventId__Empty_List() {
         //delete inserted test record
-        eventRecurrenceDAO.deleteEventRecurrece(testEventRecurrence.getId());
+        eventRecurrenceDAO.deleteEventRecurrence(testEventRecurrence.getId());
 
         //test method
         List<EventRecurrence> eventRecurrenceList = eventRecurrenceDAO.getAllEventRecurrences();
@@ -149,7 +149,7 @@ public class EventRecurrenceDAOIntegrationTest {
     @Test
     public void deleteEventRecurrence_Found() {
         //testing method
-        boolean deleted = eventRecurrenceDAO.deleteEventRecurrece(testEventRecurrence.getId());
+        boolean deleted = eventRecurrenceDAO.deleteEventRecurrence(testEventRecurrence.getId());
 
         EventRecurrence eventRecurrence = eventRecurrenceDAO.getEventRecurrenceById(testEventRecurrence.getId());
 
@@ -160,7 +160,7 @@ public class EventRecurrenceDAOIntegrationTest {
     @Test
     public void deleteEventRecurrence_Not_Found() {
         //test method
-        boolean deleted = eventRecurrenceDAO.deleteEventRecurrece(TestHelper.NON_EXISTING_ID);
+        boolean deleted = eventRecurrenceDAO.deleteEventRecurrence(TestHelper.NON_EXISTING_ID);
 
         assertFalse(deleted);
     }
@@ -180,7 +180,7 @@ public class EventRecurrenceDAOIntegrationTest {
     @Test
     public void deleteAllEventRecurrences_Not_Found() {
         //delete inserted test record
-        eventRecurrenceDAO.deleteEventRecurrece(testEventRecurrence.getId());
+        eventRecurrenceDAO.deleteEventRecurrence(testEventRecurrence.getId());
 
         //testing method
         boolean deleted = eventRecurrenceDAO.deleteAllEventRecurrences();

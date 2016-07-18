@@ -9,18 +9,18 @@ import java.util.List;
  */
 public interface CategoryDAO {
 
-     //insert data into db
-     int addCategory(Category category);
+    //insert data into db
+    int addCategory(Category category);
 
-     //read data from db
-     List<Category> getAllCategories();
-
+    //read data from db
+    List<Category> getAllCategories();
     Category getCategoryById(int categoryId);
 
-     //update data in db
-     boolean updateCategory(Category category);
+    //update data in db
+    boolean updateCategory(Category category);
 
-     //delete data from db
-     boolean deleteCategory(int categoryId);
-     boolean deleteAllCategories();
+    //delete data from db
+    boolean deleteCategory(int categoryId);
+
+    boolean deleteAllCategories();
 }

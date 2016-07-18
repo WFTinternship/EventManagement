@@ -13,6 +13,22 @@ import java.util.List;
  */
 public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenceDAO {
 
+    private DataSourceManager dataSourceManager;
+
+    public EventRecurrenceDAOImpl(DataSourceManager dataSourceManager) throws Exception {
+        super(dataSourceManager);
+        this.dataSourceManager = dataSourceManager;
+    }
+
+    public EventRecurrenceDAOImpl() {
+        try {
+            this.dataSourceManager = DataSourceManager.getInstance();
+        } catch (IOException | SQLException e) {
+            LOGGER.error("Exception...", e);
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public int addEventRecurrence(EventRecurrence recurrence) {
 
@@ -21,11 +37,11 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             id = addEventRecurrence(recurrence, conn);
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception ", e);
             throw new RuntimeException(e);
         } finally {
@@ -47,7 +63,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);
@@ -62,7 +78,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
                 eventRecurrence = eventRecurrenceList.get(0);
             }
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
@@ -123,7 +139,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);
@@ -135,7 +151,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
             //get results
             recurrencesList = createEventRecurrencesFromRS(rs);
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
@@ -155,7 +171,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create statement
             stmt = conn.prepareStatement(sqlStr);
@@ -166,7 +182,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
             //get results
             recurrencesList = createEventRecurrencesFromRS(rs);
 
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception ", e);
         } finally {
             closeResources(rs, stmt, conn);
@@ -186,7 +202,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
 
         try {
             //get connection
-            conn = DataSourceManager.getInstance().getConnection();
+            conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query);
@@ -210,7 +226,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
 
             //execute query
             affectedRows = stmt.executeUpdate();
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             LOGGER.error("Exception ", e);
         } finally {
             closeResources(stmt, conn);
@@ -218,7 +234,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
         return affectedRows != 0;    }
 
     @Override
-    public boolean deleteEventRecurrece(int id) {
+    public boolean deleteEventRecurrence(int id) {
         return deleteRecordById("event_recurrence", id);
     }
 

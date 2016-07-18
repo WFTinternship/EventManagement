@@ -23,7 +23,6 @@ public interface EventRecurrenceDAO {
     boolean updateEventRecurrence(EventRecurrence recurrence);
 
     //delete data from db
-    boolean deleteEventRecurrece(int id);
-
+    boolean deleteEventRecurrence(int id);
     boolean deleteAllEventRecurrences();
 }
