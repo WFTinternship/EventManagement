@@ -16,12 +16,14 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
+
 /**
  * Created by Hermine Turshujyan 7/18/16.
  */
 public class InvitationDAOUnitTest {
 
     //todo add test for checking conn.close()
+    //todo add method call validation
 
     private DataSourceManager dataSourceManager;
     private InvitationDAO invitationDAO;
