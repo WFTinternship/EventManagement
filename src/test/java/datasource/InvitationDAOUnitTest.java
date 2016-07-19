@@ -21,6 +21,8 @@ import static org.mockito.Mockito.when;
  */
 public class InvitationDAOUnitTest {
 
+    //todo add test for checking conn.close()
+
     private DataSourceManager dataSourceManager;
     private InvitationDAO invitationDAO;
 

@@ -16,7 +16,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 /**
- * Created by hermine on 7/9/16.
+ * Created by Hermine Turshujyan 7/9/16.
  */
 
 public class InvitationDAOIntegrationTest {
@@ -48,11 +48,11 @@ public class InvitationDAOIntegrationTest {
         testEvent = TestHelper.createTestEvent();
         testInvitation = TestHelper.createTestInvitation();
 
-        //insert user into db and get generated id
+        //insert user info into db and get generated id
         int userId = userDAO.addUser(testUser);
         testUser.setId(userId);
 
-        //insert category into db and get generated id
+        //insert category info into db and get generated id
         int categoryId = categoryDAO.addCategory(testCategory);
         testCategory.setId(categoryId);
 
