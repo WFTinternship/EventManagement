@@ -1,6 +1,6 @@
 package datasource;
 
-import com.workfront.internship.event_management.DAO.*;
+import com.workfront.internship.event_management.dao.*;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Media;
@@ -17,7 +17,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.*;
 
 /**
- * Created by hermine on 7/9/16.
+ * Created by Hermine Turshujyan 7/9/16.
  */
 public class MediaDAOIntegrationTest {
 

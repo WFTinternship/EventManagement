@@ -1,4 +1,4 @@
-package com.workfront.internship.event_management.DAO;
+package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.model.Invitation;
 import com.workfront.internship.event_management.model.User;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by hermine on 7/8/16.
+ * Created by Hermine Turshujyan 7/8/16.
  */
 public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
@@ -53,11 +53,9 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
         return id;
     }
 
-    @Override
-    public int addInvitation(Invitation invitation, Connection conn) {
+    int addInvitation(Invitation invitation, Connection conn) {
 
         PreparedStatement stmt = null;
-        ResultSet rs = null;
 
         int id = 0;
         String sqlStr = "INSERT INTO event_invitation "
@@ -88,7 +86,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             LOGGER.error("Exception ", e);
             throw new RuntimeException(e);
         } finally {
-            closeResources(rs, stmt);
+            closeResources(stmt);
         }
         return id;
     }
@@ -236,7 +234,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
     private List<Invitation> createInvitationsFromRS(ResultSet rs) throws SQLException {
 
-        List<Invitation> invitationsList = new ArrayList<Invitation>();
+        List<Invitation> invitationsList = new ArrayList<>();
 
         while (rs.next()) {
 

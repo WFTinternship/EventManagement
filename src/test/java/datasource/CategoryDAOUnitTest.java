@@ -1,8 +1,8 @@
 package datasource;
 
-import com.workfront.internship.event_management.DAO.CategoryDAO;
-import com.workfront.internship.event_management.DAO.CategoryDAOImpl;
-import com.workfront.internship.event_management.DAO.DataSourceManager;
+import com.workfront.internship.event_management.dao.CategoryDAO;
+import com.workfront.internship.event_management.dao.CategoryDAOImpl;
+import com.workfront.internship.event_management.dao.DataSourceManager;
 import com.workfront.internship.event_management.model.Category;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +24,7 @@ public class CategoryDAOUnitTest {
     private DataSourceManager dataSourceManager;
     private CategoryDAO categoryDAO;
 
-    // @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     @Before
     public void setUp() throws Exception {
 

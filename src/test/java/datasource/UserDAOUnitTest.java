@@ -1,8 +1,8 @@
 package datasource;
 
-import com.workfront.internship.event_management.DAO.DataSourceManager;
-import com.workfront.internship.event_management.DAO.UserDAO;
-import com.workfront.internship.event_management.DAO.UserDAOImpl;
+import com.workfront.internship.event_management.dao.DataSourceManager;
+import com.workfront.internship.event_management.dao.UserDAO;
+import com.workfront.internship.event_management.dao.UserDAOImpl;
 import com.workfront.internship.event_management.model.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +24,7 @@ public class UserDAOUnitTest {
     private DataSourceManager dataSourceManager;
     private UserDAO userDAO;
 
-    // @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     @Before
     public void setUp() throws Exception {
 

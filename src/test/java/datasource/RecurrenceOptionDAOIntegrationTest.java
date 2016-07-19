@@ -1,9 +1,9 @@
 package datasource;
 
-import com.workfront.internship.event_management.DAO.RecurrenceOptionDAO;
-import com.workfront.internship.event_management.DAO.RecurrenceOptionDAOImpl;
-import com.workfront.internship.event_management.DAO.RecurrenceTypeDAO;
-import com.workfront.internship.event_management.DAO.RecurrenceTypeDAOImpl;
+import com.workfront.internship.event_management.dao.RecurrenceOptionDAO;
+import com.workfront.internship.event_management.dao.RecurrenceOptionDAOImpl;
+import com.workfront.internship.event_management.dao.RecurrenceTypeDAO;
+import com.workfront.internship.event_management.dao.RecurrenceTypeDAOImpl;
 import com.workfront.internship.event_management.model.RecurrenceOption;
 import com.workfront.internship.event_management.model.RecurrenceType;
 import org.junit.After;
@@ -222,7 +222,7 @@ public class RecurrenceOptionDAOIntegrationTest {
     }
 
     //helper methods
-    public void assertEqualRepeatOptions(RecurrenceOption actualRecurrenceOption, RecurrenceOption expectedRecurrenceOption) {
+    private void assertEqualRepeatOptions(RecurrenceOption actualRecurrenceOption, RecurrenceOption expectedRecurrenceOption) {
         assertEquals(actualRecurrenceOption.getId(), expectedRecurrenceOption.getId());
         assertEquals(actualRecurrenceOption.getRecurrenceTypeId(), expectedRecurrenceOption.getRecurrenceTypeId());
         assertEquals(actualRecurrenceOption.getAbbreviation(), expectedRecurrenceOption.getAbbreviation());

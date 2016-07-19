@@ -1,4 +1,4 @@
-package com.workfront.internship.event_management.DAO;
+package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.model.*;
 import com.workfront.internship.event_management.model.DateRange;
@@ -51,7 +51,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                 InvitationDAO invitationDAO = new InvitationDAOImpl();
                 for (Invitation invitation : event.getInvitations()) {
                     invitation.setEventId(eventId);
-                    invitationDAO.addInvitation(invitation, conn);
+                    ((InvitationDAOImpl) invitationDAO).addInvitation(invitation, conn);
                 }
             }
 
@@ -60,7 +60,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                 EventRecurrenceDAO recurrenceDAO = new EventRecurrenceDAOImpl();
                 for (EventRecurrence recurrence : event.getEventRecurrences()) {
                     recurrence.setEventId(eventId);
-                    recurrenceDAO.addEventRecurrence(recurrence, conn);
+                    ((EventRecurrenceDAOImpl) recurrenceDAO).addEventRecurrence(recurrence, conn);
                 }
             }
 
@@ -69,7 +69,9 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         } catch (SQLException e) {
             try {
-                conn.rollback();
+                if (conn != null) {
+                    conn.rollback();
+                }
             } catch (SQLException e1) {
                 LOGGER.error("Commit/rollback exception...", e);
                 throw new RuntimeException(e);
@@ -147,21 +149,27 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             InvitationDAO invitationDAO = new InvitationDAOImpl();
             List<Invitation> invitations = invitationDAO.getInvitationsByEventId(eventId);
             if (invitations != null && !invitations.isEmpty()) {
-                event.setInvitations(invitations);
+                if (event != null) {
+                    event.setInvitations(invitations);
+                }
             }
 
             //get event recurrences
             EventRecurrenceDAO recurrenceDAO = new EventRecurrenceDAOImpl();
             List<EventRecurrence> recurrences = recurrenceDAO.getEventRecurrencesByEventId(eventId);
             if (recurrences != null && !recurrences.isEmpty()) {
-                event.setEventRecurrences(recurrences);
+                if (event != null) {
+                    event.setEventRecurrences(recurrences);
+                }
             }
 
             //get media list
             MediaDAO mediaDAO = new MediaDAOImpl();
             List<Media> media = mediaDAO.getMediaByEventId(eventId);
             if (media != null && !media.isEmpty()) {
-                event.setMedia(media);
+                if (event != null) {
+                    event.setMedia(media);
+                }
             }
 
         } catch (SQLException e) {
@@ -288,7 +296,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                 "ON event_invitation.event_id = event.id " +
                 "LEFT JOIN event_category " +
                 "ON event.category_id = event_category.id " +
-                "WHERE user_id = ? AND user_response = \"Yes\"";
+                "WHERE user_id = ? AND user_response = 'Yes'";
 
         try {
             //get connection
@@ -446,13 +454,13 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             LOGGER.error("Exception ", e);
             throw new RuntimeException(e);
         } finally {
-            // closeResources(stmt);
+            closeResources(stmt);
         }
         return id;
     }
 
     private List<Event> createEventListFromRS(ResultSet rs) throws SQLException {
-        List<Event> eventsList = new ArrayList<Event>();
+        List<Event> eventsList = new ArrayList<>();
 
         while (rs.next()) {
 

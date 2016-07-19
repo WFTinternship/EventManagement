@@ -1,8 +1,7 @@
-package com.workfront.internship.event_management.DAO;
+package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.model.EventRecurrence;
 
-import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -11,7 +10,6 @@ import java.util.List;
 public interface EventRecurrenceDAO {
 
     //insert data into db
-    int addEventRecurrence(EventRecurrence recurrence, Connection conn);
     int addEventRecurrence(EventRecurrence recurrence);
 
     //read data from db

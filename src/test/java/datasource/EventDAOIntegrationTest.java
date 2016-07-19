@@ -1,6 +1,6 @@
 package datasource;
 
-import com.workfront.internship.event_management.DAO.*;
+import com.workfront.internship.event_management.dao.*;
 import com.workfront.internship.event_management.model.*;
 import org.junit.After;
 import org.junit.Before;

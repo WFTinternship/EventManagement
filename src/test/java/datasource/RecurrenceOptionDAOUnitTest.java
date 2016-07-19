@@ -1,8 +1,8 @@
 package datasource;
 
-import com.workfront.internship.event_management.DAO.DataSourceManager;
-import com.workfront.internship.event_management.DAO.RecurrenceOptionDAO;
-import com.workfront.internship.event_management.DAO.RecurrenceOptionDAOImpl;
+import com.workfront.internship.event_management.dao.DataSourceManager;
+import com.workfront.internship.event_management.dao.RecurrenceOptionDAO;
+import com.workfront.internship.event_management.dao.RecurrenceOptionDAOImpl;
 import com.workfront.internship.event_management.model.RecurrenceOption;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +24,7 @@ public class RecurrenceOptionDAOUnitTest {
     private DataSourceManager dataSourceManager;
     private RecurrenceOptionDAO recurrenceOptionDAO;
 
-    // @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     @Before
     public void setUp() throws Exception {
 

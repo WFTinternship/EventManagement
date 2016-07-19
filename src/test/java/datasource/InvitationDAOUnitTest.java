@@ -1,8 +1,8 @@
 package datasource;
 
-import com.workfront.internship.event_management.DAO.DataSourceManager;
-import com.workfront.internship.event_management.DAO.InvitationDAO;
-import com.workfront.internship.event_management.DAO.InvitationDAOImpl;
+import com.workfront.internship.event_management.dao.DataSourceManager;
+import com.workfront.internship.event_management.dao.InvitationDAO;
+import com.workfront.internship.event_management.dao.InvitationDAOImpl;
 import com.workfront.internship.event_management.model.Invitation;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class InvitationDAOUnitTest {
     private DataSourceManager dataSourceManager;
     private InvitationDAO invitationDAO;
 
-    // @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     @Before
     public void setUp() throws Exception {
 

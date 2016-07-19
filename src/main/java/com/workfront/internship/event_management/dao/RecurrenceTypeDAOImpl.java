@@ -1,4 +1,4 @@
-package com.workfront.internship.event_management.DAO;
+package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.model.RecurrenceOption;
 import com.workfront.internship.event_management.model.RecurrenceType;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by hermine on 7/11/16.
+ * Created by Hermine Turshujyan 7/11/16.
  */
 public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeDAO {
 
@@ -37,7 +37,6 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
         Connection conn = null;
         PreparedStatement stmt = null;
-        ResultSet rs = null;
 
         int id = 0;
 
@@ -68,21 +67,23 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
                 List<RecurrenceOption> options = recurrenceType.getRecurrenceOptions();
                 for (RecurrenceOption option : options) {
                     option.setRecurrenceTypeId(id);
-                    recurrenceOptionDAO.addRecurrenceOption(option, conn);
+                    ((RecurrenceOptionDAOImpl) recurrenceOptionDAO).addRecurrenceOption(option, conn);
                 }
 
             }
             conn.commit();
         } catch (SQLException e) {
             try {
-                conn.rollback();
+                if (conn != null) {
+                    conn.rollback();
+                }
             } catch (SQLException re) {
                 LOGGER.error("Transaction failed! ", e);
                 throw new RuntimeException(e);
             }
             throw new RuntimeException(e);
         } finally {
-            closeResources(rs, stmt, conn);
+            closeResources(stmt, conn);
         }
         return id;
     }
@@ -143,7 +144,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
             //get result
             List<RecurrenceType> recurrenceTypes = createRecurrenceTypeListFromRS(rs);
-            if (recurrenceTypes != null & recurrenceTypes.size() == 1) {
+            if (recurrenceTypes != null && recurrenceTypes.size() == 1) {
                 recurrenceType = recurrenceTypes.get(0);
 
                 //read recurrenceType options from another table

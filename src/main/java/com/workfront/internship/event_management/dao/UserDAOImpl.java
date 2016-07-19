@@ -1,4 +1,4 @@
-package com.workfront.internship.event_management.DAO;
+package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.model.User;
 
@@ -33,7 +33,6 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
         Connection conn = null;
         PreparedStatement stmt = null;
-        ResultSet rs = null;
         int id = 0;
 
         try {
@@ -71,7 +70,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             LOGGER.error("Exception...", e);
             throw new RuntimeException();
         } finally {
-            closeResources(rs, stmt, conn);
+            closeResources(stmt, conn);
         }
         return id;
     }

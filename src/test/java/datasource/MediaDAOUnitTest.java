@@ -1,8 +1,8 @@
 package datasource;
 
-import com.workfront.internship.event_management.DAO.DataSourceManager;
-import com.workfront.internship.event_management.DAO.MediaDAO;
-import com.workfront.internship.event_management.DAO.MediaDAOImpl;
+import com.workfront.internship.event_management.dao.DataSourceManager;
+import com.workfront.internship.event_management.dao.MediaDAO;
+import com.workfront.internship.event_management.dao.MediaDAOImpl;
 import com.workfront.internship.event_management.model.Media;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +24,7 @@ public class MediaDAOUnitTest {
     private DataSourceManager dataSourceManager;
     private MediaDAO mediaDAO;
 
-    //@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     @Before
     public void setUp() throws Exception {
 

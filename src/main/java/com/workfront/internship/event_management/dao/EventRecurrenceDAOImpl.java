@@ -1,4 +1,4 @@
-package com.workfront.internship.event_management.DAO;
+package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.model.EventRecurrence;
 import com.workfront.internship.event_management.model.RecurrenceType;
@@ -87,11 +87,9 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
         return eventRecurrence;
     }
 
-    @Override
-    public int addEventRecurrence(EventRecurrence recurrence, Connection conn) {
+    int addEventRecurrence(EventRecurrence recurrence, Connection conn) {
 
         PreparedStatement stmt = null;
-        ResultSet rs = null;
 
         int id = 0;
         String query = "INSERT INTO event_recurrence "
@@ -122,7 +120,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
             LOGGER.error("Exception ", e);
             throw new RuntimeException(e);
         } finally {
-            closeResources(rs, stmt);
+            closeResources(stmt);
         }
         return id;
     }
@@ -251,7 +249,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
 
     private List<EventRecurrence> createEventRecurrencesFromRS(ResultSet rs) throws SQLException {
 
-        List<EventRecurrence> recurrencesList = new ArrayList<EventRecurrence>();
+        List<EventRecurrence> recurrencesList = new ArrayList<>();
 
         while (rs.next()) {
 

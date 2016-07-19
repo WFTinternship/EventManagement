@@ -1,4 +1,4 @@
-package com.workfront.internship.event_management.DAO;
+package com.workfront.internship.event_management.dao;
 
 import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
 

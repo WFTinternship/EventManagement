@@ -1,8 +1,7 @@
-package com.workfront.internship.event_management.DAO;
+package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.model.RecurrenceOption;
 
-import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -12,9 +11,6 @@ public interface RecurrenceOptionDAO {
 
     //insert data into db
     int addRecurrenceOption(RecurrenceOption option);
-
-    int addRecurrenceOption(RecurrenceOption option, Connection conn);
-
 
     //read data from db
     List<RecurrenceOption> getAllRecurrenceOptions();

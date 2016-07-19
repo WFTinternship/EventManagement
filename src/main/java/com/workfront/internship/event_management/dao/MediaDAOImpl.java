@@ -1,4 +1,4 @@
-package com.workfront.internship.event_management.DAO;
+package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.model.Media;
 
@@ -229,7 +229,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
 
     private List<Media> createMediaListFromRS(ResultSet rs) throws SQLException {
 
-        List<Media> mediaList = new ArrayList<Media>();
+        List<Media> mediaList = new ArrayList<>();
 
         while (rs.next()) {
 

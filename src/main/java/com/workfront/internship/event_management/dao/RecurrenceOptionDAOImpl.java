@@ -1,4 +1,4 @@
-package com.workfront.internship.event_management.DAO;
+package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.model.RecurrenceOption;
 
@@ -53,8 +53,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
         return id;
     }
 
-    @Override
-    public int addRecurrenceOption(RecurrenceOption option, Connection conn) {
+    int addRecurrenceOption(RecurrenceOption option, Connection conn) {
 
         PreparedStatement stmt = null;
         int id = 0;
@@ -232,7 +231,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
     //helper methods
     private List<RecurrenceOption> createRecurrenceOptionListFromRS(ResultSet rs) throws SQLException {
 
-        List<RecurrenceOption> optionList = new ArrayList<RecurrenceOption>();
+        List<RecurrenceOption> optionList = new ArrayList<>();
 
         while (rs.next()) {
             RecurrenceOption option = new RecurrenceOption();

@@ -1,7 +1,7 @@
 package datasource;
 
-import com.workfront.internship.event_management.DAO.RecurrenceTypeDAO;
-import com.workfront.internship.event_management.DAO.RecurrenceTypeDAOImpl;
+import com.workfront.internship.event_management.dao.RecurrenceTypeDAO;
+import com.workfront.internship.event_management.dao.RecurrenceTypeDAOImpl;
 import com.workfront.internship.event_management.model.RecurrenceType;
 import org.junit.After;
 import org.junit.Before;
@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 public class RecurrenceTypeDAOIntegrationTest {
 
     private static RecurrenceTypeDAO recurrenceTypeDAO = null;
-    RecurrenceType testRecurrenceType = null;
+    private RecurrenceType testRecurrenceType = null;
 
     @BeforeClass
     public static void setUpClass(){

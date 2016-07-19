@@ -1,8 +1,7 @@
-package com.workfront.internship.event_management.DAO;
+package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.model.Invitation;
 
-import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -11,7 +10,6 @@ import java.util.List;
 public interface InvitationDAO {
 
      //insert invitation into db
-     int addInvitation(Invitation invitation, Connection conn);
      int addInvitation(Invitation invitation);
 
      //get records from db

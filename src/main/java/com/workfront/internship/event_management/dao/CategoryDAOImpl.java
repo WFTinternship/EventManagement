@@ -1,4 +1,4 @@
-package com.workfront.internship.event_management.DAO;
+package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.model.Category;
 
@@ -177,7 +177,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
     //helper methods
     private List<Category> createEventCategoryListFromRS(ResultSet rs) throws SQLException {
 
-        List<Category> categoryList = new ArrayList<Category>();
+        List<Category> categoryList = new ArrayList<>();
 
         while (rs.next()) {
             Category category = new Category();

@@ -1,4 +1,4 @@
-package com.workfront.internship.event_management.DAO;
+package com.workfront.internship.event_management.dao;
 
 import org.apache.log4j.Logger;
 
@@ -11,14 +11,14 @@ import java.sql.*;
 
 class GenericDAO {
 
-    protected static final Logger LOGGER = Logger.getLogger(GenericDAO.class);
+    static final Logger LOGGER = Logger.getLogger(GenericDAO.class);
     private DataSourceManager dataSourceManager;
 
-    public GenericDAO(DataSourceManager dataSourceManager) throws Exception {
+    GenericDAO(DataSourceManager dataSourceManager) throws Exception {
         this.dataSourceManager = dataSourceManager;
     }
 
-    public GenericDAO() {
+    GenericDAO() {
         try {
             this.dataSourceManager = DataSourceManager.getInstance();
         } catch (IOException | SQLException e) {

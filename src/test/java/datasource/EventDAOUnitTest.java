@@ -1,8 +1,8 @@
 package datasource;
 
-import com.workfront.internship.event_management.DAO.DataSourceManager;
-import com.workfront.internship.event_management.DAO.EventDAO;
-import com.workfront.internship.event_management.DAO.EventDAOImpl;
+import com.workfront.internship.event_management.dao.DataSourceManager;
+import com.workfront.internship.event_management.dao.EventDAO;
+import com.workfront.internship.event_management.dao.EventDAOImpl;
 import com.workfront.internship.event_management.model.Event;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +24,7 @@ public class EventDAOUnitTest {
     private DataSourceManager dataSourceManager;
     private static EventDAO eventDAO;
 
-    // @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     @Before
     public void setUp() throws Exception {
 
