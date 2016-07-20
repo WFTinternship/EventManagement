@@ -2,10 +2,7 @@ package datasource;
 
 import com.workfront.internship.event_management.dao.*;
 import com.workfront.internship.event_management.model.*;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.List;
 
@@ -32,6 +29,15 @@ public class EventDAOIntegrationTest {
         eventDAO = new EventDAOImpl();
         recurrenceTypeDAO = new RecurrenceTypeDAOImpl();
     }
+
+    @AfterClass
+    public static void tearDownClass() {
+        userDAO = null;
+        categoryDAO = null;
+        eventDAO = null;
+        recurrenceTypeDAO = null;
+    }
+
 
     @Before
     public void setUp() {
@@ -64,11 +70,9 @@ public class EventDAOIntegrationTest {
 
     @After
     public void tearDown() {
-        //delete test records from db
-        userDAO.deleteAllUsers();
-        recurrenceTypeDAO.deleteAllRecurrenceTypes();
-        categoryDAO.deleteAllCategories();
-        eventDAO.deleteAllEvents();
+        deleteTestRecordsFromDB();
+        deleteTestObjects();
+
     }
 
     @Test
@@ -182,6 +186,22 @@ public class EventDAOIntegrationTest {
     }
 
     //helper methods
+    private void deleteTestObjects() {
+        testEvent = null;
+        testRecurrenceType = null;
+        testCategory = null;
+        testUser1 = null;
+        testUser2 = null;
+    }
+
+    private void deleteTestRecordsFromDB() {
+        userDAO.deleteAllUsers();
+        recurrenceTypeDAO.deleteAllRecurrenceTypes();
+        categoryDAO.deleteAllCategories();
+        eventDAO.deleteAllEvents();
+
+    }
+
     private void assertEqualEvents(Event actualEvent, Event expectedEvent) {
         assertEquals(actualEvent.getId(), expectedEvent.getId());
         assertEquals(actualEvent.getTitle(), expectedEvent.getTitle());

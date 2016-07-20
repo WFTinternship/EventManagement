@@ -6,10 +6,7 @@ import com.workfront.internship.event_management.dao.RecurrenceTypeDAO;
 import com.workfront.internship.event_management.dao.RecurrenceTypeDAOImpl;
 import com.workfront.internship.event_management.model.RecurrenceOption;
 import com.workfront.internship.event_management.model.RecurrenceType;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.List;
 
@@ -31,6 +28,12 @@ public class RecurrenceOptionDAOIntegrationTest {
     public static void setUpClass() {
         recurrenceOptionDAO = new RecurrenceOptionDAOImpl();
         recurrenceTypeDAO = new RecurrenceTypeDAOImpl();
+    }
+
+    @AfterClass
+    public static void tearDownClass() {
+        recurrenceOptionDAO = null;
+        recurrenceTypeDAO = null;
     }
 
     @Before
@@ -55,6 +58,9 @@ public class RecurrenceOptionDAOIntegrationTest {
         recurrenceTypeDAO.deleteAllRecurrenceTypes();
         recurrenceOptionDAO.deleteAllRecurrenceOptions();
 
+        //delete test objects
+        testRecurrenceOption = null;
+        testRecurrenceType = null;
     }
 
     @Test

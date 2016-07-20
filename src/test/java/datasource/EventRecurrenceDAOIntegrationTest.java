@@ -2,10 +2,7 @@ package datasource;
 
 import com.workfront.internship.event_management.dao.*;
 import com.workfront.internship.event_management.model.*;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.List;
 
@@ -35,24 +32,25 @@ public class EventRecurrenceDAOIntegrationTest {
         eventRecurrenceDAO = new EventRecurrenceDAOImpl();
     }
 
+    @AfterClass
+    public static void tearDownClass() {
+        categoryDAO = null;
+        eventDAO = null;
+        recurrenceTypeDAO = null;
+        eventRecurrenceDAO = null;
+    }
+
+
     @Before
     public void setUp() {
-        // create test objects
-        testCategory = TestHelper.createTestCategory();
-        testEvent = TestHelper.createTestEvent();
-        testRecurrenceType = TestHelper.createTestRecurrenceType();
-        testEventRecurrence = TestHelper.createTestEventRecurrence();
-
-        //insert test objects data into db
+        createTestObjects();
         insertTestObjectsIntoDB();
     }
 
     @After
     public void tearDown() {
-        categoryDAO.deleteAllCategories();
-        recurrenceTypeDAO.deleteAllRecurrenceTypes();
-        eventRecurrenceDAO.deleteAllEventRecurrences();
-        eventDAO.deleteAllEvents();
+        deleteTestRecordsFromDB();
+        deleteTestObjects();
     }
 
     @Test
@@ -69,6 +67,7 @@ public class EventRecurrenceDAOIntegrationTest {
         //test method
         eventRecurrenceDAO.addEventRecurrence(testEventRecurrence);
     }
+
     @Test
     public void getEventRecurrenceById_Found() {
         //test method
@@ -199,7 +198,10 @@ public class EventRecurrenceDAOIntegrationTest {
 
     //helper methods
     private void createTestObjects() {
-
+        testCategory = TestHelper.createTestCategory();
+        testEvent = TestHelper.createTestEvent();
+        testRecurrenceType = TestHelper.createTestRecurrenceType();
+        testEventRecurrence = TestHelper.createTestEventRecurrence();
     }
 
     private void insertTestObjectsIntoDB() {
@@ -223,6 +225,19 @@ public class EventRecurrenceDAOIntegrationTest {
         testEventRecurrence.setId(eventRecurrenceId);
     }
 
+    private void deleteTestObjects() {
+        testEventRecurrence = null;
+        testRecurrenceType = null;
+        testEvent = null;
+        testCategory = null;
+    }
+
+    private void deleteTestRecordsFromDB() {
+        categoryDAO.deleteAllCategories();
+        recurrenceTypeDAO.deleteAllRecurrenceTypes();
+        eventRecurrenceDAO.deleteAllEventRecurrences();
+        eventDAO.deleteAllEvents();
+    }
 
     private void assertEqualEventRecurrences(EventRecurrence actualEventRecurrence, EventRecurrence expectedEventRecurrence) {
         assertEquals(actualEventRecurrence.getEventId(), expectedEventRecurrence.getEventId());
@@ -231,4 +246,5 @@ public class EventRecurrenceDAOIntegrationTest {
         assertEquals(actualEventRecurrence.getRepeatInterval(), expectedEventRecurrence.getRepeatInterval());
         assertNotNull(actualEventRecurrence.getRepeatEndDate());
     }
+
 }

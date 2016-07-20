@@ -3,10 +3,7 @@ package datasource;
 import com.workfront.internship.event_management.dao.UserDAO;
 import com.workfront.internship.event_management.dao.UserDAOImpl;
 import com.workfront.internship.event_management.model.User;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +24,11 @@ public class UserDAOIntegrationTest {
         userDAO = new UserDAOImpl();
     }
 
+    @AfterClass
+    public static void tearDownClass() {
+        userDAO = null;
+    }
+
     @Before
     public void setUp() {
         //create test user
@@ -44,6 +46,7 @@ public class UserDAOIntegrationTest {
         //delete inserted test users from db
         userDAO.deleteAllUsers();
 
+        //delete test user object
         testUser = null;
     }
 

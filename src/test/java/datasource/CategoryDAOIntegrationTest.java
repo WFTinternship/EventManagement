@@ -1,12 +1,8 @@
 package datasource;
 
-import com.workfront.internship.event_management.dao.CategoryDAO;
-import com.workfront.internship.event_management.dao.CategoryDAOImpl;
+import com.workfront.internship.event_management.dao.*;
 import com.workfront.internship.event_management.model.Category;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +22,11 @@ public class CategoryDAOIntegrationTest {
         categoryDAO = new CategoryDAOImpl();
     }
 
+    @AfterClass
+    public static void tearDownClass() {
+        categoryDAO = null;
+    }
+
     @Before
     public void setUp() {
         //create test category
@@ -40,6 +41,9 @@ public class CategoryDAOIntegrationTest {
     public void tearDown() {
         //delete test categories from db
         categoryDAO.deleteAllCategories();
+
+        //delete test category object
+        testCategory = null;
     }
 
     @Test

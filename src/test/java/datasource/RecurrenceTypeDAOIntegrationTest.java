@@ -3,10 +3,7 @@ package datasource;
 import com.workfront.internship.event_management.dao.RecurrenceTypeDAO;
 import com.workfront.internship.event_management.dao.RecurrenceTypeDAOImpl;
 import com.workfront.internship.event_management.model.RecurrenceType;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.List;
 
@@ -25,6 +22,11 @@ public class RecurrenceTypeDAOIntegrationTest {
         recurrenceTypeDAO = new RecurrenceTypeDAOImpl();
     }
 
+    @AfterClass
+    public static void tearDownClass() {
+        recurrenceTypeDAO = null;
+    }
+
     @Before
     public void setUp() {
         //create test recurrence type
@@ -32,14 +34,16 @@ public class RecurrenceTypeDAOIntegrationTest {
 
         //insert test record into db and get generated id
         int recurrenceTypeId = recurrenceTypeDAO.addRecurrenceType(testRecurrenceType);
-
-        //set id to test recurrence type and recurrence type options
         testRecurrenceType.setId(recurrenceTypeId);
     }
 
     @After
     public void tearDown() {
+        //delete test record from db
         recurrenceTypeDAO.deleteAllRecurrenceTypes();
+
+        //delete test recurrenceType object
+        testRecurrenceType = null;
     }
 
     @Test
@@ -96,7 +100,7 @@ public class RecurrenceTypeDAOIntegrationTest {
         assertTrue(recurrenceTypeList.isEmpty());
     }
 
-    @Test //+
+    @Test 
     public void getRecurrenceTypeById_Found() {
         //test method (test record already inserted in seUp())
         RecurrenceType recurrenceType = recurrenceTypeDAO.getRecurrenceTypeById(testRecurrenceType.getId());

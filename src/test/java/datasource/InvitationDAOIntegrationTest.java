@@ -5,10 +5,7 @@ import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.Invitation;
 import com.workfront.internship.event_management.model.User;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,41 +37,27 @@ public class InvitationDAOIntegrationTest {
         invitationDAO = new InvitationDAOImpl();
     }
 
+    @AfterClass
+    public static void tearDownClass() {
+        userDAO = null;
+        categoryDAO = null;
+        eventDAO = null;
+        invitationDAO = null;
+    }
+
     @Before
     public void setUp() {
-        //create test objects
-        testUser = TestHelper.createTestUser();
-        testCategory = TestHelper.createTestCategory();
-        testEvent = TestHelper.createTestEvent();
-        testInvitation = TestHelper.createTestInvitation();
-
-        //insert user info into db and get generated id
-        int userId = userDAO.addUser(testUser);
-        testUser.setId(userId);
-
-        //insert category info into db and get generated id
-        int categoryId = categoryDAO.addCategory(testCategory);
-        testCategory.setId(categoryId);
-
-        //insert event into db and get generated id
-        testEvent.setCategory(testCategory);
-        int eventId = eventDAO.addEvent(testEvent);
-        testEvent.setId(eventId);
-
-        //insert invitation into db and get generated id
-        testInvitation.setUser(testUser);
-        testInvitation.setEventId(testEvent.getId());
-        int invId = invitationDAO.addInvitation(testInvitation);
-        testInvitation.setId(invId);
+        createTestObjects();
+        insertTestObjectsIntoDB();
     }
+
 
     @After
     public void tearDown() {
-        invitationDAO.deleteAllInvitations();
-        eventDAO.deleteAllEvents();
-        categoryDAO.deleteAllCategories();
-        userDAO.getAllUsers();
+        deleteTestRecordsFromDB();
+        deleteTestObjects();
     }
+
 
     @Test
     public void addInvitation_Success() {
@@ -256,6 +239,50 @@ public class InvitationDAOIntegrationTest {
 
 
     //private methods
+
+    private void insertTestObjectsIntoDB() {
+        //insert user info into db and get generated id
+        int userId = userDAO.addUser(testUser);
+        testUser.setId(userId);
+
+        //insert category info into db and get generated id
+        int categoryId = categoryDAO.addCategory(testCategory);
+        testCategory.setId(categoryId);
+
+        //insert event into db and get generated id
+        testEvent.setCategory(testCategory);
+        int eventId = eventDAO.addEvent(testEvent);
+        testEvent.setId(eventId);
+
+        //insert invitation into db and get generated id
+        testInvitation.setUser(testUser);
+        testInvitation.setEventId(testEvent.getId());
+        int invId = invitationDAO.addInvitation(testInvitation);
+        testInvitation.setId(invId);
+    }
+
+    private void createTestObjects() {
+        testUser = TestHelper.createTestUser();
+        testCategory = TestHelper.createTestCategory();
+        testEvent = TestHelper.createTestEvent();
+        testInvitation = TestHelper.createTestInvitation();
+    }
+
+    private void deleteTestRecordsFromDB() {
+        invitationDAO.deleteAllInvitations();
+        eventDAO.deleteAllEvents();
+        categoryDAO.deleteAllCategories();
+        userDAO.getAllUsers();
+    }
+
+    private void deleteTestObjects() {
+        testInvitation = null;
+        testEvent = null;
+        testCategory = null;
+        testUser = null;
+    }
+
+
     private void assertEqualInvitations(Invitation expectedInvitation, Invitation actualInvitation) {
         assertEquals(actualInvitation.getId(), expectedInvitation.getId());
         assertEquals(actualInvitation.getEventId(), expectedInvitation.getEventId());

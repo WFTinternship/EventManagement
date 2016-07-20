@@ -53,10 +53,6 @@ class GenericDAO {
         }
     }
 
-    void closeResources(ResultSet rs, Statement stmt) {
-        closeResources(rs, stmt, null);
-    }
-
     void closeResources(Statement stmt, Connection conn) {
         closeResources(null, stmt, conn);
     }
