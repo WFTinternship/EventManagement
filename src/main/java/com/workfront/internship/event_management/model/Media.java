@@ -8,7 +8,7 @@ import java.util.Date;
 public class Media {
 
     private int id;
-    private String type;
+    private MediaType type;
     private String path;
     private String description;
     private int eventId;
@@ -24,11 +24,11 @@ public class Media {
         return this;
     }
 
-    public String getType() {
+    public MediaType getType() {
         return type;
     }
 
-    public Media setType(String type) {
+    public Media setType(MediaType type) {
         this.type = type;
         return this;
     }

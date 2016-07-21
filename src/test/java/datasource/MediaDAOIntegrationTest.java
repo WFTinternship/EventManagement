@@ -1,13 +1,9 @@
 package datasource;
 
 import com.workfront.internship.event_management.dao.*;
-import com.workfront.internship.event_management.model.Event;
-import com.workfront.internship.event_management.model.Category;
-import com.workfront.internship.event_management.model.Media;
-import com.workfront.internship.event_management.model.User;
+import com.workfront.internship.event_management.model.*;
 import org.junit.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
@@ -22,7 +18,9 @@ public class MediaDAOIntegrationTest {
     private static CategoryDAO categoryDAO;
     private static EventDAO eventDAO;
     private static MediaDAO mediaDAO;
+    private static MediaTypeDAO mediaTypeDAO;
 
+    private MediaType testMediaType;
     private Media testMedia;
     private User testUser;
     private Event testEvent;
@@ -34,6 +32,7 @@ public class MediaDAOIntegrationTest {
         userDAO = new UserDAOImpl();
         categoryDAO = new CategoryDAOImpl();
         eventDAO = new EventDAOImpl();
+        mediaTypeDAO = new MediaTypeDAOImpl();
         mediaDAO = new MediaDAOImpl();
     }
 
@@ -42,6 +41,7 @@ public class MediaDAOIntegrationTest {
         userDAO = null;
         categoryDAO = null;
         eventDAO = null;
+        mediaTypeDAO = null;
         mediaDAO = null;
     }
 
@@ -74,15 +74,12 @@ public class MediaDAOIntegrationTest {
 
     @Test
     public void getAllMedia_Found() {
-        //create test media list and insert into db
-        List<Media> testMediaList = createTestMediaList();
-
         //testing method
         List<Media> mediaList = mediaDAO.getAllMedia();
 
         assertNotNull(mediaList);
         assertFalse(mediaList.isEmpty());
-        assertMediaLists(mediaList, testMediaList);
+        assertMedia(mediaList.get(0), testMedia);
     }
 
     @Test
@@ -116,15 +113,11 @@ public class MediaDAOIntegrationTest {
 
     @Test
     public void getMediaByEventId_Found() {
-        //create test media list and insert into db
-        List<Media> testMediaList = createTestMediaList();
-
-        //testing method
         List<Media> mediaList = mediaDAO.getMediaByEventId(testEvent.getId());
 
         assertNotNull(mediaList);
         assertFalse(mediaList.isEmpty());
-        assertMediaLists(mediaList, testMediaList);
+        assertMedia(mediaList.get(0), testMedia);
     }
 
     @Test
@@ -138,21 +131,18 @@ public class MediaDAOIntegrationTest {
 
     @Test
     public void getMediaByType_Found() {
-        //create test media list and insert into db
-        List<Media> testMediaList = createTestMediaList();
-
         //testing method
-        List<Media> mediaList = mediaDAO.getMediaByType(testMedia.getType());
+        List<Media> mediaList = mediaDAO.getMediaByType(testMedia.getType().getId());
 
         assertNotNull(mediaList);
         assertFalse(mediaList.isEmpty());
-        assertMediaLists(mediaList, testMediaList);
+        assertMedia(mediaList.get(0), testMedia);
     }
 
     @Test
     public void getMediaByType_Not_Found() {
         //testing method
-        List<Media> mediaList = mediaDAO.getMediaByType(TestHelper.NON_EXISTING_MEDIA_TYPE);
+        List<Media> mediaList = mediaDAO.getMediaByType(TestHelper.NON_EXISTING_ID);
 
         assertNotNull(mediaList);
         assertTrue(mediaList.isEmpty());
@@ -160,15 +150,11 @@ public class MediaDAOIntegrationTest {
 
     @Test
     public void getMediaByUploader_Found() {
-        //create test media list and insert into db
-        List<Media> testMediaList = createTestMediaList();
-
-        //testing method
         List<Media> mediaList = mediaDAO.getMediaByUploaderId(testMedia.getUploaderId());
 
         assertNotNull(mediaList);
         assertFalse(mediaList.isEmpty());
-        assertMediaLists(mediaList, testMediaList);
+        assertMedia(mediaList.get(0), testMedia);
     }
 
     @Test
@@ -255,6 +241,7 @@ public class MediaDAOIntegrationTest {
         testCategory = TestHelper.createTestCategory();
         testEvent = TestHelper.createTestEvent();
         testMedia = TestHelper.createTestMedia();
+        testMediaType = TestHelper.createTestMediaType();
     }
 
     private void insertTestObjectsIntoDB() {
@@ -271,9 +258,14 @@ public class MediaDAOIntegrationTest {
         int eventId = eventDAO.addEvent(testEvent);
         testEvent.setId(eventId);
 
+        //insert media type into db
+        int mediaTypeId = mediaTypeDAO.addMediaType(testMediaType);
+        testMediaType.setId(mediaTypeId);
+
         //insert media into db and get generated id
         testMedia.setUploaderId(testUser.getId());
         testMedia.setEventId(testEvent.getId());
+        testMedia.setType(testMediaType);
         int mediaId = mediaDAO.addMedia(testMedia);
         testMedia.setId(mediaId);
     }
@@ -296,34 +288,10 @@ public class MediaDAOIntegrationTest {
         assertEquals(actualMedia.getId(), expectedMedia.getId());
         assertEquals(actualMedia.getEventId(), expectedMedia.getEventId());
         assertEquals(actualMedia.getPath(), expectedMedia.getPath());
-        assertEquals(actualMedia.getType(), expectedMedia.getType());
+        assertEquals(actualMedia.getType().getId(), expectedMedia.getType().getId());
+        assertEquals(actualMedia.getType().getTitle(), expectedMedia.getType().getTitle());
         assertEquals(actualMedia.getDescription(), expectedMedia.getDescription());
         assertEquals(actualMedia.getUploaderId(), expectedMedia.getUploaderId());
         assertNotNull(actualMedia.getUploadDate());
-    }
-
-    private void assertMediaLists(List<Media> expectedMediaList, List<Media> actualMediaList) {
-        assertEquals(actualMediaList.size(), expectedMediaList.size());
-        for (int i = 0; i < actualMediaList.size(); i++) {
-            assertMedia(actualMediaList.get(i), expectedMediaList.get(i));
-        }
-    }
-
-    private List<Media> createTestMediaList() {
-        //create second test media with the same uploaderId, eventId ant mediaType
-        Media secondTestMedia = TestHelper.createTestMedia();
-        secondTestMedia.setEventId(testMedia.getEventId())
-                .setUploaderId(testUser.getId());
-
-        //insert second media into db
-        int mediaId = mediaDAO.addMedia(secondTestMedia);
-        secondTestMedia.setId(mediaId);
-
-        //create test media list
-        List<Media> testMediaList = new ArrayList<>();
-        testMediaList.add(testMedia);
-        testMediaList.add(secondTestMedia);
-
-        return testMediaList;
     }
 }

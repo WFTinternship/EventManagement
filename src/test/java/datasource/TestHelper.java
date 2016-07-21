@@ -103,18 +103,26 @@ class TestHelper {
         invitation.setUserRole("Member")
                 .setAttendeesCount(1)
                 .setParticipated(false)
-                .setUserResponse("Yes");
+                .setUserResponse(new UserResponse(1, "Yes"));
         return invitation;
     }
 
     static Media createTestMedia() {
         Media media = new Media();
         media.setPath("/event/111/test_path" + getRandomNumber() + ".jpg")
-                .setType("Image")
+                .setType(new MediaType(0, "Image"))
                 .setDescription("Test description")
                 .setUploadDate(new Date());
         return media;
     }
+
+    static MediaType createTestMediaType() {
+        MediaType mediaType = new MediaType();
+        mediaType.setTitle("Image" + getRandomNumber());
+
+        return mediaType;
+    }
+
 
     static RecurrenceOption createTestRecurrenceOption() {
         RecurrenceOption option = new RecurrenceOption();
@@ -151,7 +159,6 @@ class TestHelper {
     static EventRecurrence createTestEventRecurrence() {
         EventRecurrence eventRecurrence = new EventRecurrence();
         eventRecurrence.setRepeatInterval(2)
-                .setRepeatOn("Test RepeatOn string")
                 .setRepeatEndDate(new Date());
 
         return eventRecurrence;

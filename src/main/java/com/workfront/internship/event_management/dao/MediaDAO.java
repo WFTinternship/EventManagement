@@ -17,7 +17,7 @@ public interface MediaDAO {
 
     List<Media> getMediaByEventId(int eventId);
 
-    List<Media> getMediaByType(String type);
+    List<Media> getMediaByType(int typeId);
 
     List<Media> getMediaByUploaderId(int uploaderId);
 

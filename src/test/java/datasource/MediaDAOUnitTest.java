@@ -57,7 +57,7 @@ public class MediaDAOUnitTest {
 
     @Test(expected = RuntimeException.class)
     public void getMediaByType_dbError() {
-        mediaDAO.getMediaByType("Image");
+        // mediaDAO.getMediaByType("Image");
 
     }
 

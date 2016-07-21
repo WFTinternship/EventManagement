@@ -1,6 +1,7 @@
 package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.model.Media;
+import com.workfront.internship.event_management.model.MediaType;
 
 import java.io.IOException;
 import java.sql.*;
@@ -40,12 +41,12 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             conn = dataSourceManager.getConnection();
 
             //create and initialize statement
-            String sqlStr = "INSERT INTO event_media (event_id, path, type, description, uploader_id, upload_date) "
+            String sqlStr = "INSERT INTO event_media (event_id, path, media_type_id, description, uploader_id, upload_date) "
                     + "VALUES (?, ?, ?, ?, ?, ?)";
             stmt = conn.prepareStatement(sqlStr, PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, media.getEventId());
             stmt.setString(2, media.getPath());
-            stmt.setString(3, media.getType());
+            stmt.setInt(3, media.getType().getId());
             stmt.setString(4, media.getDescription());
             stmt.setInt(5, media.getUploaderId());
             if(media.getUploadDate() != null) {
@@ -82,8 +83,8 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
     }
 
     @Override
-    public List<Media> getMediaByType(String type) {
-        return getMediaByField("type", type);
+    public List<Media> getMediaByType(int typeId) {
+        return getMediaByField("media_type_id", typeId);
     }
 
     @Override
@@ -99,14 +100,16 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
         ResultSet rs = null;
 
         List<Media> mediaList = new ArrayList<>();
+        String query = "SELECT * FROM event_media " +
+                "LEFT JOIN media_type ON event_media.media_type_id = media_type.id " +
+                "WHERE event_id = ?";
 
         try {
             //get connection
             conn = dataSourceManager.getConnection();
 
             //create and initialize statement
-            String sqlStr = "SELECT * FROM event_media WHERE event_id = ?";
-            stmt = conn.prepareStatement(sqlStr);
+            stmt = conn.prepareStatement(query);
             stmt.setInt(1, eventId);
 
             //execute query
@@ -130,15 +133,17 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
+
         List<Media> mediaList = new ArrayList<>();
+        String query = "SELECT * FROM event_media " +
+                "LEFT JOIN media_type ON event_media.media_type_id = media_type.id ";
 
         try {
             //acquire connection
             conn = dataSourceManager.getConnection();
 
             //create statement
-            String sqlStr = "SELECT * FROM event_media";
-            stmt = conn.prepareStatement(sqlStr);
+            stmt = conn.prepareStatement(query);
 
             //execute statement
             rs = stmt.executeQuery();
@@ -208,7 +213,9 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             conn = dataSourceManager.getConnection();
 
             //create and initialize statement
-            String sqlStr = "SELECT * FROM event_media where " + columnName + " = ?";
+            String sqlStr = "SELECT * FROM event_media " +
+                    "LEFT JOIN media_type ON event_media.media_type_id = media_type.id " +
+                    "WHERE event_media." + columnName + " = ?";
             stmt = conn.prepareStatement(sqlStr);
             stmt.setObject(1, columnValue);
 
@@ -232,11 +239,12 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
         List<Media> mediaList = new ArrayList<>();
 
         while (rs.next()) {
+            MediaType mediaType = new MediaType(rs.getInt("media_type.id"), rs.getString("media_type.title"));
 
             Media media = new Media();
             media.setId(rs.getInt("id"))
                     .setEventId(rs.getInt("event_id"))
-                    .setType(rs.getString("type"))
+                    .setType(mediaType)
                     .setPath(rs.getString("path"))
                     .setDescription(rs.getString("description"))
                     .setUploaderId(rs.getInt("uploader_id"))
