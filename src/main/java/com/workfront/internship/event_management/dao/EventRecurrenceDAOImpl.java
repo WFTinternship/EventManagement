@@ -58,15 +58,17 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
         ResultSet rs = null;
 
         EventRecurrence eventRecurrence = null;
-        String sqlStr = "SELECT * FROM  event_recurrence LEFT JOIN recurrence_type ON " +
-                "event_recurrence.recurrence_type_id = recurrence_type.id WHERE event_recurrence.id = ?";
+        String query = "SELECT * FROM  event_recurrence " +
+                "LEFT JOIN recurrence_type ON event_recurrence.recurrence_type_id = recurrence_type.id " +
+                "LEFT JOIN recurrence_option ON event_recurrence.recurrence_option_id = recurrence_option.id " +
+                "WHERE event_recurrence.id = ?";
 
         try {
             //get connection
             conn = dataSourceManager.getConnection();
 
             //create and initialize statement
-            stmt = conn.prepareStatement(sqlStr);
+            stmt = conn.prepareStatement(query);
             stmt.setInt(1, id);
 
             //execute query
@@ -93,7 +95,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
 
         int id = 0;
         String query = "INSERT INTO event_recurrence "
-                + "(event_id, recurrence_type_id, repeat_on, repeat_interval, repeat_end) "
+                + "(event_id, recurrence_type_id, recurrence_option_id, repeat_interval, repeat_end) "
                 + "VALUES (?, ?, ?, ?, ?)";
 
         try {
@@ -103,7 +105,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
             //create and initialize statement
             stmt.setInt(1, recurrence.getEventId());
             stmt.setInt(2, recurrence.getRecurrenceType().getId());
-            stmt.setString(3, recurrence.getRepeatOn());
+            stmt.setInt(3, recurrence.getRecurrenceOptionId());
             stmt.setInt(4, recurrence.getRepeatInterval());
             if(recurrence.getRepeatEndDate()!= null) {
                 stmt.setTimestamp(5, new Timestamp(recurrence.getRepeatEndDate().getTime()));
@@ -166,8 +168,16 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
         ResultSet rs = null;
 
         List<EventRecurrence> recurrencesList = null;
-        String sqlStr = "SELECT * FROM  event_recurrence LEFT JOIN recurrence_type ON " +
-                "event_recurrence.recurrence_type_id = recurrence_type.id";
+
+        String query = "SELECT * FROM  event_recurrence " +
+                "LEFT JOIN recurrence_type ON event_recurrence.recurrence_type_id = recurrence_type.id " +
+                "LEFT JOIN recurrence_option ON event_recurrence.recurrence_option_id = recurrence_option.id " +
+                "WHERE event_recurrence.id = ?";
+
+        String sqlStr = "SELECT * FROM  event_recurrence " +
+                "LEFT JOIN recurrence_type ON event_recurrence.recurrence_type_id = recurrence_type.id " +
+                "LEFT JOIN recurrence_option ON event_recurrence.recurrence_option_id = recurrence_option.id";
+
 
         try {
             //get connection
@@ -199,7 +209,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
 
         int affectedRows = 0;
         String query = "UPDATE event_recurrence SET event_id = ?, recurrence_type_id = ?, " +
-                "repeat_on = ?, repeat_interval = ?, repeat_end = ? WHERE id = ?";
+                "recurrence_option_id = ?, repeat_interval = ?, repeat_end = ? WHERE id = ?";
 
         try {
             //get connection
@@ -214,7 +224,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
                 stmt.setInt(2, 0);
 
             }
-            stmt.setString(3, recurrence.getRepeatOn());
+            stmt.setInt(3, recurrence.getRecurrenceOptionId());
             stmt.setInt(4, recurrence.getRepeatInterval());
 
             if(recurrence.getRepeatEndDate()!= null) {
@@ -262,7 +272,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
             recurrence.setId(rs.getInt("event_recurrence.id"))
                     .setEventId(rs.getInt("event_recurrence.event_id"))
                     .setRepeatInterval(rs.getInt("event_recurrence.repeat_interval"))
-                    .setRepeatOn(rs.getString("event_recurrence.repeat_on"))
+                    .setRecurrenceOptionId(rs.getInt("event_recurrence.recurrence_option_id"))
                     .setRepeatEndDate(rs.getTimestamp("event_recurrence.repeat_end"))
                     .setRecurrenceType(recurrenceType);
 

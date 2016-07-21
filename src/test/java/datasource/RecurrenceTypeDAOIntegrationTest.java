@@ -100,7 +100,7 @@ public class RecurrenceTypeDAOIntegrationTest {
         assertTrue(recurrenceTypeList.isEmpty());
     }
 
-    @Test 
+    @Test
     public void getRecurrenceTypeById_Found() {
         //test method (test record already inserted in seUp())
         RecurrenceType recurrenceType = recurrenceTypeDAO.getRecurrenceTypeById(testRecurrenceType.getId());

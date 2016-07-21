@@ -10,7 +10,7 @@ public class EventRecurrence {
     private RecurrenceType recurrenceType;
     private int eventId;
     private int repeatInterval;
-    private String repeatOn;
+    private int recurrenceOptionId;
     private Date repeatEndDate;
 
     public int getId() {
@@ -49,12 +49,12 @@ public class EventRecurrence {
         return this;
     }
 
-    public String getRepeatOn() {
-        return repeatOn;
+    public int getRecurrenceOptionId() {
+        return recurrenceOptionId;
     }
 
-    public EventRecurrence setRepeatOn(String repeatOn) {
-        this.repeatOn = repeatOn;
+    public EventRecurrence setRecurrenceOptionId(int recurrenceOptionId) {
+        this.recurrenceOptionId = recurrenceOptionId;
         return this;
     }
 

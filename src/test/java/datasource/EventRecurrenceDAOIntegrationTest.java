@@ -17,11 +17,14 @@ public class EventRecurrenceDAOIntegrationTest {
     private static EventDAO eventDAO;
     private static EventRecurrenceDAO eventRecurrenceDAO;
     private static RecurrenceTypeDAO recurrenceTypeDAO;
+    private static RecurrenceOptionDAO recurrenceOptionDAO;
+
 
 
     private Category testCategory;
     private Event testEvent;
     private RecurrenceType testRecurrenceType;
+    private RecurrenceOption testRecurrenceOption;
     private EventRecurrence testEventRecurrence;
 
     @BeforeClass
@@ -30,6 +33,7 @@ public class EventRecurrenceDAOIntegrationTest {
         eventDAO = new EventDAOImpl();
         recurrenceTypeDAO = new RecurrenceTypeDAOImpl();
         eventRecurrenceDAO = new EventRecurrenceDAOImpl();
+        recurrenceOptionDAO = new RecurrenceOptionDAOImpl();
     }
 
     @AfterClass
@@ -130,8 +134,7 @@ public class EventRecurrenceDAOIntegrationTest {
     @Test
     public void updateEventRecurrence_Success() {
         //update recurrence type info
-        testEventRecurrence.setRepeatOn("updated repeat_on value")
-                .setRepeatInterval(7);
+        testEventRecurrence.setRepeatInterval(7);
 
         //test method
         boolean updated = eventRecurrenceDAO.updateEventRecurrence(testEventRecurrence);
@@ -202,6 +205,7 @@ public class EventRecurrenceDAOIntegrationTest {
         testEvent = TestHelper.createTestEvent();
         testRecurrenceType = TestHelper.createTestRecurrenceType();
         testEventRecurrence = TestHelper.createTestEventRecurrence();
+        testRecurrenceOption = TestHelper.createTestRecurrenceOption();
     }
 
     private void insertTestObjectsIntoDB() {
@@ -218,9 +222,15 @@ public class EventRecurrenceDAOIntegrationTest {
         int recurrenceTypeId = recurrenceTypeDAO.addRecurrenceType(testRecurrenceType);
         testRecurrenceType.setId(recurrenceTypeId);
 
+        //insert test recurrence option
+        testRecurrenceOption.setRecurrenceTypeId(testRecurrenceType.getId());
+        int recurrenceOptionId = recurrenceOptionDAO.addRecurrenceOption(testRecurrenceOption);
+        testRecurrenceOption.setId(recurrenceOptionId);
+
         //insert event recurrence info into db
         testEventRecurrence.setEventId(testEvent.getId())
-                .setRecurrenceType(testRecurrenceType);
+                .setRecurrenceType(testRecurrenceType)
+                .setRecurrenceOptionId(recurrenceOptionId);
         int eventRecurrenceId = eventRecurrenceDAO.addEventRecurrence(testEventRecurrence);
         testEventRecurrence.setId(eventRecurrenceId);
     }
@@ -242,7 +252,7 @@ public class EventRecurrenceDAOIntegrationTest {
     private void assertEqualEventRecurrences(EventRecurrence actualEventRecurrence, EventRecurrence expectedEventRecurrence) {
         assertEquals(actualEventRecurrence.getEventId(), expectedEventRecurrence.getEventId());
         assertEquals(actualEventRecurrence.getRecurrenceType().getId(), expectedEventRecurrence.getRecurrenceType().getId());
-        assertEquals(actualEventRecurrence.getRepeatOn(), expectedEventRecurrence.getRepeatOn());
+        assertEquals(actualEventRecurrence.getRecurrenceOptionId(), expectedEventRecurrence.getRecurrenceOptionId());
         assertEquals(actualEventRecurrence.getRepeatInterval(), expectedEventRecurrence.getRepeatInterval());
         assertNotNull(actualEventRecurrence.getRepeatEndDate());
     }
