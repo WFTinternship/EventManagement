@@ -234,7 +234,6 @@ public class MediaDAOIntegrationTest {
         assertFalse(deleted);
     }
 
-
     //helper methods
     private void createTestObjects() {
         testUser = TestHelper.createTestUser();
