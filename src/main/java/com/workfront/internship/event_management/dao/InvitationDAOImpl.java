@@ -2,6 +2,7 @@ package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.model.Invitation;
 import com.workfront.internship.event_management.model.User;
+import com.workfront.internship.event_management.model.UserResponse;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -59,20 +60,27 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
         int id = 0;
         String sqlStr = "INSERT INTO event_invitation "
-                + "(event_id, user_id, user_role, user_response, attendees_count, participated) VALUES "
+                + "(event_id, user_id, user_role, user_response_id, attendees_count, participated) VALUES "
                 + "(?, ?, ?, ?, ?, ? )";
 
         try {
             //create and initialize statement
             stmt = conn.prepareStatement(sqlStr, PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, invitation.getEventId());
+
             if (invitation.getUser() != null) {
                 stmt.setInt(2, invitation.getUser().getId());
             } else {
                 stmt.setInt(2, 0);
             }
             stmt.setString(3, invitation.getUserRole());
-            stmt.setString(4, invitation.getUserResponse());
+
+            if (invitation.getUserResponse() != null) {
+                stmt.setInt(4, invitation.getUserResponse().getId());
+            } else {
+                stmt.setInt(4, 0);
+            }
+
             stmt.setInt(5, invitation.getAttendeesCount());
             stmt.setBoolean(6, invitation.isParticipated());
 
@@ -149,7 +157,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
         Connection conn = null;
         PreparedStatement stmt = null;
         int affectedRows = 0;
-        String sqlStr = "UPDATE event_invitation SET user_role = ? , user_response = ?, attendees_count = ?, " +
+        String sqlStr = "UPDATE event_invitation SET user_role = ? , user_response_id = ?, attendees_count = ?, " +
                     "participated = ? WHERE id = ?";
 
         try {
@@ -159,7 +167,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);
             stmt.setString(1, invitation.getUserRole());
-            stmt.setString(2, invitation.getUserResponse());
+            stmt.setInt(2, invitation.getUserResponse().getId());
             stmt.setInt(3, invitation.getAttendeesCount());
             stmt.setBoolean(4, invitation.isParticipated());
             stmt.setInt(5, invitation.getId());
@@ -204,8 +212,9 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
         ResultSet rs = null;
 
         List<Invitation> invitationsList = new ArrayList<>();
-        String sqlStr = "SELECT * FROM event_invitation LEFT JOIN user " +
-                "ON event_invitation.user_id = user.id " +
+        String sqlStr = "SELECT * FROM event_invitation " +
+                "LEFT JOIN user ON event_invitation.user_id = user.id " +
+                "LEFT JOIN user_response ON event_invitation.user_response_id = user_response.id" +
                 "WHERE " + columnName + " = ?";
 
         try {
@@ -250,12 +259,14 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
                     .setVerified(rs.getBoolean("verified"))
                     .setRegistrationDate(rs.getTimestamp("registration_date"));
 
+            UserResponse userResponse = new UserResponse(rs.getInt("user_response.id"), rs.getString("user_response.title"));
+
             Invitation invitation = new Invitation();
             invitation.setUser(user)
                     .setId(rs.getInt("event_invitation.id"))
                     .setEventId(rs.getInt("event_id"))
                     .setAttendeesCount(rs.getInt("attendees_count"))
-                    .setUserResponse(rs.getString("user_response"))
+                    .setUserResponse(userResponse)
                     .setUserRole(rs.getString("user_role"))
                     .setParticipated(rs.getBoolean("participated"));
 

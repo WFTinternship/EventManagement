@@ -9,7 +9,7 @@ public class Invitation {
     private int eventId;
     private User user;
     private String userRole;
-    private String userResponse;
+    private UserResponse userResponse;
     private int attendeesCount;
     private boolean participated;
 
@@ -40,11 +40,11 @@ public class Invitation {
         return this;
     }
 
-    public String getUserResponse() {
+    public UserResponse getUserResponse() {
         return userResponse;
     }
 
-    public Invitation setUserResponse(String userResponse) {
+    public Invitation setUserResponse(UserResponse userResponse) {
         this.userResponse = userResponse;
         return this;
     }
