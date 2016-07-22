@@ -2,6 +2,8 @@ package datasource;
 
 import com.workfront.internship.event_management.dao.UserDAO;
 import com.workfront.internship.event_management.dao.UserDAOImpl;
+import com.workfront.internship.event_management.exception.DataAccessException;
+import com.workfront.internship.event_management.exception.DuplicateEntryException;
 import com.workfront.internship.event_management.model.User;
 import org.junit.*;
 
@@ -30,7 +32,7 @@ public class UserDAOIntegrationTest {
     }
 
     @Before
-    public void setUp() {
+    public void setUp() throws DuplicateEntryException, DataAccessException {
         //create test user
         testUser = TestHelper.createTestUser();
 
@@ -60,13 +62,13 @@ public class UserDAOIntegrationTest {
     }
 
     @Test(expected = RuntimeException.class)
-    public void insertUser_Dublicate_Entry() {
+    public void insertUser_Dublicate_Entry() throws DuplicateEntryException, DataAccessException {
         //test user already inserted into db, insert dublicate user
         userDAO.addUser(testUser); //username, email fields in db are unique
     }
 
     @Test
-    public void getAllUsers_Found() {
+    public void getAllUsers_Found() throws DuplicateEntryException, DataAccessException {
         //create test users list, insert into db
         List<User> testUserList = createTestUserList();
 
@@ -103,23 +105,6 @@ public class UserDAOIntegrationTest {
     public void getUserById_Not_Found() {
         //testing method
         User user = userDAO.getUserById(TestHelper.NON_EXISTING_ID);
-
-        assertNull(user);
-    }
-
-    @Test
-    public void getUserByUsername_Found() {
-        //testing method
-        User user = userDAO.getUserByUsername(testUser.getUsername());
-
-        assertNotNull(user);
-        assertEqualUsers(user, testUser);
-    }
-
-    @Test
-    public void getUserByUsername_Not_Found() {
-        //testing method
-        User user = userDAO.getUserByUsername(TestHelper.NON_EXISTING_USERNAME);
 
         assertNull(user);
     }
@@ -236,12 +221,11 @@ public class UserDAOIntegrationTest {
         assertEquals(expectedUser.getId(), actualUser.getId());
         assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
         assertEquals(expectedUser.getLastName(), actualUser.getLastName());
-        assertEquals(expectedUser.getUsername(), actualUser.getUsername());
+        assertEquals(expectedUser.getEmail(), actualUser.getEmail());
         assertEquals(expectedUser.getPassword(), actualUser.getPassword());
         assertEquals(expectedUser.getPhoneNumber(), actualUser.getPhoneNumber());
         assertEquals(expectedUser.getAvatarPath(), actualUser.getAvatarPath());
         assertEquals(expectedUser.isVerified(), actualUser.isVerified());
-        assertEquals(expectedUser.getEmail(), actualUser.getEmail());
         assertNotNull(expectedUser.getEmail());
     }
 
@@ -252,7 +236,7 @@ public class UserDAOIntegrationTest {
         }
     }
 
-    private List<User> createTestUserList(){
+    private List<User> createTestUserList() throws DuplicateEntryException, DataAccessException {
         //create second test category
         User secondTestUser = TestHelper.createTestUser();
 

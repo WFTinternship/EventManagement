@@ -10,7 +10,6 @@ public class User {
     private int id;
     private String firstName;
     private String lastName;
-    private String username;
     private String password;
     private String email;
     private String phoneNumber;
@@ -42,15 +41,6 @@ public class User {
 
     public User setLastName(String lastName) {
         this.lastName = lastName;
-        return this;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public User setUsername(String username) {
-        this.username = username;
         return this;
     }
 
