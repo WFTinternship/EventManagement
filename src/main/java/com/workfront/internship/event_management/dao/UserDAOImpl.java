@@ -1,6 +1,6 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.exception.DataAccessException;
+import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.exception.DuplicateEntryException;
 import com.workfront.internship.event_management.model.User;
 
@@ -21,18 +21,18 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
         this.dataSourceManager = dataSourceManager;
     }
 
-    public UserDAOImpl() throws DataAccessException {
+    public UserDAOImpl() throws DAOException {
         try {
             this.dataSourceManager = DataSourceManager.getInstance();
         } catch (IOException | SQLException e) {
             LOGGER.error("Could not instantiate data source manager for UserDAO", e);
-            throw new DataAccessException();
+            throw new DAOException();
         }
     }
 
 
     @Override
-    public int addUser(User user) throws DuplicateEntryException, DataAccessException {
+    public int addUser(User user) throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -45,7 +45,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             //create and initialize statement
             String sql = "INSERT INTO user (first_name, last_name, email, password, phone_number, " +
                     "avatar_path, verified, registration_date) VALUES " +
-                    "(?, ?, ?, ?, ?, ?, ?, ?, ? )";
+                    "(?, ?, ?, ?, ?, ?, ?, ?)";
             stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
             stmt.setString(1, user.getFirstName());
@@ -73,7 +73,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             throw new DuplicateEntryException();
         } catch (SQLException e) {
             LOGGER.error("SQL exception", e);
-            throw new DataAccessException();
+            throw new DAOException();
         } finally {
             closeResources(stmt, conn);
         }
@@ -81,7 +81,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
     }
 
     @Override
-    public List<User> getAllUsers() throws DataAccessException {
+    public List<User> getAllUsers() throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -104,7 +104,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
         } catch (SQLException e) {
             LOGGER.error("SQL exception", e);
-            throw new DataAccessException();
+            throw new DAOException();
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -112,17 +112,17 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
     }
 
     @Override
-    public User getUserById(int userId) throws DataAccessException {
+    public User getUserById(int userId) throws DAOException {
         return getUserByField("id", userId);
     }
 
     @Override
-    public User getUserByEmail(String email) throws DataAccessException {
+    public User getUserByEmail(String email) throws DAOException {
         return getUserByField("email", email);
     }
 
     @Override
-    public boolean updateVerifiedStatus(int userId) throws DataAccessException {
+    public boolean updateVerifiedStatus(int userId) throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -142,7 +142,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
         } catch (SQLException e) {
             LOGGER.error("SQL exception", e);
-            throw new DataAccessException();
+            throw new DAOException();
         } finally {
             closeResources(stmt, conn);
         }
@@ -150,7 +150,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
     }
 
     @Override
-    public boolean updateUser(User user) throws DataAccessException, DuplicateEntryException {
+    public boolean updateUser(User user) throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -180,7 +180,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             throw new DuplicateEntryException();
         } catch (SQLException e) {
             LOGGER.error("SQL exception", e);
-            throw new DataAccessException();
+            throw new DAOException();
         } finally {
             closeResources(stmt, conn);
         }
@@ -188,17 +188,17 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
     }
 
     @Override
-    public boolean deleteUser(int userId) throws DataAccessException {
+    public boolean deleteUser(int userId) throws DAOException {
         return deleteRecordById("user", userId);
     }
 
     @Override
-    public boolean deleteAllUsers() throws DataAccessException {
+    public boolean deleteAllUsers() throws DAOException {
         return deleteAllRecords("user");
     }
 
     //helper methods
-    private User getUserByField(String columnName, Object columnValue) throws DataAccessException {
+    private User getUserByField(String columnName, Object columnValue) throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -225,7 +225,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
         } catch (SQLException e) {
             LOGGER.error("SQL exception", e);
-            throw new DataAccessException();
+            throw new DAOException();
         } finally {
             closeResources(rs, stmt, conn);
         }

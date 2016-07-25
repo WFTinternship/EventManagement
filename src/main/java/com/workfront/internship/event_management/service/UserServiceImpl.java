@@ -2,7 +2,7 @@ package com.workfront.internship.event_management.service;
 
 import com.workfront.internship.event_management.dao.UserDAO;
 import com.workfront.internship.event_management.dao.UserDAOImpl;
-import com.workfront.internship.event_management.exception.DataAccessException;
+import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.exception.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
@@ -18,7 +18,11 @@ public class UserServiceImpl implements UserService {
     private UserDAO userDAO;
 
     public UserServiceImpl() throws OperationFailedException {
-        userDAO = new UserDAOImpl();
+        try {
+            userDAO = new UserDAOImpl();
+        } catch (DAOException e) {
+            throw new OperationFailedException("Database error!");
+        }
     }
 
     @Override
@@ -45,7 +49,7 @@ public class UserServiceImpl implements UserService {
                 } else {
                     throw new OperationFailedException("User with this email already exists!");
                 }
-            } catch (DataAccessException e) {
+            } catch (DAOException e) {
                 throw new OperationFailedException("Database error!");
             }
         }
@@ -65,7 +69,7 @@ public class UserServiceImpl implements UserService {
                 }*/
             } catch (DuplicateEntryException e) {
                 throw new OperationFailedException("User with this email already exists!");
-            } catch (DataAccessException e) {
+            } catch (DAOException e) {
                 throw new OperationFailedException("Database error!");
             }
         }
@@ -84,7 +88,7 @@ public class UserServiceImpl implements UserService {
               /*  if(!success) {
                     throw new OperationFailedException("Non existing user.");
                 }*/
-            } catch (DataAccessException e) {
+            } catch (DAOException e) {
                 throw new OperationFailedException("Database error!");
             }
         }
@@ -101,7 +105,7 @@ public class UserServiceImpl implements UserService {
             /*  if(!success) {
                     throw new OperationFailedException("Non existing user.");
                 }*/
-            } catch (DataAccessException e) {
+            } catch (DAOException e) {
                 throw new OperationFailedException("Database error!");
             }
         }
@@ -118,7 +122,7 @@ public class UserServiceImpl implements UserService {
             if (user != null && user.getPassword().equals(HashGeneratorUtil.generateHashString(password))) {
                 validUser = user;
             }
-        } catch (DataAccessException e) {
+        } catch (DAOException e) {
             throw new OperationFailedException("Database error!");
         }
 
@@ -131,7 +135,7 @@ public class UserServiceImpl implements UserService {
         User user;
         try {
             user = userDAO.getUserById(userId);
-        } catch (DataAccessException e) {
+        } catch (DAOException e) {
             throw new OperationFailedException("Database error!");
         }
 
@@ -145,7 +149,7 @@ public class UserServiceImpl implements UserService {
 
         try {
             user = userDAO.getUserByEmail(email);
-        } catch (DataAccessException e) {
+        } catch (DAOException e) {
             throw new OperationFailedException("Database error!");
         }
         return user;
@@ -158,7 +162,7 @@ public class UserServiceImpl implements UserService {
 
         try {
             userList = userDAO.getAllUsers();
-        } catch (OperationFailedException e) {
+        } catch (DAOException e) {
             throw new OperationFailedException("Database error!");
         }
         return userList;
@@ -171,7 +175,7 @@ public class UserServiceImpl implements UserService {
 
         try {
             success = userDAO.deleteAllUsers();
-        } catch (DataAccessException e) {
+        } catch (DAOException e) {
             throw new OperationFailedException("Database error!");
         }
         return success;

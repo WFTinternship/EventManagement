@@ -1,8 +1,7 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.exception.DataAccessException;
+import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.exception.DuplicateEntryException;
-import com.workfront.internship.event_management.exception.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
 
 import java.util.List;
@@ -13,22 +12,22 @@ import java.util.List;
 public interface UserDAO {
 
     //insert record into db
-    int addUser(User user) throws OperationFailedException;
+    int addUser(User user) throws DAOException;
 
     //read data from db
-    List<User> getAllUsers() throws OperationFailedException;
+    List<User> getAllUsers() throws DAOException;
 
-    User getUserById(int userId) throws DataAccessException;
+    User getUserById(int userId) throws DAOException;
 
-    User getUserByEmail(String email) throws DataAccessException;
+    User getUserByEmail(String email) throws DAOException;
 
     //update record in db
-    boolean updateVerifiedStatus(int userId) throws DataAccessException;
+    boolean updateVerifiedStatus(int userId) throws DAOException;
 
-    boolean updateUser(User user) throws DataAccessException, DuplicateEntryException;
+    boolean updateUser(User user) throws DAOException;
 
     //delete record from db
-    boolean deleteUser(int userId) throws DataAccessException;
+    boolean deleteUser(int userId) throws DAOException;
 
-    boolean deleteAllUsers() throws DataAccessException;
+    boolean deleteAllUsers() throws DAOException;
 }
