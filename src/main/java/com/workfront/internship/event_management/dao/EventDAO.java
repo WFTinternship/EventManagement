@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.dao;
 
+import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.Event;
 
 import java.util.List;
@@ -10,21 +11,29 @@ import java.util.List;
 public interface EventDAO {
 
     //insert into db
-    int addEvent(Event event);
+    int addEvent(Event event) throws DAOException;
+
+    int addEventWithRecurrences(Event event) throws DAOException;
 
     //read data from db
-    List<Event> getAllEvents();
-    Event getEventById(int eventId);
-    List<Event> getEventsByCategory(int categoryId);
-    List<Event> getEventsByUserId(String userRole, int userId);
-    List<Event> getParticipatedEventsByUserId(int userId);
-    List<Event> getAcceptedEventsByUserId(int userId);
+    List<Event> getAllEvents() throws DAOException;
+
+    Event getEventById(int eventId) throws DAOException;
+
+    List<Event> getEventsByCategory(int categoryId) throws DAOException;
+
+    List<Event> getEventsByUserId(String userRole, int userId) throws DAOException;
+
+    List<Event> getParticipatedEventsByUserId(int userId) throws DAOException;
+
+    List<Event> getAcceptedEventsByUserId(int userId) throws DAOException;
 
     //update record in db
-    boolean updateEvent(Event event);
+    boolean updateEvent(Event event) throws DAOException;
 
     //delete record from db
-    boolean deleteEvent(int eventId);
-    boolean deleteAllEvents();
+    boolean deleteEvent(int eventId) throws DAOException;
+
+    boolean deleteAllEvents() throws DAOException;
 
 }

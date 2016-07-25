@@ -3,6 +3,7 @@ package datasource;
 import com.workfront.internship.event_management.dao.DataSourceManager;
 import com.workfront.internship.event_management.dao.EventDAO;
 import com.workfront.internship.event_management.dao.EventDAOImpl;
+import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.Event;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,55 +40,55 @@ public class EventDAOUnitTest {
     }
 
     @Test(expected = RuntimeException.class)
-    public void addEvent_dbError() {
+    public void addEvent_dbError() throws DAOException {
         eventDAO.addEvent(new Event());
     }
 
     @Test(expected = RuntimeException.class)
-    public void getAllEvents_dbError() {
+    public void getAllEvents_dbError() throws DAOException {
         eventDAO.getAllEvents();
     }
 
     @Test(expected = RuntimeException.class)
-    public void getEventById_dbError() {
+    public void getEventById_dbError() throws DAOException {
         eventDAO.getEventById(1);
     }
 
     @Test(expected = RuntimeException.class)
-    public void getEventsByCategoryId_dbError() {
+    public void getEventsByCategoryId_dbError() throws DAOException {
         eventDAO.getEventsByCategory(1);
 
     }
 
     @Test(expected = RuntimeException.class)
-    public void getEventsByUserId_dbError() {
+    public void getEventsByUserId_dbError() throws DAOException {
         eventDAO.getEventsByUserId("organizer", 1);
 
     }
 
     @Test(expected = RuntimeException.class)
-    public void getParticipatedEventsByUserId_dbError() {
+    public void getParticipatedEventsByUserId_dbError() throws DAOException {
         eventDAO.getParticipatedEventsByUserId(1);
     }
 
     @Test(expected = RuntimeException.class)
-    public void getAcceptedEventsByUserId_dbError() {
+    public void getAcceptedEventsByUserId_dbError() throws DAOException {
         eventDAO.getAcceptedEventsByUserId(1);
 
     }
 
     @Test(expected = RuntimeException.class)
-    public void updateEvent_dbError() {
+    public void updateEvent_dbError() throws DAOException {
         eventDAO.updateEvent(new Event());
     }
 
     @Test(expected = RuntimeException.class)
-    public void deleteEvent_dbError() {
+    public void deleteEvent_dbError() throws DAOException {
         eventDAO.deleteEvent(1);
     }
 
     @Test(expected = RuntimeException.class)
-    public void deleteAllEvents_dbError() {
+    public void deleteAllEvents_dbError() throws DAOException {
         eventDAO.deleteAllEvents();
     }
 }

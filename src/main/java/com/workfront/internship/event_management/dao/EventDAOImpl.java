@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.dao;
 
+import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.*;
 import com.workfront.internship.event_management.model.DateRange;
 
@@ -20,18 +21,39 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         this.dataSourceManager = dataSourceManager;
     }
 
-    public EventDAOImpl() {
+    public EventDAOImpl() throws DAOException {
         try {
             this.dataSourceManager = DataSourceManager.getInstance();
         } catch (IOException | SQLException e) {
-            LOGGER.error("Exception...", e);
-            throw new RuntimeException(e);
+            LOGGER.error("Could not instantiate data source manager for EventDAOImpl.", e);
+            throw new DAOException();
         }
     }
 
     @Override
-    public int addEvent(Event event) {
+    public int addEvent(Event event) throws DAOException {
 
+        Connection conn = null;
+        int eventId = 0;
+
+        try {
+            //get connection
+            conn = dataSourceManager.getConnection();
+
+            //insert event info and get generated event id
+            eventId = addEvent(event, conn);
+
+        } catch (SQLException e) {
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException();
+        } finally {
+            closeResources(conn);
+        }
+        return eventId;
+    }
+
+    @Override
+    public int addEventWithRecurrences(Event event) throws DAOException {
         Connection conn = null;
         int eventId = 0;
 
@@ -43,25 +65,14 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             conn.setAutoCommit(false);
 
             //insert event main info and get generated event id
-            eventId = addEventMainInfo(event, conn);
+            eventId = addEvent(event, conn);
             event.setId(eventId);
 
-            //insert event invitations (included organizer)
-            if (event.getInvitations() != null && !event.getInvitations().isEmpty()) {
-                InvitationDAO invitationDAO = new InvitationDAOImpl();
-                for (Invitation invitation : event.getInvitations()) {
-                    invitation.setEventId(eventId);
-                    ((InvitationDAOImpl) invitationDAO).addInvitation(invitation, conn);
-                }
-            }
-
             //insert event recurrence info
-            if (event.getEventRecurrences() != null && !event.getInvitations().isEmpty()) {
-                EventRecurrenceDAO recurrenceDAO = new EventRecurrenceDAOImpl();
-                for (EventRecurrence recurrence : event.getEventRecurrences()) {
-                    recurrence.setEventId(eventId);
-                    ((EventRecurrenceDAOImpl) recurrenceDAO).addEventRecurrence(recurrence, conn);
-                }
+            EventRecurrenceDAO recurrenceDAO = new EventRecurrenceDAOImpl();
+            for (EventRecurrence recurrence : event.getEventRecurrences()) {
+                recurrence.setEventId(eventId);
+                ((EventRecurrenceDAOImpl) recurrenceDAO).addEventRecurrence(recurrence, conn);
             }
 
             //commit transaction
@@ -74,10 +85,10 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                 }
             } catch (SQLException e1) {
                 LOGGER.error("Commit/rollback exception...", e);
-                throw new RuntimeException(e);
+                throw new DAOException();
             }
-            LOGGER.error("Exception...", e);
-            throw new RuntimeException(e);
+            LOGGER.error("SQL Exception...", e);
+            throw new DAOException();
         } finally {
             closeResources(conn);
         }
@@ -85,7 +96,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     @Override
-    public List<Event> getAllEvents() {
+    public List<Event> getAllEvents() throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -111,7 +122,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         } catch (SQLException e) {
             LOGGER.error("Exception...", e);
-            throw new RuntimeException(e);
+            throw new DAOException();
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -119,7 +130,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     @Override
-    public Event getEventById(int eventId) {
+    public Event getEventById(int eventId) throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -145,6 +156,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             if (eventList != null && !eventList.isEmpty()) {
                 event = eventList.get(0);
             }
+
             //get invitations list
             InvitationDAO invitationDAO = new InvitationDAOImpl();
             List<Invitation> invitations = invitationDAO.getInvitationsByEventId(eventId);
@@ -174,7 +186,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         } catch (SQLException e) {
             LOGGER.error("Exception ", e);
-            throw new RuntimeException(e);
+            throw new DAOException();
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -182,7 +194,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     @Override
-    public List<Event> getEventsByCategory(int categoryId) {
+    public List<Event> getEventsByCategory(int categoryId) throws DAOException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -207,7 +219,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         } catch (SQLException e) {
             LOGGER.error("Exception ", e);
-            throw new RuntimeException(e);
+            throw new DAOException();
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -215,7 +227,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     @Override
-    public List<Event> getEventsByUserId(String userRole, int userId) {
+    public List<Event> getEventsByUserId(String userRole, int userId) throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -242,7 +254,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         } catch (SQLException e) {
             LOGGER.error("Exception ", e);
-            throw new RuntimeException(e);
+            throw new DAOException();
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -250,7 +262,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     @Override
-    public List<Event> getParticipatedEventsByUserId(int userId) {
+    public List<Event> getParticipatedEventsByUserId(int userId) throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -275,7 +287,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             eventsList = createEventListFromRS(rs);
         } catch (SQLException e) {
             LOGGER.error("Exception ", e);
-            throw new RuntimeException(e);
+            throw new DAOException();
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -283,7 +295,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     @Override
-    public List<Event> getAcceptedEventsByUserId(int userId) {
+    public List<Event> getAcceptedEventsByUserId(int userId) throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -311,7 +323,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             eventsList = createEventListFromRS(rs);
         } catch (SQLException e) {
             LOGGER.error("Exception ", e);
-            throw new RuntimeException(e);
+            throw new DAOException();
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -319,7 +331,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     @Override
-    public boolean updateEvent(Event event) {
+    public boolean updateEvent(Event event) throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -370,18 +382,18 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             }
 
             if (event.getLastModifiedDate() != null) {
-                stmt.setTimestamp(14, new Timestamp(event.getLastModifiedDate().getTime()));
+                stmt.setTimestamp(15, new Timestamp(event.getLastModifiedDate().getTime()));
             } else {
-                stmt.setObject(14, null);
+                stmt.setObject(15, null);
             }
-            stmt.setInt(15, event.getId());
+            stmt.setInt(16, event.getId());
 
             //execute query
             affectedRows = stmt.executeUpdate();
 
         } catch (SQLException e) {
             LOGGER.error("Exception ", e);
-            throw new RuntimeException(e);
+            throw new DAOException();
         } finally {
             closeResources(null, stmt, conn);
         }
@@ -389,17 +401,17 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     @Override
-    public boolean deleteEvent(int eventId) {
+    public boolean deleteEvent(int eventId) throws DAOException {
         return deleteRecordById("event", eventId);
     }
 
     @Override
-    public boolean deleteAllEvents() {
+    public boolean deleteAllEvents() throws DAOException {
         return deleteAllRecords("event");
     }
 
     //helper methods
-    private int addEventMainInfo(Event event, Connection conn) {
+    private int addEvent(Event event, Connection conn) {
 
         PreparedStatement stmt = null;
 
@@ -420,13 +432,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             stmt.setDouble(6, event.getLng());
             stmt.setString(7, event.getFilePath());
             stmt.setString(8, event.getImagePath());
-
-            if (event.getCategory() != null) {
-                stmt.setInt(9, event.getCategory().getId());
-            } else {
-                stmt.setObject(9, null);
-            }
-
+            stmt.setInt(9, event.getCategory().getId());
             stmt.setBoolean(10, event.isPublicAccessed());
             stmt.setBoolean(11, event.isGuestsAllowed());
 
