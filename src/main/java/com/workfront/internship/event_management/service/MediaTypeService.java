@@ -1,4 +1,4 @@
-package com.workfront.internship.event_management.dao;
+package com.workfront.internship.event_management.service;
 
 import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.MediaType;
@@ -6,24 +6,22 @@ import com.workfront.internship.event_management.model.MediaType;
 import java.util.List;
 
 /**
- * Created by Hermine Turshujyan 7/21/16.
+ * Created by Hermine Turshujyan 7/22/16.
  */
+public interface MediaTypeService {
 
-public interface MediaTypeDAO {
-
-    //insert data into db
+    //CRUD operations with media type
     int addMediaType(MediaType mediaType);
-
-    //read data from db
-    List<MediaType> getAllMediaTypes();
 
     MediaType getMediaTypeById(int mediaTypeId);
 
-    //update data in db
     boolean updateMediaType(MediaType mediaType);
 
-    //delete data from db
     boolean deleteMediaType(int mediaTypeId) throws DAOException;
 
+    //operations with all media types
+    List<MediaType> getAllMediaTypes();
+
     boolean deleteAllMediaTypes() throws DAOException;
+
 }

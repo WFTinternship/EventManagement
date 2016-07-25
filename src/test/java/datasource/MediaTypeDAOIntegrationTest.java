@@ -2,6 +2,7 @@ package datasource;
 
 import com.workfront.internship.event_management.dao.MediaTypeDAO;
 import com.workfront.internship.event_management.dao.MediaTypeDAOImpl;
+import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.MediaType;
 import org.junit.*;
 
@@ -39,7 +40,7 @@ public class MediaTypeDAOIntegrationTest {
     }
 
     @After
-    public void tearDown() {
+    public void tearDown() throws DAOException {
         //delete test record from db
         mediaTypeDAO.deleteAllMediaTypes();
 
@@ -73,7 +74,7 @@ public class MediaTypeDAOIntegrationTest {
     }
 
     @Test
-    public void getAllMediaTypes_Empty_List() {
+    public void getAllMediaTypes_Empty_List() throws DAOException {
         //delete inserted category from db
         mediaTypeDAO.deleteMediaType(testMediaType.getId());
 
@@ -129,7 +130,7 @@ public class MediaTypeDAOIntegrationTest {
     }
 
     @Test
-    public void deleteMediaType_Found() {
+    public void deleteMediaType_Found() throws DAOException {
         //testing method
         boolean deleted = mediaTypeDAO.deleteMediaType(testMediaType.getId());
 
@@ -140,7 +141,7 @@ public class MediaTypeDAOIntegrationTest {
     }
 
     @Test
-    public void deleteCategory_Not_Found() {
+    public void deleteCategory_Not_Found() throws DAOException {
         //testing method
         boolean deleted = mediaTypeDAO.deleteMediaType(TestHelper.NON_EXISTING_ID);
 
@@ -148,7 +149,7 @@ public class MediaTypeDAOIntegrationTest {
     }
 
     @Test
-    public void deleteAllCategories_Found() {
+    public void deleteAllCategories_Found() throws DAOException {
         //testing method
         boolean deleted = mediaTypeDAO.deleteAllMediaTypes();
 
@@ -160,7 +161,7 @@ public class MediaTypeDAOIntegrationTest {
     }
 
     @Test
-    public void deleteAllMediaTypes_Not_Found() {
+    public void deleteAllMediaTypes_Not_Found() throws DAOException {
         //delete inserted media type
         mediaTypeDAO.deleteMediaType(testMediaType.getId());
 
