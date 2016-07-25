@@ -3,6 +3,7 @@ package datasource;
 import com.workfront.internship.event_management.dao.DataSourceManager;
 import com.workfront.internship.event_management.dao.InvitationDAO;
 import com.workfront.internship.event_management.dao.InvitationDAOImpl;
+import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.Invitation;
 import org.junit.Before;
 import org.junit.Test;
@@ -75,22 +76,22 @@ public class InvitationDAOUnitTest {
     }
 
     @Test(expected = RuntimeException.class)
-    public void deleteInvitation_dbError() {
+    public void deleteInvitation_dbError() throws DAOException {
         invitationDAO.deleteInvitation(1);
     }
 
     @Test(expected = RuntimeException.class)
-    public void deleteInvitationsByEventId_dbError() {
+    public void deleteInvitationsByEventId_dbError() throws DAOException {
         invitationDAO.deleteInvitationsByEventId(1);
     }
 
     @Test(expected = RuntimeException.class)
-    public void deleteInvitationsByUserId_dbError() {
+    public void deleteInvitationsByUserId_dbError() throws DAOException {
         invitationDAO.deleteInvitationsByUserId(1);
     }
 
     @Test(expected = RuntimeException.class)
-    public void deleteAllInvitations_dbError() {
+    public void deleteAllInvitations_dbError() throws DAOException {
         invitationDAO.deleteAllInvitations();
     }
 }

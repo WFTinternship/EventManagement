@@ -12,6 +12,8 @@ class TestHelper {
     static final String NON_EXISTING_USERNAME = "nonExistingUsername";
     static final String NON_EXISTING_EMAIL = "nonExistingEmail@test.com";
     static final String NON_EXISTING_MEDIA_TYPE = "Video";
+    static final String NON_EXISTING_TITLE = "nonExistingTitle";
+
 
     static int NON_EXISTING_ID = 1;
 
@@ -21,7 +23,6 @@ class TestHelper {
         User testUser = new User();
         testUser.setFirstName("Test FirstName")
                 .setLastName("Test LastName")
-                .setUsername("testUsername" + getRandomNumber())
                 .setPassword("testPassword")
                 .setEmail("test" + getRandomNumber() + "@test.com")
                 .setPhoneNumber("1111111")
@@ -51,35 +52,15 @@ class TestHelper {
                 .setImagePath("events/test_event.jpg")
                 .setCreationDate(new Date())
                 .setPublicAccessed(true)
-                .setGuestsAllowed(true);
+                .setGuestsAllowed(true)
+                .setDateRange(new DateRange(new Date(), new Date()));
 
         return testEvent;
     }
 
-    static Event createTestEventWithRecurrencesAndInvitations(User user1, User user2, RecurrenceType recurrenceType) {
-        Event testEvent = new Event();
-        testEvent.setTitle("Test title")
-                .setShortDescription("Test short description")
-                .setFullDescription("Test full description")
-                .setLocation("Test location")
-                .setLat(11111.0)
-                .setLng(11111.0)
-                .setFilePath("/events/test_event.doc")
-                .setImagePath("events/test_event.jpg")
-                .setCreationDate(new Date())
-                .setPublicAccessed(true)
-                .setGuestsAllowed(true);
 
-
-        //create invitation list
-        Invitation invitation1 = createTestInvitation();
-        Invitation invitation2 = createTestInvitation();
-        invitation1.setUser(user1);
-        invitation2.setUser(user2);
-
-        List<Invitation> invitationList = new ArrayList<>();
-        invitationList.add(invitation1);
-        invitationList.add(invitation2);
+    static Event createTestEventWithRecurrences(RecurrenceType recurrenceType) {
+        Event testEvent = createTestEvent();
 
         //create recurrence list
         EventRecurrence recurrence1 = createTestEventRecurrence();
@@ -92,7 +73,6 @@ class TestHelper {
 
         //set to event
         testEvent.setEventRecurrences(recurrenceList);
-        testEvent.setInvitations(invitationList);
 
         return testEvent;
     }

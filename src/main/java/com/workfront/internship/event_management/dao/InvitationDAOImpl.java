@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.dao;
 
+import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.Invitation;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.model.UserResponse;
@@ -28,7 +29,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
         try {
             this.dataSourceManager = DataSourceManager.getInstance();
         } catch (IOException | SQLException e) {
-            LOGGER.error("Exception...", e);
+            LOGGER.error("Could not instantiate data source manager.", e);
             throw new RuntimeException(e);
         }
     }
@@ -185,22 +186,22 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
     }
 
     @Override
-    public boolean deleteInvitation(int invitationId) {
+    public boolean deleteInvitation(int invitationId) throws DAOException {
         return deleteRecordById("event_invitation", invitationId);
     }
 
     @Override
-    public boolean deleteInvitationsByEventId(int eventId){
+    public boolean deleteInvitationsByEventId(int eventId) throws DAOException {
         return deleteRecord("event_invitation", "event_id", eventId);
     }
 
     @Override
-    public boolean deleteInvitationsByUserId(int userId) {
+    public boolean deleteInvitationsByUserId(int userId) throws DAOException {
         return deleteRecord("event_invitation", "user_id", userId);
     }
 
     @Override
-    public boolean deleteAllInvitations() {
+    public boolean deleteAllInvitations() throws DAOException {
         return deleteAllRecords("event_invitation");
     }
 
@@ -214,7 +215,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
         List<Invitation> invitationsList = new ArrayList<>();
         String sqlStr = "SELECT * FROM event_invitation " +
                 "LEFT JOIN user ON event_invitation.user_id = user.id " +
-                "LEFT JOIN user_response ON event_invitation.user_response_id = user_response.id" +
+                "LEFT JOIN user_response ON event_invitation.user_response_id = user_response.id " +
                 "WHERE " + columnName + " = ?";
 
         try {
@@ -251,8 +252,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             user.setId(rs.getInt("user.id"))
                     .setFirstName(rs.getString("first_name"))
                     .setLastName(rs.getString("last_name"))
-                    .setUsername(rs.getString("username"))
-                    .setUsername(rs.getString("password"))
+                    .setPassword(rs.getString("password"))
                     .setEmail(rs.getString("email"))
                     .setAvatarPath(rs.getString("avatar_path"))
                     .setPhoneNumber(rs.getString("phone_number"))

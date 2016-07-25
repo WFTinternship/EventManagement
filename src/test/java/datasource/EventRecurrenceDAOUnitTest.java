@@ -3,6 +3,7 @@ package datasource;
 import com.workfront.internship.event_management.dao.DataSourceManager;
 import com.workfront.internship.event_management.dao.EventRecurrenceDAO;
 import com.workfront.internship.event_management.dao.EventRecurrenceDAOImpl;
+import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.EventRecurrence;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,12 +65,12 @@ public class EventRecurrenceDAOUnitTest {
     }
 
     @Test(expected = RuntimeException.class)
-    public void deleteEventRecurrence_dbError() {
+    public void deleteEventRecurrence_dbError() throws DAOException {
         eventRecurrenceDAO.deleteEventRecurrence(1);
     }
 
     @Test(expected = RuntimeException.class)
-    public void deleteAllEventRecurrences_dbError() {
+    public void deleteAllEventRecurrences_dbError() throws DAOException {
         eventRecurrenceDAO.deleteAllEventRecurrences();
     }
 }

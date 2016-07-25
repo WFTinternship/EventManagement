@@ -3,6 +3,7 @@ package datasource;
 import com.workfront.internship.event_management.dao.DataSourceManager;
 import com.workfront.internship.event_management.dao.MediaDAO;
 import com.workfront.internship.event_management.dao.MediaDAOImpl;
+import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.Media;
 import org.junit.Before;
 import org.junit.Test;
@@ -77,12 +78,12 @@ public class MediaDAOUnitTest {
     }
 
     @Test(expected = RuntimeException.class)
-    public void deleteMedia_dbError() {
+    public void deleteMedia_dbError() throws DAOException {
         mediaDAO.deleteMedia(1);
     }
 
     @Test(expected = RuntimeException.class)
-    public void deleteAllMedia_dbError() {
+    public void deleteAllMedia_dbError() throws DAOException {
         mediaDAO.deleteAllMedia();
 
     }

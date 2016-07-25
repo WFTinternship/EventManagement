@@ -53,6 +53,10 @@ public class UserServiceImpl implements UserService {
                 throw new OperationFailedException("Database error!");
             }
         }
+
+        EmailService emailService = new EmailServiceImpl();
+        emailService.sendVerificationEmail(user);
+        // TODO: 7/25/16 send verification email 
         return success;
     }
 

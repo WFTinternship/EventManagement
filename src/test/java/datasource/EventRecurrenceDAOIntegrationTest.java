@@ -1,6 +1,7 @@
 package datasource;
 
 import com.workfront.internship.event_management.dao.*;
+import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.*;
 import org.junit.*;
 
@@ -28,7 +29,7 @@ public class EventRecurrenceDAOIntegrationTest {
     private EventRecurrence testEventRecurrence;
 
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws DAOException {
         categoryDAO = new CategoryDAOImpl();
         eventDAO = new EventDAOImpl();
         recurrenceTypeDAO = new RecurrenceTypeDAOImpl();
@@ -46,13 +47,13 @@ public class EventRecurrenceDAOIntegrationTest {
 
 
     @Before
-    public void setUp() {
+    public void setUp() throws DAOException {
         createTestObjects();
         insertTestObjectsIntoDB();
     }
 
     @After
-    public void tearDown() {
+    public void tearDown() throws DAOException {
         deleteTestRecordsFromDB();
         deleteTestObjects();
     }
@@ -119,7 +120,7 @@ public class EventRecurrenceDAOIntegrationTest {
     }
 
     @Test
-    public void getAllEventRecurrencesByEventId__Empty_List() {
+    public void getAllEventRecurrencesByEventId__Empty_List() throws DAOException {
         //delete inserted test record
         eventRecurrenceDAO.deleteEventRecurrence(testEventRecurrence.getId());
 
@@ -157,7 +158,7 @@ public class EventRecurrenceDAOIntegrationTest {
     }
 
     @Test
-    public void deleteEventRecurrence_Found() {
+    public void deleteEventRecurrence_Found() throws DAOException {
         //testing method
         boolean deleted = eventRecurrenceDAO.deleteEventRecurrence(testEventRecurrence.getId());
 
@@ -168,7 +169,7 @@ public class EventRecurrenceDAOIntegrationTest {
     }
 
     @Test
-    public void deleteEventRecurrence_Not_Found() {
+    public void deleteEventRecurrence_Not_Found() throws DAOException {
         //test method
         boolean deleted = eventRecurrenceDAO.deleteEventRecurrence(TestHelper.NON_EXISTING_ID);
 
@@ -176,7 +177,7 @@ public class EventRecurrenceDAOIntegrationTest {
     }
 
     @Test
-    public void deleteAllEventRecurrences_Found() {
+    public void deleteAllEventRecurrences_Found() throws DAOException {
         //testing method
         boolean deleted = eventRecurrenceDAO.deleteAllEventRecurrences();
 
@@ -188,7 +189,7 @@ public class EventRecurrenceDAOIntegrationTest {
     }
 
     @Test
-    public void deleteAllEventRecurrences_Not_Found() {
+    public void deleteAllEventRecurrences_Not_Found() throws DAOException {
         //delete inserted test record
         eventRecurrenceDAO.deleteEventRecurrence(testEventRecurrence.getId());
 
@@ -208,7 +209,7 @@ public class EventRecurrenceDAOIntegrationTest {
         testRecurrenceOption = TestHelper.createTestRecurrenceOption();
     }
 
-    private void insertTestObjectsIntoDB() {
+    private void insertTestObjectsIntoDB() throws DAOException {
         //insert category into db and get generated id
         int categoryId = categoryDAO.addCategory(testCategory);
         testCategory.setId(categoryId);
@@ -242,7 +243,7 @@ public class EventRecurrenceDAOIntegrationTest {
         testCategory = null;
     }
 
-    private void deleteTestRecordsFromDB() {
+    private void deleteTestRecordsFromDB() throws DAOException {
         categoryDAO.deleteAllCategories();
         recurrenceTypeDAO.deleteAllRecurrenceTypes();
         eventRecurrenceDAO.deleteAllEventRecurrences();

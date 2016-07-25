@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.dao;
 
+import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.EventRecurrence;
 import com.workfront.internship.event_management.model.RecurrenceType;
 
@@ -24,7 +25,7 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
         try {
             this.dataSourceManager = DataSourceManager.getInstance();
         } catch (IOException | SQLException e) {
-            LOGGER.error("Exception...", e);
+            LOGGER.error("Could not instantiate data source manager.", e);
             throw new RuntimeException(e);
         }
     }
@@ -246,12 +247,12 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
         return affectedRows != 0;    }
 
     @Override
-    public boolean deleteEventRecurrence(int id) {
+    public boolean deleteEventRecurrence(int id) throws DAOException {
         return deleteRecordById("event_recurrence", id);
     }
 
     @Override
-    public boolean deleteAllEventRecurrences() {
+    public boolean deleteAllEventRecurrences() throws DAOException {
         return deleteAllRecords("event_recurrence");
     }
 

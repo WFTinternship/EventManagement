@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.dao;
 
+import com.workfront.internship.event_management.exception.DAOException;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -9,7 +10,7 @@ import java.sql.*;
  * Created by Hermine Turshujyan 7/1/16.
  */
 
-class GenericDAO {
+public class GenericDAO {
 
     static final Logger LOGGER = Logger.getLogger(GenericDAO.class);
     private DataSourceManager dataSourceManager;
@@ -75,11 +76,11 @@ class GenericDAO {
         return id;
     }
 
-    boolean deleteRecordById(String tableName, int id) {
+    boolean deleteRecordById(String tableName, int id) throws DAOException {
         return deleteRecord(tableName, "id", id);
     }
 
-    boolean deleteAllRecords(String tableName) {
+    boolean deleteAllRecords(String tableName) throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -97,15 +98,15 @@ class GenericDAO {
             affectedRows = stmt.executeUpdate();
 
         } catch (SQLException e) {
-            LOGGER.error("Exception...", e);
-            throw new RuntimeException(e);
+            LOGGER.error("SQLException in deleteAllRecords()", e);
+            throw new DAOException();
         } finally {
             closeResources(stmt, conn);
         }
         return affectedRows != 0;
     }
 
-    boolean deleteRecord(String tableName, String columnName, int id) {
+    boolean deleteRecord(String tableName, String columnName, int id) throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -124,8 +125,8 @@ class GenericDAO {
             affectedRows = stmt.executeUpdate();
 
         } catch (SQLException e) {
-            LOGGER.error("Exception ", e);
-            throw new RuntimeException(e);
+            LOGGER.error("SQLException in deleteRecord()", e);
+            throw new DAOException();
         } finally {
             closeResources(stmt, conn);
         }

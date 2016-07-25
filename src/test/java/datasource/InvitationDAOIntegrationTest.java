@@ -1,6 +1,8 @@
 package datasource;
 
 import com.workfront.internship.event_management.dao.*;
+import com.workfront.internship.event_management.exception.DAOException;
+import com.workfront.internship.event_management.exception.DuplicateEntryException;
 import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.Invitation;
@@ -30,7 +32,7 @@ public class InvitationDAOIntegrationTest {
 
 
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws DAOException {
         userDAO = new UserDAOImpl();
         categoryDAO = new CategoryDAOImpl();
         eventDAO = new EventDAOImpl();
@@ -46,14 +48,14 @@ public class InvitationDAOIntegrationTest {
     }
 
     @Before
-    public void setUp() {
+    public void setUp() throws DAOException, DuplicateEntryException {
         createTestObjects();
         insertTestObjectsIntoDB();
     }
 
 
     @After
-    public void tearDown() {
+    public void tearDown() throws DAOException {
         deleteTestRecordsFromDB();
         deleteTestObjects();
     }
@@ -158,7 +160,7 @@ public class InvitationDAOIntegrationTest {
     }
 
     @Test
-    public void deleteInvitation_Success() {
+    public void deleteInvitation_Success() throws DAOException {
         //test method
         boolean deleted = invitationDAO.deleteInvitation(testInvitation.getId());
 
@@ -169,14 +171,14 @@ public class InvitationDAOIntegrationTest {
     }
 
     @Test
-    public void deleteInvitation_Not_Found() {
+    public void deleteInvitation_Not_Found() throws DAOException {
         boolean deleted = invitationDAO.deleteInvitation(TestHelper.NON_EXISTING_ID);
 
         assertFalse(deleted);
     }
 
     @Test
-    public void deleteInvitationsByEventId_Success() {
+    public void deleteInvitationsByEventId_Success() throws DAOException {
         //test method
         boolean deleted = invitationDAO.deleteInvitationsByEventId(testEvent.getId());
 
@@ -188,14 +190,14 @@ public class InvitationDAOIntegrationTest {
     }
 
     @Test
-    public void deleteInvitationsByEventId_Not_Found() {
+    public void deleteInvitationsByEventId_Not_Found() throws DAOException {
         boolean deleted = invitationDAO.deleteInvitationsByEventId(TestHelper.NON_EXISTING_ID);
 
         assertFalse(deleted);
     }
 
     @Test
-    public void deleteInvitationsByUserId_Success() {
+    public void deleteInvitationsByUserId_Success() throws DAOException {
         //test method
         boolean deleted = invitationDAO.deleteInvitationsByUserId(testUser.getId());
 
@@ -207,7 +209,7 @@ public class InvitationDAOIntegrationTest {
     }
 
     @Test
-    public void deleteInvitationsByUserId_Not_Found() {
+    public void deleteInvitationsByUserId_Not_Found() throws DAOException {
         //test method
         boolean deleted = invitationDAO.deleteInvitationsByUserId(TestHelper.NON_EXISTING_ID);
 
@@ -215,7 +217,7 @@ public class InvitationDAOIntegrationTest {
     }
 
     @Test
-    public void deleteAllInvitations_Success() {
+    public void deleteAllInvitations_Success() throws DAOException {
         //test method
         boolean deleted = invitationDAO.deleteAllInvitations();
 
@@ -227,7 +229,7 @@ public class InvitationDAOIntegrationTest {
     }
 
     @Test
-    public void deleteAllInvitations_Not_Found() {
+    public void deleteAllInvitations_Not_Found() throws DAOException {
         //delete inserted invitation from db
         invitationDAO.deleteInvitation(testInvitation.getId());
 
@@ -240,7 +242,7 @@ public class InvitationDAOIntegrationTest {
 
     //private methods
 
-    private void insertTestObjectsIntoDB() {
+    private void insertTestObjectsIntoDB() throws DAOException, DuplicateEntryException {
         //insert user info into db and get generated id
         int userId = userDAO.addUser(testUser);
         testUser.setId(userId);
@@ -268,7 +270,7 @@ public class InvitationDAOIntegrationTest {
         testInvitation = TestHelper.createTestInvitation();
     }
 
-    private void deleteTestRecordsFromDB() {
+    private void deleteTestRecordsFromDB() throws DAOException {
         invitationDAO.deleteAllInvitations();
         eventDAO.deleteAllEvents();
         categoryDAO.deleteAllCategories();

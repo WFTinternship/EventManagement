@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.dao;
 
+import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.Media;
 import com.workfront.internship.event_management.model.MediaType;
 
@@ -24,7 +25,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
         try {
             this.dataSourceManager = DataSourceManager.getInstance();
         } catch (IOException | SQLException e) {
-            LOGGER.error("Exception...", e);
+            LOGGER.error("Could not instantiate data source manager.", e);
             throw new RuntimeException(e);
         }
     }
@@ -190,12 +191,12 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
     }
 
     @Override
-    public boolean deleteMedia(int mediaId) {
+    public boolean deleteMedia(int mediaId) throws DAOException {
         return deleteRecordById("event_media", mediaId);
     }
 
     @Override
-    public boolean deleteAllMedia() {
+    public boolean deleteAllMedia() throws DAOException {
         return deleteAllRecords("event_media");
     }
 

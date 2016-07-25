@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.dao;
 
+import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.Media;
 
 import java.util.List;
@@ -9,11 +10,11 @@ import java.util.List;
  */
 public interface MediaDAO {
 
-     //insert media into db
-     int addMedia(Media media);
+    //insert media into db
+    int addMedia(Media media);
 
-     //read data from db
-     Media getMediaById(int mediaId);
+    //read data from db
+    Media getMediaById(int mediaId);
 
     List<Media> getMediaByEventId(int eventId);
 
@@ -23,10 +24,11 @@ public interface MediaDAO {
 
     List<Media> getAllMedia();
 
-     //update data in db
-     boolean updateMediaDescription(int mediaId, String description);
+    //update data in db
+    boolean updateMediaDescription(int mediaId, String description);
 
-     //delete data from db
-     boolean deleteMedia(int mediaId);
-     boolean deleteAllMedia();
+    //delete data from db
+    boolean deleteMedia(int mediaId) throws DAOException;
+
+    boolean deleteAllMedia() throws DAOException;
 }
