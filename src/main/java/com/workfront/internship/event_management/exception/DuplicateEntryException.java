@@ -3,7 +3,7 @@ package com.workfront.internship.event_management.exception;
 /**
  * Created by Hermine Turshujyan 7/22/16.
  */
-public class DuplicateEntryException extends OperationFailedException {
+public class DuplicateEntryException extends DAOException {
 
     public DuplicateEntryException() {
     }
