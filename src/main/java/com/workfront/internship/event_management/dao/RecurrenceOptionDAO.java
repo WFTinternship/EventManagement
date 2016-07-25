@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.dao;
 
+import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.RecurrenceOption;
 
 import java.util.List;
@@ -23,10 +24,10 @@ public interface RecurrenceOptionDAO {
     boolean updateRecurrenceOption(RecurrenceOption option);
 
     //delete data from db
-    boolean deleteRecurrenceOption(int optionId);
+    boolean deleteRecurrenceOption(int optionId) throws DAOException;
 
-    boolean deleteRecurrenceOptionsByRecurrenceType(int recurrenceTypeId);
+    boolean deleteRecurrenceOptionsByRecurrenceType(int recurrenceTypeId) throws DAOException;
 
-    boolean deleteAllRecurrenceOptions();
+    boolean deleteAllRecurrenceOptions() throws DAOException;
 
 }

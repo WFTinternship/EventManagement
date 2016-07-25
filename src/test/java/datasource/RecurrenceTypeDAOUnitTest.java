@@ -3,6 +3,7 @@ package datasource;
 import com.workfront.internship.event_management.dao.DataSourceManager;
 import com.workfront.internship.event_management.dao.RecurrenceTypeDAO;
 import com.workfront.internship.event_management.dao.RecurrenceTypeDAOImpl;
+import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.RecurrenceType;
 import org.junit.Before;
 import org.junit.Test;
@@ -59,12 +60,12 @@ public class RecurrenceTypeDAOUnitTest {
     }
 
     @Test(expected = RuntimeException.class)
-    public void deleteRecurrenceType() {
+    public void deleteRecurrenceType() throws DAOException {
         recurrenceTypeDAO.deleteRecurrenceType(1);
     }
 
     @Test(expected = RuntimeException.class)
-    public void deleteAllRecurrenceTypes() {
+    public void deleteAllRecurrenceTypes() throws DAOException {
         recurrenceTypeDAO.deleteAllRecurrenceTypes();
 
     }

@@ -3,6 +3,7 @@ package datasource;
 import com.workfront.internship.event_management.dao.DataSourceManager;
 import com.workfront.internship.event_management.dao.RecurrenceOptionDAO;
 import com.workfront.internship.event_management.dao.RecurrenceOptionDAOImpl;
+import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.RecurrenceOption;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,17 +66,17 @@ public class RecurrenceOptionDAOUnitTest {
     }
 
     @Test(expected = RuntimeException.class)
-    public void deleteRecurrenceOption_dbError() {
+    public void deleteRecurrenceOption_dbError() throws DAOException {
         recurrenceOptionDAO.deleteRecurrenceOption(1);
     }
 
     @Test(expected = RuntimeException.class)
-    public void deleteRecurrenceOptionsByRecurrenceType_dbError() {
+    public void deleteRecurrenceOptionsByRecurrenceType_dbError() throws DAOException {
         recurrenceOptionDAO.deleteRecurrenceOptionsByRecurrenceType(1);
     }
 
     @Test(expected = RuntimeException.class)
-    public void deleteAllRecurrenceOptions() {
+    public void deleteAllRecurrenceOptions() throws DAOException {
         recurrenceOptionDAO.deleteAllRecurrenceOptions();
     }
 }

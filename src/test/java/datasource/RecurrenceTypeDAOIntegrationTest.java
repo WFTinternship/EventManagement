@@ -2,6 +2,7 @@ package datasource;
 
 import com.workfront.internship.event_management.dao.RecurrenceTypeDAO;
 import com.workfront.internship.event_management.dao.RecurrenceTypeDAOImpl;
+import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.RecurrenceType;
 import org.junit.*;
 
@@ -38,7 +39,7 @@ public class RecurrenceTypeDAOIntegrationTest {
     }
 
     @After
-    public void tearDown() {
+    public void tearDown() throws DAOException {
         //delete test record from db
         recurrenceTypeDAO.deleteAllRecurrenceTypes();
 
@@ -89,7 +90,7 @@ public class RecurrenceTypeDAOIntegrationTest {
     }
 
     @Test
-    public void getAllRecurrenceTypes_Empty_List() {
+    public void getAllRecurrenceTypes_Empty_List() throws DAOException {
         //delete inserted record from db
         recurrenceTypeDAO.deleteRecurrenceType(testRecurrenceType.getId());
 
@@ -145,7 +146,7 @@ public class RecurrenceTypeDAOIntegrationTest {
     }
 
     @Test
-    public void deleteRecurrenceType_Found() {
+    public void deleteRecurrenceType_Found() throws DAOException {
         //testing method
         boolean deleted = recurrenceTypeDAO.deleteRecurrenceType(testRecurrenceType.getId());
 
@@ -156,7 +157,7 @@ public class RecurrenceTypeDAOIntegrationTest {
     }
 
     @Test
-    public void deleteRecurrenceType_Not_Found() {
+    public void deleteRecurrenceType_Not_Found() throws DAOException {
         //testing method
         boolean deleted = recurrenceTypeDAO.deleteRecurrenceType(TestHelper.NON_EXISTING_ID);
 
@@ -164,7 +165,7 @@ public class RecurrenceTypeDAOIntegrationTest {
     }
 
     @Test
-    public void deleteAllRecurrenceTypes_Found() {
+    public void deleteAllRecurrenceTypes_Found() throws DAOException {
         //testing method
         boolean deleted = recurrenceTypeDAO.deleteAllRecurrenceTypes();
 
@@ -176,7 +177,7 @@ public class RecurrenceTypeDAOIntegrationTest {
     }
 
     @Test
-    public void deleteAllRecurrenceTypes_Not_Found() {
+    public void deleteAllRecurrenceTypes_Not_Found() throws DAOException {
         //delete inserted test record
         recurrenceTypeDAO.deleteRecurrenceType(testRecurrenceType.getId());
 

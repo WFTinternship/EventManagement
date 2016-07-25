@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.dao;
 
+import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.RecurrenceOption;
 
 import java.io.IOException;
@@ -26,7 +27,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
         try {
             this.dataSourceManager = DataSourceManager.getInstance();
         } catch (IOException | SQLException e) {
-            LOGGER.error("Exception...", e);
+            LOGGER.error("Could not instantiate data source manager.", e);
             throw new RuntimeException(e);
         }
     }
@@ -214,17 +215,17 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
     }
 
     @Override
-    public boolean deleteRecurrenceOption(int optionId) {
+    public boolean deleteRecurrenceOption(int optionId) throws DAOException {
         return deleteRecordById("recurrence_option", optionId);
     }
 
     @Override
-    public boolean deleteRecurrenceOptionsByRecurrenceType(int recurrenceTypeId) {
+    public boolean deleteRecurrenceOptionsByRecurrenceType(int recurrenceTypeId) throws DAOException {
         return deleteRecord("recurrence_option", "recurrence_type_id", recurrenceTypeId);
     }
 
     @Override
-    public boolean deleteAllRecurrenceOptions() {
+    public boolean deleteAllRecurrenceOptions() throws DAOException {
         return deleteAllRecords("recurrence_option");
     }
 

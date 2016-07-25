@@ -4,6 +4,7 @@ import com.workfront.internship.event_management.dao.RecurrenceOptionDAO;
 import com.workfront.internship.event_management.dao.RecurrenceOptionDAOImpl;
 import com.workfront.internship.event_management.dao.RecurrenceTypeDAO;
 import com.workfront.internship.event_management.dao.RecurrenceTypeDAOImpl;
+import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.RecurrenceOption;
 import com.workfront.internship.event_management.model.RecurrenceType;
 import org.junit.*;
@@ -53,7 +54,7 @@ public class RecurrenceOptionDAOIntegrationTest {
     }
 
     @After
-    public void tearDown() {
+    public void tearDown() throws DAOException {
         //delete test records from db
         recurrenceTypeDAO.deleteAllRecurrenceTypes();
         recurrenceOptionDAO.deleteAllRecurrenceOptions();
@@ -91,7 +92,7 @@ public class RecurrenceOptionDAOIntegrationTest {
     }
 
     @Test
-    public void getAllRecurrenceOptions_Not_Found() {
+    public void getAllRecurrenceOptions_Not_Found() throws DAOException {
         //delete inserted tet record
         recurrenceOptionDAO.deleteRecurrenceOption(testRecurrenceOption.getId());
 
@@ -166,7 +167,7 @@ public class RecurrenceOptionDAOIntegrationTest {
     }
 
     @Test
-    public void deleteRecurrenceOption_Success() {
+    public void deleteRecurrenceOption_Success() throws DAOException {
         //testing method
         boolean deleted = recurrenceOptionDAO.deleteRecurrenceOption(testRecurrenceOption.getId());
 
@@ -177,7 +178,7 @@ public class RecurrenceOptionDAOIntegrationTest {
     }
 
     @Test
-    public void deleteRecurrencetOption_NotFound() {
+    public void deleteRecurrencetOption_NotFound() throws DAOException {
         //testing method
         boolean deleted = recurrenceOptionDAO.deleteRecurrenceOption(TestHelper.NON_EXISTING_ID);
 
@@ -185,7 +186,7 @@ public class RecurrenceOptionDAOIntegrationTest {
     }
 
     @Test
-    public void deleteRepeatOptionsByRecurrenceType_Success() {
+    public void deleteRepeatOptionsByRecurrenceType_Success() throws DAOException {
         //testing method
         boolean deleted = recurrenceOptionDAO.deleteRecurrenceOptionsByRecurrenceType(testRecurrenceOption.getRecurrenceTypeId());
 
@@ -197,7 +198,7 @@ public class RecurrenceOptionDAOIntegrationTest {
     }
 
     @Test
-    public void deleteRepeatOptionsByRecurrenceType_Not_Found() {
+    public void deleteRepeatOptionsByRecurrenceType_Not_Found() throws DAOException {
         //testing method
         boolean deleted = recurrenceOptionDAO.deleteRecurrenceOptionsByRecurrenceType(TestHelper.NON_EXISTING_ID);
 
@@ -205,7 +206,7 @@ public class RecurrenceOptionDAOIntegrationTest {
     }
 
     @Test
-    public void deleteAllRecurrenceOptions_Success() {
+    public void deleteAllRecurrenceOptions_Success() throws DAOException {
         //testing method
         boolean deleted = recurrenceOptionDAO.deleteAllRecurrenceOptions();
 
@@ -217,7 +218,7 @@ public class RecurrenceOptionDAOIntegrationTest {
     }
 
     @Test
-    public void deleteAllRecurrenceOptions_Not_Found() {
+    public void deleteAllRecurrenceOptions_Not_Found() throws DAOException {
         //delete inserted record
         recurrenceOptionDAO.deleteRecurrenceOption(testRecurrenceOption.getId());
 
