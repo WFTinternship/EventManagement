@@ -41,25 +41,22 @@ public class UserServiceImpl implements UserService {
             user.setPassword(encryptedPassword);
 
             try {
-                //check if user with this email already exists
-                User existingUser = userDAO.getUserByEmail(user.getEmail());
+                userId = userDAO.addUser(user);
 
-                if (existingUser == null) {
-                    userId = userDAO.addUser(user);
-                } else {
-                    // TODO: 7/26/16 check
-                    // TODO: 7/26/16 add logs 
-                    throw new OperationFailedException("User with this email already exists!");
-
+                //if user successfully inserted
+                if (userId > 0) {
+                    EmailService emailService = new EmailServiceImpl();
+                    emailService.sendVerificationEmail(user);
+                    // TODO: 7/25/16 send verification email
                 }
+
+            } catch (DuplicateEntryException e) {
+                throw new OperationFailedException("User with this email already exists!");
             } catch (DAOException e) {
                 throw new OperationFailedException("Database error!");
             }
-
-
-            EmailService emailService = new EmailServiceImpl();
-            emailService.sendVerificationEmail(user);
-            // TODO: 7/25/16 send verification email
+        } else {
+            throw new OperationFailedException("Invalid user object.");
         }
         return userId;
     }
@@ -67,7 +64,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean editProfile(User user) throws OperationFailedException {
 
-        boolean success = false;
+        boolean success;
 
         if (isValidUser(user)) {
             try {
@@ -80,6 +77,8 @@ public class UserServiceImpl implements UserService {
             } catch (DAOException e) {
                 throw new OperationFailedException("Database error!");
             }
+        } else {
+            throw new OperationFailedException("Invalid user object.");
         }
 
         return success;
@@ -88,7 +87,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean verifyAccount(int userId) throws OperationFailedException {
 
-        boolean success = false;
+        boolean success;
 
         if (userId > 0) {
             try {
@@ -99,6 +98,8 @@ public class UserServiceImpl implements UserService {
             } catch (DAOException e) {
                 throw new OperationFailedException("Database error!");
             }
+        } else {
+            throw new OperationFailedException("Invalid user id.");
         }
         return success;
     }
@@ -106,7 +107,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean deleteAccount(int userId) throws OperationFailedException {
 
-        boolean success = false;
+        boolean success;
+
         if (userId > 0) {
             try {
                 success = userDAO.deleteUser(userId);
@@ -116,6 +118,8 @@ public class UserServiceImpl implements UserService {
             } catch (DAOException e) {
                 throw new OperationFailedException("Database error!");
             }
+        } else {
+            throw new OperationFailedException("Invalid user id.");
         }
         return success;
     }
@@ -125,7 +129,7 @@ public class UserServiceImpl implements UserService {
 
         User validUser;
 
-        //check if email structure is valid
+        //check if email is valid
         if (isValidEmailAddress(email)) {
             try {
                 User user = userDAO.getUserByEmail(email);
@@ -140,7 +144,6 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new OperationFailedException("Invalid email!");
         }
-
         return validUser;
     }
 
@@ -154,7 +157,7 @@ public class UserServiceImpl implements UserService {
                 user = userDAO.getUserById(userId);
                 if (user == null) {
                     throw new OperationFailedException("Non existing user!");
-                }
+                } // TODO: 7/26/16 check
             } catch (DAOException e) {
                 throw new OperationFailedException("Database error!");
             }
@@ -167,13 +170,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByEmail(String email) throws OperationFailedException {
+
         User user;
+
         if (isValidEmailAddress(email)) {
             try {
                 user = userDAO.getUserByEmail(email);
                 if (user == null) {
                     throw new OperationFailedException("Non existing user.");
-                }
+                } // TODO: 7/26/16 check
             } catch (DAOException e) {
                 throw new OperationFailedException("Database error!");
             }
@@ -188,12 +193,8 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllUsers() throws OperationFailedException {
 
         List<User> userList;
-
         try {
             userList = userDAO.getAllUsers();
-            if (userList == null || userList.isEmpty()) {
-                throw new OperationFailedException("No users in database!");
-            }
         } catch (DAOException e) {
             throw new OperationFailedException("Database error!");
         }
@@ -207,9 +208,6 @@ public class UserServiceImpl implements UserService {
 
         try {
             success = userDAO.deleteAllUsers();
-            if (!success) {
-                throw new OperationFailedException("No users to delete!");
-            }
         } catch (DAOException e) {
             throw new OperationFailedException("Database error!");
         }
@@ -221,7 +219,6 @@ public class UserServiceImpl implements UserService {
     private boolean isValidUser(User user) {
 
         boolean valid = false;
-
         if (user != null) {
             if (user.getFirstName() != null
                     && user.getLastName() != null
@@ -236,7 +233,7 @@ public class UserServiceImpl implements UserService {
 
 
     private static boolean isValidEmailAddress(String email) {
-        // TODO: 7/26/16
-        return false;
+        String EMAIL_REGEX = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$;";
+        return email.matches(EMAIL_REGEX);
     }
 }
