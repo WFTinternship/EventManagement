@@ -236,8 +236,8 @@ public class EventDAOIntegrationTest {
     private void deleteTestRecordsFromDB() throws DAOException {
         userDAO.deleteAllUsers();
         recurrenceTypeDAO.deleteAllRecurrenceTypes();
-        categoryDAO.deleteAllCategories();
         eventDAO.deleteAllEvents();
+        categoryDAO.deleteAllCategories();
 
     }
 

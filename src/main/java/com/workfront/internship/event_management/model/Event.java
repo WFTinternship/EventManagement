@@ -17,7 +17,8 @@ public class Event {
     private String filePath;
     private String imagePath;
     private Category category;
-    private DateRange dateRange;
+    private Date startDate;
+    private Date endDate;
     private boolean publicAccessed;
     private boolean guestsAllowed;
     private Date creationDate;
@@ -25,6 +26,9 @@ public class Event {
     private List<EventRecurrence> eventRecurrences;
     private List<Invitation> invitations;
     private List<Media> media;
+
+    public Event() {
+    }
 
     public int getId() {
         return id;
@@ -116,15 +120,6 @@ public class Event {
         return this;
     }
 
-    public DateRange getDateRange() {
-        return dateRange;
-    }
-
-    public Event setDateRange(DateRange dateRange) {
-        this.dateRange = dateRange;
-        return this;
-    }
-
     public List<EventRecurrence> getEventRecurrences() {
         return eventRecurrences;
     }
@@ -187,6 +182,24 @@ public class Event {
 
     public Event setMedia(List<Media> media) {
         this.media = media;
+        return this;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public Event setStartDate(Date startDate) {
+        this.startDate = startDate;
+        return this;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public Event setEndDate(Date endDate) {
+        this.endDate = endDate;
         return this;
     }
 }

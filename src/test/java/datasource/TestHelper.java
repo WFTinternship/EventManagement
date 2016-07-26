@@ -53,7 +53,8 @@ class TestHelper {
                 .setCreationDate(new Date())
                 .setPublicAccessed(true)
                 .setGuestsAllowed(true)
-                .setDateRange(new DateRange(new Date(), new Date()));
+                .setStartDate(new Date())
+                .setEndDate(new Date());
 
         return testEvent;
     }

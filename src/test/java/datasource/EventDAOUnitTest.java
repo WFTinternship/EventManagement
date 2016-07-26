@@ -60,22 +60,6 @@ public class EventDAOUnitTest {
 
     }
 
-    @Test(expected = RuntimeException.class)
-    public void getEventsByUserId_dbError() throws DAOException {
-        eventDAO.getEventsByUserId("organizer", 1);
-
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void getParticipatedEventsByUserId_dbError() throws DAOException {
-        eventDAO.getParticipatedEventsByUserId(1);
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void getAcceptedEventsByUserId_dbError() throws DAOException {
-        eventDAO.getAcceptedEventsByUserId(1);
-
-    }
 
     @Test(expected = RuntimeException.class)
     public void updateEvent_dbError() throws DAOException {

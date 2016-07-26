@@ -2,7 +2,6 @@ package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.*;
-import com.workfront.internship.event_management.model.DateRange;
 
 import java.io.IOException;
 import java.sql.*;
@@ -96,40 +95,6 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     @Override
-    public List<Event> getAllEvents() throws DAOException {
-
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        List<Event> eventsList = null;
-
-        String query = "SELECT * FROM event " +
-                "LEFT JOIN event_category ON event.category_id = event_category.id ";
-
-        try {
-            //get connection
-            conn = dataSourceManager.getConnection();
-
-            //create statement
-            stmt = conn.prepareStatement(query);
-
-            //execute query
-            rs = stmt.executeQuery();
-
-            //get results
-            eventsList = createEventListFromRS(rs);
-
-        } catch (SQLException e) {
-            LOGGER.error("Exception...", e);
-            throw new DAOException();
-        } finally {
-            closeResources(rs, stmt, conn);
-        }
-        return eventsList;
-    }
-
-    @Override
     public Event getEventById(int eventId) throws DAOException {
 
         Connection conn = null;
@@ -185,7 +150,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             }
 
         } catch (SQLException e) {
-            LOGGER.error("Exception ", e);
+            LOGGER.error("SQL Exception ", e);
             throw new DAOException();
         } finally {
             closeResources(rs, stmt, conn);
@@ -195,6 +160,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
     @Override
     public List<Event> getEventsByCategory(int categoryId) throws DAOException {
+
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -218,7 +184,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             eventsList = createEventListFromRS(rs);
 
         } catch (SQLException e) {
-            LOGGER.error("Exception ", e);
+            LOGGER.error("SQL Exception ", e);
             throw new DAOException();
         } finally {
             closeResources(rs, stmt, conn);
@@ -227,24 +193,38 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     @Override
-    public List<Event> getEventsByUserId(String userRole, int userId) throws DAOException {
+    public List<Event> getUserOrganizedEvents(int userId) throws DAOException {
+        return getUserEventsByField(userId, "user_role", "Organizer");
+    }
+
+    @Override
+    public List<Event> getUserParticipatedEvents(int userId) throws DAOException {
+        return getUserEventsByField(userId, "participated", true);
+    }
+
+    @Override
+    public List<Event> getUserEventsByResponse(int userId, String userResponse) throws DAOException {
+        return getUserEventsByField(userId, "user_response.title", userResponse);
+    }
+
+    @Override
+    public List<Event> getAllEvents() throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         List<Event> eventsList = null;
-        String query = "SELECT event.*, event_category.* FROM event " +
-                "LEFT JOIN event_invitation ON event_invitation.event_id = event.id " +
-                "LEFT JOIN event_category ON event.category_id = event_category.id " +
-                "WHERE user_id = ? AND user_role = ? ";
+
+        String query = "SELECT * FROM event " +
+                "LEFT JOIN event_category ON event.category_id = event_category.id ";
 
         try {
+            //get connection
             conn = dataSourceManager.getConnection();
 
+            //create statement
             stmt = conn.prepareStatement(query);
-            stmt.setInt(1, userId);
-            stmt.setString(2, userRole);
 
             //execute query
             rs = stmt.executeQuery();
@@ -253,76 +233,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             eventsList = createEventListFromRS(rs);
 
         } catch (SQLException e) {
-            LOGGER.error("Exception ", e);
-            throw new DAOException();
-        } finally {
-            closeResources(rs, stmt, conn);
-        }
-        return eventsList;
-    }
-
-    @Override
-    public List<Event> getParticipatedEventsByUserId(int userId) throws DAOException {
-
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        List<Event> eventsList = null;
-        String sqlStr = "SELECT event.*, event_category.* FROM event " +
-                "LEFT JOIN event_invitation ON event_invitation.event_id = event.id " +
-                "LEFT JOIN event_category ON event.category_id = event_category.id " +
-                "WHERE user_id = ? AND participated = TRUE ";
-
-        try {
-            //get connection
-            conn = dataSourceManager.getConnection();
-
-            //create and initialize statement
-            stmt = conn.prepareStatement(sqlStr);
-            stmt.setInt(1, userId);
-
-            rs = stmt.executeQuery();
-
-            eventsList = createEventListFromRS(rs);
-        } catch (SQLException e) {
-            LOGGER.error("Exception ", e);
-            throw new DAOException();
-        } finally {
-            closeResources(rs, stmt, conn);
-        }
-        return eventsList;
-    }
-
-    @Override
-    public List<Event> getAcceptedEventsByUserId(int userId) throws DAOException {
-
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        List<Event> eventsList = null;
-
-        String sqlStr = "SELECT event.*, event_category.* " +
-                "FROM event " +
-                "LEFT JOIN event_invitation " +
-                "ON event_invitation.event_id = event.id " +
-                "LEFT JOIN event_category " +
-                "ON event.category_id = event_category.id " +
-                "WHERE user_id = ? AND user_response = 'Yes'";
-
-        try {
-            //get connection
-            conn = dataSourceManager.getConnection();
-
-            //create and initialize statement
-            stmt = conn.prepareStatement(sqlStr);
-            stmt.setInt(1, userId);
-
-            rs = stmt.executeQuery();
-
-            eventsList = createEventListFromRS(rs);
-        } catch (SQLException e) {
-            LOGGER.error("Exception ", e);
+            LOGGER.error("Exception...", e);
             throw new DAOException();
         } finally {
             closeResources(rs, stmt, conn);
@@ -367,13 +278,17 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             stmt.setBoolean(10, event.isPublicAccessed());
             stmt.setBoolean(11, event.isGuestsAllowed());
 
-            if (event.getDateRange() != null) {
-                stmt.setTimestamp(12, new Timestamp(event.getDateRange().getStart().getTime()));
-                stmt.setTimestamp(13, new Timestamp(event.getDateRange().getEnd().getTime()));
-            } else {
+            if (event.getStartDate() != null)
+                stmt.setTimestamp(12, new Timestamp(event.getStartDate().getTime()));
+            else
                 stmt.setObject(12, null);
+
+
+            if (event.getEndDate() != null)
+                stmt.setTimestamp(13, new Timestamp(event.getEndDate().getTime()));
+            else
                 stmt.setObject(13, null);
-            }
+
 
             if (event.getCreationDate() != null) {
                 stmt.setTimestamp(14, new Timestamp(event.getCreationDate().getTime()));
@@ -436,13 +351,17 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             stmt.setBoolean(10, event.isPublicAccessed());
             stmt.setBoolean(11, event.isGuestsAllowed());
 
-            if (event.getDateRange() != null) {
-                stmt.setTimestamp(12, new Timestamp(event.getDateRange().getStart().getTime()));
-                stmt.setTimestamp(13, new Timestamp(event.getDateRange().getEnd().getTime()));
-            } else {
+            if (event.getStartDate() != null)
+                stmt.setTimestamp(12, new Timestamp(event.getStartDate().getTime()));
+            else
                 stmt.setObject(12, null);
+
+
+            if (event.getEndDate() != null)
+                stmt.setTimestamp(13, new Timestamp(event.getEndDate().getTime()));
+            else
                 stmt.setObject(13, null);
-            }
+
 
             if (event.getCreationDate() != null) {
                 stmt.setTimestamp(14, new Timestamp(event.getCreationDate().getTime()));
@@ -463,6 +382,41 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             closeResources(stmt);
         }
         return id;
+    }
+
+    private List<Event> getUserEventsByField(int userId, String columnName, Object columnValue) throws DAOException {
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        List<Event> eventsList = null;
+        String sqlStr = "SELECT event.*, event_category.* FROM event " +
+                "LEFT JOIN event_category ON event.category_id = event_category.id " +
+                "LEFT JOIN event_invitation ON event_invitation.event_id = event.id " +
+                "LEFT JOIN user_response ON event_invitation.user_response = user_response.id " +
+                "WHERE event_invitation.user_id = ? AND " + columnName + " = ?";
+
+        try {
+            //get connection
+            conn = dataSourceManager.getConnection();
+
+            //create and initialize statement
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setInt(1, userId);
+            stmt.setObject(2, columnValue);
+
+
+            rs = stmt.executeQuery();
+
+            eventsList = createEventListFromRS(rs);
+        } catch (SQLException e) {
+            LOGGER.error("Exception ", e);
+            throw new DAOException();
+        } finally {
+            closeResources(rs, stmt, conn);
+        }
+        return eventsList;
     }
 
     private List<Event> createEventListFromRS(ResultSet rs) throws SQLException {
@@ -490,7 +444,8 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                     .setGuestsAllowed(rs.getBoolean("guests_allowed"))
                     .setCreationDate(rs.getTimestamp("event.creation_date"))
                     .setLastModifiedDate(rs.getTimestamp("event.last_modified"))
-                    .setDateRange(new DateRange(rs.getTimestamp("start"), rs.getTimestamp("end")))
+                    .setStartDate(rs.getTimestamp("start"))
+                    .setEndDate(rs.getTimestamp("end"))
                     .setCategory(category);
 
             eventsList.add(event);

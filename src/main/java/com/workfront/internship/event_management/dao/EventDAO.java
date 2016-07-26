@@ -16,17 +16,17 @@ public interface EventDAO {
     int addEventWithRecurrences(Event event) throws DAOException;
 
     //read data from db
-    List<Event> getAllEvents() throws DAOException;
-
     Event getEventById(int eventId) throws DAOException;
 
     List<Event> getEventsByCategory(int categoryId) throws DAOException;
 
-    List<Event> getEventsByUserId(String userRole, int userId) throws DAOException;
+    List<Event> getUserOrganizedEvents(int userId) throws DAOException;
 
-    List<Event> getParticipatedEventsByUserId(int userId) throws DAOException;
+    List<Event> getUserParticipatedEvents(int userId) throws DAOException;
 
-    List<Event> getAcceptedEventsByUserId(int userId) throws DAOException;
+    List<Event> getUserEventsByResponse(int userId, String userResponse) throws DAOException;
+
+    List<Event> getAllEvents() throws DAOException;
 
     //update record in db
     boolean updateEvent(Event event) throws DAOException;
