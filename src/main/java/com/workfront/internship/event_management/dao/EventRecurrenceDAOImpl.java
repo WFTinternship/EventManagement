@@ -52,6 +52,11 @@ public class EventRecurrenceDAOImpl extends GenericDAO implements EventRecurrenc
     }
 
     @Override
+    public int addEventRecurrences(List<EventRecurrence> recurrenceList) {
+        return 0; // TODO: 7/26/16 implement 
+    }
+
+    @Override
     public EventRecurrence getEventRecurrenceById(int id) {
 
         Connection conn = null;

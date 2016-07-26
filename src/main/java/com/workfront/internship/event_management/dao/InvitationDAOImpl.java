@@ -35,38 +35,23 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
     }
 
     @Override
-    public int addInvitation(Invitation invitation) {
+    public int addInvitation(Invitation invitation) throws DAOException {
 
         Connection conn = null;
+        PreparedStatement stmt = null;
+
         int id = 0;
+        String query = "INSERT INTO event_invitation "
+                + "(event_id, user_id, user_role, user_response_id, attendees_count, participated) VALUES "
+                + "(?, ?, ?, ?, ?, ? )";
 
         try {
             //get connection
             conn = dataSourceManager.getConnection();
 
-            //insert invitation and get generated id
-            id = addInvitation(invitation, conn);
-        } catch (SQLException e) {
-            LOGGER.error("Exception ", e);
-            throw new RuntimeException(e);
-        } finally {
-            closeResources(conn);
-        }
-        return id;
-    }
-
-    int addInvitation(Invitation invitation, Connection conn) {
-
-        PreparedStatement stmt = null;
-
-        int id = 0;
-        String sqlStr = "INSERT INTO event_invitation "
-                + "(event_id, user_id, user_role, user_response_id, attendees_count, participated) VALUES "
-                + "(?, ?, ?, ?, ?, ? )";
-
-        try {
             //create and initialize statement
-            stmt = conn.prepareStatement(sqlStr, PreparedStatement.RETURN_GENERATED_KEYS);
+            stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+
             stmt.setInt(1, invitation.getEventId());
 
             if (invitation.getUser() != null) {
@@ -88,14 +73,59 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             //execute query
             stmt.executeUpdate();
 
-            //get generated id
-            id = getInsertedId(stmt);
+        } catch (SQLException e) {
+            LOGGER.error("SQL Exception ", e);
+            throw new DAOException();
+        } finally {
+            closeResources(stmt, conn);
+        }
+        return id;
+    }
+
+    @Override
+    public int addInvitations(List<Invitation> invitationList) throws DAOException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        int id = 0;
+        String query = "INSERT INTO event_invitation "
+                + "(event_id, user_id, user_role, user_response_id, attendees_count, participated) VALUES "
+                + "(?, ?, ?, ?, ?, ? )";
+
+        try {
+            //get connection
+            conn = dataSourceManager.getConnection();
+            conn.setAutoCommit(false);
+            stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+
+            for (Invitation invitation : invitationList) {
+                stmt.setInt(1, invitation.getEventId());
+
+                if (invitation.getUser() != null) {
+                    stmt.setInt(2, invitation.getUser().getId());
+                } else {
+                    stmt.setInt(2, 0);
+                }
+                stmt.setString(3, invitation.getUserRole());
+
+                if (invitation.getUserResponse() != null) {
+                    stmt.setInt(4, invitation.getUserResponse().getId());
+                } else {
+                    stmt.setInt(4, 0);
+                }
+
+                stmt.setInt(5, invitation.getAttendeesCount());
+                stmt.setBoolean(6, invitation.isParticipated());
+                stmt.addBatch();
+            }
+
+            stmt.executeBatch();
 
         } catch (SQLException e) {
-            LOGGER.error("Exception ", e);
-            throw new RuntimeException(e);
+            LOGGER.error("SQL Exception ", e);
+            throw new DAOException();
         } finally {
-            closeResources(stmt);
+            closeResources(stmt, conn);
         }
         return id;
     }
@@ -159,7 +189,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
         PreparedStatement stmt = null;
         int affectedRows = 0;
         String sqlStr = "UPDATE event_invitation SET user_role = ? , user_response_id = ?, attendees_count = ?, " +
-                    "participated = ? WHERE id = ?";
+                "participated = ? WHERE id = ?";
 
         try {
             //get connection

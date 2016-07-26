@@ -72,6 +72,49 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
     }
 
     @Override
+    public boolean addMedia(List<Media> mediaList) {
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        String query = "INSERT INTO event_media (event_id, path, media_type_id, description, uploader_id, upload_date) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
+        boolean success;
+
+        try {
+            //get connection
+            conn = dataSourceManager.getConnection();
+            conn.setAutoCommit(false);
+
+            //create and initialize statement
+            stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+            for (Media media : mediaList) {
+                stmt.setInt(1, media.getEventId());
+                stmt.setString(2, media.getPath());
+                stmt.setInt(3, media.getType().getId());
+                stmt.setString(4, media.getDescription());
+                stmt.setInt(5, media.getUploaderId());
+                if (media.getUploadDate() != null) {
+                    stmt.setTimestamp(6, new Timestamp(media.getUploadDate().getTime()));
+                } else {
+                    stmt.setObject(6, null);
+                }
+                stmt.addBatch();
+            }
+
+            //execute query
+            success = (stmt.executeBatch().length != 0);
+
+        } catch (SQLException e) {
+            LOGGER.error("SQL exception...", e);
+            throw new RuntimeException(e);
+        } finally {
+            closeResources(stmt, conn);
+        }
+        return success;
+    }
+
+    @Override
     public Media getMediaById(int mediaId) {
 
         List<Media> mediaList = getMediaByField("id", mediaId);

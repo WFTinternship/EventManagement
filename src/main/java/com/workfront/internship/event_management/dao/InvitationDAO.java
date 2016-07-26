@@ -11,8 +11,9 @@ import java.util.List;
 public interface InvitationDAO {
 
      //insert invitation into db
-     int addInvitation(Invitation invitation);
-    //int addInvitationList(List<Invitation> invitation);
+     int addInvitation(Invitation invitation) throws DAOException;
+
+    int addInvitations(List<Invitation> invitation) throws DAOException;
 
 
      //get records from db

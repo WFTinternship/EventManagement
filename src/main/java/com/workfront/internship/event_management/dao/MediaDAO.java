@@ -13,6 +13,9 @@ public interface MediaDAO {
     //insert media into db
     int addMedia(Media media);
 
+    boolean addMedia(List<Media> mediaList);
+
+
     //read data from db
     Media getMediaById(int mediaId);
 

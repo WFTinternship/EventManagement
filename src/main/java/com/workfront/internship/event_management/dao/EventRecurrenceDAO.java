@@ -13,6 +13,9 @@ public interface EventRecurrenceDAO {
     //insert data into db
     int addEventRecurrence(EventRecurrence recurrence);
 
+    int addEventRecurrences(List<EventRecurrence> recurrenceList);
+
+
     //read data from db
     EventRecurrence getEventRecurrenceById(int id);
     List<EventRecurrence> getEventRecurrencesByEventId(int eventId);
