@@ -11,27 +11,27 @@ import java.util.List;
 interface EventService {
 
     //CRUD operations with event
-    boolean addEvent(Event event) throws OperationFailedException; //+
+    int createEvent(Event event) throws OperationFailedException;
 
-    Event getEventById(int eventId);
+    Event getEventById(int eventId) throws OperationFailedException;
 
-    boolean updateEvent(Event event);
+    boolean editEvent(Event event) throws OperationFailedException;
 
-    boolean deleteEvent(int eventId);
+    boolean deleteEvent(int eventId) throws OperationFailedException;
 
     // get event list
-    List<Event> getEventsByCategory(int categoryId);
+    List<Event> getEventsByCategory(int categoryId) throws OperationFailedException;
 
-    List<Event> getEventsByUserId(String userRole, int userId);
+    List<Event> getUserOrganizedEvents(int userId) throws OperationFailedException;
 
-    List<Event> getParticipatedEventsByUserId(int userId);
+    List<Event> getUserParticipatedEvents(int userId) throws OperationFailedException;
 
-    List<Event> getAcceptedEventsByUserId(int userId);
+    List<Event> getUserEventsByResponse(int userId, String userResponse) throws OperationFailedException;
 
     //operations with all events
-    List<Event> getAllEvents();
+    List<Event> getAllEvents() throws OperationFailedException;
 
-    boolean deleteAllEvents();
+    boolean deleteAllEvents() throws OperationFailedException;
 
 
 

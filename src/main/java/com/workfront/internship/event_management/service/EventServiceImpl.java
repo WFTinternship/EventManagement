@@ -1,13 +1,9 @@
 package com.workfront.internship.event_management.service;
 
-import com.workfront.internship.event_management.dao.EventDAO;
-import com.workfront.internship.event_management.dao.EventDAOImpl;
-import com.workfront.internship.event_management.dao.InvitationDAO;
+import com.workfront.internship.event_management.dao.*;
 import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.exception.OperationFailedException;
 import com.workfront.internship.event_management.model.Event;
-import com.workfront.internship.event_management.model.EventRecurrence;
-import com.workfront.internship.event_management.model.Invitation;
 
 import java.util.List;
 
@@ -17,8 +13,6 @@ import java.util.List;
 public class EventServiceImpl implements EventService {
 
     private EventDAO eventDAO;
-    private InvitationDAO invitationDAO;
-    private EventRecurrence recurrenceDAO;
 
     public EventServiceImpl() throws OperationFailedException {
         try {
@@ -29,14 +23,14 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public boolean addEvent(Event event) throws OperationFailedException {
+    public int createEvent(Event event) throws OperationFailedException {
 
         int eventId = 0;
+
         //check if event object is valid
-        if (isValid(event)) {
+        if (isValidEvent(event)) {
 
             try {
-
                 if (event.getEventRecurrences() == null || event.getEventRecurrences().isEmpty()) {
                     eventId = eventDAO.addEvent(event);
                 } else {
@@ -44,66 +38,185 @@ public class EventServiceImpl implements EventService {
                 }
 
                 //if event info is successfully inserted, insert also invitations
-                // TODO: 7/25/16
                 if (eventId != 0 && event.getInvitations() != null && !event.getInvitations().isEmpty()) {
-                    for (Invitation invitation : event.getInvitations()) {
-                        invitationDAO.addInvitation(invitation);
-                    }
+                    InvitationDAO invitationDAO = new InvitationDAOImpl();
+                    invitationDAO.addInvitations(event.getInvitations());
                 }
             } catch (DAOException e) {
                 throw new OperationFailedException("Database error!");
             }
+        } else {
+            throw new OperationFailedException("Invalid event!");
         }
-        return eventId != 0;
+        return eventId;
     }
 
     @Override
-    public Event getEventById(int eventId) {
-        return null;
+    public Event getEventById(int eventId) throws OperationFailedException {
+
+        Event event;
+
+        if (eventId > 0) {
+            try {
+                event = eventDAO.getEventById(eventId);
+            } catch (DAOException e) {
+                throw new OperationFailedException("Database error!");
+            }
+        } else {
+            throw new OperationFailedException("Invalid event id.");
+        }
+        return event;
     }
 
     @Override
-    public boolean updateEvent(Event event) {
-        return false;
+    public boolean editEvent(Event event) throws OperationFailedException {
+
+        boolean success;
+
+        if (isValidEvent(event)) {
+            try {
+                success = eventDAO.updateEvent(event);
+
+                EventRecurrenceService recurrenceService = new EventRecurrenceServiceImpl();
+                InvitationService invitationService = new InvitationServiceImpl();
+                MediaService mediaService = new MediaServiceImpl();
+                // TODO: 7/26/16 add update list methods
+
+
+            } catch (DAOException e) {
+                throw new OperationFailedException("Database error!");
+            }
+        } else {
+            throw new OperationFailedException("Invalid event.");
+        }
+
+        return success;
     }
 
     @Override
-    public boolean deleteEvent(int eventId) {
-        return false;
+    public boolean deleteEvent(int eventId) throws OperationFailedException {
+
+        boolean success;
+
+        if (eventId > 0) {
+            try {
+                success = eventDAO.deleteEvent(eventId);
+            } catch (DAOException e) {
+                throw new OperationFailedException("Database error!");
+            }
+        } else {
+            throw new OperationFailedException("Invalid event id.");
+        }
+        return success;
     }
 
     @Override
-    public List<Event> getAllEvents() {
-        return null;
+    public List<Event> getEventsByCategory(int categoryId) throws OperationFailedException {
+
+        List<Event> eventList;
+
+        if (categoryId > 0) {
+            try {
+                eventList = eventDAO.getEventsByCategory(categoryId);
+            } catch (DAOException e) {
+                throw new OperationFailedException("Database error!");
+            }
+        } else {
+            throw new OperationFailedException("Invalid category id.");
+        }
+        return eventList;
     }
 
     @Override
-    public boolean deleteAllEvents() {
-        return false;
+    public List<Event> getUserOrganizedEvents(int userId) throws OperationFailedException {
+
+        List<Event> eventList;
+
+        if (userId > 0) {
+            try {
+                eventList = eventDAO.getUserOrganizedEvents(userId);
+            } catch (DAOException e) {
+                throw new OperationFailedException("Database error!");
+            }
+        } else {
+            throw new OperationFailedException("Invalid user id.");
+        }
+        return eventList;
     }
 
     @Override
-    public List<Event> getEventsByCategory(int categoryId) {
-        return null;
+    public List<Event> getUserParticipatedEvents(int userId) throws OperationFailedException {
+
+        List<Event> eventList;
+
+        if (userId > 0) {
+            try {
+                eventList = eventDAO.getUserParticipatedEvents(userId);
+            } catch (DAOException e) {
+                throw new OperationFailedException("Database error!");
+
+            }
+        } else {
+            throw new OperationFailedException("Invalid user id.");
+        }
+        return eventList;
     }
 
     @Override
-    public List<Event> getEventsByUserId(String userRole, int userId) {
-        return null;
+    public List<Event> getUserEventsByResponse(int userId, String userResponse) throws OperationFailedException {
+
+        List<Event> eventList;
+
+        if (userId > 0) {
+            try {
+                eventList = eventDAO.getUserEventsByResponse(userId, userResponse);
+            } catch (DAOException e) {
+                throw new OperationFailedException("Database error!");
+            }
+        } else {
+            throw new OperationFailedException("Invalid user id.");
+        }
+        return eventList;
     }
 
     @Override
-    public List<Event> getParticipatedEventsByUserId(int userId) {
-        return null;
+    public List<Event> getAllEvents() throws OperationFailedException {
+
+        List<Event> eventList;
+        try {
+            eventList = eventDAO.getAllEvents();
+        } catch (DAOException e) {
+            throw new OperationFailedException("Database error!");
+        }
+        return eventList;
     }
 
     @Override
-    public List<Event> getAcceptedEventsByUserId(int userId) {
-        return null;
+    public boolean deleteAllEvents() throws OperationFailedException {
+
+        boolean success;
+        try {
+            success = eventDAO.deleteAllEvents();
+        } catch (DAOException e) {
+            throw new OperationFailedException("Database error!");
+        }
+        return success;
     }
 
-    private boolean isValid(Event event) {
-        //todo implement
+    //helper methods
+
+    private boolean isValidEvent(Event event) {
+
+        boolean valid = false;
+        if (event != null) {
+            if (event.getTitle() != null
+                    && event.getCategory() != null && event.getCategory().getId() > 0
+                    && event.getStartDate() != null
+                    && event.getEndDate() != null
+                    && event.getCreationDate() != null) {
+                valid = true;
+            }
+        }
         return false;
     }
 }
