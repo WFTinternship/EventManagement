@@ -11,7 +11,7 @@ import java.util.List;
 interface UserService {
 
     //CRUD operations with user
-    boolean addAccount(User user) throws OperationFailedException;
+    int addAccount(User user) throws OperationFailedException;
 
     boolean editProfile(User user) throws OperationFailedException;
 

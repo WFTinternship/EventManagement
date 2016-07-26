@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.service;
 
+import com.workfront.internship.event_management.dao.GenericDAO;
 import com.workfront.internship.event_management.dao.UserDAO;
 import com.workfront.internship.event_management.dao.UserDAOImpl;
 import com.workfront.internship.event_management.exception.DAOException;
@@ -7,6 +8,7 @@ import com.workfront.internship.event_management.exception.DuplicateEntryExcepti
 import com.workfront.internship.event_management.exception.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.util.HashGeneratorUtil;
+import org.apache.log4j.Logger;
 
 import java.util.List;
 
@@ -15,6 +17,7 @@ import java.util.List;
  */
 public class UserServiceImpl implements UserService {
 
+    static final Logger LOGGER = Logger.getLogger(GenericDAO.class);
     private UserDAO userDAO;
 
     public UserServiceImpl() throws OperationFailedException {
@@ -26,12 +29,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean addAccount(User user) throws OperationFailedException {
+    public int addAccount(User user) throws OperationFailedException {
 
-        boolean success = false;
+        int userId = 0;
 
         //check if user object is valid
-        if (isValid(user)) {
+        if (isValidUser(user)) {
 
             //encrypt user password
             String encryptedPassword = HashGeneratorUtil.generateHashString(user.getPassword());
@@ -42,22 +45,23 @@ public class UserServiceImpl implements UserService {
                 User existingUser = userDAO.getUserByEmail(user.getEmail());
 
                 if (existingUser == null) {
-                    int userId = userDAO.addUser(user);
-                    if (userId != 0) {
-                        success = true;
-                    }
+                    userId = userDAO.addUser(user);
                 } else {
+                    // TODO: 7/26/16 check
+                    // TODO: 7/26/16 add logs 
                     throw new OperationFailedException("User with this email already exists!");
+
                 }
             } catch (DAOException e) {
                 throw new OperationFailedException("Database error!");
             }
-        }
 
-        EmailService emailService = new EmailServiceImpl();
-        emailService.sendVerificationEmail(user);
-        // TODO: 7/25/16 send verification email 
-        return success;
+
+            EmailService emailService = new EmailServiceImpl();
+            emailService.sendVerificationEmail(user);
+            // TODO: 7/25/16 send verification email
+        }
+        return userId;
     }
 
     @Override
@@ -65,12 +69,12 @@ public class UserServiceImpl implements UserService {
 
         boolean success = false;
 
-        if (isValid(user)) {
+        if (isValidUser(user)) {
             try {
                 success = userDAO.updateUser(user);
-               /* if(!success) {
+                if (!success) {
                     throw new OperationFailedException("Non existing user.");
-                }*/
+                }
             } catch (DuplicateEntryException e) {
                 throw new OperationFailedException("User with this email already exists!");
             } catch (DAOException e) {
@@ -89,9 +93,9 @@ public class UserServiceImpl implements UserService {
         if (userId > 0) {
             try {
                 success = userDAO.updateVerifiedStatus(userId);
-              /*  if(!success) {
+                if (!success) {
                     throw new OperationFailedException("Non existing user.");
-                }*/
+                }
             } catch (DAOException e) {
                 throw new OperationFailedException("Database error!");
             }
@@ -106,9 +110,9 @@ public class UserServiceImpl implements UserService {
         if (userId > 0) {
             try {
                 success = userDAO.deleteUser(userId);
-            /*  if(!success) {
+                if (!success) {
                     throw new OperationFailedException("Non existing user.");
-                }*/
+                }
             } catch (DAOException e) {
                 throw new OperationFailedException("Database error!");
             }
@@ -119,15 +123,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public User login(String email, String password) throws OperationFailedException {
 
-        User validUser = null;
+        User validUser;
 
-        try {
-            User user = userDAO.getUserByEmail(email);
-            if (user != null && user.getPassword().equals(HashGeneratorUtil.generateHashString(password))) {
-                validUser = user;
+        //check if email structure is valid
+        if (isValidEmailAddress(email)) {
+            try {
+                User user = userDAO.getUserByEmail(email);
+                if (user != null && user.getPassword().equals(HashGeneratorUtil.generateHashString(password))) {
+                    validUser = user;
+                } else {
+                    throw new OperationFailedException("Invalid email/password combination!");
+                }
+            } catch (DAOException e) {
+                throw new OperationFailedException("Database error!");
             }
-        } catch (DAOException e) {
-            throw new OperationFailedException("Database error!");
+        } else {
+            throw new OperationFailedException("Invalid email!");
         }
 
         return validUser;
@@ -137,10 +148,18 @@ public class UserServiceImpl implements UserService {
     public User getUserById(int userId) throws OperationFailedException {
 
         User user;
-        try {
-            user = userDAO.getUserById(userId);
-        } catch (DAOException e) {
-            throw new OperationFailedException("Database error!");
+
+        if (userId > 0) {
+            try {
+                user = userDAO.getUserById(userId);
+                if (user == null) {
+                    throw new OperationFailedException("Non existing user!");
+                }
+            } catch (DAOException e) {
+                throw new OperationFailedException("Database error!");
+            }
+        } else {
+            throw new OperationFailedException("Invalid user id!");
         }
 
         return user;
@@ -148,14 +167,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByEmail(String email) throws OperationFailedException {
-
         User user;
-
-        try {
-            user = userDAO.getUserByEmail(email);
-        } catch (DAOException e) {
-            throw new OperationFailedException("Database error!");
+        if (isValidEmailAddress(email)) {
+            try {
+                user = userDAO.getUserByEmail(email);
+                if (user == null) {
+                    throw new OperationFailedException("Non existing user.");
+                }
+            } catch (DAOException e) {
+                throw new OperationFailedException("Database error!");
+            }
+        } else {
+            throw new OperationFailedException("Invalid email address.");
         }
+
         return user;
     }
 
@@ -166,6 +191,9 @@ public class UserServiceImpl implements UserService {
 
         try {
             userList = userDAO.getAllUsers();
+            if (userList == null || userList.isEmpty()) {
+                throw new OperationFailedException("No users in database!");
+            }
         } catch (DAOException e) {
             throw new OperationFailedException("Database error!");
         }
@@ -179,6 +207,9 @@ public class UserServiceImpl implements UserService {
 
         try {
             success = userDAO.deleteAllUsers();
+            if (!success) {
+                throw new OperationFailedException("No users to delete!");
+            }
         } catch (DAOException e) {
             throw new OperationFailedException("Database error!");
         }
@@ -187,16 +218,25 @@ public class UserServiceImpl implements UserService {
 
 
     //helper methods
-    private boolean isValid(User user) {
+    private boolean isValidUser(User user) {
 
         boolean valid = false;
 
         if (user != null) {
-            if (user.getFirstName() != null && user.getLastName() != null
-                    && user.getPassword() != null && user.getEmail() != null) {
+            if (user.getFirstName() != null
+                    && user.getLastName() != null
+                    && user.getPassword() != null
+                    && user.getEmail() != null
+                    && isValidEmailAddress(user.getEmail())) {
                 valid = true;
             }
         }
         return valid;
+    }
+
+
+    private static boolean isValidEmailAddress(String email) {
+        // TODO: 7/26/16
+        return false;
     }
 }
