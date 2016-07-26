@@ -245,7 +245,7 @@ public class MediaDAOIntegrationTest {
 
         //insert event into db and get generated id
         testEvent.setCategory(testCategory);
-        int eventId = eventDAO.addEvent(testEvent);
+        int eventId = eventDAO.createEvent(testEvent);
         testEvent.setId(eventId);
 
         //insert media type into db

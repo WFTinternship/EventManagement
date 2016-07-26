@@ -76,7 +76,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public boolean updateCategory(Category category) throws OperationFailedException {
+    public boolean editCategory(Category category) throws OperationFailedException {
 
         boolean success = false;
 

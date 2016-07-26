@@ -17,7 +17,7 @@ interface CategoryService {
 
     Category getCategoryByTitle(String categoryTitle) throws OperationFailedException;
 
-    boolean updateCategory(Category category) throws OperationFailedException;
+    boolean editCategory(Category category) throws OperationFailedException;
 
     boolean deleteCategory(int categoryId) throws OperationFailedException;
 

@@ -71,7 +71,7 @@ public class InvitationDAOIntegrationTest {
     }
 
     @Test(expected = RuntimeException.class)
-    public void addInvitation_Dublicate_Entry() {
+    public void addInvitation_Dublicate_Entry() throws DAOException {
         //insert dublicate entry (the same eventId - userId pair)
         invitationDAO.addInvitation(testInvitation);
     }
@@ -302,7 +302,7 @@ public class InvitationDAOIntegrationTest {
         }
     }
 
-    private List<Invitation> createTestInvitationsList() {
+    private List<Invitation> createTestInvitationsList() throws DAOException {
         //create second test invitation
         Invitation secondTestInvitation = TestHelper.createTestInvitation();
 

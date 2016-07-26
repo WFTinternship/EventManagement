@@ -45,7 +45,7 @@ public class InvitationDAOUnitTest {
 
 
     @Test(expected = RuntimeException.class)
-    public void addInvitation_dbError() {
+    public void addInvitation_dbError() throws DAOException {
         invitationDAO.addInvitation(new Invitation());
     }
 
