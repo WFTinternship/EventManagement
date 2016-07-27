@@ -7,5 +7,5 @@ import com.workfront.internship.event_management.model.User;
  */
 public interface EmailService {
 
-    public void sendVerificationEmail(User user);
+    public boolean sendVerificationEmail(User user);
 }

@@ -18,11 +18,15 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     static final Logger LOGGER = Logger.getLogger(GenericDAO.class);
+
     private UserDAO userDAO;
+    private EmailService emailService;
+
 
     public UserServiceImpl() throws OperationFailedException {
         try {
             userDAO = new UserDAOImpl();
+            emailService = new EmailServiceImpl();
         } catch (DAOException e) {
             throw new OperationFailedException("Database error!");
         }
@@ -45,18 +49,17 @@ public class UserServiceImpl implements UserService {
 
                 //if user successfully inserted
                 if (userId > 0) {
-                    EmailService emailService = new EmailServiceImpl();
-                    emailService.sendVerificationEmail(user);
-                    // TODO: 7/25/16 send verification email
+                    boolean success = emailService.sendVerificationEmail(user);
+                    if (!success)
+                        throw new OperationFailedException("Unable to send verification email!");
                 }
-
             } catch (DuplicateEntryException e) {
                 throw new OperationFailedException("User with this email already exists!");
             } catch (DAOException e) {
                 throw new OperationFailedException("Database error!");
             }
         } else {
-            throw new OperationFailedException("Invalid user object.");
+            throw new OperationFailedException("Invalid user object!");
         }
         return userId;
     }
@@ -233,7 +236,7 @@ public class UserServiceImpl implements UserService {
 
 
     private static boolean isValidEmailAddress(String email) {
-        String EMAIL_REGEX = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$;";
+        String EMAIL_REGEX = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
         return email.matches(EMAIL_REGEX);
     }
 }
