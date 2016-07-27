@@ -4,7 +4,6 @@ import com.workfront.internship.event_management.dao.GenericDAO;
 import com.workfront.internship.event_management.dao.UserDAO;
 import com.workfront.internship.event_management.dao.UserDAOImpl;
 import com.workfront.internship.event_management.exception.DAOException;
-import com.workfront.internship.event_management.exception.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.util.HashGeneratorUtil;
@@ -17,13 +16,13 @@ import java.util.List;
  */
 public class UserServiceImpl implements UserService {
 
-    static final Logger LOGGER = Logger.getLogger(GenericDAO.class);
+    static final Logger LOGGER = Logger.getLogger(GenericDAO.class); // TODO: 7/27/16  add logs
 
     private UserDAO userDAO;
     private EmailService emailService;
 
 
-    public UserServiceImpl() throws OperationFailedException {
+    public UserServiceImpl() {
         try {
             userDAO = new UserDAOImpl();
             emailService = new EmailServiceImpl();
@@ -33,7 +32,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int addAccount(User user) throws OperationFailedException {
+    public int addAccount(User user) {
 
         int userId = 0;
 
@@ -44,19 +43,15 @@ public class UserServiceImpl implements UserService {
             String encryptedPassword = HashGeneratorUtil.generateHashString(user.getPassword());
             user.setPassword(encryptedPassword);
 
-            try {
-                userId = userDAO.addUser(user);
+            //insert user into db
+            userId = userDAO.addUser(user);
 
-                //if user successfully inserted
-                if (userId > 0) {
-                    boolean success = emailService.sendVerificationEmail(user);
-                    if (!success)
-                        throw new OperationFailedException("Unable to send verification email!");
+            //if user successfully inserted
+            if (userId > 0) {
+                boolean success = emailService.sendVerificationEmail(user);
+                if (!success) {
+                    throw new OperationFailedException("Unable to send verification email!");
                 }
-            } catch (DuplicateEntryException e) {
-                throw new OperationFailedException("User with this email already exists!");
-            } catch (DAOException e) {
-                throw new OperationFailedException("Database error!");
             }
         } else {
             throw new OperationFailedException("Invalid user object!");
@@ -65,84 +60,57 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean editProfile(User user) throws OperationFailedException {
+    public boolean editProfile(User user) {
 
         boolean success;
 
         if (isValidUser(user)) {
-            try {
-                success = userDAO.updateUser(user);
-                if (!success) {
-                    throw new OperationFailedException("Non existing user.");
-                }
-            } catch (DuplicateEntryException e) {
-                throw new OperationFailedException("User with this email already exists!");
-            } catch (DAOException e) {
-                throw new OperationFailedException("Database error!");
-            }
+            success = userDAO.updateUser(user);
         } else {
-            throw new OperationFailedException("Invalid user object.");
+            throw new OperationFailedException("Invalid user object!");
         }
 
         return success;
     }
 
     @Override
-    public boolean verifyAccount(int userId) throws OperationFailedException {
+    public boolean verifyAccount(int userId) {
 
         boolean success;
 
         if (userId > 0) {
-            try {
-                success = userDAO.updateVerifiedStatus(userId);
-                if (!success) {
-                    throw new OperationFailedException("Non existing user.");
-                }
-            } catch (DAOException e) {
-                throw new OperationFailedException("Database error!");
-            }
+            success = userDAO.updateVerifiedStatus(userId);
         } else {
-            throw new OperationFailedException("Invalid user id.");
+            throw new OperationFailedException("Invalid user id!");
         }
         return success;
     }
 
     @Override
-    public boolean deleteAccount(int userId) throws OperationFailedException {
+    public boolean deleteAccount(int userId) {
 
         boolean success;
 
         if (userId > 0) {
-            try {
-                success = userDAO.deleteUser(userId);
-                if (!success) {
-                    throw new OperationFailedException("Non existing user.");
-                }
-            } catch (DAOException e) {
-                throw new OperationFailedException("Database error!");
-            }
+            success = userDAO.deleteUser(userId);
         } else {
-            throw new OperationFailedException("Invalid user id.");
+            throw new OperationFailedException("Invalid user id!");
         }
         return success;
     }
 
     @Override
-    public User login(String email, String password) throws OperationFailedException {
+    public User login(String email, String password) {
 
         User validUser;
 
         //check if email is valid
         if (isValidEmailAddress(email)) {
-            try {
-                User user = userDAO.getUserByEmail(email);
-                if (user != null && user.getPassword().equals(HashGeneratorUtil.generateHashString(password))) {
-                    validUser = user;
-                } else {
-                    throw new OperationFailedException("Invalid email/password combination!");
-                }
-            } catch (DAOException e) {
-                throw new OperationFailedException("Database error!");
+            User user = userDAO.getUserByEmail(email);
+            if (user != null && user.getPassword().equals(HashGeneratorUtil.generateHashString(password))) {
+                validUser = user;
+            } else {
+                throw new OperationFailedException("Invalid email/password combination!");
             }
         } else {
             throw new OperationFailedException("Invalid email!");
@@ -156,14 +124,7 @@ public class UserServiceImpl implements UserService {
         User user;
 
         if (userId > 0) {
-            try {
-                user = userDAO.getUserById(userId);
-                if (user == null) {
-                    throw new OperationFailedException("Non existing user!");
-                } // TODO: 7/26/16 check
-            } catch (DAOException e) {
-                throw new OperationFailedException("Database error!");
-            }
+            user = userDAO.getUserById(userId);
         } else {
             throw new OperationFailedException("Invalid user id!");
         }
@@ -177,16 +138,9 @@ public class UserServiceImpl implements UserService {
         User user;
 
         if (isValidEmailAddress(email)) {
-            try {
                 user = userDAO.getUserByEmail(email);
-                if (user == null) {
-                    throw new OperationFailedException("Non existing user.");
-                } // TODO: 7/26/16 check
-            } catch (DAOException e) {
-                throw new OperationFailedException("Database error!");
-            }
         } else {
-            throw new OperationFailedException("Invalid email address.");
+            throw new OperationFailedException("Invalid email address!");
         }
 
         return user;
@@ -194,27 +148,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsers() throws OperationFailedException {
-
-        List<User> userList;
-        try {
-            userList = userDAO.getAllUsers();
-        } catch (DAOException e) {
-            throw new OperationFailedException("Database error!");
-        }
-        return userList;
+        return userDAO.getAllUsers();
     }
 
     @Override
     public boolean deleteAllUsers() throws OperationFailedException {
-
-        boolean success;
-
-        try {
-            success = userDAO.deleteAllUsers();
-        } catch (DAOException e) {
-            throw new OperationFailedException("Database error!");
-        }
-        return success;
+        return userDAO.deleteAllUsers();
     }
 
 

@@ -1,6 +1,5 @@
 package com.workfront.internship.event_management.service;
 
-import com.workfront.internship.event_management.exception.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
 
 import java.util.List;
@@ -11,22 +10,22 @@ import java.util.List;
 interface UserService {
 
     //CRUD operations with user
-    int addAccount(User user) throws OperationFailedException;
+    int addAccount(User user);
 
-    boolean editProfile(User user) throws OperationFailedException;
+    boolean editProfile(User user);
 
-    boolean verifyAccount(int userId) throws OperationFailedException;
+    boolean verifyAccount(int userId);
 
-    User login(String email, String password) throws OperationFailedException;
+    User login(String email, String password);
 
-    boolean deleteAccount(int userId) throws OperationFailedException;
+    boolean deleteAccount(int userId);
 
-    User getUserById(int userId) throws OperationFailedException;
+    User getUserById(int userId);
 
-    User getUserByEmail(String email) throws OperationFailedException;
+    User getUserByEmail(String email);
 
     //operations with all users
-    List<User> getAllUsers() throws OperationFailedException;
+    List<User> getAllUsers();
 
-    boolean deleteAllUsers() throws OperationFailedException;
+    boolean deleteAllUsers();
 }
