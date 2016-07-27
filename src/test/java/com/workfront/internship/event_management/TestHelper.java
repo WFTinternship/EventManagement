@@ -7,6 +7,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 /**
  * Created by Hermine Turshujyan 7/10/16.
  */
@@ -19,6 +22,8 @@ public class TestHelper {
     public static final String INVALID_EMAIL = "nonExistingTitle";
 
     public static int NON_EXISTING_ID = 1;
+    public static int INVALID_ID = -1;
+
 
 
     //test object creation
@@ -148,11 +153,27 @@ public class TestHelper {
         return eventRecurrence;
     }
 
+    //assertion methods
+    public static void assertEqualUsers(User expectedUser, User actualUser) {
+        assertEquals(expectedUser.getId(), actualUser.getId());
+        assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
+        assertEquals(expectedUser.getLastName(), actualUser.getLastName());
+        assertEquals(expectedUser.getEmail(), actualUser.getEmail());
+        assertEquals(expectedUser.getPassword(), actualUser.getPassword());
+        assertEquals(expectedUser.getPhoneNumber(), actualUser.getPhoneNumber());
+        assertEquals(expectedUser.getAvatarPath(), actualUser.getAvatarPath());
+        assertEquals(expectedUser.isVerified(), actualUser.isVerified());
+        assertEquals(expectedUser.getEmail(), actualUser.getEmail());
+        assertNotNull(expectedUser.getRegistrationDate()); // TODO: 7/27/16 check date type
+    }
+
+
     //helper methods
     private static int getRandomNumber() {
         Random rand = new Random();
         int n = rand.nextInt(100000) + 1;
         return n;
     }
+
 
 }
