@@ -1,6 +1,5 @@
 package com.workfront.internship.event_management.service;
 
-import com.workfront.internship.event_management.exception.OperationFailedException;
 import com.workfront.internship.event_management.model.Category;
 
 import java.util.List;
@@ -11,19 +10,19 @@ import java.util.List;
 interface CategoryService {
 
     //CRUD operations with category
-    boolean addCategory(Category category) throws OperationFailedException;
+    int addCategory(Category category);
 
-    Category getCategoryById(int categoryId) throws OperationFailedException;
+    Category getCategoryById(int categoryId);
 
-    Category getCategoryByTitle(String categoryTitle) throws OperationFailedException;
+    Category getCategoryByTitle(String categoryTitle);
 
-    boolean editCategory(Category category) throws OperationFailedException;
+    boolean editCategory(Category category);
 
-    boolean deleteCategory(int categoryId) throws OperationFailedException;
+    boolean deleteCategory(int categoryId);
 
     //operations with all categories
-    List<Category> getAllCategories() throws OperationFailedException;
+    List<Category> getAllCategories();
 
-    boolean deleteAllCategories() throws OperationFailedException;
+    boolean deleteAllCategories();
 
 }

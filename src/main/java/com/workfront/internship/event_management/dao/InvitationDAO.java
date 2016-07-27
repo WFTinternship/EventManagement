@@ -1,6 +1,5 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.Invitation;
 
 import java.util.List;
@@ -10,29 +9,32 @@ import java.util.List;
  */
 public interface InvitationDAO {
 
-     //insert invitation into db
-     int addInvitation(Invitation invitation) throws DAOException;
+    //insert invitation into db
+    int addInvitation(Invitation invitation);
 
-    int addInvitations(List<Invitation> invitation) throws DAOException;
-
-
-     //get records from db
-     Invitation getInvitationById(int invitationId);
-     List<Invitation> getAllInvitations();
-     List<Invitation> getInvitationsByEventId(int eventId);
-     List<Invitation> getInvitationsByUserId(int userId);
+    int addInvitations(List<Invitation> invitation);
 
 
-     //update record in db
-     boolean updateInvitation(Invitation invitation);
+    //get records from db
+    Invitation getInvitationById(int invitationId);
 
-     //delete records from db
-     boolean deleteInvitation(int invitationId) throws DAOException;
+    List<Invitation> getAllInvitations();
 
-    boolean deleteInvitationsByEventId(int eventId) throws DAOException;
+    List<Invitation> getInvitationsByEventId(int eventId);
 
-    boolean deleteInvitationsByUserId(int userId) throws DAOException;
+    List<Invitation> getInvitationsByUserId(int userId);
 
-    boolean deleteAllInvitations() throws DAOException;
+
+    //update record in db
+    boolean updateInvitation(Invitation invitation);
+
+    //delete records from db
+    boolean deleteInvitation(int invitationId);
+
+    boolean deleteInvitationsByEventId(int eventId);
+
+    boolean deleteInvitationsByUserId(int userId);
+
+    boolean deleteAllInvitations();
 
 }

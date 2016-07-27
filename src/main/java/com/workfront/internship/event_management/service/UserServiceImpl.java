@@ -89,14 +89,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean deleteAccount(int userId) {
 
-        boolean success;
-
         if (userId > 0) {
-            success = userDAO.deleteUser(userId);
+            return userDAO.deleteUser(userId);
         } else {
             throw new OperationFailedException("Invalid user id!");
         }
-        return success;
     }
 
     @Override
@@ -121,29 +118,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(int userId) throws OperationFailedException {
 
-        User user;
-
         if (userId > 0) {
-            user = userDAO.getUserById(userId);
+            return userDAO.getUserById(userId);
         } else {
             throw new OperationFailedException("Invalid user id!");
         }
-
-        return user;
     }
 
     @Override
     public User getUserByEmail(String email) throws OperationFailedException {
-
-        User user;
-
         if (isValidEmailAddress(email)) {
-                user = userDAO.getUserByEmail(email);
+            return userDAO.getUserByEmail(email);
         } else {
             throw new OperationFailedException("Invalid email address!");
         }
-
-        return user;
     }
 
     @Override

@@ -15,6 +15,7 @@ public interface RecurrenceTypeDAO {
 
      //read data from db
      List<RecurrenceType> getAllRecurrenceTypes();
+
      RecurrenceType getRecurrenceTypeById(int id);
 
      //update record in db
@@ -23,6 +24,6 @@ public interface RecurrenceTypeDAO {
      //delete data from db
      boolean deleteRecurrenceType(int id) throws DAOException;
 
-    boolean deleteAllRecurrenceTypes() throws DAOException;
+     boolean deleteAllRecurrenceTypes() throws DAOException;
 
 }

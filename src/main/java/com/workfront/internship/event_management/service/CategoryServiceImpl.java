@@ -16,7 +16,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     private CategoryDAO categoryDAO;
 
-    public CategoryServiceImpl() throws OperationFailedException {
+    public CategoryServiceImpl() {
         try {
             categoryDAO = new CategoryDAOImpl();
         } catch (DAOException e) {
@@ -25,46 +25,30 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public boolean addCategory(Category category) throws OperationFailedException {
+    public int addCategory(Category category) {
 
-        boolean success = false;
+        int categoryId = 0;
 
         //check if category object is valid
         if (isValid(category)) {
-
-            try {
-                //check if category with this title already exists
-                Category existingCategory = categoryDAO.getCategoryByTitle(category.getTitle());
-
-                if (existingCategory == null) {
-                    int userId = categoryDAO.addCategory(category);
-                    if (userId != 0) {
-                        success = true;
-                    }
-                } else {
-                    throw new OperationFailedException("Category with this title already exists!");
-                }
-            } catch (DAOException e) {
-                throw new OperationFailedException("Database error!");
-            }
+            categoryId = categoryDAO.addCategory(category);
         }
-        return success;
+
+        return categoryId;
     }
 
     @Override
-    public Category getCategoryById(int categoryId) throws OperationFailedException {
-        Category category;
-        try {
-            category = categoryDAO.getCategoryById(categoryId);
-        } catch (DAOException e) {
-            throw new OperationFailedException("Database error!");
-        }
+    public Category getCategoryById(int categoryId) {
 
-        return category;
+        if (categoryId > 0) {
+            return categoryDAO.getCategoryById(categoryId);
+        } else {
+            throw new OperationFailedException("Invalid category id!");
+        }
     }
 
     @Override
-    public Category getCategoryByTitle(String categoryTitle) throws OperationFailedException {
+    public Category getCategoryByTitle(String categoryTitle) {
         Category category;
         try {
             category = categoryDAO.getCategoryByTitle(categoryTitle);
@@ -76,7 +60,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public boolean editCategory(Category category) throws OperationFailedException {
+    public boolean editCategory(Category category) {
 
         boolean success = false;
 
@@ -97,7 +81,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public boolean deleteCategory(int categoryId) throws OperationFailedException {
+    public boolean deleteCategory(int categoryId) {
         boolean success = false;
         if (categoryId > 0) {
             try {
@@ -113,7 +97,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> getAllCategories() throws OperationFailedException {
+    public List<Category> getAllCategories() {
         List<Category> categoryList;
 
         try {
@@ -125,7 +109,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public boolean deleteAllCategories() throws OperationFailedException {
+    public boolean deleteAllCategories() {
         boolean success;
         try {
             success = categoryDAO.deleteAllCategories();

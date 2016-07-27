@@ -21,7 +21,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
         this.dataSourceManager = dataSourceManager;
     }
 
-    public CategoryDAOImpl() throws DAOException {
+    public CategoryDAOImpl() {
         try {
             this.dataSourceManager = DataSourceManager.getInstance();
         } catch (IOException | SQLException e) {
@@ -31,7 +31,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
     }
 
     @Override
-    public int addCategory(Category category) throws DAOException {
+    public int addCategory(Category category) {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -63,7 +63,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
 
         } catch (SQLIntegrityConstraintViolationException e) {
             LOGGER.error("Duplicate category entry", e);
-            throw new DuplicateEntryException();
+            throw new DuplicateEntryException("Duplicate category entry!");
         } catch (SQLException e) {
             LOGGER.error("SQL exception", e);
             throw new DAOException();
@@ -74,7 +74,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
     }
 
     @Override
-    public List<Category> getAllCategories() throws DAOException {
+    public List<Category> getAllCategories() {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -106,7 +106,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
     }
 
     @Override
-    public Category getCategoryById(int id) throws DAOException {
+    public Category getCategoryById(int id) {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -140,7 +140,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
     }
 
     @Override
-    public Category getCategoryByTitle(String categoryTitle) throws DAOException {
+    public Category getCategoryByTitle(String categoryTitle) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -173,7 +173,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
     }
 
     @Override
-    public boolean updateCategory(Category category) throws DAOException {
+    public boolean updateCategory(Category category) {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -206,12 +206,12 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
     }
 
     @Override
-    public boolean deleteCategory(int categoryId) throws DAOException {
+    public boolean deleteCategory(int categoryId) {
         return deleteRecordById("event_category", categoryId);
     }
 
     @Override
-    public boolean deleteAllCategories() throws DAOException {
+    public boolean deleteAllCategories() {
         return deleteAllRecords("event_category");
     }
 

@@ -1,6 +1,5 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.Category;
 
 import java.util.List;
@@ -11,20 +10,20 @@ import java.util.List;
 public interface CategoryDAO {
 
     //insert data into db
-    int addCategory(Category category) throws DAOException;
+    int addCategory(Category category);
 
     //read data from db
-    List<Category> getAllCategories() throws DAOException;
+    List<Category> getAllCategories();
 
-    Category getCategoryById(int categoryId) throws DAOException;
+    Category getCategoryById(int categoryId);
 
-    Category getCategoryByTitle(String categoryTitle) throws DAOException;
+    Category getCategoryByTitle(String categoryTitle);
 
     //update data in db
-    boolean updateCategory(Category category) throws DAOException;
+    boolean updateCategory(Category category);
 
     //delete data from db
-    boolean deleteCategory(int categoryId) throws DAOException;
+    boolean deleteCategory(int categoryId);
 
-    boolean deleteAllCategories() throws DAOException;
+    boolean deleteAllCategories();
 }

@@ -1,6 +1,5 @@
 package com.workfront.internship.event_management.service;
 
-import com.workfront.internship.event_management.exception.OperationFailedException;
 import com.workfront.internship.event_management.model.Event;
 
 import java.util.List;
@@ -11,27 +10,25 @@ import java.util.List;
 interface EventService {
 
     //CRUD operations with event
-    int createEvent(Event event) throws OperationFailedException;
+    int createEvent(Event event);
 
-    Event getEventById(int eventId) throws OperationFailedException;
+    Event getEventById(int eventId);
 
-    boolean editEvent(Event event) throws OperationFailedException;
+    List<Event> getEventsByCategory(int categoryId);
 
-    boolean deleteEvent(int eventId) throws OperationFailedException;
+    List<Event> getUserOrganizedEvents(int userId);
 
-    // get event list
-    List<Event> getEventsByCategory(int categoryId) throws OperationFailedException;
+    List<Event> getUserParticipatedEvents(int userId);
 
-    List<Event> getUserOrganizedEvents(int userId) throws OperationFailedException;
+    List<Event> getUserEventsByResponse(int userId, String userResponse);
 
-    List<Event> getUserParticipatedEvents(int userId) throws OperationFailedException;
+    List<Event> getAllEvents();
 
-    List<Event> getUserEventsByResponse(int userId, String userResponse) throws OperationFailedException;
+    boolean editEvent(Event event);
 
-    //operations with all events
-    List<Event> getAllEvents() throws OperationFailedException;
+    boolean deleteEvent(int eventId);
 
-    boolean deleteAllEvents() throws OperationFailedException;
+    boolean deleteAllEvents();
 
 
 
