@@ -1,7 +1,6 @@
-package datasource;
+package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.dao.MediaTypeDAO;
-import com.workfront.internship.event_management.dao.MediaTypeDAOImpl;
+import com.workfront.internship.event_management.TestHelper;
 import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.MediaType;
 import org.junit.*;

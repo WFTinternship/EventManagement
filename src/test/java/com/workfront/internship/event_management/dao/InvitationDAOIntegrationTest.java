@@ -1,12 +1,9 @@
-package datasource;
+package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.dao.*;
+import com.workfront.internship.event_management.TestHelper;
 import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.exception.DuplicateEntryException;
-import com.workfront.internship.event_management.model.Category;
-import com.workfront.internship.event_management.model.Event;
-import com.workfront.internship.event_management.model.Invitation;
-import com.workfront.internship.event_management.model.User;
+import com.workfront.internship.event_management.model.*;
 import org.junit.*;
 
 import java.util.ArrayList;

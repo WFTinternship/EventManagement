@@ -1,10 +1,7 @@
-package datasource;
+package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.dao.DataSourceManager;
-import com.workfront.internship.event_management.dao.EventRecurrenceDAO;
-import com.workfront.internship.event_management.dao.EventRecurrenceDAOImpl;
 import com.workfront.internship.event_management.exception.DAOException;
-import com.workfront.internship.event_management.model.EventRecurrence;
+import com.workfront.internship.event_management.model.RecurrenceOption;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -20,10 +17,10 @@ import static org.mockito.Mockito.when;
 /**
  * Created by Hermine Turshujyan 7/18/16.
  */
-public class EventRecurrenceDAOUnitTest {
+public class RecurrenceOptionDAOUnitTest {
 
     private DataSourceManager dataSourceManager;
-    private EventRecurrenceDAO eventRecurrenceDAO;
+    private RecurrenceOptionDAO recurrenceOptionDAO;
 
     @SuppressWarnings("unchecked")
     @Before
@@ -36,41 +33,47 @@ public class EventRecurrenceDAOUnitTest {
         when(connection.prepareStatement(any(String.class), eq(PreparedStatement.RETURN_GENERATED_KEYS))).thenThrow(SQLException.class);
         when(connection.prepareStatement(any(String.class))).thenThrow(SQLException.class);
 
-        eventRecurrenceDAO = new EventRecurrenceDAOImpl(dataSourceManager);
+        recurrenceOptionDAO = new RecurrenceOptionDAOImpl(dataSourceManager);
     }
 
     @Test(expected = RuntimeException.class)
-    public void addEventRecurrence_dbError() {
-        eventRecurrenceDAO.addEventRecurrence(new EventRecurrence());
+    public void addRecurrenceOption_dbError() {
+        recurrenceOptionDAO.addRecurrenceOption(new RecurrenceOption());
+    }
+
+
+    @Test(expected = RuntimeException.class)
+    public void getAllRecurrenceOptions_dbError() {
+        recurrenceOptionDAO.getAllRecurrenceOptions();
     }
 
     @Test(expected = RuntimeException.class)
-    public void getEventRecurrenceById_dbError() {
-        eventRecurrenceDAO.getEventRecurrenceById(1);
+    public void getRecurrenceOption_dbError() {
+        recurrenceOptionDAO.getRecurrenceOption(1);
     }
 
     @Test(expected = RuntimeException.class)
-    public void getEventRecurrencesByEventId_dbError() {
-        eventRecurrenceDAO.getEventRecurrencesByEventId(1);
+    public void getRecurrenceOptionsByRecurrenceType_dbError() {
+        recurrenceOptionDAO.getRecurrenceOptionsByRecurrenceType(1);
     }
 
     @Test(expected = RuntimeException.class)
-    public void getAllEventRecurrences_dbError() {
-        eventRecurrenceDAO.getAllEventRecurrences();
+    public void updateRecurrenceOption_dbError() {
+        recurrenceOptionDAO.updateRecurrenceOption(new RecurrenceOption());
     }
 
     @Test(expected = RuntimeException.class)
-    public void updateEventRecurrence_dbError() {
-        eventRecurrenceDAO.updateEventRecurrence(new EventRecurrence());
+    public void deleteRecurrenceOption_dbError() throws DAOException {
+        recurrenceOptionDAO.deleteRecurrenceOption(1);
     }
 
     @Test(expected = RuntimeException.class)
-    public void deleteEventRecurrence_dbError() throws DAOException {
-        eventRecurrenceDAO.deleteEventRecurrence(1);
+    public void deleteRecurrenceOptionsByRecurrenceType_dbError() throws DAOException {
+        recurrenceOptionDAO.deleteRecurrenceOptionsByRecurrenceType(1);
     }
 
     @Test(expected = RuntimeException.class)
-    public void deleteAllEventRecurrences_dbError() throws DAOException {
-        eventRecurrenceDAO.deleteAllEventRecurrences();
+    public void deleteAllRecurrenceOptions() throws DAOException {
+        recurrenceOptionDAO.deleteAllRecurrenceOptions();
     }
 }

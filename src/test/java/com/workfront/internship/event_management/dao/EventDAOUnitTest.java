@@ -1,10 +1,7 @@
-package datasource;
+package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.dao.DataSourceManager;
-import com.workfront.internship.event_management.dao.MediaDAO;
-import com.workfront.internship.event_management.dao.MediaDAOImpl;
 import com.workfront.internship.event_management.exception.DAOException;
-import com.workfront.internship.event_management.model.Media;
+import com.workfront.internship.event_management.model.Event;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -20,10 +17,10 @@ import static org.mockito.Mockito.when;
 /**
  * Created by Hermine Turshujyan 7/18/16.
  */
-public class MediaDAOUnitTest {
+public class EventDAOUnitTest {
 
     private DataSourceManager dataSourceManager;
-    private MediaDAO mediaDAO;
+    private static EventDAO eventDAO;
 
     @SuppressWarnings("unchecked")
     @Before
@@ -36,56 +33,43 @@ public class MediaDAOUnitTest {
         when(connection.prepareStatement(any(String.class), eq(PreparedStatement.RETURN_GENERATED_KEYS))).thenThrow(SQLException.class);
         when(connection.prepareStatement(any(String.class))).thenThrow(SQLException.class);
 
-        mediaDAO = new MediaDAOImpl(dataSourceManager);
+        eventDAO = new EventDAOImpl(dataSourceManager);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void addEvent_dbError() throws DAOException {
+        eventDAO.addEvent(new Event());
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void getAllEvents_dbError() throws DAOException {
+        eventDAO.getAllEvents();
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void getEventById_dbError() throws DAOException {
+        eventDAO.getEventById(1);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void getEventsByCategoryId_dbError() throws DAOException {
+        eventDAO.getEventsByCategory(1);
+
     }
 
 
     @Test(expected = RuntimeException.class)
-    public void addMedia_dbError() {
-        mediaDAO.addMedia(new Media());
+    public void updateEvent_dbError() throws DAOException {
+        eventDAO.updateEvent(new Event());
     }
 
     @Test(expected = RuntimeException.class)
-    public void getMediaById_dbError() {
-        mediaDAO.getMediaById(1);
+    public void deleteEvent_dbError() throws DAOException {
+        eventDAO.deleteEvent(1);
     }
 
     @Test(expected = RuntimeException.class)
-    public void getMediaByEventId_dbError() {
-        mediaDAO.getMediaByEventId(1);
-
+    public void deleteAllEvents_dbError() throws DAOException {
+        eventDAO.deleteAllEvents();
     }
-
-    @Test(expected = RuntimeException.class)
-    public void getMediaByType_dbError() {
-        // mediaDAO.getMediaByType("Image");
-
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void getMediaByUploaderId_dbError() {
-        mediaDAO.getMediaByUploaderId(1);
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void getAllMedia_dbError() {
-        mediaDAO.getAllMedia();
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void updateMediaDescription_dbError() {
-        mediaDAO.updateMediaDescription(1, "description");
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void deleteMedia_dbError() throws DAOException {
-        mediaDAO.deleteMedia(1);
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void deleteAllMedia_dbError() throws DAOException {
-        mediaDAO.deleteAllMedia();
-
-    }
-
 }

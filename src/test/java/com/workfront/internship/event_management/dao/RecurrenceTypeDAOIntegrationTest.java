@@ -1,7 +1,6 @@
-package datasource;
+package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.dao.RecurrenceTypeDAO;
-import com.workfront.internship.event_management.dao.RecurrenceTypeDAOImpl;
+import com.workfront.internship.event_management.TestHelper;
 import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.RecurrenceType;
 import org.junit.*;

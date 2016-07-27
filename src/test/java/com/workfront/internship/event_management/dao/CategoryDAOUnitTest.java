@@ -1,8 +1,5 @@
-package datasource;
+package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.dao.CategoryDAO;
-import com.workfront.internship.event_management.dao.CategoryDAOImpl;
-import com.workfront.internship.event_management.dao.DataSourceManager;
 import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.Category;
 import org.junit.Before;

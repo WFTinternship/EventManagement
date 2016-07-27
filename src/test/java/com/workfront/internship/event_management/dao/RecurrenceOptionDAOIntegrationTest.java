@@ -1,9 +1,6 @@
-package datasource;
+package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.dao.RecurrenceOptionDAO;
-import com.workfront.internship.event_management.dao.RecurrenceOptionDAOImpl;
-import com.workfront.internship.event_management.dao.RecurrenceTypeDAO;
-import com.workfront.internship.event_management.dao.RecurrenceTypeDAOImpl;
+import com.workfront.internship.event_management.TestHelper;
 import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.RecurrenceOption;
 import com.workfront.internship.event_management.model.RecurrenceType;
@@ -12,8 +9,6 @@ import org.junit.*;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Hermine Turshujyan 7/16/16.

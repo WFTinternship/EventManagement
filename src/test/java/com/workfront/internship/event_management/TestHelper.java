@@ -1,25 +1,28 @@
-package datasource;
+package com.workfront.internship.event_management;
 
 import com.workfront.internship.event_management.model.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Hermine Turshujyan 7/10/16.
  */
-class TestHelper {
+public class TestHelper {
 
-    static final String NON_EXISTING_USERNAME = "nonExistingUsername";
-    static final String NON_EXISTING_EMAIL = "nonExistingEmail@test.com";
-    static final String NON_EXISTING_MEDIA_TYPE = "Video";
-    static final String NON_EXISTING_TITLE = "nonExistingTitle";
+    public static final String NON_EXISTING_USERNAME = "nonExistingUsername";
+    public static final String NON_EXISTING_EMAIL = "nonExistingEmail@test.com";
+    public static final String NON_EXISTING_MEDIA_TYPE = "Video";
+    public static final String NON_EXISTING_TITLE = "nonExistingTitle";
+    public static final String INVALID_EMAIL = "nonExistingTitle";
 
-
-    static int NON_EXISTING_ID = 1;
+    public static int NON_EXISTING_ID = 1;
 
 
     //test object creation
-    static User createTestUser() {
+    public static User createTestUser() {
         User testUser = new User();
         testUser.setFirstName("Test FirstName")
                 .setLastName("Test LastName")
@@ -32,7 +35,7 @@ class TestHelper {
         return testUser;
     }
 
-    static Category createTestCategory() {
+    public static Category createTestCategory() {
         Category category = new Category();
         category.setTitle("Test Category" + getRandomNumber())
                 .setDescription("Test Description")
@@ -40,7 +43,7 @@ class TestHelper {
         return category;
     }
 
-    static Event createTestEvent() {
+    public static Event createTestEvent() {
         Event testEvent = new Event();
         testEvent.setTitle("Test title")
                 .setShortDescription("Test short description")
@@ -60,7 +63,7 @@ class TestHelper {
     }
 
 
-    static Event createTestEventWithRecurrences(RecurrenceType recurrenceType) {
+    public static Event createTestEventWithRecurrences(RecurrenceType recurrenceType) {
         Event testEvent = createTestEvent();
 
         //create recurrence list
@@ -79,7 +82,7 @@ class TestHelper {
     }
 
 
-    static Invitation createTestInvitation() {
+    public static Invitation createTestInvitation() {
         Invitation invitation = new Invitation();
         invitation.setUserRole("Member")
                 .setAttendeesCount(1)
@@ -88,7 +91,7 @@ class TestHelper {
         return invitation;
     }
 
-    static Media createTestMedia() {
+    public static Media createTestMedia() {
         Media media = new Media();
         media.setPath("/event/111/test_path" + getRandomNumber() + ".jpg")
                 .setType(new MediaType(0, "Image"))
@@ -97,7 +100,7 @@ class TestHelper {
         return media;
     }
 
-    static MediaType createTestMediaType() {
+    public static MediaType createTestMediaType() {
         MediaType mediaType = new MediaType();
         mediaType.setTitle("Image" + getRandomNumber());
 
@@ -105,14 +108,14 @@ class TestHelper {
     }
 
 
-    static RecurrenceOption createTestRecurrenceOption() {
+    public static RecurrenceOption createTestRecurrenceOption() {
         RecurrenceOption option = new RecurrenceOption();
         option.setTitle("Test repeat option" + getRandomNumber())
                 .setAbbreviation("RO");
         return option;
     }
 
-    static RecurrenceType createTestRecurrenceTypeWithOptions() {
+    public static RecurrenceType createTestRecurrenceTypeWithOptions() {
 
         //create recurrence type option list
         RecurrenceOption option1 = createTestRecurrenceOption();
@@ -130,14 +133,14 @@ class TestHelper {
         return recurrenceType;
     }
 
-    static RecurrenceType createTestRecurrenceType() {
+    public static RecurrenceType createTestRecurrenceType() {
         RecurrenceType recurrenceType = new RecurrenceType();
         recurrenceType.setTitle("Test recurrence type " + getRandomNumber())
                 .setIntervalUnit("test unit");
         return recurrenceType;
     }
 
-    static EventRecurrence createTestEventRecurrence() {
+    public static EventRecurrence createTestEventRecurrence() {
         EventRecurrence eventRecurrence = new EventRecurrence();
         eventRecurrence.setRepeatInterval(2)
                 .setRepeatEndDate(new Date());
