@@ -9,6 +9,7 @@ import org.junit.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.workfront.internship.event_management.TestHelper.assertEqualUsers;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.*;
 
@@ -213,19 +214,6 @@ public class UserDAOIntegrationTest {
         boolean deleted = userDAO.deleteAllUsers();
 
         assertFalse(deleted);
-    }
-
-    //helper methods
-    private void assertEqualUsers(User expectedUser, User actualUser) {
-        assertEquals(expectedUser.getId(), actualUser.getId());
-        assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
-        assertEquals(expectedUser.getLastName(), actualUser.getLastName());
-        assertEquals(expectedUser.getEmail(), actualUser.getEmail());
-        assertEquals(expectedUser.getPassword(), actualUser.getPassword());
-        assertEquals(expectedUser.getPhoneNumber(), actualUser.getPhoneNumber());
-        assertEquals(expectedUser.getAvatarPath(), actualUser.getAvatarPath());
-        assertEquals(expectedUser.isVerified(), actualUser.isVerified());
-        assertNotNull(expectedUser.getEmail());
     }
 
     private void assertUserLists(List<User> expectedList, List<User> actualList) {

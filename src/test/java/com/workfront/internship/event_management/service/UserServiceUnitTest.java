@@ -215,4 +215,32 @@ public class UserServiceUnitTest {
 
         assertNull(user);
     }
+
+    @Test
+    public void deleteAccount_Success() {
+        when(userDAO.deleteUser(anyInt())).thenReturn(true);
+
+        //method under test
+        boolean success = userService.deleteAccount(1);
+        assertTrue(success);
+    }
+
+    @Test
+    public void deleteAccount_UserNotFound() {
+        when(userDAO.deleteUser(anyInt())).thenReturn(false);
+
+        //method under test
+        boolean success = userService.deleteAccount(1);
+        assertFalse(success);
+    }
+
+    @Test
+    public void deleteAccount_InvalidUserId() {
+        thrown.expect(OperationFailedException.class);
+        thrown.expectMessage("Invalid user id!");
+
+        //method under test
+        boolean success = userService.deleteAccount(TestHelper.INVALID_ID);
+    }
+
 }

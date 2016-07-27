@@ -21,7 +21,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
         this.dataSourceManager = dataSourceManager;
     }
 
-    public UserDAOImpl() throws DAOException {
+    public UserDAOImpl() {
         try {
             this.dataSourceManager = DataSourceManager.getInstance();
         } catch (IOException | SQLException e) {
@@ -32,7 +32,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
 
     @Override
-    public int addUser(User user) throws DAOException {
+    public int addUser(User user) {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -81,7 +81,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
     }
 
     @Override
-    public List<User> getAllUsers() throws DAOException {
+    public List<User> getAllUsers() {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -112,17 +112,17 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
     }
 
     @Override
-    public User getUserById(int userId) throws DAOException {
+    public User getUserById(int userId) {
         return getUserByField("id", userId);
     }
 
     @Override
-    public User getUserByEmail(String email) throws DAOException {
+    public User getUserByEmail(String email) {
         return getUserByField("email", email);
     }
 
     @Override
-    public boolean updateVerifiedStatus(int userId) throws DAOException {
+    public boolean updateVerifiedStatus(int userId) {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -150,7 +150,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
     }
 
     @Override
-    public boolean updateUser(User user) throws DAOException {
+    public boolean updateUser(User user) {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -188,17 +188,17 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
     }
 
     @Override
-    public boolean deleteUser(int userId) throws DAOException {
+    public boolean deleteUser(int userId) {
         return deleteRecordById("user", userId);
     }
 
     @Override
-    public boolean deleteAllUsers() throws DAOException {
+    public boolean deleteAllUsers() {
         return deleteAllRecords("user");
     }
 
     //helper methods
-    private User getUserByField(String columnName, Object columnValue) throws DAOException {
+    private User getUserByField(String columnName, Object columnValue) {
 
         Connection conn = null;
         PreparedStatement stmt = null;
