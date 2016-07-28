@@ -5,15 +5,18 @@ import com.workfront.internship.event_management.dao.UserDAO;
 import com.workfront.internship.event_management.dao.UserDAOImpl;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.util.HashGenerator;
 import org.junit.*;
-import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.Whitebox;
 
+import static com.workfront.internship.event_management.TestHelper.assertEqualUsers;
 import static junit.framework.TestCase.assertEquals;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 /**
@@ -30,7 +33,6 @@ public class UserServiceUnitTest {
     public static void setUpClass() throws OperationFailedException {
         userService = new UserServiceImpl();
     }
-
 
     @AfterClass
     public static void tearDownClass() {
@@ -56,11 +58,19 @@ public class UserServiceUnitTest {
         emailService = null;
     }
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    //Testing addAccount method
+    @Test(expected = OperationFailedException.class)
+    public void addAccount_InvalidUser() {
+        testUser.setEmail(TestHelper.INVALID_EMAIL);
+
+        //method under test
+        userService.addAccount(testUser);
+    }
 
     @Test
-    public void addAccount_ValidUser_EncryptPassword() {
+    public void addAccount_EncryptPassword() throws DuplicateEntryException, DAOException {
+        when(userDAO.addUser(testUser)).thenReturn(1);
+        when(emailService.sendVerificationEmail(testUser)).thenReturn(true);
 
         String expectedPassword = HashGenerator.generateHashString(testUser.getPassword());
 
@@ -71,9 +81,25 @@ public class UserServiceUnitTest {
         assertEquals("Unable to hash password.", actualPassword, expectedPassword);
     }
 
+    @Test(expected = OperationFailedException.class)
+    public void addAccount_InsertFailed_DuplicateUser() throws DuplicateEntryException, DAOException {
+        when(userDAO.addUser(testUser)).thenThrow(DuplicateEntryException.class);
+
+        //method under test
+        userService.addAccount(testUser);
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void addAccount_InsertFailed_DBError() throws DuplicateEntryException, DAOException {
+        when(userDAO.addUser(testUser)).thenThrow(DAOException.class);
+
+        //method under test
+        userService.addAccount(testUser);
+    }
+
     @Test
-    public void addAccount_ValidUser_EmailSent() throws DuplicateEntryException, DAOException {
-        when(userDAO.addUser(testUser)).thenReturn(10);
+    public void addAccount_EmailSent_Success() throws DuplicateEntryException, DAOException {
+        when(userDAO.addUser(testUser)).thenReturn(TestHelper.VALID_ID);
         when(emailService.sendVerificationEmail(testUser)).thenReturn(true);
 
         //method under test
@@ -82,13 +108,10 @@ public class UserServiceUnitTest {
         Mockito.verify(emailService).sendVerificationEmail(testUser);
     }
 
-    @Test
-    public void addAccount_ValidUser_EmailSent_False() throws DuplicateEntryException, DAOException {
-        when(userDAO.addUser(testUser)).thenReturn(10);
+    @Test(expected = OperationFailedException.class)
+    public void addAccount_EmailSent_Fail() throws DuplicateEntryException, DAOException {
+        when(userDAO.addUser(testUser)).thenReturn(TestHelper.VALID_ID);
         when(emailService.sendVerificationEmail(testUser)).thenReturn(false);
-
-        thrown.expect(OperationFailedException.class);
-        thrown.expectMessage("Unable to send verification email!");
 
         //method under test
         userService.addAccount(testUser);
@@ -96,150 +119,236 @@ public class UserServiceUnitTest {
         Mockito.verify(emailService).sendVerificationEmail(testUser);
     }
 
-    @Test
-    public void addAccount_InvalidUser() {
+    //Testing editAccount method
+    @Test(expected = OperationFailedException.class)
+    public void editAccount_InvalidUser() {
         testUser.setEmail(TestHelper.INVALID_EMAIL);
 
-        thrown.expect(OperationFailedException.class);
-        thrown.expectMessage("Invalid user object!");
-
         //method under test
-        userService.addAccount(testUser);
-    }
-
-   /* @Test
-    public void editProfile_Success() {
-        when(userDAO.updateUser(testUser)).thenReturn(true);
-
-        //method under test
-        boolean success = userService.editProfile(testUser);
-
-        assertTrue(success);
+        userService.editAccount(testUser);
     }
 
     @Test
-    public void editProfile_UserNotFound() {
-        when(userDAO.updateUser(testUser)).thenReturn(false);
-
+    public void editAccount_Success() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
         //method under test
-        boolean success = userService.editProfile(testUser);
+        userService.editAccount(testUser);
 
-        assertFalse(success);
+        Mockito.verify(userDAO).updateUser(testUser);
     }
 
-    @Test
-    public void editProfile_InvalidUser() {
-        testUser.setEmail(TestHelper.INVALID_EMAIL);
-
-        thrown.expect(OperationFailedException.class);
-        thrown.expectMessage("Invalid user object!");
+    @Test(expected = OperationFailedException.class)
+    public void editAccount_UserNotFound() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
+        doThrow(ObjectNotFoundException.class).when(userDAO).updateUser(testUser);
 
         //method under test
-        userService.editProfile(testUser);
+        userService.editAccount(testUser);
     }
 
-    @Test
-    public void verifyAccount_Success() {
-        when(userDAO.updateVerifiedStatus(anyInt())).thenReturn(true);
+    @Test(expected = OperationFailedException.class)
+    public void editAccount_DuplicateUser() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
+        doThrow(DuplicateEntryException.class).when(userDAO).updateUser(testUser);
 
         //method under test
-        boolean success = userService.verifyAccount(1);
-        assertTrue(success);
+        userService.editAccount(testUser);
     }
 
-    @Test
-    public void verifyAccount_UserNotFound() {
-        when(userDAO.updateVerifiedStatus(anyInt())).thenReturn(false);
+    @Test(expected = OperationFailedException.class)
+    public void editAccount_DBError() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
+        doThrow(DAOException.class).when(userDAO).updateUser(testUser);
 
         //method under test
-        boolean success = userService.verifyAccount(1);
-
-        assertFalse(success);
+        userService.editAccount(testUser);
     }
 
-    @Test
-    public void verifyAccount_InvalidUserId() {
-        thrown.expect(OperationFailedException.class);
-        thrown.expectMessage("Invalid user id!");
-
+    //Testing verifyAccount method
+    @Test(expected = OperationFailedException.class)
+    public void verifyAccount_InvalidUserId() throws DAOException, ObjectNotFoundException {
         //method under test
         userService.verifyAccount(TestHelper.INVALID_ID);
+
+        Mockito.verify(userDAO).updateVerifiedStatus(TestHelper.INVALID_ID);
     }
 
     @Test
-    public void login_Success() {
-        String email = testUser.getEmail();
+    public void verifyAccount_Success() throws DAOException, ObjectNotFoundException {
+        //method under test
+        userService.verifyAccount(TestHelper.VALID_ID);
+
+        Mockito.verify(userDAO).updateVerifiedStatus(TestHelper.VALID_ID);
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void verifyAccount_UserNotFound() throws DAOException, ObjectNotFoundException {
+        doThrow(ObjectNotFoundException.class).when(userDAO).updateVerifiedStatus(anyInt());
+
+        //method under test
+        userService.verifyAccount(TestHelper.VALID_ID);
+
+        Mockito.verify(userDAO).updateVerifiedStatus(TestHelper.VALID_ID);
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void verifyAccount_DBError() throws DAOException, ObjectNotFoundException {
+        doThrow(DAOException.class).when(userDAO).updateVerifiedStatus(anyInt());
+
+        //method under test
+        userService.verifyAccount(TestHelper.VALID_ID);
+
+        Mockito.verify(userDAO).updateVerifiedStatus(TestHelper.VALID_ID);
+    }
+
+    // Testing login method
+    @Test(expected = OperationFailedException.class)
+    public void login_InvalidEmailForm() {
+        //method under test
+        userService.login(TestHelper.INVALID_EMAIL, testUser.getPassword());
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void login_EmptyEmail() {
+        //method under test
+        userService.login("", testUser.getPassword());
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void login_EmptyPassword() {
+        //method under test
+        userService.login(testUser.getEmail(), "");
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void login_NullEmail() {
+        //method under test
+        userService.login(null, testUser.getPassword());
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void login_NullPassword() {
+        //method under test
+        userService.login(testUser.getEmail(), null);
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void login_DBError() throws ObjectNotFoundException, DAOException {
+        doThrow(DAOException.class).when(userDAO).getUserByEmail(testUser.getEmail());
+
+        //method under test
+        userService.login(testUser.getEmail(), testUser.getPassword());
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void login_NonExistingEmail() throws ObjectNotFoundException, DAOException {
+        doThrow(ObjectNotFoundException.class).when(userDAO).getUserByEmail(TestHelper.NON_EXISTING_EMAIL);
+
+        //method under test
+        userService.login(TestHelper.NON_EXISTING_EMAIL, testUser.getPassword());
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void login_WrongPassword() throws ObjectNotFoundException, DAOException {
+        when(userDAO.getUserByEmail(testUser.getEmail())).thenReturn(testUser);
+
+        //method under test
+        userService.login(testUser.getEmail(), TestHelper.WRONG_PASSWORD);
+    }
+
+    @Test
+    public void login_Success() throws ObjectNotFoundException, DAOException {
         String notEncryptedPassword = testUser.getPassword();
 
-        //encrypt password
-        testUser.setPassword(HashGenerator.generateHashString(notEncryptedPassword));
+        //set encrypted password to test user
+        testUser.setPassword(HashGenerator.generateHashString(testUser.getPassword()));
 
         when(userDAO.getUserByEmail(testUser.getEmail())).thenReturn(testUser);
 
         //method under test
-        User user = userService.login(email, notEncryptedPassword);
+        User actualUser = userService.login(testUser.getEmail(), notEncryptedPassword);
 
-        assertEqualUsers(user, testUser);
+        assertEqualUsers(testUser, actualUser);
     }
 
-    @Test
-    public void login_InvalidEmail() {
-        thrown.expect(OperationFailedException.class);
-        thrown.expectMessage("Invalid email!");
-
-        //method under test
-        userService.login(TestHelper.INVALID_EMAIL, "password");
-    }
-
-    @Test
-    public void login_UserNotFound() {
-        when(userDAO.getUserByEmail(anyString())).thenReturn(null);
-        thrown.expect(OperationFailedException.class);
-        thrown.expectMessage("Invalid email/password combination!");
-
-        //method under test
-        User user = userService.login(testUser.getEmail(), "password");
-
-        assertNull(user);
-    }
-
-    @Test
-    public void login_InvalidPassword() {
-        when(userDAO.getUserByEmail(anyString())).thenReturn(testUser);
-        thrown.expect(OperationFailedException.class);
-        thrown.expectMessage("Invalid email/password combination!");
-
-        //method under test
-        User user = userService.login(testUser.getEmail(), "password");
-
-        assertNull(user);
-    }
-
-    @Test
-    public void deleteAccount_Success() {
-        when(userDAO.deleteUser(anyInt())).thenReturn(true);
-
-        //method under test
-        boolean success = userService.deleteAccount(1);
-        assertTrue(success);
-    }
-
-    @Test
-    public void deleteAccount_UserNotFound() {
-        when(userDAO.deleteUser(anyInt())).thenReturn(false);
-
-        //method under test
-        boolean success = userService.deleteAccount(1);
-        assertFalse(success);
-    }
-
-    @Test
+    //Testing deleteAccount method
+    @Test(expected = OperationFailedException.class)
     public void deleteAccount_InvalidUserId() {
-        thrown.expect(OperationFailedException.class);
-        thrown.expectMessage("Invalid user id!");
+        //method under test
+        userService.deleteAccount(TestHelper.INVALID_ID);
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void deleteAccount_DBError() throws ObjectNotFoundException, DAOException {
+        doThrow(DAOException.class).when(userDAO).deleteUser(TestHelper.VALID_ID);
 
         //method under test
-        boolean success = userService.deleteAccount(TestHelper.INVALID_ID);
-    }*/
+        userService.deleteAccount(TestHelper.VALID_ID);
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void deleteAccount_UserNotFound() throws ObjectNotFoundException, DAOException {
+        doThrow(ObjectNotFoundException.class).when(userDAO).deleteUser(TestHelper.NON_EXISTING_ID);
+
+        //method under test
+        userService.deleteAccount(TestHelper.NON_EXISTING_ID);
+    }
+
+    @Test
+    public void deleteAccount_Success() throws ObjectNotFoundException, DAOException {
+        // TODO: 7/29/16 implement
+    }
+
+    //Testing getUserById method
+    @Test(expected = OperationFailedException.class)
+    public void getUserById_InvalidUserId() {
+        //method under test
+        userService.getUserById(TestHelper.INVALID_ID);
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void getUserById_DBError() throws ObjectNotFoundException, DAOException {
+        doThrow(DAOException.class).when(userDAO).getUserById(TestHelper.VALID_ID);
+
+        //method under test
+        userService.getUserById(TestHelper.VALID_ID);
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void getUserById_UserNotFound() throws ObjectNotFoundException, DAOException {
+        doThrow(ObjectNotFoundException.class).when(userDAO).getUserById(TestHelper.NON_EXISTING_ID);
+
+        //method under test
+        userService.getUserById(TestHelper.NON_EXISTING_ID);
+    }
+
+    @Test
+    public void getUserById_Success() throws ObjectNotFoundException, DAOException {
+        when(userDAO.getUserById(TestHelper.VALID_ID)).thenReturn(testUser); // TODO: 7/29/16 check
+    }
+
+    //Testing getUserByEmail method
+    @Test(expected = OperationFailedException.class)
+    public void getUserByEmail_InvalidEmailForm() {
+        //method under test
+        userService.getUserByEmail(TestHelper.INVALID_EMAIL);
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void getUserByEmail_DBError() throws ObjectNotFoundException, DAOException {
+        doThrow(DAOException.class).when(userDAO).getUserByEmail(testUser.getEmail());
+
+        //method under test
+        userService.getUserByEmail(testUser.getEmail());
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void getUserByEmail_UserNotFound() throws ObjectNotFoundException, DAOException {
+        doThrow(ObjectNotFoundException.class).when(userDAO).getUserByEmail(TestHelper.NON_EXISTING_EMAIL);
+
+        //method under test
+        userService.getUserByEmail(TestHelper.NON_EXISTING_EMAIL);
+    }
+
+    @Test
+    public void getUserByEmail_Success() throws ObjectNotFoundException, DAOException {
+        when(userDAO.getUserByEmail(testUser.getEmail())).thenReturn(testUser); // TODO: 7/29/16 check
+    }
 
 }

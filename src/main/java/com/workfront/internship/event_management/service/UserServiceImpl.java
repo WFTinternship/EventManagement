@@ -21,7 +21,7 @@ import static com.workfront.internship.event_management.service.util.Validator.i
  */
 public class UserServiceImpl implements UserService {
 
-    static final Logger LOGGER = Logger.getLogger(UserServiceImpl.class);
+    private static final Logger LOGGER = Logger.getLogger(UserServiceImpl.class);
 
     private UserDAO userDAO;
     private EmailService emailService;
@@ -52,13 +52,11 @@ public class UserServiceImpl implements UserService {
             //insert user into db
             int userId = userDAO.addUser(user);
 
-            //if user is successfully inserted
-            if (userId > 0) {
-                user.setId(userId);
-                boolean success = emailService.sendVerificationEmail(user);
-                if (!success) {
-                    throw new OperationFailedException("Unable to send verification email");
-                }
+            //set generated it to user
+            user.setId(userId);
+            boolean success = emailService.sendVerificationEmail(user);
+            if (!success) {
+                throw new OperationFailedException("Unable to send verification email");
             }
         } catch (DuplicateEntryException e) {
             LOGGER.error(e.getMessage(), e);
@@ -71,9 +69,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void editProfile(User user) {
+    public void editAccount(User user) {
         if (!isValidUser(user)) {
-            throw new InvalidObjectException("Invalid user");
+            throw new OperationFailedException("Invalid user");
         }
 
         try {
@@ -92,7 +90,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void verifyAccount(int userId) {
-        if (userId <= 0) {
+        if (userId < 1) {
             throw new OperationFailedException("Invalid user id");
         }
 
@@ -109,7 +107,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteAccount(int userId) {
-        if (userId <= 0) {
+        if (userId < 1) {
             throw new OperationFailedException("Invalid user id");
         }
 
@@ -161,7 +159,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(int userId) {
-        if (userId <= 0) {
+        if (userId < 1) {
             throw new OperationFailedException("Invalid user id");
         }
 

@@ -11,7 +11,7 @@ interface UserService {
 
     User addAccount(User user);
 
-    void editProfile(User user);
+    void editAccount(User user);
 
     void verifyAccount(int userId);
 
