@@ -10,20 +10,24 @@ import java.util.List;
  */
 public interface RecurrenceTypeDAO {
 
-     //insert data into db
-     int addRecurrenceType(RecurrenceType recurrenceType);
+    //insert data into db
+    int addRecurrenceType(RecurrenceType recurrenceType);
 
-     //read data from db
-     List<RecurrenceType> getAllRecurrenceTypes();
+    int addRecurrenceTypeWithOptions(RecurrenceType recurrenceType);
 
-     RecurrenceType getRecurrenceTypeById(int id);
+    //read data from db
+    List<RecurrenceType> getAllRecurrenceTypes();
 
-     //update record in db
-     boolean updateRecurrenceType(RecurrenceType recurrenceType);
+    RecurrenceType getRecurrenceTypeById(int id);
 
-     //delete data from db
-     boolean deleteRecurrenceType(int id) throws DAOException;
+    RecurrenceType getRecurrenceTypeWithOptionsById(int id);
 
-     boolean deleteAllRecurrenceTypes() throws DAOException;
+    //update record in db
+    boolean updateRecurrenceType(RecurrenceType recurrenceType);
+
+    //delete data from db
+    boolean deleteRecurrenceType(int id) throws DAOException;
+
+    boolean deleteAllRecurrenceTypes() throws DAOException;
 
 }

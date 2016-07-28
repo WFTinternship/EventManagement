@@ -27,8 +27,8 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
         try {
             this.dataSourceManager = DataSourceManager.getInstance();
         } catch (IOException | SQLException e) {
-            LOGGER.error("Could not instantiate data source manager.", e);
-            throw new RuntimeException(e);
+            LOGGER.error("Could not instantiate data source manager for RecurrenceOptionDAOImpl.", e);
+            throw new DAOException("Could not instantiate data source manager.");
         }
     }
 
@@ -46,13 +46,36 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
             id = addRecurrenceOption(recurrenceOption, conn);
 
         } catch (SQLException e) {
-            LOGGER.error("Exception ", e);
-            throw new RuntimeException(e);
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException("SQL Exception");
         } finally {
             closeResources(conn);
         }
         return id;
     }
+
+    @Override
+    public boolean addRecurrenceOptions(List<RecurrenceOption> options) {
+
+        Connection conn = null;
+        boolean success;
+
+        try {
+            //get connection
+            conn = dataSourceManager.getConnection();
+
+            //insert recurrenceOption and get generated id
+            success = addRecurrenceOptions(options, conn);
+
+        } catch (SQLException e) {
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException("SQL Exception");
+        } finally {
+            closeResources(conn);
+        }
+        return success;
+    }
+
 
     int addRecurrenceOption(RecurrenceOption option, Connection conn) {
 
@@ -72,14 +95,47 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
 
             //get generated id
             id = getInsertedId(stmt);
+
         } catch (SQLException e) {
-            LOGGER.error("Exception...", e);
-            throw new RuntimeException(e);
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException("SQL Exception");
         } finally {
             closeResources(stmt);
         }
         return id;
     }
+
+    boolean addRecurrenceOptions(List<RecurrenceOption> options, Connection conn) {
+
+        PreparedStatement stmt = null;
+
+        boolean success;
+        int id = 0;
+        String query = "INSERT INTO recurrence_option " +
+                "(recurrence_type_id, title, abbreviation) VALUES (?, ?, ?)";
+        try {
+            //create and initialize statement
+            stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+
+            for (RecurrenceOption option : options) {
+                stmt.setInt(1, option.getRecurrenceTypeId());
+                stmt.setString(2, option.getTitle());
+                stmt.setString(3, option.getAbbreviation());
+                stmt.addBatch();
+            }
+
+            //execute query
+            success = (stmt.executeBatch().length != 0);
+
+        } catch (SQLException e) {
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException("SQL Exception");
+        } finally {
+            closeResources(stmt);
+        }
+        return success;
+    }
+
 
     @Override
     public List<RecurrenceOption> getAllRecurrenceOptions() {
@@ -105,8 +161,8 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
             optionList = createRecurrenceOptionListFromRS(rs);
 
         } catch (SQLException e) {
-            LOGGER.error("Exception...", e);
-            throw new RuntimeException(e);
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException("SQL Exception");
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -140,8 +196,8 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
                 option = optionsList.get(0);
             }
         } catch (SQLException e) {
-            LOGGER.error("Exception...", e);
-            throw new RuntimeException(e);
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException("SQL Exception");
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -174,8 +230,8 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
             optionList = createRecurrenceOptionListFromRS(rs);
 
         } catch (SQLException e) {
-            LOGGER.error("Exception...", e);
-            throw new RuntimeException(e);
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException("SQL Exception");
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -206,8 +262,8 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
             affectedRows = stmt.executeUpdate();
 
         } catch (SQLException e) {
-            LOGGER.error("Exception...", e);
-            throw new RuntimeException(e);
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException("SQL Exception");
         } finally {
             closeResources(stmt, conn);
         }
@@ -215,17 +271,17 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
     }
 
     @Override
-    public boolean deleteRecurrenceOption(int optionId) throws DAOException {
+    public boolean deleteRecurrenceOption(int optionId) {
         return deleteRecordById("recurrence_option", optionId);
     }
 
     @Override
-    public boolean deleteRecurrenceOptionsByRecurrenceType(int recurrenceTypeId) throws DAOException {
+    public boolean deleteRecurrenceOptionsByRecurrenceType(int recurrenceTypeId) {
         return deleteRecord("recurrence_option", "recurrence_type_id", recurrenceTypeId);
     }
 
     @Override
-    public boolean deleteAllRecurrenceOptions() throws DAOException {
+    public boolean deleteAllRecurrenceOptions() {
         return deleteAllRecords("recurrence_option");
     }
 
