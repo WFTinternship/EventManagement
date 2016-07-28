@@ -1,9 +1,11 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.exception.DAOException;
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.Invitation;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.model.UserResponse;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -18,6 +20,7 @@ import java.util.List;
  */
 public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
+    static final Logger LOGGER = Logger.getLogger(InvitationDAOImpl.class);
     private DataSourceManager dataSourceManager;
 
     public InvitationDAOImpl(DataSourceManager dataSourceManager) throws Exception {
@@ -25,12 +28,12 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
         this.dataSourceManager = dataSourceManager;
     }
 
-    public InvitationDAOImpl() {
+    public InvitationDAOImpl() throws DAOException {
         try {
             this.dataSourceManager = DataSourceManager.getInstance();
         } catch (IOException | SQLException e) {
             LOGGER.error("Could not instantiate data source manager.", e);
-            throw new RuntimeException(e);
+            throw new DAOException("Could not instantiate data source manager.", e);
         }
     }
 
@@ -44,29 +47,24 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
         String query = "INSERT INTO event_invitation "
                 + "(event_id, user_id, user_role, user_response_id, attendees_count, participated) VALUES "
                 + "(?, ?, ?, ?, ?, ? )";
-
         try {
             //get connection
             conn = dataSourceManager.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
-
             stmt.setInt(1, invitation.getEventId());
-
             if (invitation.getUser() != null) {
                 stmt.setInt(2, invitation.getUser().getId());
             } else {
                 stmt.setInt(2, 0);
             }
             stmt.setString(3, invitation.getUserRole());
-
             if (invitation.getUserResponse() != null) {
                 stmt.setInt(4, invitation.getUserResponse().getId());
             } else {
                 stmt.setInt(4, 0);
             }
-
             stmt.setInt(5, invitation.getAttendeesCount());
             stmt.setBoolean(6, invitation.isParticipated());
 
@@ -74,8 +72,8 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            LOGGER.error("SQL Exception ", e);
-            throw new DAOException();
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
         } finally {
             closeResources(stmt, conn);
         }
@@ -83,7 +81,8 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
     }
 
     @Override
-    public int addInvitations(List<Invitation> invitationList) throws DAOException {
+    public void addInvitations(List<Invitation> invitationList) throws DAOException {
+
         Connection conn = null;
         PreparedStatement stmt = null;
 
@@ -91,14 +90,19 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
         String query = "INSERT INTO event_invitation "
                 + "(event_id, user_id, user_role, user_response_id, attendees_count, participated) VALUES "
                 + "(?, ?, ?, ?, ?, ? )";
-
         try {
             //get connection
             conn = dataSourceManager.getConnection();
+
+            //start transaction
             conn.setAutoCommit(false);
+
+            //create statement
             stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
 
+            //initialize statement
             for (Invitation invitation : invitationList) {
+
                 stmt.setInt(1, invitation.getEventId());
 
                 if (invitation.getUser() != null) {
@@ -106,6 +110,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
                 } else {
                     stmt.setInt(2, 0);
                 }
+
                 stmt.setString(3, invitation.getUserRole());
 
                 if (invitation.getUserResponse() != null) {
@@ -116,33 +121,32 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
                 stmt.setInt(5, invitation.getAttendeesCount());
                 stmt.setBoolean(6, invitation.isParticipated());
+
                 stmt.addBatch();
             }
-
+            //execute query
             stmt.executeBatch();
-
         } catch (SQLException e) {
-            LOGGER.error("SQL Exception ", e);
-            throw new DAOException();
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
         } finally {
             closeResources(stmt, conn);
         }
-        return id;
     }
 
     @Override
-    public Invitation getInvitationById(int invitationId) {
-        Invitation invitation = null;
+    public Invitation getInvitationById(int invitationId) throws ObjectNotFoundException, DAOException {
 
         List<Invitation> invitationList = getInvitationsByField("event_invitation.id", invitationId);
-        if (invitationList != null && !invitationList.isEmpty()) {
-            invitation = invitationList.get(0);
+        if (invitationList.isEmpty()) {
+            throw new ObjectNotFoundException("Invitation with id " + invitationId + " not found!");
         }
-        return invitation;
+
+        return invitationList.get(0);
     }
 
     @Override
-    public List<Invitation> getAllInvitations() {
+    public List<Invitation> getAllInvitations() throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -164,8 +168,8 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             //get results
             invitationsList = createInvitationsFromRS(rs);
         } catch (SQLException e) {
-            LOGGER.error("Exception ", e);
-            throw new RuntimeException(e);
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -173,21 +177,21 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
     }
 
     @Override
-    public List<Invitation> getInvitationsByEventId(int eventId) {
+    public List<Invitation> getInvitationsByEventId(int eventId) throws DAOException {
         return getInvitationsByField("event_id", eventId);
     }
 
     @Override
-    public List<Invitation> getInvitationsByUserId(int userId) {
+    public List<Invitation> getInvitationsByUserId(int userId) throws DAOException {
         return getInvitationsByField("user_id", userId);
     }
 
     @Override
-    public boolean updateInvitation(Invitation invitation) {
+    public void updateInvitation(Invitation invitation) throws ObjectNotFoundException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
-        int affectedRows = 0;
+
         String sqlStr = "UPDATE event_invitation SET user_role = ? , user_response_id = ?, attendees_count = ?, " +
                 "participated = ? WHERE id = ?";
 
@@ -204,39 +208,40 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             stmt.setInt(5, invitation.getId());
 
             //execute query
-            affectedRows = stmt.executeUpdate();
-
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new ObjectNotFoundException("Invitation with id " + invitation.getId() + " not found!");
+            }
         } catch (SQLException e) {
             LOGGER.error("Exception ", e);
             throw new RuntimeException(e);
         } finally {
             closeResources(stmt, conn);
         }
-        return affectedRows != 0;
     }
 
     @Override
-    public boolean deleteInvitation(int invitationId) throws DAOException {
-        return deleteRecordById("event_invitation", invitationId);
+    public void deleteInvitation(int invitationId) throws DAOException, ObjectNotFoundException {
+        deleteRecordById("event_invitation", invitationId);
     }
 
     @Override
-    public boolean deleteInvitationsByEventId(int eventId) throws DAOException {
-        return deleteRecord("event_invitation", "event_id", eventId);
+    public void deleteInvitationsByEventId(int eventId) throws DAOException, ObjectNotFoundException {
+        deleteRecord("event_invitation", "event_id", eventId);
     }
 
     @Override
-    public boolean deleteInvitationsByUserId(int userId) throws DAOException {
-        return deleteRecord("event_invitation", "user_id", userId);
+    public void deleteInvitationsByUserId(int userId) throws DAOException, ObjectNotFoundException {
+        deleteRecord("event_invitation", "user_id", userId);
     }
 
     @Override
-    public boolean deleteAllInvitations() throws DAOException {
-        return deleteAllRecords("event_invitation");
+    public void deleteAllInvitations() throws DAOException {
+        deleteAllRecords("event_invitation");
     }
 
     //helper methods
-    private List<Invitation> getInvitationsByField(String columnName, int id) {
+    private List<Invitation> getInvitationsByField(String columnName, int id) throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -263,8 +268,8 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             invitationsList = createInvitationsFromRS(rs);
 
         } catch (SQLException e) {
-            LOGGER.error("Exception ", e);
-            throw new RuntimeException(e);
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }

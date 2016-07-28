@@ -1,6 +1,8 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.exception.DAOException;
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +39,7 @@ public class UserDAOUnitTest {
     }
 
     @Test(expected = DAOException.class)
-    public void addUser_dbError() throws DAOException {
+    public void addUser_dbError() throws DAOException, DuplicateEntryException {
         userDAO.addUser(new User());
     }
 
@@ -47,28 +49,27 @@ public class UserDAOUnitTest {
     }
 
     @Test(expected = DAOException.class)
-    public void getUserById_dbError() throws DAOException {
+    public void getUserById_dbError() throws DAOException, ObjectNotFoundException {
         userDAO.getUserById(1);
     }
 
     @Test(expected = DAOException.class)
-    public void getUserByEmail_dbError() throws DAOException {
+    public void getUserByEmail_dbError() throws DAOException, ObjectNotFoundException {
         userDAO.getUserByEmail("email");
     }
 
     @Test(expected = DAOException.class)
-    public void updateVerifiedStatus_dbError() throws DAOException {
+    public void updateVerifiedStatus_dbError() throws DAOException, ObjectNotFoundException {
         userDAO.updateVerifiedStatus(1);
     }
 
     @Test(expected = DAOException.class)
-    public void updateUser_dbError() throws DAOException {
+    public void updateUser_dbError() throws DAOException, DuplicateEntryException, ObjectNotFoundException {
         userDAO.updateUser(new User());
     }
 
-
     @Test(expected = DAOException.class)
-    public void deleteUser_dbError() throws DAOException {
+    public void deleteUser_dbError() throws DAOException, ObjectNotFoundException {
         userDAO.deleteUser(1);
     }
 

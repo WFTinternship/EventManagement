@@ -43,7 +43,6 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
         String query = "INSERT INTO user (first_name, last_name, email, password, phone_number, " +
                 "avatar_path, verified, registration_date) VALUES " +
                 "(?, ?, ?, ?, ?, ?, ?, ?)";
-
         try {
             //get connection
             conn = dataSourceManager.getConnection();
@@ -139,7 +138,6 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
             //execute query
             int affectedRows = stmt.executeUpdate();
-
             if (affectedRows == 0) {
                 throw new ObjectNotFoundException("User with id " + userId + " not found!");
             }

@@ -2,9 +2,10 @@ package com.workfront.internship.event_management.service;
 
 import com.workfront.internship.event_management.dao.CategoryDAO;
 import com.workfront.internship.event_management.dao.CategoryDAOImpl;
-import com.workfront.internship.event_management.exception.DAOException;
-import com.workfront.internship.event_management.exception.DuplicateEntryException;
-import com.workfront.internship.event_management.exception.OperationFailedException;
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
+import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Category;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public int addCategory(Category category) {
+    public int addCategory(Category category) throws DuplicateEntryException, DAOException {
 
         int categoryId = 0;
 
@@ -38,7 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category getCategoryById(int categoryId) {
+    public Category getCategoryById(int categoryId) throws DAOException, ObjectNotFoundException {
 
         if (categoryId > 0) {
             return categoryDAO.getCategoryById(categoryId);
@@ -51,22 +52,23 @@ public class CategoryServiceImpl implements CategoryService {
     public Category getCategoryByTitle(String categoryTitle) {
         Category category;
         try {
-            category = categoryDAO.getCategoryByTitle(categoryTitle);
+            return categoryDAO.getCategoryByTitle(categoryTitle);
         } catch (DAOException e) {
             throw new OperationFailedException("Database error!");
+        } catch (ObjectNotFoundException e) {
+            e.printStackTrace();
         }
-
-        return category;
+        return null;
     }
 
     @Override
-    public boolean editCategory(Category category) {
+    public void editCategory(Category category) {
 
         boolean success = false;
 
         if (isValid(category)) {
             try {
-                success = categoryDAO.updateCategory(category);
+                categoryDAO.updateCategory(category);
                /* if(!success) {
                     throw new OperationFailedException("Non existing user.");
                 }*/
@@ -74,26 +76,27 @@ public class CategoryServiceImpl implements CategoryService {
                 throw new OperationFailedException("Category with this title already exists!");
             } catch (DAOException e) {
                 throw new OperationFailedException("Database error!");
+            } catch (ObjectNotFoundException e) {
+                e.printStackTrace();
             }
         }
-
-        return success;
     }
 
     @Override
-    public boolean deleteCategory(int categoryId) {
+    public void deleteCategory(int categoryId) {
         boolean success = false;
         if (categoryId > 0) {
             try {
-                success = categoryDAO.deleteCategory(categoryId);
+                categoryDAO.deleteCategory(categoryId);
             /*  if(!success) {
                     throw new OperationFailedException("Non existing user.");
                 }*/
             } catch (DAOException e) {
                 throw new OperationFailedException("Database error!");
+            } catch (ObjectNotFoundException e) {
+                e.printStackTrace();
             }
         }
-        return success;
     }
 
     @Override
@@ -109,14 +112,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public boolean deleteAllCategories() {
+    public void deleteAllCategories() {
         boolean success;
         try {
-            success = categoryDAO.deleteAllCategories();
+            categoryDAO.deleteAllCategories();
         } catch (DAOException e) {
             throw new OperationFailedException("Database error!");
         }
-        return success;
     }
 
     //helper methods

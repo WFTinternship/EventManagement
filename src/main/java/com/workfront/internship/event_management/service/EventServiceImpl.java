@@ -1,8 +1,9 @@
 package com.workfront.internship.event_management.service;
 
 import com.workfront.internship.event_management.dao.*;
-import com.workfront.internship.event_management.exception.DAOException;
-import com.workfront.internship.event_management.exception.OperationFailedException;
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
+import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Event;
 
 import java.util.List;
@@ -69,13 +70,17 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public boolean editEvent(Event event) throws OperationFailedException {
+    public void editEvent(Event event) throws OperationFailedException {
 
         boolean success;
 
         if (isValidEvent(event)) {
             try {
-                success = eventDAO.updateEvent(event);
+                try {
+                    eventDAO.updateEvent(event);
+                } catch (ObjectNotFoundException e) {
+                    e.printStackTrace();
+                }
 
                 EventRecurrenceService recurrenceService = new EventRecurrenceServiceImpl();
                 InvitationService invitationService = new InvitationServiceImpl();
@@ -89,25 +94,24 @@ public class EventServiceImpl implements EventService {
         } else {
             throw new OperationFailedException("Invalid event.");
         }
-
-        return success;
     }
 
     @Override
-    public boolean deleteEvent(int eventId) throws OperationFailedException {
+    public void deleteEvent(int eventId) throws OperationFailedException {
 
         boolean success;
 
         if (eventId > 0) {
             try {
-                success = eventDAO.deleteEvent(eventId);
+                eventDAO.deleteEvent(eventId);
             } catch (DAOException e) {
                 throw new OperationFailedException("Database error!");
+            } catch (ObjectNotFoundException e) {
+                e.printStackTrace();
             }
         } else {
             throw new OperationFailedException("Invalid event id.");
         }
-        return success;
     }
 
     @Override
@@ -192,15 +196,14 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public boolean deleteAllEvents() throws OperationFailedException {
+    public void deleteAllEvents() throws OperationFailedException {
 
         boolean success;
         try {
-            success = eventDAO.deleteAllEvents();
+            eventDAO.deleteAllEvents();
         } catch (DAOException e) {
             throw new OperationFailedException("Database error!");
         }
-        return success;
     }
 
     //helper methods

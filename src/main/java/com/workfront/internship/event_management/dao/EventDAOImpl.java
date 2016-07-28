@@ -1,6 +1,7 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.exception.DAOException;
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.*;
 
 import java.io.IOException;
@@ -24,8 +25,8 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         try {
             this.dataSourceManager = DataSourceManager.getInstance();
         } catch (IOException | SQLException e) {
-            LOGGER.error("Could not instantiate data source manager for EventDAOImpl.", e);
-            throw new DAOException();
+            LOGGER.error("Could not instantiate data source manager.", e);
+            throw new DAOException("Could not instantiate data source manager.", e);
         }
     }
 
@@ -41,10 +42,9 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
             //insert event info and get generated event id
             eventId = addEvent(event, conn);
-
         } catch (SQLException e) {
             LOGGER.error("SQL Exception", e);
-            throw new DAOException();
+            throw new DAOException(e);
         } finally {
             closeResources(conn);
         }
@@ -53,6 +53,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
     @Override
     public int addEventWithRecurrences(Event event) throws DAOException {
+
         Connection conn = null;
         int eventId = 0;
 
@@ -67,27 +68,28 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             eventId = addEvent(event, conn);
             event.setId(eventId);
 
-            //insert event recurrence info
-            EventRecurrenceDAO recurrenceDAO = new EventRecurrenceDAOImpl();
+            //set event id to recurrences
             for (EventRecurrence recurrence : event.getEventRecurrences()) {
                 recurrence.setEventId(eventId);
-                ((EventRecurrenceDAOImpl) recurrenceDAO).addEventRecurrence(recurrence, conn);
             }
+
+            //insert event recurrence info
+            EventRecurrenceDAO recurrenceDAO = new EventRecurrenceDAOImpl();
+            ((EventRecurrenceDAOImpl) recurrenceDAO).addEventRecurrences(event.getEventRecurrences(), conn);
 
             //commit transaction
             conn.commit();
-
         } catch (SQLException e) {
             try {
                 if (conn != null) {
                     conn.rollback();
                 }
-            } catch (SQLException e1) {
-                LOGGER.error("Commit/rollback exception...", e);
-                throw new DAOException();
+            } catch (SQLException re) {
+                LOGGER.error("Transaction failed!", e);
+                throw new DAOException("Could not insert event into db. Transaction failed!", e);
             }
-            LOGGER.error("SQL Exception...", e);
-            throw new DAOException();
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
         } finally {
             closeResources(conn);
         }
@@ -104,7 +106,6 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         Event event = null;
         String query = "SELECT * FROM (event LEFT JOIN event_category " +
                 "ON event.category_id = event_category.id) WHERE event.id = ?";
-
         try {
             //get connection
             conn = dataSourceManager.getConnection();
@@ -117,7 +118,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             rs = stmt.executeQuery();
 
             //get results from event table
-            List<Event> eventList = createEventListFromRS(rs);
+    /*        List<Event> eventList = createEventListFromRS(rs);
             if (eventList != null && !eventList.isEmpty()) {
                 event = eventList.get(0);
             }
@@ -147,11 +148,11 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                 if (event != null) {
                     event.setMedia(media);
                 }
-            }
+            }*/
 
         } catch (SQLException e) {
             LOGGER.error("SQL Exception ", e);
-            throw new DAOException();
+            throw new DAOException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -182,10 +183,9 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
             //get results
             eventsList = createEventListFromRS(rs);
-
         } catch (SQLException e) {
-            LOGGER.error("SQL Exception ", e);
-            throw new DAOException();
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -233,8 +233,8 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             eventsList = createEventListFromRS(rs);
 
         } catch (SQLException e) {
-            LOGGER.error("Exception...", e);
-            throw new DAOException();
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -242,18 +242,16 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     @Override
-    public boolean updateEvent(Event event) throws DAOException {
+    public void updateEvent(Event event) throws DAOException, ObjectNotFoundException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
 
-        int affectedRows = 0;
         String query = "UPDATE event SET " +
                 "title = ?, short_desc = ?, full_desc = ?, location = ?, lat = ?, lng = ?, " +
                 "file_path = ?, image_path = ?, category_id = ?, public_accessed = ?, guests_allowed = ?, " +
                 "start = ?, end = ?, creation_date = ?, last_modified = ?" +
                 "WHERE id = ?";
-
         try {
             //get connection
             conn = dataSourceManager.getConnection();
@@ -304,25 +302,26 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             stmt.setInt(16, event.getId());
 
             //execute query
-            affectedRows = stmt.executeUpdate();
-
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new ObjectNotFoundException("Event with id " + event.getId() + " not found!");
+            }
         } catch (SQLException e) {
             LOGGER.error("Exception ", e);
-            throw new DAOException();
+            throw new DAOException(e);
         } finally {
             closeResources(null, stmt, conn);
         }
-        return affectedRows != 0;
     }
 
     @Override
-    public boolean deleteEvent(int eventId) throws DAOException {
-        return deleteRecordById("event", eventId);
+    public void deleteEvent(int eventId) throws DAOException, ObjectNotFoundException {
+        deleteRecordById("event", eventId);
     }
 
     @Override
-    public boolean deleteAllEvents() throws DAOException {
-        return deleteAllRecords("event");
+    public void deleteAllEvents() throws DAOException {
+        deleteAllRecords("event");
     }
 
     //helper methods
@@ -396,7 +395,6 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                 "LEFT JOIN event_invitation ON event_invitation.event_id = event.id " +
                 "LEFT JOIN user_response ON event_invitation.user_response = user_response.id " +
                 "WHERE event_invitation.user_id = ? AND " + columnName + " = ?";
-
         try {
             //get connection
             conn = dataSourceManager.getConnection();
@@ -406,13 +404,14 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             stmt.setInt(1, userId);
             stmt.setObject(2, columnValue);
 
-
+            //execute query
             rs = stmt.executeQuery();
 
+            //get results
             eventsList = createEventListFromRS(rs);
         } catch (SQLException e) {
-            LOGGER.error("Exception ", e);
-            throw new DAOException();
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -452,6 +451,4 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         }
         return eventsList;
     }
-
-
 }

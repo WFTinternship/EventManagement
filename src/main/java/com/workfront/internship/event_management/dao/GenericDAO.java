@@ -1,6 +1,7 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.exception.DAOException;
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -19,14 +20,14 @@ public class GenericDAO {
         this.dataSourceManager = dataSourceManager;
     }
 
-    GenericDAO() {
+    GenericDAO() throws DAOException {
         try {
             this.dataSourceManager = DataSourceManager.getInstance();
         } catch (IOException | SQLException e) {
-            LOGGER.error("Exception...", e);
+            LOGGER.error("Could not instantiate data source manager", e);
+            throw new DAOException("Could not instantiate data source manager", e);
         }
     }
-
 
     void closeResources(ResultSet rs, Statement stmt, Connection conn) {
         try {
@@ -42,7 +43,7 @@ public class GenericDAO {
                 stmt.close();
             }
         } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
+            LOGGER.error(e);
         }
 
         try {
@@ -50,7 +51,7 @@ public class GenericDAO {
                 conn.close();
             }
         } catch (SQLException e) {
-            System.out.println("SQLException " + e.getMessage());
+            LOGGER.error(e);
         }
     }
 
@@ -67,7 +68,6 @@ public class GenericDAO {
     }
 
     int getInsertedId(Statement stmt) throws SQLException {
-
         int id = 0;
         ResultSet rs = stmt.getGeneratedKeys();
         if (rs.next()) {
@@ -76,11 +76,11 @@ public class GenericDAO {
         return id;
     }
 
-    boolean deleteRecordById(String tableName, int id) throws DAOException {
-        return deleteRecord(tableName, "id", id);
+    void deleteRecordById(String tableName, int id) throws DAOException, ObjectNotFoundException {
+        deleteRecord(tableName, "id", id);
     }
 
-    boolean deleteAllRecords(String tableName) throws DAOException {
+    void deleteAllRecords(String tableName) throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -95,43 +95,41 @@ public class GenericDAO {
             stmt = conn.prepareStatement(sqlStr);
 
             //execute query
-            affectedRows = stmt.executeUpdate();
-
+            stmt.executeUpdate();
         } catch (SQLException e) {
-            LOGGER.error("SQLException in deleteAllRecords()", e);
-            throw new DAOException();
+            LOGGER.error("SQL exception", e);
+            throw new DAOException(e);
         } finally {
             closeResources(stmt, conn);
         }
-        return affectedRows != 0;
     }
 
-    boolean deleteRecord(String tableName, String columnName, int id) throws DAOException {
+    void deleteRecord(String tableName, String columnName, Object columnValue) throws DAOException, ObjectNotFoundException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
-        int affectedRows = 0;
+
+        String query = "DELETE FROM " + tableName + " WHERE " + columnName + " = ?";
 
         try {
             //get connection
             conn = dataSourceManager.getConnection();
 
             //create and initialize statement
-            String sqlStr = "DELETE FROM " + tableName + " WHERE " + columnName + " = ?";
-            stmt = conn.prepareStatement(sqlStr);
-            stmt.setInt(1, id);
+            stmt = conn.prepareStatement(query);
+            stmt.setObject(1, columnValue);
 
             //execute query
-            affectedRows = stmt.executeUpdate();
-
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new ObjectNotFoundException("Object with " + columnName + " " + columnValue + " not found!");
+            }
         } catch (SQLException e) {
-            LOGGER.error("SQLException in deleteRecord()", e);
-            throw new DAOException();
+            LOGGER.error("SQL exception", e);
+            throw new DAOException(e);
         } finally {
             closeResources(stmt, conn);
         }
-        return affectedRows != 0;
     }
-
 
 }

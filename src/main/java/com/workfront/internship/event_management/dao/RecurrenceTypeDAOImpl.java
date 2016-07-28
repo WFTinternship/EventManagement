@@ -92,6 +92,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
                 LOGGER.error("Transaction failed!", e);
                 throw new DAOException("Could not insert recurrence type into db. Transaction failed!", e);
             }
+            LOGGER.error("SQL Exception", e);
             throw new DAOException(e);
         } finally {
             closeResources(conn);

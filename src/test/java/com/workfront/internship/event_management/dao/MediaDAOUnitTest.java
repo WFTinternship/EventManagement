@@ -1,24 +1,10 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.exception.DAOException;
-import com.workfront.internship.event_management.model.Media;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.when;
-
 /**
  * Created by Hermine Turshujyan 7/18/16.
  */
 public class MediaDAOUnitTest {
-
+/*
     private DataSourceManager dataSourceManager;
     private MediaDAO mediaDAO;
 
@@ -83,6 +69,6 @@ public class MediaDAOUnitTest {
     public void deleteAllMedia_dbError() throws DAOException {
         mediaDAO.deleteAllMedia();
 
-    }
+    }*/
 
 }

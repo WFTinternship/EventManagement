@@ -1,20 +1,10 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.TestHelper;
-import com.workfront.internship.event_management.exception.DAOException;
-import com.workfront.internship.event_management.model.RecurrenceOption;
-import com.workfront.internship.event_management.model.RecurrenceType;
-import org.junit.*;
-
-import java.util.List;
-
-import static org.junit.Assert.*;
-
 /**
  * Created by Hermine Turshujyan 7/16/16.
  */
 public class RecurrenceOptionDAOIntegrationTest {
-
+/*
     private static RecurrenceOptionDAO recurrenceOptionDAO;
     private static RecurrenceTypeDAO recurrenceTypeDAO;
     private RecurrenceOption testRecurrenceOption;
@@ -230,5 +220,5 @@ public class RecurrenceOptionDAOIntegrationTest {
         assertEquals(actualRecurrenceOption.getAbbreviation(), expectedRecurrenceOption.getAbbreviation());
         assertEquals(actualRecurrenceOption.getTitle(), expectedRecurrenceOption.getTitle());
 
-    }
+    } */
 }

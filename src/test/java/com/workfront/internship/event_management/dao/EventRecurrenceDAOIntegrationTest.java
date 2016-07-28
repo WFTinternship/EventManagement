@@ -1,19 +1,10 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.TestHelper;
-import com.workfront.internship.event_management.exception.DAOException;
-import com.workfront.internship.event_management.model.*;
-import org.junit.*;
-
-import java.util.List;
-
-import static org.junit.Assert.*;
-
 /**
  * Created by Hermine Turshujyan 7/13/16.
  */
 public class EventRecurrenceDAOIntegrationTest {
-
+/*
     private static CategoryDAO categoryDAO;
     private static EventDAO eventDAO;
     private static EventRecurrenceDAO eventRecurrenceDAO;
@@ -257,5 +248,5 @@ public class EventRecurrenceDAOIntegrationTest {
         assertEquals(actualEventRecurrence.getRepeatInterval(), expectedEventRecurrence.getRepeatInterval());
         assertNotNull(actualEventRecurrence.getRepeatEndDate());
     }
-
+*/
 }

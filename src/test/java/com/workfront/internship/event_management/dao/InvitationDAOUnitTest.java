@@ -1,20 +1,5 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.exception.DAOException;
-import com.workfront.internship.event_management.model.Invitation;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.when;
-
-
 /**
  * Created by Hermine Turshujyan 7/18/16.
  */
@@ -22,7 +7,7 @@ public class InvitationDAOUnitTest {
 
     //todo add test for checking conn.close()
     //todo add method call validation
-
+/*
     private DataSourceManager dataSourceManager;
     private InvitationDAO invitationDAO;
 
@@ -90,5 +75,5 @@ public class InvitationDAOUnitTest {
     @Test(expected = RuntimeException.class)
     public void deleteAllInvitations_dbError() throws DAOException {
         invitationDAO.deleteAllInvitations();
-    }
+    }*/
 }

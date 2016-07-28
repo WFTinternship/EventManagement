@@ -1,19 +1,10 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.TestHelper;
-import com.workfront.internship.event_management.exception.DAOException;
-import com.workfront.internship.event_management.model.MediaType;
-import org.junit.*;
-
-import java.util.List;
-
-import static org.junit.Assert.*;
-
 /**
  * Created by Hermine Turshujyan 7/21/16.
  */
 public class MediaTypeDAOIntegrationTest {
-
+/*
     private static MediaTypeDAO mediaTypeDAO;
     private MediaType testMediaType;
 
@@ -174,6 +165,6 @@ public class MediaTypeDAOIntegrationTest {
     private void assertEqualMediaTypes(MediaType expectedMediaType, MediaType actualMediaType) {
         assertEquals(expectedMediaType.getId(), actualMediaType.getId());
         assertEquals(expectedMediaType.getTitle(), actualMediaType.getTitle());
-    }
+    }*/
 
 }

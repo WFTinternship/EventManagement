@@ -1,7 +1,5 @@
 package com.workfront.internship.event_management.service;
 
-import com.workfront.internship.event_management.exception.DAOException;
-import com.workfront.internship.event_management.model.RecurrenceOption;
 import com.workfront.internship.event_management.model.RecurrenceType;
 
 import java.util.List;
@@ -41,12 +39,12 @@ public class RecurrenceTypeServiceImpl implements RecurrenceTypeService {
     }
 
     @Override
-    public boolean deleteRecurrenceType(int id) throws DAOException {
+    public boolean deleteRecurrenceType(int id) {
         return false;
     }
 
     @Override
-    public boolean deleteAllRecurrenceTypes() throws DAOException {
+    public boolean deleteAllRecurrenceTypes() {
         return false;
     }
 }

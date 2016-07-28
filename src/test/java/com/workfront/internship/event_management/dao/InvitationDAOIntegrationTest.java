@@ -1,22 +1,11 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.TestHelper;
-import com.workfront.internship.event_management.exception.DAOException;
-import com.workfront.internship.event_management.exception.DuplicateEntryException;
-import com.workfront.internship.event_management.model.*;
-import org.junit.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.*;
-
 /**
  * Created by Hermine Turshujyan 7/9/16.
  */
 
 public class InvitationDAOIntegrationTest {
-
+/*
     private static UserDAO userDAO;
     private static CategoryDAO categoryDAO;
     private static EventDAO eventDAO;
@@ -313,7 +302,7 @@ public class InvitationDAOIntegrationTest {
         testInvitationList.add(secondTestInvitation);
 
         return testInvitationList;
-    }
+    }*/
 
 
 }

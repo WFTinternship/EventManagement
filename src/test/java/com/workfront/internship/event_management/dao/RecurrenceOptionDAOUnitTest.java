@@ -1,25 +1,11 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.exception.DAOException;
-import com.workfront.internship.event_management.model.RecurrenceOption;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.when;
-
 /**
  * Created by Hermine Turshujyan 7/18/16.
  */
 public class RecurrenceOptionDAOUnitTest {
 
-    private DataSourceManager dataSourceManager;
+   /* private DataSourceManager dataSourceManager;
     private RecurrenceOptionDAO recurrenceOptionDAO;
 
     @SuppressWarnings("unchecked")
@@ -75,5 +61,5 @@ public class RecurrenceOptionDAOUnitTest {
     @Test(expected = RuntimeException.class)
     public void deleteAllRecurrenceOptions() throws DAOException {
         recurrenceOptionDAO.deleteAllRecurrenceOptions();
-    }
+    }*/
 }

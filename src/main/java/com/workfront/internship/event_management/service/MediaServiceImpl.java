@@ -1,10 +1,5 @@
 package com.workfront.internship.event_management.service;
 
-import com.workfront.internship.event_management.dao.MediaDAO;
-import com.workfront.internship.event_management.dao.MediaDAOImpl;
-import com.workfront.internship.event_management.dao.MediaTypeDAO;
-import com.workfront.internship.event_management.dao.MediaTypeDAOImpl;
-import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.Media;
 import com.workfront.internship.event_management.model.MediaType;
 
@@ -15,84 +10,79 @@ import java.util.List;
  */
 public class MediaServiceImpl implements MediaService {
 
-    MediaDAO mediaDAO = new MediaDAOImpl();
 
     @Override
     public int addMedia(Media media) {
-        return mediaDAO.addMedia(media);
+        return 0;
     }
 
     @Override
     public Media getMediaById(int mediaId) {
-        return mediaDAO.getMediaById(mediaId);
+        return null;
     }
 
     @Override
     public boolean updateMediaDescription(int mediaId, String description) {
-        return mediaDAO.updateMediaDescription(mediaId, description);
+        return false;
     }
 
     @Override
-    public boolean deleteMedia(int mediaId) throws DAOException {
-        return mediaDAO.deleteMedia(mediaId);
+    public boolean deleteMedia(int mediaId) {
+        return false;
     }
 
     @Override
     public List<Media> getAllMedia() {
-        return mediaDAO.getAllMedia();
+        return null;
     }
 
     @Override
-    public boolean deleteAllMedia() throws DAOException {
-        return mediaDAO.deleteAllMedia();
+    public boolean deleteAllMedia() {
+        return false;
     }
 
     @Override
     public List<Media> getMediaByEventId(int eventId) {
-        return mediaDAO.getMediaByEventId(eventId);
+        return null;
     }
 
     @Override
     public List<Media> getMediaByType(int typeId) {
-        return mediaDAO.getMediaByType(typeId);
+        return null;
     }
 
     @Override
     public List<Media> getMediaByUploaderId(int uploaderId) {
-        return mediaDAO.getMediaByUploaderId(uploaderId);
+        return null;
     }
-
-
-    //Media type operations
-    MediaTypeDAO mediaTypeDAO = new MediaTypeDAOImpl();
 
     @Override
     public int addMediaType(MediaType mediaType) {
-        return mediaTypeDAO.addMediaType(mediaType);
+        return 0;
     }
 
     @Override
     public MediaType getMediaTypeById(int mediaTypeId) {
-        return mediaTypeDAO.getMediaTypeById(mediaTypeId);
+        return null;
     }
 
     @Override
     public boolean updateMediaType(MediaType mediaType) {
-        return mediaTypeDAO.updateMediaType(mediaType);
+        return false;
     }
 
     @Override
-    public boolean deleteMediaType(int mediaTypeId) throws DAOException {
-        return mediaTypeDAO.deleteMediaType(mediaTypeId);
+    public boolean deleteMediaType(int mediaTypeId) {
+        return false;
     }
 
     @Override
     public List<MediaType> getAllMediaTypes() {
-        return mediaTypeDAO.getAllMediaTypes();
+        return null;
     }
 
     @Override
-    public boolean deleteAllMediaTypes() throws DAOException {
-        return mediaTypeDAO.deleteAllMediaTypes();
+    public boolean deleteAllMediaTypes() {
+        return false;
     }
 }

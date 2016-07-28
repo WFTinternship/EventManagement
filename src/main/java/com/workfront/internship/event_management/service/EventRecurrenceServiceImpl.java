@@ -1,6 +1,5 @@
 package com.workfront.internship.event_management.service;
 
-import com.workfront.internship.event_management.exception.DAOException;
 import com.workfront.internship.event_management.model.EventRecurrence;
 
 import java.util.List;
@@ -40,12 +39,12 @@ public class EventRecurrenceServiceImpl implements EventRecurrenceService {
     }
 
     @Override
-    public boolean deleteEventRecurrence(int id) throws DAOException {
+    public boolean deleteEventRecurrence(int id) {
         return false;
     }
 
     @Override
-    public boolean deleteAllEventRecurrences() throws DAOException {
+    public boolean deleteAllEventRecurrences() {
         return false;
     }
 }

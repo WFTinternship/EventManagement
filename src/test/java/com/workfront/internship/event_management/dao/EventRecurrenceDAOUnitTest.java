@@ -1,24 +1,10 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.exception.DAOException;
-import com.workfront.internship.event_management.model.EventRecurrence;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.when;
-
 /**
  * Created by Hermine Turshujyan 7/18/16.
  */
 public class EventRecurrenceDAOUnitTest {
-
+/*
     private DataSourceManager dataSourceManager;
     private EventRecurrenceDAO eventRecurrenceDAO;
 
@@ -69,5 +55,5 @@ public class EventRecurrenceDAOUnitTest {
     @Test(expected = RuntimeException.class)
     public void deleteAllEventRecurrences_dbError() throws DAOException {
         eventRecurrenceDAO.deleteAllEventRecurrences();
-    }
+    }*/
 }

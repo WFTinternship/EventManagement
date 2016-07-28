@@ -1,17 +1,16 @@
 package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.TestHelper;
-import com.workfront.internship.event_management.exception.DAOException;
-import com.workfront.internship.event_management.exception.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.User;
 import org.junit.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.workfront.internship.event_management.TestHelper.assertEqualUsers;
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.*;
+import static junit.framework.TestCase.*;
 
 /**
  * Created by Hermine Turshujyan 7/8/16.
@@ -32,7 +31,7 @@ public class UserDAOIntegrationTest {
     }
 
     @Before
-    public void setUp() throws DAOException {
+    public void setUp() throws DAOException, DuplicateEntryException {
         //create test user
         testUser = TestHelper.createTestUser();
 
@@ -53,7 +52,7 @@ public class UserDAOIntegrationTest {
     }
 
     @Test
-    public void insertUser_Sucess() throws DAOException {
+    public void addUser_Sucess() throws DAOException, ObjectNotFoundException {
         //test user already inserted in setup, read record by userId
         User user = userDAO.getUserById(testUser.getId());
 
@@ -62,26 +61,24 @@ public class UserDAOIntegrationTest {
     }
 
     @Test(expected = DuplicateEntryException.class)
-    public void insertUser_Dublicate_Entry() throws DAOException {
-        //test user already inserted into db, insert dublicate user
-        userDAO.addUser(testUser); //username, email fields in db are unique
+    public void addUser_Duplicate_Entry() throws DuplicateEntryException, DAOException {
+        //test user already inserted into db, insert duplicate user
+        userDAO.addUser(testUser);
     }
 
     @Test
     public void getAllUsers_Found() throws DAOException {
-        //create test users list, insert into db
-        List<User> testUserList = createTestUserList();
-
         //test method
         List<User> userList = userDAO.getAllUsers();
 
         assertNotNull(userList);
         assertFalse(userList.isEmpty());
-        assertUserLists(userList, testUserList);
+        assertEquals(userList.size(), 1);
+        assertEqualUsers(userList.get(0), testUser);
     }
 
     @Test
-    public void getAllUsers_Empty_List() throws DAOException {
+    public void getAllUsers_Empty_List() throws DAOException, ObjectNotFoundException {
         //delete inserted user from db
         userDAO.deleteUser(testUser.getId());
 
@@ -93,7 +90,7 @@ public class UserDAOIntegrationTest {
     }
 
     @Test
-    public void getUserById_Found() throws DAOException {
+    public void getUserById_Found() throws DAOException, ObjectNotFoundException {
         //testing method
         User user = userDAO.getUserById(testUser.getId());
 
@@ -101,8 +98,8 @@ public class UserDAOIntegrationTest {
         assertEqualUsers(user, testUser);
     }
 
-    @Test
-    public void getUserById_Not_Found() throws DAOException {
+    @Test(expected = ObjectNotFoundException.class)
+    public void getUserById_Not_Found() throws DAOException, ObjectNotFoundException {
         //testing method
         User user = userDAO.getUserById(TestHelper.NON_EXISTING_ID);
 
@@ -110,7 +107,7 @@ public class UserDAOIntegrationTest {
     }
 
     @Test
-    public void getUserByEmail_Found() throws DAOException {
+    public void getUserByEmail_Found() throws DAOException, ObjectNotFoundException {
         //testing method
         User user = userDAO.getUserByEmail(testUser.getEmail());
 
@@ -118,8 +115,8 @@ public class UserDAOIntegrationTest {
         assertEqualUsers(user, testUser);
     }
 
-    @Test
-    public void getUserByEmail_Not_Fount() throws DAOException {
+    @Test(expected = ObjectNotFoundException.class)
+    public void getUserByEmail_Not_Fount() throws DAOException, ObjectNotFoundException {
         //testing method
         User user = userDAO.getUserByEmail(TestHelper.NON_EXISTING_EMAIL);
 
@@ -127,28 +124,25 @@ public class UserDAOIntegrationTest {
     }
 
     @Test
-    public void updateVerifiedStatus_Success() throws DAOException {
+    public void updateVerifiedStatus_Success() throws DAOException, ObjectNotFoundException {
         //testing method
-        boolean updated = userDAO.updateVerifiedStatus(testUser.getId());
+        userDAO.updateVerifiedStatus(testUser.getId());
 
         //read updated record from db
         User user = userDAO.getUserById(testUser.getId());
 
         assertNotNull(user);
         assertTrue(user.isVerified());
-        assertTrue(updated);
     }
 
-    @Test
-    public void updateVerifiedStatus_Not_Found() throws DAOException {
+    @Test(expected = ObjectNotFoundException.class)
+    public void updateVerifiedStatus_Not_Found() throws DAOException, ObjectNotFoundException {
         //testing method
-        boolean updated = userDAO.updateVerifiedStatus(TestHelper.NON_EXISTING_ID);
-
-        assertFalse(updated);
+        userDAO.updateVerifiedStatus(TestHelper.NON_EXISTING_ID);
     }
 
     @Test
-    public void updateUser_Success() throws DAOException {
+    public void updateUser_Success() throws DAOException, DuplicateEntryException, ObjectNotFoundException {
         //create new user with the same id
         User updatedUser = TestHelper.createTestUser();
         updatedUser.setId(testUser.getId());
@@ -163,79 +157,57 @@ public class UserDAOIntegrationTest {
         assertEqualUsers(user, updatedUser);
     }
 
-    @Test
-    public void updateUser_Not_Found() throws DAOException {
+    @Test(expected = ObjectNotFoundException.class)
+    public void updateUser_Not_Found() throws DAOException, DuplicateEntryException, ObjectNotFoundException {
         //create new user without id
         User updatedUser = TestHelper.createTestUser();
 
         //test method
-        boolean updated = userDAO.updateUser(updatedUser);
-
-        assertFalse(updated);
+        userDAO.updateUser(updatedUser);
     }
 
     @Test
-    public void deleteUser_Success() throws DAOException {
+    public void deleteUser_Success() throws DAOException, ObjectNotFoundException {
         //test method
-        boolean deleted = userDAO.deleteUser(testUser.getId());
+        userDAO.deleteUser(testUser.getId());
 
         User user = userDAO.getUserById(testUser.getId());
 
-        assertTrue(deleted);
         assertNull(user);
     }
 
 
-    @Test
-    public void deleteUser_Not_Found() throws DAOException {
+    @Test(expected = ObjectNotFoundException.class)
+    public void deleteUser_Not_Found() throws DAOException, ObjectNotFoundException {
         //test method
-        boolean deleted = userDAO.deleteUser(TestHelper.NON_EXISTING_ID);
-
-        assertFalse(deleted);
+        userDAO.deleteUser(TestHelper.NON_EXISTING_ID);
     }
 
 
     @Test
     public void deleteAllUsers_Success() throws DAOException {
         //test method
-        boolean deleted = userDAO.deleteAllUsers();
+        userDAO.deleteAllUsers();
 
         List<User> userList = userDAO.getAllUsers();
         assertTrue(userList.isEmpty());
-        assertTrue(deleted);
     }
 
     @Test
-    public void deleteAllUsers_Not_Found() throws DAOException {
+    public void deleteAllUsers_Not_Found() throws DAOException, ObjectNotFoundException {
         //delete inserted user
         userDAO.deleteUser(testUser.getId());
 
         //test method
-        boolean deleted = userDAO.deleteAllUsers();
-
-        assertFalse(deleted);
+        userDAO.deleteAllUsers();
     }
 
     private void assertUserLists(List<User> expectedList, List<User> actualList) {
         assertEquals(actualList.size(), expectedList.size());
-        for(int i = 0; i < actualList.size(); i++) {
+        for (int i = 0; i < actualList.size(); i++) {
             assertEqualUsers(actualList.get(i), expectedList.get(i));
         }
     }
 
-    private List<User> createTestUserList() throws DAOException {
-        //create second test category
-        User secondTestUser = TestHelper.createTestUser();
 
-        //insert second category into db
-        int userId = userDAO.addUser(secondTestUser);
-        secondTestUser.setId(userId);
-
-        //create test media list
-        List<User> testUserList = new ArrayList<>();
-        testUserList.add(testUser);
-        testUserList.add(secondTestUser);
-
-        return testUserList;
-    }
 }

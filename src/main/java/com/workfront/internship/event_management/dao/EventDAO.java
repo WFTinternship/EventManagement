@@ -1,6 +1,7 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.exception.DAOException;
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.Event;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface EventDAO {
     int addEventWithRecurrences(Event event) throws DAOException;
 
     //read data from db
-    Event getEventById(int eventId) throws DAOException;
+    Event getEventById(int eventId) throws DAOException; // TODO: 7/28/16 check 
 
     List<Event> getEventsByCategory(int categoryId) throws DAOException;
 
@@ -29,11 +30,11 @@ public interface EventDAO {
     List<Event> getAllEvents() throws DAOException;
 
     //update record in db
-    boolean updateEvent(Event event) throws DAOException;
+    void updateEvent(Event event) throws DAOException, ObjectNotFoundException;
 
     //delete record from db
-    boolean deleteEvent(int eventId) throws DAOException;
+    void deleteEvent(int eventId) throws DAOException, ObjectNotFoundException;
 
-    boolean deleteAllEvents() throws DAOException;
+    void deleteAllEvents() throws DAOException;
 
 }

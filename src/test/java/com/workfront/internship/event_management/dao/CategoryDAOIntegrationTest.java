@@ -1,21 +1,10 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.TestHelper;
-import com.workfront.internship.event_management.exception.DAOException;
-import com.workfront.internship.event_management.exception.DuplicateEntryException;
-import com.workfront.internship.event_management.model.Category;
-import org.junit.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.*;
-
 /**
  * Created by Hermine Turshujyan 7/9/16.
  */
 public class CategoryDAOIntegrationTest {
-
+/*
     private static CategoryDAO categoryDAO;
     private Category testCategory;
 
@@ -221,5 +210,5 @@ public class CategoryDAOIntegrationTest {
         testCategoryList.add(secondTestCategory);
 
         return testCategoryList;
-    }
+    }*/
 }

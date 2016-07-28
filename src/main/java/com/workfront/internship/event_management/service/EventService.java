@@ -24,11 +24,11 @@ interface EventService {
 
     List<Event> getAllEvents();
 
-    boolean editEvent(Event event);
+    void editEvent(Event event);
 
-    boolean deleteEvent(int eventId);
+    void deleteEvent(int eventId);
 
-    boolean deleteAllEvents();
+    void deleteAllEvents();
 
 
 
