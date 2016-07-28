@@ -1,22 +1,27 @@
 package com.workfront.internship.event_management.service;
 
-import com.workfront.internship.event_management.dao.GenericDAO;
 import com.workfront.internship.event_management.dao.UserDAO;
 import com.workfront.internship.event_management.dao.UserDAOImpl;
-import com.workfront.internship.event_management.exception.DAOException;
-import com.workfront.internship.event_management.exception.OperationFailedException;
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
+import com.workfront.internship.event_management.exception.service.InvalidObjectException;
+import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
-import com.workfront.internship.event_management.service.util.HashGeneratorUtil;
+import com.workfront.internship.event_management.service.util.HashGenerator;
 import org.apache.log4j.Logger;
 
 import java.util.List;
+
+import static com.workfront.internship.event_management.service.util.Validator.isValidEmailAddressForm;
+import static com.workfront.internship.event_management.service.util.Validator.isValidUser;
 
 /**
  * Created by Hermine Turshujyan 7/20/16.
  */
 public class UserServiceImpl implements UserService {
 
-    static final Logger LOGGER = Logger.getLogger(GenericDAO.class); // TODO: 7/27/16  add logs
+    static final Logger LOGGER = Logger.getLogger(UserServiceImpl.class);
 
     private UserDAO userDAO;
     private EmailService emailService;
@@ -27,143 +32,186 @@ public class UserServiceImpl implements UserService {
             userDAO = new UserDAOImpl();
             emailService = new EmailServiceImpl();
         } catch (DAOException e) {
-            throw new OperationFailedException("Database error!");
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
         }
     }
 
     @Override
-    public int addAccount(User user) {
-
-        int userId = 0;
-
+    public User addAccount(User user) {
         //check if user object is valid
-        if (isValidUser(user)) {
+        if (!isValidUser(user)) {
+            throw new OperationFailedException("Invalid user");
+        }
 
-            //encrypt user password
-            String encryptedPassword = HashGeneratorUtil.generateHashString(user.getPassword());
-            user.setPassword(encryptedPassword);
+        //encrypt user password
+        String encryptedPassword = HashGenerator.generateHashString(user.getPassword());
+        user.setPassword(encryptedPassword);
 
+        try {
             //insert user into db
-            userId = userDAO.addUser(user);
+            int userId = userDAO.addUser(user);
 
-            //if user successfully inserted
+            //if user is successfully inserted
             if (userId > 0) {
+                user.setId(userId);
                 boolean success = emailService.sendVerificationEmail(user);
                 if (!success) {
-                    throw new OperationFailedException("Unable to send verification email!");
+                    throw new OperationFailedException("Unable to send verification email");
                 }
             }
-        } else {
-            throw new OperationFailedException("Invalid user object!");
+        } catch (DuplicateEntryException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException("User with email " + user.getEmail() + " already exists!", e);
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
         }
-        return userId;
+        return user;
     }
 
     @Override
-    public boolean editProfile(User user) {
-
-        boolean success;
-
-        if (isValidUser(user)) {
-            success = userDAO.updateUser(user);
-        } else {
-            throw new OperationFailedException("Invalid user object!");
+    public void editProfile(User user) {
+        if (!isValidUser(user)) {
+            throw new InvalidObjectException("Invalid user");
         }
 
-        return success;
+        try {
+            userDAO.updateUser(user);
+        } catch (ObjectNotFoundException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException("User not found", e);
+        } catch (DuplicateEntryException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException("User with email " + user.getEmail() + " already exists!", e);
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
+        }
     }
 
     @Override
-    public boolean verifyAccount(int userId) {
-
-        boolean success;
-
-        if (userId > 0) {
-            success = userDAO.updateVerifiedStatus(userId);
-        } else {
-            throw new OperationFailedException("Invalid user id!");
+    public void verifyAccount(int userId) {
+        if (userId <= 0) {
+            throw new OperationFailedException("Invalid user id");
         }
-        return success;
+
+        try {
+            userDAO.updateVerifiedStatus(userId);
+        } catch (ObjectNotFoundException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException("User not found", e);
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
+        }
     }
 
     @Override
-    public boolean deleteAccount(int userId) {
+    public void deleteAccount(int userId) {
+        if (userId <= 0) {
+            throw new OperationFailedException("Invalid user id");
+        }
 
-        if (userId > 0) {
-            return userDAO.deleteUser(userId);
-        } else {
-            throw new OperationFailedException("Invalid user id!");
+        try {
+            userDAO.deleteUser(userId);
+        } catch (ObjectNotFoundException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException("User not found", e);
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
         }
     }
 
     @Override
     public User login(String email, String password) {
-
-        User validUser;
-
-        //check if email is valid
-        if (isValidEmailAddress(email)) {
-            User user = userDAO.getUserByEmail(email);
-            if (user != null && user.getPassword().equals(HashGeneratorUtil.generateHashString(password))) {
-                validUser = user;
-            } else {
-                throw new OperationFailedException("Invalid email/password combination!");
-            }
-        } else {
-            throw new OperationFailedException("Invalid email!");
+        //email/password validation
+        if (email == null || email.isEmpty()) {
+            throw new OperationFailedException("Empty email");
         }
-        return validUser;
+
+        if (password == null || password.isEmpty()) {
+            throw new OperationFailedException("Empty password");
+        }
+
+        if (!isValidEmailAddressForm(email)) {
+            throw new OperationFailedException("Invalid email address form");
+        }
+
+        User user;
+        try {
+            //read user data from db
+            user = userDAO.getUserByEmail(email);
+        } catch (ObjectNotFoundException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException("Invalid email/password combination!");
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
+        }
+
+        //check if passwords match
+        if (user.getPassword().equals(HashGenerator.generateHashString(password))) {
+            return user;
+        } else {
+            throw new OperationFailedException("Invalid email/password combination!");
+        }
     }
 
     @Override
-    public User getUserById(int userId) throws OperationFailedException {
+    public User getUserById(int userId) {
+        if (userId <= 0) {
+            throw new OperationFailedException("Invalid user id");
+        }
 
-        if (userId > 0) {
+        try {
+            //get user data from db
             return userDAO.getUserById(userId);
-        } else {
-            throw new OperationFailedException("Invalid user id!");
+        } catch (ObjectNotFoundException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException("User not found");
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
         }
     }
 
     @Override
-    public User getUserByEmail(String email) throws OperationFailedException {
-        if (isValidEmailAddress(email)) {
+    public User getUserByEmail(String email) {
+        if (!isValidEmailAddressForm(email)) {
+            throw new OperationFailedException("Invalid email address form");
+        }
+
+        try {
+            //get user data from db
             return userDAO.getUserByEmail(email);
-        } else {
-            throw new OperationFailedException("Invalid email address!");
+        } catch (ObjectNotFoundException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException("User not found");
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
         }
     }
 
     @Override
-    public List<User> getAllUsers() throws OperationFailedException {
-        return userDAO.getAllUsers();
+    public List<User> getAllUsers() {
+        try {
+            return userDAO.getAllUsers();
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
+        }
     }
 
     @Override
-    public boolean deleteAllUsers() throws OperationFailedException {
-        return userDAO.deleteAllUsers();
-    }
-
-
-    //helper methods
-    private boolean isValidUser(User user) {
-
-        boolean valid = false;
-        if (user != null) {
-            if (user.getFirstName() != null
-                    && user.getLastName() != null
-                    && user.getPassword() != null
-                    && user.getEmail() != null
-                    && isValidEmailAddress(user.getEmail())) {
-                valid = true;
-            }
+    public void deleteAllUsers() {
+        try {
+            userDAO.deleteAllUsers();
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
         }
-        return valid;
-    }
-
-
-    private static boolean isValidEmailAddress(String email) {
-        String EMAIL_REGEX = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
-        return email.matches(EMAIL_REGEX);
     }
 }

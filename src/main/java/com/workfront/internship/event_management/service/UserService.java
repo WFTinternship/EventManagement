@@ -9,23 +9,21 @@ import java.util.List;
  */
 interface UserService {
 
-    //CRUD operations with user
-    int addAccount(User user);
+    User addAccount(User user);
 
-    boolean editProfile(User user);
+    void editProfile(User user);
 
-    boolean verifyAccount(int userId);
+    void verifyAccount(int userId);
 
     User login(String email, String password);
-
-    boolean deleteAccount(int userId);
 
     User getUserById(int userId);
 
     User getUserByEmail(String email);
 
-    //operations with all users
     List<User> getAllUsers();
 
-    boolean deleteAllUsers();
+    void deleteAccount(int userId);
+
+    void deleteAllUsers();
 }
