@@ -16,15 +16,16 @@ import static org.junit.Assert.assertNotNull;
 public class TestHelper {
 
     public static final String NON_EXISTING_USERNAME = "nonExistingUsername";
-    public static final String NON_EXISTING_EMAIL = "nonExistingEmail@test.com";
+    public static final String NON_EXISTING_EMAIL = "nonExistingEmail@nonExisting.email";
     public static final String NON_EXISTING_MEDIA_TYPE = "Video";
     public static final String NON_EXISTING_TITLE = "nonExistingTitle";
     public static final String INVALID_EMAIL = "nonExistingTitle";
+    public static final String WRONG_PASSWORD = "wrongPassword";
+
 
     public static int NON_EXISTING_ID = 1;
     public static int INVALID_ID = -1;
-
-
+    public static int VALID_ID = 10;
 
     //test object creation
     public static User createTestUser() {
