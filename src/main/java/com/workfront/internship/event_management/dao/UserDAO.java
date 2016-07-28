@@ -1,5 +1,8 @@
 package com.workfront.internship.event_management.dao;
 
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.User;
 
 import java.util.List;
@@ -10,22 +13,22 @@ import java.util.List;
 public interface UserDAO {
 
     //insert record into db
-    int addUser(User user);
+    int addUser(User user) throws DAOException, DuplicateEntryException;
 
     //read data from db
-    List<User> getAllUsers();
+    List<User> getAllUsers() throws DAOException;
 
-    User getUserById(int userId);
+    User getUserById(int userId) throws DAOException, ObjectNotFoundException;
 
-    User getUserByEmail(String email);
+    User getUserByEmail(String email) throws DAOException, ObjectNotFoundException;
 
     //update record in db
-    boolean updateVerifiedStatus(int userId);
+    void updateVerifiedStatus(int userId) throws ObjectNotFoundException, DAOException;
 
-    boolean updateUser(User user);
+    void updateUser(User user) throws ObjectNotFoundException, DAOException, DuplicateEntryException;
 
     //delete record from db
-    boolean deleteUser(int userId);
+    void deleteUser(int userId) throws DAOException, ObjectNotFoundException;
 
-    boolean deleteAllUsers();
+    void deleteAllUsers() throws DAOException;
 }

@@ -1,8 +1,10 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.exception.DAOException;
-import com.workfront.internship.event_management.exception.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.User;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.*;
@@ -14,6 +16,7 @@ import java.util.List;
  */
 public class UserDAOImpl extends GenericDAO implements UserDAO {
 
+    static final Logger LOGGER = Logger.getLogger(UserDAOImpl.class);
     private DataSourceManager dataSourceManager;
 
     public UserDAOImpl(DataSourceManager dataSourceManager) throws Exception {
@@ -21,33 +24,32 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
         this.dataSourceManager = dataSourceManager;
     }
 
-    public UserDAOImpl() {
+    public UserDAOImpl() throws DAOException {
         try {
             this.dataSourceManager = DataSourceManager.getInstance();
         } catch (IOException | SQLException e) {
-            LOGGER.error("Could not instantiate data source manager for UserDAO", e);
-            throw new DAOException();
+            LOGGER.error("Could not instantiate data source manager", e);
+            throw new DAOException("Could not instantiate data source manager", e);
         }
     }
 
-
     @Override
-    public int addUser(User user) {
+    public int addUser(User user) throws DAOException, DuplicateEntryException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
+
         int id = 0;
+        String query = "INSERT INTO user (first_name, last_name, email, password, phone_number, " +
+                "avatar_path, verified, registration_date) VALUES " +
+                "(?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             //get connection
             conn = dataSourceManager.getConnection();
 
             //create and initialize statement
-            String sql = "INSERT INTO user (first_name, last_name, email, password, phone_number, " +
-                    "avatar_path, verified, registration_date) VALUES " +
-                    "(?, ?, ?, ?, ?, ?, ?, ?)";
-            stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-
+            stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setString(1, user.getFirstName());
             stmt.setString(2, user.getLastName());
             stmt.setString(3, user.getEmail());
@@ -55,7 +57,6 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             stmt.setString(5, user.getPhoneNumber());
             stmt.setString(6, user.getAvatarPath());
             stmt.setBoolean(7, user.isVerified());
-
             if (user.getRegistrationDate() != null) {
                 stmt.setTimestamp(8, new Timestamp(user.getRegistrationDate().getTime()));
             } else {
@@ -67,13 +68,12 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
             //get inserted id
             id = getInsertedId(stmt);
-
         } catch (SQLIntegrityConstraintViolationException e) {
             LOGGER.error("Duplicate user entry", e);
-            throw new DuplicateEntryException();
+            throw new DuplicateEntryException("User with email " + user.getEmail() + " already exists!", e);
         } catch (SQLException e) {
             LOGGER.error("SQL exception", e);
-            throw new DAOException();
+            throw new DAOException(e);
         } finally {
             closeResources(stmt, conn);
         }
@@ -81,11 +81,13 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers() throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
+
+        String query = "SELECT * FROM user";
         List<User> usersList = new ArrayList<>();
 
         try {
@@ -93,18 +95,16 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             conn = dataSourceManager.getConnection();
 
             //create statement
-            String sql = "SELECT * FROM user";
-            stmt = conn.prepareStatement(sql);
+            stmt = conn.prepareStatement(query);
 
             //execute query
             rs = stmt.executeQuery();
 
             //get results
             usersList = createUsersListFromRS(rs);
-
         } catch (SQLException e) {
             LOGGER.error("SQL exception", e);
-            throw new DAOException();
+            throw new DAOException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -112,49 +112,50 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
     }
 
     @Override
-    public User getUserById(int userId) {
+    public User getUserById(int userId) throws DAOException, ObjectNotFoundException {
         return getUserByField("id", userId);
     }
 
     @Override
-    public User getUserByEmail(String email) {
+    public User getUserByEmail(String email) throws DAOException, ObjectNotFoundException {
         return getUserByField("email", email);
     }
 
     @Override
-    public boolean updateVerifiedStatus(int userId) {
+    public void updateVerifiedStatus(int userId) throws ObjectNotFoundException, DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
-        int affectedRows = 0;
+
+        String query = "UPDATE user SET verified = 1 WHERE id = ?";
 
         try {
             //get connection
             conn = dataSourceManager.getConnection();
 
             //create and initialize statement
-            String sqlStr = "UPDATE user SET verified = 1 WHERE id = ?";
-            stmt = conn.prepareStatement(sqlStr);
+            stmt = conn.prepareStatement(query);
             stmt.setInt(1, userId);
 
             //execute query
-            affectedRows = stmt.executeUpdate();
+            int affectedRows = stmt.executeUpdate();
 
+            if (affectedRows == 0) {
+                throw new ObjectNotFoundException("User with id " + userId + " not found!");
+            }
         } catch (SQLException e) {
             LOGGER.error("SQL exception", e);
-            throw new DAOException();
+            throw new DAOException(e);
         } finally {
             closeResources(stmt, conn);
         }
-        return affectedRows != 0;
     }
 
     @Override
-    public boolean updateUser(User user) {
+    public void updateUser(User user) throws ObjectNotFoundException, DAOException, DuplicateEntryException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
-        int affectedRows = 0;
 
         try {
             //get connection
@@ -173,59 +174,64 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             stmt.setInt(7, user.getId());
 
             //execute query
-            affectedRows = stmt.executeUpdate();
+            int affectedRows = stmt.executeUpdate();
 
+            if (affectedRows == 0) {
+                throw new ObjectNotFoundException("User with id " + user.getId() + " not found!");
+            }
         } catch (SQLIntegrityConstraintViolationException e) {
             LOGGER.error("Duplicate user entry", e);
-            throw new DuplicateEntryException();
+            throw new DuplicateEntryException("User with email " + user.getEmail() + " already exists!", e);
         } catch (SQLException e) {
             LOGGER.error("SQL exception", e);
-            throw new DAOException();
+            throw new DAOException(e);
         } finally {
             closeResources(stmt, conn);
         }
-        return affectedRows != 0;
     }
 
     @Override
-    public boolean deleteUser(int userId) {
-        return deleteRecordById("user", userId);
+    public void deleteUser(int userId) throws DAOException, ObjectNotFoundException {
+        deleteRecordById("user", userId);
     }
 
     @Override
-    public boolean deleteAllUsers() {
-        return deleteAllRecords("user");
+    public void deleteAllUsers() throws DAOException {
+        deleteAllRecords("user");
     }
 
     //helper methods
-    private User getUserByField(String columnName, Object columnValue) {
+    private User getUserByField(String columnName, Object columnValue) throws ObjectNotFoundException, DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
+
         User user = null;
+        String query = "SELECT * FROM user WHERE " + columnName + " = ?";
 
         try {
             //get connection
             conn = dataSourceManager.getConnection();
 
             //create and initialize statement
-            String sqlStr = "SELECT * FROM user WHERE " + columnName + " = ?";
-            stmt = conn.prepareStatement(sqlStr);
+            stmt = conn.prepareStatement(query);
             stmt.setObject(1, columnValue);
 
             //execute query
             rs = stmt.executeQuery();
 
             //get results
-            List<User> users = createUsersListFromRS(rs);
-            if (!users.isEmpty()) {
-                user = users.get(0);
-            }
+            List<User> userList = createUsersListFromRS(rs);
 
+            if (userList.isEmpty()) {
+                throw new ObjectNotFoundException("User with " + columnName + " " + columnValue + " not found!");
+            } else {
+                user = userList.get(0);
+            }
         } catch (SQLException e) {
             LOGGER.error("SQL exception", e);
-            throw new DAOException();
+            throw new DAOException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -233,7 +239,6 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
     }
 
     private List<User> createUsersListFromRS(ResultSet rs) throws SQLException {
-
         List<User> usersList = new ArrayList<>();
 
         while (rs.next()) {
