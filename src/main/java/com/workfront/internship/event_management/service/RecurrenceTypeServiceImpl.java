@@ -16,12 +16,22 @@ public class RecurrenceTypeServiceImpl implements RecurrenceTypeService {
     }
 
     @Override
+    public int addRecurrenceTypeWithOptions(RecurrenceType recurrenceType) {
+        return 0;
+    }
+
+    @Override
     public List<RecurrenceType> getAllRecurrenceTypes() {
         return null;
     }
 
     @Override
     public RecurrenceType getRecurrenceTypeById(int id) {
+        return null;
+    }
+
+    @Override
+    public RecurrenceType getRecurrenceTypeWithOptionsById(int id) {
         return null;
     }
 
@@ -37,46 +47,6 @@ public class RecurrenceTypeServiceImpl implements RecurrenceTypeService {
 
     @Override
     public boolean deleteAllRecurrenceTypes() throws DAOException {
-        return false;
-    }
-
-    @Override
-    public int addRecurrenceOption(RecurrenceOption option) {
-        return 0;
-    }
-
-    @Override
-    public List<RecurrenceOption> getAllRecurrenceOptions() {
-        return null;
-    }
-
-    @Override
-    public RecurrenceOption getRecurrenceOption(int optionId) {
-        return null;
-    }
-
-    @Override
-    public List<RecurrenceOption> getRecurrenceOptionsByRecurrenceType(int recurrenceTypeId) {
-        return null;
-    }
-
-    @Override
-    public boolean updateRecurrenceOption(RecurrenceOption option) {
-        return false;
-    }
-
-    @Override
-    public boolean deleteRecurrenceOption(int optionId) throws DAOException {
-        return false;
-    }
-
-    @Override
-    public boolean deleteRecurrenceOptionsByRecurrenceType(int recurrenceTypeId) throws DAOException {
-        return false;
-    }
-
-    @Override
-    public boolean deleteAllRecurrenceOptions() throws DAOException {
         return false;
     }
 }
