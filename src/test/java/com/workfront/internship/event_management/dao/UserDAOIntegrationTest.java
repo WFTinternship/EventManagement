@@ -52,8 +52,8 @@ public class UserDAOIntegrationTest {
     }
 
     @Test
-    public void addUser_Sucess() throws DAOException, ObjectNotFoundException {
-        //test user already inserted in setup, read record by userId
+    public void addUser_Success() throws DAOException, ObjectNotFoundException {
+        //test user already inserted in setup, get record by userId
         User user = userDAO.getUserById(testUser.getId());
 
         assertNotNull(user);
@@ -62,13 +62,13 @@ public class UserDAOIntegrationTest {
 
     @Test(expected = DuplicateEntryException.class)
     public void addUser_Duplicate_Entry() throws DuplicateEntryException, DAOException {
-        //test user already inserted into db, insert duplicate user
+        //method under test, insert duplicate user
         userDAO.addUser(testUser);
     }
 
     @Test
     public void getAllUsers_Found() throws DAOException {
-        //test method
+        //method under test
         List<User> userList = userDAO.getAllUsers();
 
         assertNotNull(userList);
@@ -82,7 +82,7 @@ public class UserDAOIntegrationTest {
         //delete inserted user from db
         userDAO.deleteUser(testUser.getId());
 
-        //test method
+        //method under test
         List<User> userList = userDAO.getAllUsers();
 
         assertNotNull(userList);
@@ -100,15 +100,13 @@ public class UserDAOIntegrationTest {
 
     @Test(expected = ObjectNotFoundException.class)
     public void getUserById_Not_Found() throws DAOException, ObjectNotFoundException {
-        //testing method
-        User user = userDAO.getUserById(TestHelper.NON_EXISTING_ID);
-
-        assertNull(user);
+        //method under test
+        userDAO.getUserById(TestHelper.NON_EXISTING_ID);
     }
 
     @Test
     public void getUserByEmail_Found() throws DAOException, ObjectNotFoundException {
-        //testing method
+        //method under test
         User user = userDAO.getUserByEmail(testUser.getEmail());
 
         assertNotNull(user);
@@ -117,15 +115,13 @@ public class UserDAOIntegrationTest {
 
     @Test(expected = ObjectNotFoundException.class)
     public void getUserByEmail_Not_Fount() throws DAOException, ObjectNotFoundException {
-        //testing method
-        User user = userDAO.getUserByEmail(TestHelper.NON_EXISTING_EMAIL);
-
-        assertNull(user);
+        //method under test
+        userDAO.getUserByEmail(TestHelper.NON_EXISTING_EMAIL);
     }
 
     @Test
     public void updateVerifiedStatus_Success() throws DAOException, ObjectNotFoundException {
-        //testing method
+        //method under test
         userDAO.updateVerifiedStatus(testUser.getId());
 
         //read updated record from db
@@ -137,7 +133,7 @@ public class UserDAOIntegrationTest {
 
     @Test(expected = ObjectNotFoundException.class)
     public void updateVerifiedStatus_Not_Found() throws DAOException, ObjectNotFoundException {
-        //testing method
+        //method under test
         userDAO.updateVerifiedStatus(TestHelper.NON_EXISTING_ID);
     }
 
@@ -162,31 +158,30 @@ public class UserDAOIntegrationTest {
         //create new user without id
         User updatedUser = TestHelper.createTestUser();
 
-        //test method
+        //method under test
         userDAO.updateUser(updatedUser);
     }
 
-    @Test
+    @Test(expected = ObjectNotFoundException.class)
     public void deleteUser_Success() throws DAOException, ObjectNotFoundException {
-        //test method
+        //method under test
         userDAO.deleteUser(testUser.getId());
 
-        User user = userDAO.getUserById(testUser.getId());
-
-        assertNull(user);
+        //non-existing user, method should throw ObjectNotFoundException
+        userDAO.getUserById(testUser.getId());
     }
 
 
     @Test(expected = ObjectNotFoundException.class)
     public void deleteUser_Not_Found() throws DAOException, ObjectNotFoundException {
-        //test method
+        //method under test
         userDAO.deleteUser(TestHelper.NON_EXISTING_ID);
     }
 
 
     @Test
     public void deleteAllUsers_Success() throws DAOException {
-        //test method
+        //method under test
         userDAO.deleteAllUsers();
 
         List<User> userList = userDAO.getAllUsers();
@@ -198,7 +193,7 @@ public class UserDAOIntegrationTest {
         //delete inserted user
         userDAO.deleteUser(testUser.getId());
 
-        //test method
+        //method under test
         userDAO.deleteAllUsers();
     }
 

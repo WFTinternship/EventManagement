@@ -4,6 +4,7 @@ import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.User;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -21,14 +22,15 @@ import static org.mockito.Mockito.when;
  */
 public class UserDAOUnitTest {
 
-    private DataSourceManager dataSourceManager;
+
     private UserDAO userDAO;
+
 
     @SuppressWarnings("unchecked")
     @Before
-    public void setUp() throws Exception {
+    public void setUpClass() throws Exception {
 
-        dataSourceManager = Mockito.mock(DataSourceManager.class);
+        DataSourceManager dataSourceManager = Mockito.mock(DataSourceManager.class); // TODO: 7/29/16 set to null in tear down? 
         Connection connection = Mockito.mock(Connection.class);
 
         when(dataSourceManager.getConnection()).thenReturn(connection);
@@ -37,6 +39,12 @@ public class UserDAOUnitTest {
 
         userDAO = new UserDAOImpl(dataSourceManager);
     }
+
+    @After
+    public void tearDownClass() throws Exception {
+        userDAO = null;
+    }
+
 
     @Test(expected = DAOException.class)
     public void addUser_dbError() throws DAOException, DuplicateEntryException {
