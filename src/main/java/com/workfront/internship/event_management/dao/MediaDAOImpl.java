@@ -1,8 +1,11 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.exception.DAOException;
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.Media;
 import com.workfront.internship.event_management.model.MediaType;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.*;
@@ -14,6 +17,7 @@ import java.util.List;
  */
 public class MediaDAOImpl extends GenericDAO implements MediaDAO {
 
+    static final Logger LOGGER = Logger.getLogger(MediaTypeDAOImpl.class);
     private DataSourceManager dataSourceManager;
 
     public MediaDAOImpl(DataSourceManager dataSourceManager) throws Exception {
@@ -21,30 +25,30 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
         this.dataSourceManager = dataSourceManager;
     }
 
-    public MediaDAOImpl() {
+    public MediaDAOImpl() throws DAOException {
         try {
             this.dataSourceManager = DataSourceManager.getInstance();
         } catch (IOException | SQLException e) {
             LOGGER.error("Could not instantiate data source manager.", e);
-            throw new RuntimeException(e);
+            throw new DAOException("Could not instantiate data source manager.", e);
         }
     }
 
     @Override
-    public int addMedia(Media media) {
+    public int addMedia(Media media) throws DuplicateEntryException, DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
-        int id = 0;
 
+        int id = 0;
+        String query = "INSERT INTO event_media (event_id, path, media_type_id, description, uploader_id, upload_date) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
         try {
             //get connection
             conn = dataSourceManager.getConnection();
 
             //create and initialize statement
-            String sqlStr = "INSERT INTO event_media (event_id, path, media_type_id, description, uploader_id, upload_date) "
-                    + "VALUES (?, ?, ?, ?, ?, ?)";
-            stmt = conn.prepareStatement(sqlStr, PreparedStatement.RETURN_GENERATED_KEYS);
+            stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, media.getEventId());
             stmt.setString(2, media.getPath());
             stmt.setInt(3, media.getType().getId());
@@ -61,10 +65,12 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
 
             //get inserted id
             id = getInsertedId(stmt);
-
+        } catch (SQLIntegrityConstraintViolationException e) {
+            LOGGER.error("Duplicate media entry", e);
+            throw new DuplicateEntryException("Media with path " + media.getPath() + " already exists!", e);
         } catch (SQLException e) {
-            LOGGER.error("Exception...", e);
-            throw new RuntimeException(e);
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
         } finally {
             closeResources(stmt, conn);
         }
@@ -72,15 +78,13 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
     }
 
     @Override
-    public boolean addMedia(List<Media> mediaList) {
+    public void addMedia(List<Media> mediaList) throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
 
         String query = "INSERT INTO event_media (event_id, path, media_type_id, description, uploader_id, upload_date) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
-        boolean success;
-
         try {
             //get connection
             conn = dataSourceManager.getConnection();
@@ -103,41 +107,39 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             }
 
             //execute query
-            success = (stmt.executeBatch().length != 0);
+            stmt.executeBatch();
 
         } catch (SQLException e) {
-            LOGGER.error("SQL exception...", e);
-            throw new RuntimeException(e);
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
         } finally {
             closeResources(stmt, conn);
         }
-        return success;
     }
 
     @Override
-    public Media getMediaById(int mediaId) {
+    public Media getMediaById(int mediaId) throws ObjectNotFoundException, DAOException {
 
         List<Media> mediaList = getMediaByField("id", mediaId);
-
-        if (!mediaList.isEmpty()) {
-            return mediaList.get(0);
+        if (mediaList.isEmpty()) {
+            throw new ObjectNotFoundException("Media with id " + mediaId + " not found!");
         } else {
-            return null;
+            return mediaList.get(0);
         }
     }
 
     @Override
-    public List<Media> getMediaByType(int typeId) {
+    public List<Media> getMediaByType(int typeId) throws DAOException {
         return getMediaByField("media_type_id", typeId);
     }
 
     @Override
-    public List<Media> getMediaByUploaderId(int uploaderId) {
+    public List<Media> getMediaByUploaderId(int uploaderId) throws DAOException {
         return getMediaByField("uploader_id", uploaderId);
     }
 
     @Override
-    public List<Media> getMediaByEventId(int eventId) {
+    public List<Media> getMediaByEventId(int eventId) throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -163,8 +165,8 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             mediaList = createMediaListFromRS(rs);
 
         } catch (SQLException e) {
-            LOGGER.error("Exception...", e);
-            throw new RuntimeException();
+            LOGGER.error("SQL exception", e);
+            throw new DAOException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -172,7 +174,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
     }
 
     @Override
-    public List<Media> getAllMedia() {
+    public List<Media> getAllMedia() throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -196,8 +198,8 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             mediaList = createMediaListFromRS(rs);
 
         } catch (SQLException e) {
-            LOGGER.error("Exception...", e);
-            throw new RuntimeException(e);
+            LOGGER.error("SQL exception", e);
+            throw new DAOException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -205,62 +207,62 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
     }
 
     @Override
-    public boolean updateMediaDescription(int mediaId, String desc) {
+    public void updateMediaDescription(int mediaId, String desc) throws DAOException, ObjectNotFoundException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
-        int affectedRows = 0;
+
+        String query = "UPDATE event_media SET description = ? WHERE id = ?";
 
         try {
             //get connection
             conn = dataSourceManager.getConnection();
 
             //create and initialize statement
-            String sqlStr = "UPDATE event_media SET description = ? WHERE id = ?";
-            stmt = conn.prepareStatement(sqlStr);
+            stmt = conn.prepareStatement(query);
             stmt.setString(1, desc);
             stmt.setInt(2, mediaId);
 
             //execute query
-            affectedRows = stmt.executeUpdate();
-
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new ObjectNotFoundException("Media with id " + mediaId + " not found!");
+            }
         } catch (SQLException e) {
-            LOGGER.error("Exception...", e);
-            throw new RuntimeException(e);
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
         } finally {
             closeResources(null, stmt, conn);
         }
-        return affectedRows != 0;
     }
 
     @Override
-    public boolean deleteMedia(int mediaId) throws DAOException {
-        return deleteRecordById("event_media", mediaId);
+    public void deleteMedia(int mediaId) throws DAOException, ObjectNotFoundException {
+        deleteRecordById("event_media", mediaId);
     }
 
     @Override
-    public boolean deleteAllMedia() throws DAOException {
-        return deleteAllRecords("event_media");
+    public void deleteAllMedia() throws DAOException {
+        deleteAllRecords("event_media");
     }
 
     // helper methods
-    private List<Media> getMediaByField(String columnName, Object columnValue) {
+    private List<Media> getMediaByField(String columnName, Object columnValue) throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         List<Media> mediaList = new ArrayList<>();
-
+        String query = "SELECT * FROM event_media " +
+                "LEFT JOIN media_type ON event_media.media_type_id = media_type.id " +
+                "WHERE event_media." + columnName + " = ?";
         try {
             //get connection
             conn = dataSourceManager.getConnection();
 
             //create and initialize statement
-            String sqlStr = "SELECT * FROM event_media " +
-                    "LEFT JOIN media_type ON event_media.media_type_id = media_type.id " +
-                    "WHERE event_media." + columnName + " = ?";
-            stmt = conn.prepareStatement(sqlStr);
+            stmt = conn.prepareStatement(query);
             stmt.setObject(1, columnValue);
 
             //execute statement
@@ -270,8 +272,8 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             mediaList = createMediaListFromRS(rs);
 
         } catch (SQLException e) {
-            LOGGER.error("Exception...", e);
-            throw new RuntimeException(e);
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }

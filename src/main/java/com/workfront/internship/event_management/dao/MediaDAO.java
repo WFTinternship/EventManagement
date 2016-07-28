@@ -1,6 +1,8 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.exception.DAOException;
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.Media;
 
 import java.util.List;
@@ -11,27 +13,27 @@ import java.util.List;
 public interface MediaDAO {
 
     //insert media into db
-    int addMedia(Media media);
+    int addMedia(Media media) throws DuplicateEntryException, DAOException;
 
-    boolean addMedia(List<Media> mediaList);
+    void addMedia(List<Media> mediaList) throws DAOException;
 
 
     //read data from db
-    Media getMediaById(int mediaId);
+    Media getMediaById(int mediaId) throws ObjectNotFoundException, DAOException;
 
-    List<Media> getMediaByEventId(int eventId);
+    List<Media> getMediaByEventId(int eventId) throws DAOException;
 
-    List<Media> getMediaByType(int typeId);
+    List<Media> getMediaByType(int typeId) throws DAOException;
 
-    List<Media> getMediaByUploaderId(int uploaderId);
+    List<Media> getMediaByUploaderId(int uploaderId) throws DAOException;
 
-    List<Media> getAllMedia();
+    List<Media> getAllMedia() throws DAOException;
 
     //update data in db
-    boolean updateMediaDescription(int mediaId, String description);
+    void updateMediaDescription(int mediaId, String description) throws DAOException, ObjectNotFoundException;
 
     //delete data from db
-    boolean deleteMedia(int mediaId) throws DAOException;
+    void deleteMedia(int mediaId) throws ObjectNotFoundException, DAOException;
 
-    boolean deleteAllMedia() throws DAOException;
+    void deleteAllMedia() throws DAOException;
 }

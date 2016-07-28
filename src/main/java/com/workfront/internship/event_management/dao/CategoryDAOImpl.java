@@ -1,8 +1,10 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.exception.DAOException;
-import com.workfront.internship.event_management.exception.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.Category;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.*;
@@ -14,6 +16,7 @@ import java.util.List;
  */
 public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
 
+    static final Logger LOGGER = Logger.getLogger(CategoryDAOImpl.class);
     private DataSourceManager dataSourceManager;
 
     public CategoryDAOImpl(DataSourceManager dataSourceManager) throws Exception {
@@ -21,25 +24,23 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
         this.dataSourceManager = dataSourceManager;
     }
 
-    public CategoryDAOImpl() {
+    public CategoryDAOImpl() throws DAOException {
         try {
             this.dataSourceManager = DataSourceManager.getInstance();
         } catch (IOException | SQLException e) {
-            LOGGER.error("Could not instantiate data source manager for CategoryDAO", e);
-            throw new DAOException();
+            LOGGER.error("Could not instantiate data source manager", e);
+            throw new DAOException("Could not instantiate data source manager", e);
         }
     }
 
     @Override
-    public int addCategory(Category category) {
-
+    public int addCategory(Category category) throws DuplicateEntryException, DAOException {
         Connection conn = null;
         PreparedStatement stmt = null;
 
         int id = 0;
         String query = "INSERT INTO event_category " +
                 "(title, description, creation_date) VALUES (?, ?, ?)";
-
         try {
             //get connection
             conn = dataSourceManager.getConnection();
@@ -60,13 +61,12 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
 
             //get generated id
             id = getInsertedId(stmt);
-
         } catch (SQLIntegrityConstraintViolationException e) {
             LOGGER.error("Duplicate category entry", e);
-            throw new DuplicateEntryException("Duplicate category entry!");
+            throw new DuplicateEntryException("Category with title " + category.getTitle() + " already exists!", e);
         } catch (SQLException e) {
             LOGGER.error("SQL exception", e);
-            throw new DAOException();
+            throw new DAOException(e);
         } finally {
             closeResources(stmt, conn);
         }
@@ -74,43 +74,41 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
     }
 
     @Override
-    public List<Category> getAllCategories() {
-
+    public List<Category> getAllCategories() throws DAOException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
-        List<Category> categoriesList = new ArrayList<>();
+        List<Category> categoryList = new ArrayList<>();
+        String query = "SELECT * FROM event_category";
 
         try {
             //get connection
             conn = dataSourceManager.getConnection();
 
             //create statement
-            String query = "SELECT * FROM event_category";
             stmt = conn.prepareStatement(query);
 
             //execute query
             rs = stmt.executeQuery();
 
             //get results
-            categoriesList = createEventCategoryListFromRS(rs);
-
+            categoryList = createEventCategoryListFromRS(rs);
         } catch (SQLException e) {
             LOGGER.error("SQL exception", e);
-            throw new DAOException();
+            throw new DAOException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
-        return categoriesList;
+        return categoryList;
     }
 
     @Override
-    public Category getCategoryById(int id) {
-
+    public Category getCategoryById(int categoryId) throws ObjectNotFoundException, DAOException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
+
         Category category = null;
 
         try {
@@ -120,19 +118,21 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
             //create and initialize statement
             String query = "SELECT * FROM event_category where id = ?";
             stmt = conn.prepareStatement(query);
-            stmt.setInt(1, id);
+            stmt.setInt(1, categoryId);
 
             //execute query
             rs = stmt.executeQuery();
 
             //get results
             List<Category> categoryList = createEventCategoryListFromRS(rs);
-            if (!categoryList.isEmpty()) {
+            if (categoryList.isEmpty()) {
+                throw new ObjectNotFoundException("Category with id " + categoryId + " not found!");
+            } else {
                 category = categoryList.get(0);
             }
         } catch (SQLException e) {
             LOGGER.error("SQL exception", e);
-            throw new DAOException();
+            throw new DAOException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -140,18 +140,19 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
     }
 
     @Override
-    public Category getCategoryByTitle(String categoryTitle) {
+    public Category getCategoryByTitle(String categoryTitle) throws ObjectNotFoundException, DAOException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
+
         Category category = null;
+        String query = "SELECT * FROM event_category WHERE title = ?";
 
         try {
-            //acquire connection
+            //get connection
             conn = dataSourceManager.getConnection();
 
             //create and initialize statement
-            String query = "SELECT * FROM event_category WHERE title = ?";
             stmt = conn.prepareStatement(query);
             stmt.setString(1, categoryTitle);
 
@@ -160,12 +161,14 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
 
             //get results
             List<Category> categoryList = createEventCategoryListFromRS(rs);
-            if (!categoryList.isEmpty()) {
+            if (categoryList.isEmpty()) {
+                throw new ObjectNotFoundException("Category with title " + categoryTitle + " not found!");
+            } else {
                 category = categoryList.get(0);
             }
         } catch (SQLException e) {
             LOGGER.error("SQL exception", e);
-            throw new DAOException();
+            throw new DAOException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -173,11 +176,9 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
     }
 
     @Override
-    public boolean updateCategory(Category category) {
-
+    public void updateCategory(Category category) throws DuplicateEntryException, DAOException, ObjectNotFoundException {
         Connection conn = null;
         PreparedStatement stmt = null;
-        int affectedRows = 0;
 
         try {
             //get connection
@@ -191,28 +192,30 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
             stmt.setInt(3, category.getId());
 
             //execute query
-            affectedRows = stmt.executeUpdate();
+            int affectedRows = stmt.executeUpdate();
 
+            if (affectedRows == 0) {
+                throw new ObjectNotFoundException("Category with id " + category.getId() + " not found!");
+            }
         } catch (SQLIntegrityConstraintViolationException e) {
             LOGGER.error("Duplicate category entry", e);
-            throw new DuplicateEntryException();
+            throw new DuplicateEntryException("Category with title " + category.getTitle() + " already exists!", e);
         } catch (SQLException e) {
             LOGGER.error("SQL exception", e);
-            throw new DAOException();
+            throw new DAOException(e);
         } finally {
             closeResources(stmt, conn);
         }
-        return affectedRows != 0;
     }
 
     @Override
-    public boolean deleteCategory(int categoryId) {
-        return deleteRecordById("event_category", categoryId);
+    public void deleteCategory(int categoryId) throws ObjectNotFoundException, DAOException {
+        deleteRecordById("event_category", categoryId);
     }
 
     @Override
-    public boolean deleteAllCategories() {
-        return deleteAllRecords("event_category");
+    public void deleteAllCategories() throws DAOException {
+        deleteAllRecords("event_category");
     }
 
     //helper methods
@@ -229,7 +232,6 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
 
             categoryList.add(category);
         }
-
         return categoryList;
     }
 }

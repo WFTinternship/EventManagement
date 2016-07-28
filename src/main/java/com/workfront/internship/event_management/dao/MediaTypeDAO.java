@@ -1,6 +1,8 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.exception.DAOException;
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.MediaType;
 
 import java.util.List;
@@ -12,18 +14,18 @@ import java.util.List;
 public interface MediaTypeDAO {
 
     //insert data into db
-    int addMediaType(MediaType mediaType);
+    int addMediaType(MediaType mediaType) throws DAOException, DuplicateEntryException;
 
     //read data from db
-    List<MediaType> getAllMediaTypes();
+    List<MediaType> getAllMediaTypes() throws DAOException;
 
-    MediaType getMediaTypeById(int mediaTypeId);
+    MediaType getMediaTypeById(int mediaTypeId) throws ObjectNotFoundException, DAOException;
 
     //update data in db
-    boolean updateMediaType(MediaType mediaType);
+    void updateMediaType(MediaType mediaType) throws DuplicateEntryException, DAOException;
 
     //delete data from db
-    boolean deleteMediaType(int mediaTypeId) throws DAOException;
+    void deleteMediaType(int mediaTypeId) throws ObjectNotFoundException, DAOException;
 
-    boolean deleteAllMediaTypes() throws DAOException;
+    void deleteAllMediaTypes() throws DAOException;
 }

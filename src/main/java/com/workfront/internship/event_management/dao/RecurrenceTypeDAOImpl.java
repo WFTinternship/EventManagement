@@ -1,14 +1,14 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.exception.DAOException;
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.RecurrenceOption;
 import com.workfront.internship.event_management.model.RecurrenceType;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +17,7 @@ import java.util.List;
  */
 public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeDAO {
 
+    static final Logger LOGGER = Logger.getLogger(RecurrenceTypeDAOImpl.class);
     private DataSourceManager dataSourceManager;
 
     public RecurrenceTypeDAOImpl(DataSourceManager dataSourceManager) throws Exception {
@@ -24,18 +25,17 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
         this.dataSourceManager = dataSourceManager;
     }
 
-    public RecurrenceTypeDAOImpl() {
+    public RecurrenceTypeDAOImpl() throws DAOException {
         try {
             this.dataSourceManager = DataSourceManager.getInstance();
         } catch (IOException | SQLException e) {
-            LOGGER.error("Could not instantiate data source manager for RecurrenceTypeDAOImpl.", e);
-            throw new DAOException("Could not instantiate data source manager");
+            LOGGER.error("Could not instantiate data source manager", e);
+            throw new DAOException("Could not instantiate data source manager", e);
         }
     }
 
     @Override
-    public int addRecurrenceType(RecurrenceType recurrenceType) {
-
+    public int addRecurrenceType(RecurrenceType recurrenceType) throws DAOException, DuplicateEntryException {
         Connection conn = null;
         int id = 0;
 
@@ -45,50 +45,17 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
             //execute query and get generated id
             id = addRecurrenceType(recurrenceType, conn);
-
         } catch (SQLException e) {
             LOGGER.error("SQL Exception", e);
-            throw new DAOException("SQL Exception");
+            throw new DAOException(e);
         } finally {
             closeResources(conn);
         }
         return id;
     }
 
-
-    public int addRecurrenceType(RecurrenceType recurrenceType, Connection conn) {
-
-        PreparedStatement stmt = null;
-
-        int id = 0;
-        String query = "INSERT INTO recurrence_type "
-                + "(title, interval_unit) VALUES (?, ?) ";
-
-        try {
-            //create and initialize statement
-            stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
-            stmt.setString(1, recurrenceType.getTitle());
-            stmt.setString(2, recurrenceType.getIntervalUnit());
-
-            //execute query
-            stmt.executeUpdate();
-
-            //get generated id
-            id = getInsertedId(stmt);
-
-        } catch (SQLException e) {
-            LOGGER.error("SQL Exception", e);
-            throw new DAOException("SQL Exception");
-        } finally {
-            closeResources(stmt);
-        }
-        return id;
-    }
-
-
     @Override
-    public int addRecurrenceTypeWithOptions(RecurrenceType recurrenceType) {
-
+    public int addRecurrenceTypeWithOptions(RecurrenceType recurrenceType) throws DuplicateEntryException, DAOException {
         Connection conn = null;
         int id = 0;
 
@@ -99,8 +66,8 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
             //start transaction
             conn.setAutoCommit(false);
 
+            //insert recurrence type
             int recurrenceTypeId = addRecurrenceType(recurrenceType, conn);
-
 
             //set generated recurrence type id to recurrence options
             List<RecurrenceOption> options = recurrenceType.getRecurrenceOptions();
@@ -116,7 +83,6 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
             //commit transaction
             conn.commit();
-
         } catch (SQLException e) {
             try {
                 if (conn != null) {
@@ -124,26 +90,23 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
                 }
             } catch (SQLException re) {
                 LOGGER.error("Transaction failed!", e);
-                throw new DAOException("Could not insert recurrence type into db. Transaction failed!");
+                throw new DAOException("Could not insert recurrence type into db. Transaction failed!", e);
             }
-            throw new RuntimeException(e);
+            throw new DAOException(e);
         } finally {
             closeResources(conn);
         }
         return id;
     }
 
-
     @Override
-   public List<RecurrenceType> getAllRecurrenceTypes() {
-
+    public List<RecurrenceType> getAllRecurrenceTypes() throws DAOException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         String query = "SELECT * FROM recurrence_type ";
         List<RecurrenceType> recurrenceTypeList = new ArrayList<>();
-
         try {
             //get connection
             conn = dataSourceManager.getConnection();
@@ -156,10 +119,9 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
             //get results
             recurrenceTypeList = createRecurrenceTypeListFromRS(rs);
-
         } catch (SQLException e) {
             LOGGER.error("SQL Exception ", e);
-            throw new DAOException("SQL Exception");
+            throw new DAOException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -167,15 +129,13 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
     }
 
     @Override
-    public RecurrenceType getRecurrenceTypeById(int id) {
-
+    public RecurrenceType getRecurrenceTypeById(int id) throws DAOException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         RecurrenceType recurrenceType = null;
         String query = "SELECT * FROM recurrence_type WHERE recurrence_type.id = ?";
-
         try {
             //get connection
             conn = dataSourceManager.getConnection();
@@ -192,10 +152,9 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
             if (recurrenceTypes != null && recurrenceTypes.size() == 1) {
                 recurrenceType = recurrenceTypes.get(0);
             }
-
         } catch (SQLException e) {
             LOGGER.error("SQL Exception ", e);
-            throw new DAOException("SQL Exception");
+            throw new DAOException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -203,8 +162,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
     }
 
     @Override
-    public RecurrenceType getRecurrenceTypeWithOptionsById(int id) {
-
+    public RecurrenceType getRecurrenceTypeWithOptionsById(int id) throws DAOException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -230,7 +188,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
         } catch (SQLException e) {
             LOGGER.error("SQL Exception ", e);
-            throw new DAOException("SQL Exception");
+            throw new DAOException(e);
         } finally {
             closeResources(rs, stmt, conn);
         }
@@ -238,8 +196,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
     }
 
     @Override
-    public boolean updateRecurrenceType(RecurrenceType recurrenceType) {
-
+    public void updateRecurrenceType(RecurrenceType recurrenceType) throws DAOException {
         Connection conn = null;
         PreparedStatement stmt = null;
 
@@ -258,28 +215,54 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
             //execute query
             affectedRows = stmt.executeUpdate();
-
         } catch (SQLException e) {
             LOGGER.error("SQL Exception ", e);
-            throw new DAOException("SQL Exception");
+            throw new DAOException(e);
         } finally {
             closeResources(stmt, conn);
         }
-        return affectedRows != 0;
     }
 
     @Override
-    public boolean deleteRecurrenceType(int id) {
-        return deleteRecordById("recurrence_type", id);
+    public void deleteRecurrenceType(int id) throws ObjectNotFoundException, DAOException {
+        deleteRecordById("recurrence_type", id);
     }
 
     @Override
-    public boolean deleteAllRecurrenceTypes() {
-        return deleteAllRecords("recurrence_type");
+    public void deleteAllRecurrenceTypes() throws DAOException {
+        deleteAllRecords("recurrence_type");
     }
-
 
     //helper methods
+    public int addRecurrenceType(RecurrenceType recurrenceType, Connection conn) throws DAOException, DuplicateEntryException {
+        PreparedStatement stmt = null;
+
+        int id = 0;
+        String query = "INSERT INTO recurrence_type "
+                + "(title, interval_unit) VALUES (?, ?) ";
+        try {
+            //create and initialize statement
+            stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, recurrenceType.getTitle());
+            stmt.setString(2, recurrenceType.getIntervalUnit());
+
+            //execute query
+            stmt.executeUpdate();
+
+            //get generated id
+            id = getInsertedId(stmt);
+        } catch (SQLIntegrityConstraintViolationException e) {
+            LOGGER.error("Duplicate recurrence type entry", e);
+            throw new DuplicateEntryException("Recurrence type with title " + recurrenceType.getTitle() + " already exists!", e);
+        } catch (SQLException e) {
+            LOGGER.error("SQL exception", e);
+            throw new DAOException(e);
+        } finally {
+            closeResources(stmt);
+        }
+        return id;
+    }
+
     private List<RecurrenceType> createRecurrenceTypeListFromRS(ResultSet rs) throws SQLException {
 
         List<RecurrenceType> recurrenceTypeList = new ArrayList<>();
@@ -287,8 +270,8 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
         while (rs.next()) {
             RecurrenceType recurrenceType = new RecurrenceType();
             recurrenceType.setId(rs.getInt("id"))
-                        .setTitle(rs.getString("title"))
-                        .setIntervalUnit(rs.getString("interval_unit"));
+                    .setTitle(rs.getString("title"))
+                    .setIntervalUnit(rs.getString("interval_unit"));
 
             recurrenceTypeList.add(recurrenceType);
         }
@@ -315,5 +298,4 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
         }
         return recurrenceType;
     }
-
 }
