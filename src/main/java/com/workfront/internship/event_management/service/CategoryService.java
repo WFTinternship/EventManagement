@@ -1,8 +1,5 @@
 package com.workfront.internship.event_management.service;
 
-import com.workfront.internship.event_management.exception.dao.DAOException;
-import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
-import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.Category;
 
 import java.util.List;
@@ -13,10 +10,9 @@ import java.util.List;
 interface CategoryService {
 
     //CRUD operations with category
+    Category addCategory(Category category);
 
-    int addCategory(Category category) throws DuplicateEntryException, DAOException;
-
-    Category getCategoryById(int categoryId) throws DAOException, ObjectNotFoundException;
+    Category getCategoryById(int categoryId);
 
     Category getCategoryByTitle(String categoryTitle);
 
@@ -26,7 +22,5 @@ interface CategoryService {
 
     void deleteCategory(int categoryId);
 
-
     void deleteAllCategories();
-
 }

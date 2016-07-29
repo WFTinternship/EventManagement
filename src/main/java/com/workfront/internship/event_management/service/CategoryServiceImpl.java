@@ -7,131 +7,134 @@ import com.workfront.internship.event_management.exception.dao.DuplicateEntryExc
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Category;
+import org.apache.log4j.Logger;
 
 import java.util.List;
+
+import static com.workfront.internship.event_management.service.util.Validator.isEmptyString;
+import static com.workfront.internship.event_management.service.util.Validator.isValidCategory;
 
 /**
  * Created by Hermine Turshujyan 7/22/16.
  */
 public class CategoryServiceImpl implements CategoryService {
 
+    private static final Logger LOGGER = Logger.getLogger(CategoryServiceImpl.class);
     private CategoryDAO categoryDAO;
 
     public CategoryServiceImpl() {
         try {
             categoryDAO = new CategoryDAOImpl();
         } catch (DAOException e) {
-            throw new OperationFailedException("Database error!");
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
         }
     }
 
     @Override
-    public int addCategory(Category category) throws DuplicateEntryException, DAOException {
-
-        int categoryId = 0;
-
+    public Category addCategory(Category category) {
         //check if category object is valid
-        if (isValid(category)) {
-            categoryId = categoryDAO.addCategory(category);
+        if (!isValidCategory(category)) {
+            throw new OperationFailedException("Invalid category");
         }
 
-        return categoryId;
+        try {
+            //insert category into db
+            int categoryId = categoryDAO.addCategory(category);
+
+            //set generated it to category
+            category.setId(categoryId);
+        } catch (DuplicateEntryException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException("Category with title " + category.getTitle() + " already exists!", e);
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
+        }
+        return category;
     }
 
     @Override
-    public Category getCategoryById(int categoryId) throws DAOException, ObjectNotFoundException {
+    public Category getCategoryById(int categoryId) {
+        if (categoryId < 1) {
+            throw new OperationFailedException("Invalid category id");
+        }
 
-        if (categoryId > 0) {
+        try {
+            //get category from db
             return categoryDAO.getCategoryById(categoryId);
-        } else {
-            throw new OperationFailedException("Invalid category id!");
+        } catch (ObjectNotFoundException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException("Category not found", e);
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
         }
     }
 
     @Override
     public Category getCategoryByTitle(String categoryTitle) {
-        Category category;
-        try {
-            return categoryDAO.getCategoryByTitle(categoryTitle);
-        } catch (DAOException e) {
-            throw new OperationFailedException("Database error!");
-        } catch (ObjectNotFoundException e) {
-            e.printStackTrace();
+        if (isEmptyString(categoryTitle)) {
+            throw new OperationFailedException("Invalid category title");
         }
-        return null;
+
+        try {
+            //get category from db
+            return categoryDAO.getCategoryByTitle(categoryTitle);
+        } catch (ObjectNotFoundException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException("Category not found", e);
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
+        }
     }
 
     @Override
     public void editCategory(Category category) {
+        //check if category object is valid
+        if (!isValidCategory(category)) {
+            throw new OperationFailedException("Invalid category");
+        }
 
-        boolean success = false;
-
-        if (isValid(category)) {
-            try {
-                categoryDAO.updateCategory(category);
-               /* if(!success) {
-                    throw new OperationFailedException("Non existing user.");
-                }*/
-            } catch (DuplicateEntryException e) {
-                throw new OperationFailedException("Category with this title already exists!");
-            } catch (DAOException e) {
-                throw new OperationFailedException("Database error!");
-            } catch (ObjectNotFoundException e) {
-                e.printStackTrace();
-            }
+        try {
+            //update category in db
+            categoryDAO.updateCategory(category);
+        } catch (DuplicateEntryException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException("Category with title " + category.getTitle() + " already exists!", e);
+        } catch (ObjectNotFoundException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException("Category not found", e);
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
         }
     }
 
     @Override
     public void deleteCategory(int categoryId) {
-        boolean success = false;
-        if (categoryId > 0) {
-            try {
-                categoryDAO.deleteCategory(categoryId);
-            /*  if(!success) {
-                    throw new OperationFailedException("Non existing user.");
-                }*/
-            } catch (DAOException e) {
-                throw new OperationFailedException("Database error!");
-            } catch (ObjectNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
+
     }
 
     @Override
     public List<Category> getAllCategories() {
-        List<Category> categoryList;
-
         try {
-            categoryList = categoryDAO.getAllCategories();
+            return categoryDAO.getAllCategories();
         } catch (DAOException e) {
-            throw new OperationFailedException("Database error!");
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
         }
-        return categoryList;
     }
 
     @Override
     public void deleteAllCategories() {
-        boolean success;
         try {
             categoryDAO.deleteAllCategories();
         } catch (DAOException e) {
-            throw new OperationFailedException("Database error!");
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
         }
     }
 
-    //helper methods
-    private boolean isValid(Category category) {
-
-        boolean valid = false;
-
-        if (category != null) {
-            if (category.getTitle() != null) {
-                valid = true;
-            }
-
-        }
-        return valid;
-    }
 }
