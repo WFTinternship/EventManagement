@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 
 import java.util.List;
 
-import static com.workfront.internship.event_management.service.util.Validator.isEmptyString;
 import static com.workfront.internship.event_management.service.util.Validator.isValidCategory;
 
 /**
@@ -73,24 +72,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category getCategoryByTitle(String categoryTitle) {
-        if (isEmptyString(categoryTitle)) {
-            throw new OperationFailedException("Invalid category title");
-        }
-
-        try {
-            //get category from db
-            return categoryDAO.getCategoryByTitle(categoryTitle);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Category not found", e);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
-    }
-
-    @Override
     public void editCategory(Category category) {
         //check if category object is valid
         if (!isValidCategory(category)) {
@@ -114,7 +95,19 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteCategory(int categoryId) {
+        if (categoryId < 1) {
+            throw new OperationFailedException("Invalid user id");
+        }
 
+        try {
+            categoryDAO.deleteCategory(categoryId);
+        } catch (ObjectNotFoundException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException("User not found", e);
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
+        }
     }
 
     @Override

@@ -20,8 +20,6 @@ public interface CategoryDAO {
 
     Category getCategoryById(int categoryId) throws ObjectNotFoundException, DAOException;
 
-    Category getCategoryByTitle(String categoryTitle) throws ObjectNotFoundException, DAOException;
-
     //update data in db
     void updateCategory(Category category) throws DuplicateEntryException, DAOException, ObjectNotFoundException;
 

@@ -14,8 +14,6 @@ interface CategoryService {
 
     Category getCategoryById(int categoryId);
 
-    Category getCategoryByTitle(String categoryTitle);
-
     List<Category> getAllCategories();
 
     void editCategory(Category category);

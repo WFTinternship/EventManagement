@@ -140,42 +140,6 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
     }
 
     @Override
-    public Category getCategoryByTitle(String categoryTitle) throws ObjectNotFoundException, DAOException {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        Category category = null;
-        String query = "SELECT * FROM event_category WHERE title = ?";
-
-        try {
-            //get connection
-            conn = dataSourceManager.getConnection();
-
-            //create and initialize statement
-            stmt = conn.prepareStatement(query);
-            stmt.setString(1, categoryTitle);
-
-            //execute query
-            rs = stmt.executeQuery();
-
-            //get results
-            List<Category> categoryList = createEventCategoryListFromRS(rs);
-            if (categoryList.isEmpty()) {
-                throw new ObjectNotFoundException("Category with title " + categoryTitle + " not found!");
-            } else {
-                category = categoryList.get(0);
-            }
-        } catch (SQLException e) {
-            LOGGER.error("SQL exception", e);
-            throw new DAOException(e);
-        } finally {
-            closeResources(rs, stmt, conn);
-        }
-        return category;
-    }
-
-    @Override
     public void updateCategory(Category category) throws DuplicateEntryException, DAOException, ObjectNotFoundException {
         Connection conn = null;
         PreparedStatement stmt = null;

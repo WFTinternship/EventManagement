@@ -1,10 +1,24 @@
 package com.workfront.internship.event_management.dao;
 
+import com.workfront.internship.event_management.TestObjectCreator;
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
+import com.workfront.internship.event_management.model.Category;
+import org.junit.*;
+
+import java.util.List;
+
+import static com.workfront.internship.event_management.AssertionHelper.assertEqualCategories;
+import static com.workfront.internship.event_management.TestObjectCreator.NON_EXISTING_ID;
+import static com.workfront.internship.event_management.TestObjectCreator.createTestCategory;
+import static junit.framework.TestCase.*;
+
 /**
  * Created by Hermine Turshujyan 7/9/16.
  */
 public class CategoryDAOIntegrationTest {
-/*
+
     private static CategoryDAO categoryDAO;
     private Category testCategory;
 
@@ -19,9 +33,9 @@ public class CategoryDAOIntegrationTest {
     }
 
     @Before
-    public void setUp() throws DAOException {
+    public void setUp() throws DAOException, DuplicateEntryException {
         //create test category
-        testCategory = TestHelper.createTestCategory();
+        testCategory = createTestCategory();
 
         //insert test user into db, get generated id
         int categoryId = categoryDAO.addCategory(testCategory);
@@ -38,7 +52,7 @@ public class CategoryDAOIntegrationTest {
     }
 
     @Test
-    public void addCategory_Success() throws DAOException {
+    public void addCategory_Success() throws DAOException, ObjectNotFoundException {
         //test category already inserted in setup, read record by categoryId
         Category category = categoryDAO.getCategoryById(testCategory.getId());
 
@@ -46,27 +60,27 @@ public class CategoryDAOIntegrationTest {
         assertEqualCategories(category, testCategory);
     }
 
+
     @Test(expected = DuplicateEntryException.class)
-    public void addCategory_Dublicate_Entry() throws DAOException {
+    public void addCategory_Duplicate_Entry() throws DAOException, DuplicateEntryException {
         //test category already inserted into db, insert dublicate category
         categoryDAO.addCategory(testCategory);  //event_category.title field in db is unique
     }
 
     @Test
     public void getAllCategories_Found() throws DAOException {
-        //create test categoryList, insert into db
-        List<Category> testCategoryList = createTestCategoryList();
-
         //test method
         List<Category> categoryList = categoryDAO.getAllCategories();
 
         assertNotNull(categoryList);
         assertFalse(categoryList.isEmpty());
-        assertCategoryLists(categoryList, testCategoryList);
+        assertEquals(categoryList.size(), 1);
+
+        assertEqualCategories(categoryList.get(0), testCategory);
     }
 
     @Test
-    public void getAllCategories_Empty_List() throws DAOException {
+    public void getAllCategories_Empty_List() throws DAOException, ObjectNotFoundException {
         //delete inserted category from db
         categoryDAO.deleteCategory(testCategory.getId());
 
@@ -78,7 +92,7 @@ public class CategoryDAOIntegrationTest {
     }
 
     @Test
-    public void getCategoryById_Found() throws DAOException {
+    public void getCategoryById_Found() throws DAOException, ObjectNotFoundException {
         //test method
         Category category = categoryDAO.getCategoryById(testCategory.getId());
 
@@ -86,36 +100,16 @@ public class CategoryDAOIntegrationTest {
         assertEqualCategories(category, testCategory);
     }
 
-    @Test
-    public void getCategoryById_Not_Found() throws DAOException {
+    @Test(expected = ObjectNotFoundException.class)
+    public void getCategoryById_Not_Found() throws DAOException, ObjectNotFoundException {
         //test method
-        Category category = categoryDAO.getCategoryById(TestHelper.NON_EXISTING_ID);
-
-        assertNull(category);
+        categoryDAO.getCategoryById(NON_EXISTING_ID);
     }
 
     @Test
-    public void getCategoryByTitle_Found() throws DAOException {
-        //test method
-        Category category = categoryDAO.getCategoryByTitle(testCategory.getTitle());
-
-        assertNotNull(category);
-        assertEqualCategories(category, testCategory);
-    }
-
-    @Test
-    public void getCategoryByTitle_Not_Found() throws DAOException {
-        //test method
-        Category category = categoryDAO.getCategoryByTitle(TestHelper.NON_EXISTING_TITLE);
-
-        assertNull(category);
-    }
-
-
-    @Test
-    public void updateCategory_Found() throws DAOException {
+    public void updateCategory_Found() throws DAOException, DuplicateEntryException, ObjectNotFoundException {
         //create new category with the same id
-        Category updatedCategory = TestHelper.createTestCategory();
+        Category updatedCategory = TestObjectCreator.createTestCategory();
         updatedCategory.setId(testCategory.getId());
 
         //test method
@@ -128,87 +122,38 @@ public class CategoryDAOIntegrationTest {
         assertEqualCategories(category, updatedCategory);
     }
 
-    @Test
-    public void updateCategory_Not_Found() throws DAOException {
+    @Test(expected = ObjectNotFoundException.class)
+    public void updateCategory_Not_Found() throws DAOException, DuplicateEntryException, ObjectNotFoundException {
         //create new category with non-existing id
-        Category updatedCategory = TestHelper.createTestCategory();
+        Category updatedCategory = TestObjectCreator.createTestCategory();
 
         //test method
-        boolean updated = categoryDAO.updateCategory(updatedCategory);
-
-        assertFalse(updated);
+        categoryDAO.updateCategory(updatedCategory);
     }
 
-    @Test
-    public void deleteCategory_Found() throws DAOException {
+    @Test(expected = ObjectNotFoundException.class)
+    public void deleteCategory_Found() throws DAOException, ObjectNotFoundException {
         //testing method
-        boolean deleted = categoryDAO.deleteCategory(testCategory.getId());
+        categoryDAO.deleteCategory(testCategory.getId());
 
-        Category category = categoryDAO.getCategoryById(testCategory.getId());
-
-        assertTrue(deleted);
-        assertNull(category);
+        categoryDAO.getCategoryById(testCategory.getId());
     }
 
-    @Test
-    public void deleteCategory_Not_Found() throws DAOException {
+    @Test(expected = ObjectNotFoundException.class)
+    public void deleteCategory_Not_Found() throws DAOException, ObjectNotFoundException {
         //testing method
-        boolean deleted = categoryDAO.deleteCategory(TestHelper.NON_EXISTING_ID);
-
-        assertFalse(deleted);
+        categoryDAO.deleteCategory(TestObjectCreator.NON_EXISTING_ID);
     }
 
     @Test
     public void deleteAllCategories_Found() throws DAOException {
         //testing method
-        boolean deleted = categoryDAO.deleteAllCategories();
+        categoryDAO.deleteAllCategories();
 
         List<Category> categoryList = categoryDAO.getAllCategories();
 
         assertNotNull(categoryList);
         assertTrue(categoryList.isEmpty());
-        assertTrue(deleted);
     }
 
-    @Test
-    public void deleteAllCategories_Not_Found() throws DAOException {
-        //delete inserted category
-        categoryDAO.deleteCategory(testCategory.getId());
-
-        //testing method
-        boolean deleted = categoryDAO.deleteAllCategories();
-
-        assertFalse(deleted);
-    }
-
-    //helper methods
-    private void assertEqualCategories(Category expectedCategory, Category actualCategory) {
-        assertEquals(expectedCategory.getId(), actualCategory.getId());
-        assertEquals(expectedCategory.getTitle(), actualCategory.getTitle());
-        assertEquals(expectedCategory.getDescription(), actualCategory.getDescription());
-        assertNotNull(expectedCategory.getCreationDate());
-    }
-
-    private void assertCategoryLists(List<Category> expectedList, List<Category> actualList) {
-        assertEquals(actualList.size(), expectedList.size());
-        for(int i = 0; i < actualList.size(); i++) {
-            assertEqualCategories(actualList.get(i), expectedList.get(i));
-        }
-    }
-
-    private List<Category> createTestCategoryList() throws DAOException {
-        //create second test category
-        Category secondTestCategory = TestHelper.createTestCategory();
-
-        //insert second category into db
-        int categoryId = categoryDAO.addCategory(secondTestCategory);
-        secondTestCategory.setId(categoryId);
-
-        //create test media list
-        List<Category> testCategoryList = new ArrayList<>();
-        testCategoryList.add(testCategory);
-        testCategoryList.add(secondTestCategory);
-
-        return testCategoryList;
-    }*/
 }
