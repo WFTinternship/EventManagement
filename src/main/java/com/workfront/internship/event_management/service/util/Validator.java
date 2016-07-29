@@ -30,4 +30,8 @@ public class Validator {
         }
         return valid;
     }
+
+    public static boolean isEmptyString(String string) {
+        return (string == null || (string != null && string.isEmpty()));
+    }
 }
