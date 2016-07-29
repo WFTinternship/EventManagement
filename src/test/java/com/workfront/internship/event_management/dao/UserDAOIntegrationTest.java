@@ -1,6 +1,6 @@
 package com.workfront.internship.event_management.dao;
 
-import com.workfront.internship.event_management.TestHelper;
+import com.workfront.internship.event_management.TestObjectCreator;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
@@ -9,7 +9,7 @@ import org.junit.*;
 
 import java.util.List;
 
-import static com.workfront.internship.event_management.TestHelper.assertEqualUsers;
+import static com.workfront.internship.event_management.AssertionHelper.assertEqualUsers;
 import static junit.framework.TestCase.*;
 
 /**
@@ -33,7 +33,7 @@ public class UserDAOIntegrationTest {
     @Before
     public void setUp() throws DAOException, DuplicateEntryException {
         //create test user
-        testUser = TestHelper.createTestUser();
+        testUser = TestObjectCreator.createTestUser();
 
         //insert test user into db, get generated id
         int userId = userDAO.addUser(testUser);
@@ -101,7 +101,7 @@ public class UserDAOIntegrationTest {
     @Test(expected = ObjectNotFoundException.class)
     public void getUserById_Not_Found() throws DAOException, ObjectNotFoundException {
         //method under test
-        userDAO.getUserById(TestHelper.NON_EXISTING_ID);
+        userDAO.getUserById(TestObjectCreator.NON_EXISTING_ID);
     }
 
     @Test
@@ -116,7 +116,7 @@ public class UserDAOIntegrationTest {
     @Test(expected = ObjectNotFoundException.class)
     public void getUserByEmail_Not_Fount() throws DAOException, ObjectNotFoundException {
         //method under test
-        userDAO.getUserByEmail(TestHelper.NON_EXISTING_EMAIL);
+        userDAO.getUserByEmail(TestObjectCreator.NON_EXISTING_EMAIL);
     }
 
     @Test
@@ -134,13 +134,13 @@ public class UserDAOIntegrationTest {
     @Test(expected = ObjectNotFoundException.class)
     public void updateVerifiedStatus_Not_Found() throws DAOException, ObjectNotFoundException {
         //method under test
-        userDAO.updateVerifiedStatus(TestHelper.NON_EXISTING_ID);
+        userDAO.updateVerifiedStatus(TestObjectCreator.NON_EXISTING_ID);
     }
 
     @Test
     public void updateUser_Success() throws DAOException, DuplicateEntryException, ObjectNotFoundException {
         //create new user with the same id
-        User updatedUser = TestHelper.createTestUser();
+        User updatedUser = TestObjectCreator.createTestUser();
         updatedUser.setId(testUser.getId());
 
         //test method
@@ -156,7 +156,7 @@ public class UserDAOIntegrationTest {
     @Test(expected = ObjectNotFoundException.class)
     public void updateUser_Not_Found() throws DAOException, DuplicateEntryException, ObjectNotFoundException {
         //create new user without id
-        User updatedUser = TestHelper.createTestUser();
+        User updatedUser = TestObjectCreator.createTestUser();
 
         //method under test
         userDAO.updateUser(updatedUser);
@@ -175,7 +175,7 @@ public class UserDAOIntegrationTest {
     @Test(expected = ObjectNotFoundException.class)
     public void deleteUser_Not_Found() throws DAOException, ObjectNotFoundException {
         //method under test
-        userDAO.deleteUser(TestHelper.NON_EXISTING_ID);
+        userDAO.deleteUser(TestObjectCreator.NON_EXISTING_ID);
     }
 
 

@@ -1,6 +1,6 @@
 package com.workfront.internship.event_management.service;
 
-import com.workfront.internship.event_management.TestHelper;
+import com.workfront.internship.event_management.TestObjectCreator;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.model.User;
@@ -32,7 +32,7 @@ public class UserServiceIntegrationTest {
     @Before
     public void setUp() throws DAOException, DuplicateEntryException {
         //create test user
-        testUser = TestHelper.createTestUser();
+        testUser = TestObjectCreator.createTestUser();
 
     }
 

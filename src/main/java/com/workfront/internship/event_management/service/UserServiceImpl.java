@@ -24,7 +24,6 @@ public class UserServiceImpl implements UserService {
     private UserDAO userDAO;
     private EmailService emailService;
 
-
     public UserServiceImpl() {
         try {
             userDAO = new UserDAOImpl();
