@@ -1,17 +1,26 @@
 package com.workfront.internship.event_management.service;
 
-import com.workfront.internship.event_management.dao.*;
+import com.workfront.internship.event_management.dao.EventDAO;
+import com.workfront.internship.event_management.dao.EventDAOImpl;
+import com.workfront.internship.event_management.dao.InvitationDAO;
+import com.workfront.internship.event_management.dao.InvitationDAOImpl;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Event;
+import org.apache.log4j.Logger;
 
 import java.util.List;
+
+import static com.workfront.internship.event_management.service.util.Validator.isEmptyCollection;
+import static com.workfront.internship.event_management.service.util.Validator.isValidEvent;
 
 /**
  * Created by Hermine Turshujyan 7/20/16.
  */
 public class EventServiceImpl implements EventService {
+
+    private static final Logger LOGGER = Logger.getLogger(EventServiceImpl.class);
 
     private EventDAO eventDAO;
 
@@ -19,56 +28,61 @@ public class EventServiceImpl implements EventService {
         try {
             eventDAO = new EventDAOImpl();
         } catch (DAOException e) {
-            throw new OperationFailedException("Database error!");
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
         }
     }
 
     @Override
-    public int createEvent(Event event) throws OperationFailedException {
-
-        int eventId = 0;
-
+    public Event createEvent(Event event) {
         //check if event object is valid
         if (isValidEvent(event)) {
-
-            try {
-                if (event.getEventRecurrences() == null || event.getEventRecurrences().isEmpty()) {
-                    eventId = eventDAO.addEvent(event);
-                } else {
-                    eventId = eventDAO.addEventWithRecurrences(event);
-                }
-
-                //if event info is successfully inserted, insert also invitations
-                if (eventId != 0 && event.getInvitations() != null && !event.getInvitations().isEmpty()) {
-                    InvitationDAO invitationDAO = new InvitationDAOImpl();
-                    invitationDAO.addInvitations(event.getInvitations());
-                }
-            } catch (DAOException e) {
-                throw new OperationFailedException("Database error!");
-            }
-        } else {
-            throw new OperationFailedException("Invalid event!");
+            throw new OperationFailedException("Invalid event");
         }
-        return eventId;
-    }
 
-    @Override
-    public Event getEventById(int eventId) throws OperationFailedException {
+        try {
+            int eventId;
 
-        Event event;
-
-        if (eventId > 0) {
-            try {
-                event = eventDAO.getEventById(eventId);
-            } catch (DAOException e) {
-                throw new OperationFailedException("Database error!");
+            if (isEmptyCollection(event.getEventRecurrences())) {
+                eventId = eventDAO.addEvent(event);
+            } else {
+                eventId = eventDAO.addEventWithRecurrences(event);
             }
-        } else {
-            throw new OperationFailedException("Invalid event id.");
+
+            //set generated id to event
+            event.setId(eventId);
+
+            //if event info is successfully inserted, insert also invitations
+            if (eventId != 0 && !isEmptyCollection(event.getInvitations())) {
+                InvitationDAO invitationDAO = new InvitationDAOImpl();
+                invitationDAO.addInvitations(event.getInvitations());
+            }
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
         }
         return event;
     }
 
+    @Override
+    public Event getEventById(int eventId) {
+        if (eventId < 1) {
+            throw new OperationFailedException("Invalid event id");
+        }
+
+        try {
+            //get category from db
+            return eventDAO.getEventById(eventId);
+        } catch (ObjectNotFoundException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException("Category not found", e);
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
+        }
+    }
+
+    ////////--------
     @Override
     public void editEvent(Event event) throws OperationFailedException {
 
@@ -208,18 +222,5 @@ public class EventServiceImpl implements EventService {
 
     //helper methods
 
-    private boolean isValidEvent(Event event) {
 
-        boolean valid = false;
-        if (event != null) {
-            if (event.getTitle() != null
-                    && event.getCategory() != null && event.getCategory().getId() > 0
-                    && event.getStartDate() != null
-                    && event.getEndDate() != null
-                    && event.getCreationDate() != null) {
-                valid = true;
-            }
-        }
-        return false;
-    }
 }

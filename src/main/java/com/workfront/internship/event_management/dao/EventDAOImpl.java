@@ -97,8 +97,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     @Override
-    public Event getEventById(int eventId) throws DAOException {
-
+    public Event getEventById(int eventId) throws DAOException, ObjectNotFoundException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -118,37 +117,33 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             rs = stmt.executeQuery();
 
             //get results from event table
-    /*        List<Event> eventList = createEventListFromRS(rs);
-            if (eventList != null && !eventList.isEmpty()) {
-                event = eventList.get(0);
+            List<Event> eventList = createEventListFromRS(rs);
+            if (eventList.isEmpty()) {
+                throw new ObjectNotFoundException("Event with id " + eventId + " not found!");
             }
+
+            event = eventList.get(0);
 
             //get invitations list
             InvitationDAO invitationDAO = new InvitationDAOImpl();
             List<Invitation> invitations = invitationDAO.getInvitationsByEventId(eventId);
-            if (invitations != null && !invitations.isEmpty()) {
-                if (event != null) {
-                    event.setInvitations(invitations);
-                }
+            if (!invitations.isEmpty()) {
+                event.setInvitations(invitations);
             }
 
             //get event recurrences
             EventRecurrenceDAO recurrenceDAO = new EventRecurrenceDAOImpl();
             List<EventRecurrence> recurrences = recurrenceDAO.getEventRecurrencesByEventId(eventId);
-            if (recurrences != null && !recurrences.isEmpty()) {
-                if (event != null) {
-                    event.setEventRecurrences(recurrences);
-                }
+            if (!recurrences.isEmpty()) {
+                event.setEventRecurrences(recurrences);
             }
 
             //get media list
             MediaDAO mediaDAO = new MediaDAOImpl();
             List<Media> media = mediaDAO.getMediaByEventId(eventId);
-            if (media != null && !media.isEmpty()) {
-                if (event != null) {
-                    event.setMedia(media);
-                }
-            }*/
+            if (!media.isEmpty()) {
+                event.setMedia(media);
+            }
 
         } catch (SQLException e) {
             LOGGER.error("SQL Exception ", e);

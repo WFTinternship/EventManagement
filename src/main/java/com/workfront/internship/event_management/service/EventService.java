@@ -10,7 +10,7 @@ import java.util.List;
 interface EventService {
 
     //CRUD operations with event
-    int createEvent(Event event);
+    Event createEvent(Event event);
 
     Event getEventById(int eventId);
 

@@ -17,7 +17,7 @@ public interface EventDAO {
     int addEventWithRecurrences(Event event) throws DAOException;
 
     //read data from db
-    Event getEventById(int eventId) throws DAOException; // TODO: 7/28/16 check 
+    Event getEventById(int eventId) throws DAOException, ObjectNotFoundException; // TODO: 7/28/16 check
 
     List<Event> getEventsByCategory(int categoryId) throws DAOException;
 
