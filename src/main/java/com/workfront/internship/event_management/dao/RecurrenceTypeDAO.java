@@ -25,7 +25,7 @@ public interface RecurrenceTypeDAO {
     RecurrenceType getRecurrenceTypeWithOptionsById(int id) throws DAOException;
 
     //update record in db
-    void updateRecurrenceType(RecurrenceType recurrenceType) throws DAOException;
+    void updateRecurrenceType(RecurrenceType recurrenceType) throws DAOException, DuplicateEntryException, ObjectNotFoundException;
 
     //delete data from db
     void deleteRecurrenceType(int id) throws DAOException, ObjectNotFoundException;

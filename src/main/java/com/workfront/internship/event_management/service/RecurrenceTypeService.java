@@ -10,20 +10,16 @@ import java.util.List;
 public interface RecurrenceTypeService {
 
     //CRUD methods for recurrence type
-    int addRecurrenceType(RecurrenceType recurrenceType);
-
-    int addRecurrenceTypeWithOptions(RecurrenceType recurrenceType);
+    RecurrenceType addRecurrenceType(RecurrenceType recurrenceType);
 
     List<RecurrenceType> getAllRecurrenceTypes();
 
-    RecurrenceType getRecurrenceTypeById(int id);
+    RecurrenceType getRecurrenceTypeById(int recurrenceTypeId);
 
-    RecurrenceType getRecurrenceTypeWithOptionsById(int id);
+    void updateRecurrenceType(RecurrenceType recurrenceType);
 
-    boolean updateRecurrenceType(RecurrenceType recurrenceType);
+    void deleteRecurrenceType(int id);
 
-    boolean deleteRecurrenceType(int id);
-
-    boolean deleteAllRecurrenceTypes();
+    void deleteAllRecurrenceTypes();
 
 }

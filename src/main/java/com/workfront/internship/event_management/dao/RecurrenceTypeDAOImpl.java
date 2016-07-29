@@ -45,8 +45,11 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
             //execute query and get generated id
             id = addRecurrenceType(recurrenceType, conn);
+        } catch (SQLIntegrityConstraintViolationException e) {
+            LOGGER.error("Duplicate recurrence type entry", e);
+            throw new DuplicateEntryException("Recurrence type with title " + recurrenceType.getTitle() + " already exists!", e);
         } catch (SQLException e) {
-            LOGGER.error("SQL Exception", e);
+            LOGGER.error("SQL exception", e);
             throw new DAOException(e);
         } finally {
             closeResources(conn);
@@ -83,6 +86,9 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
             //commit transaction
             conn.commit();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            LOGGER.error("Duplicate recurrence type entry", e);
+            throw new DuplicateEntryException("Recurrence type with title " + recurrenceType.getTitle() + " already exists!", e);
         } catch (SQLException e) {
             try {
                 if (conn != null) {
@@ -197,7 +203,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
     }
 
     @Override
-    public void updateRecurrenceType(RecurrenceType recurrenceType) throws DAOException {
+    public void updateRecurrenceType(RecurrenceType recurrenceType) throws DAOException, DuplicateEntryException, ObjectNotFoundException {
         Connection conn = null;
         PreparedStatement stmt = null;
 
@@ -216,8 +222,15 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
             //execute query
             affectedRows = stmt.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new ObjectNotFoundException("Recurrence type with id " + recurrenceType.getId() + " not found!");
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            LOGGER.error("Duplicate recurrence type entry", e);
+            throw new DuplicateEntryException("Recurrence type with title " + recurrenceType.getTitle() + " already exists!", e);
         } catch (SQLException e) {
-            LOGGER.error("SQL Exception ", e);
+            LOGGER.error("SQL exception", e);
             throw new DAOException(e);
         } finally {
             closeResources(stmt, conn);

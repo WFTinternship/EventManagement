@@ -21,7 +21,7 @@ public class RecurrenceTypeDAOIntegrationTest {
     @Before
     public void setUp() {
         //create test recurrence type
-        testRecurrenceType = TestHelper.createTestRecurrenceTypeWithOptions();
+        testRecurrenceType = TestObjectCreator.createTestRecurrenceTypeWithOptions();
 
         //insert test record into db and get generated id
         int recurrenceTypeId = recurrenceTypeDAO.addRecurrenceType(testRecurrenceType);
@@ -49,7 +49,7 @@ public class RecurrenceTypeDAOIntegrationTest {
     @Test
     public void addRecurrenceTypeWithoutOptions_Success() {
         //create recurrence type without options
-        RecurrenceType newTestRecurrenceType = TestHelper.createTestRecurrenceType();
+        RecurrenceType newTestRecurrenceType = TestObjectCreator.createTestRecurrenceType();
         int id = recurrenceTypeDAO.addRecurrenceType(newTestRecurrenceType);
         newTestRecurrenceType.setId(id);
 
@@ -103,7 +103,7 @@ public class RecurrenceTypeDAOIntegrationTest {
     @Test
     public void getRecurrenceTypeById_Not_Found() {
         //test method
-        RecurrenceType recurrenceType = recurrenceTypeDAO.getRecurrenceTypeById(TestHelper.NON_EXISTING_ID);
+        RecurrenceType recurrenceType = recurrenceTypeDAO.getRecurrenceTypeById(TestObjectCreator.NON_EXISTING_ID);
 
         assertNull(recurrenceType);
     }
@@ -127,7 +127,7 @@ public class RecurrenceTypeDAOIntegrationTest {
     @Test
     public void updateRecurrenceType_Not_Found() {
         //create new recurrence type with non-existing id
-        RecurrenceType recurrenceType = TestHelper.createTestRecurrenceType();
+        RecurrenceType recurrenceType = TestObjectCreator.createTestRecurrenceType();
 
         //test method
         boolean updated = recurrenceTypeDAO.updateRecurrenceType(recurrenceType);
@@ -149,7 +149,7 @@ public class RecurrenceTypeDAOIntegrationTest {
     @Test
     public void deleteRecurrenceType_Not_Found() throws DAOException {
         //testing method
-        boolean deleted = recurrenceTypeDAO.deleteRecurrenceType(TestHelper.NON_EXISTING_ID);
+        boolean deleted = recurrenceTypeDAO.deleteRecurrenceType(TestObjectCreator.NON_EXISTING_ID);
 
         assertFalse(deleted);
     }
