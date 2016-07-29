@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.service.util;
 
+import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.User;
 
 import java.util.regex.Matcher;
@@ -14,17 +15,21 @@ public class Validator {
     private static final Pattern pattern = Pattern.compile(EMAIL_PATTERN); // TODO: 7/28/16 read more
 
     public static boolean isValidEmailAddressForm(String email) {
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
+        if (isEmptyString(email)) {
+            return false;
+        } else {
+            Matcher matcher = pattern.matcher(email);
+            return matcher.matches();
+        }
     }
 
     public static boolean isValidUser(User user) {
         boolean valid = false;
         if (user != null) {
-            if (user.getFirstName() != null && !user.getFirstName().isEmpty()
-                    && user.getLastName() != null && !user.getLastName().isEmpty()
-                    && user.getPassword() != null && !user.getPassword().isEmpty()
-                    && user.getEmail() != null && isValidEmailAddressForm(user.getEmail())) {
+            if (!isEmptyString(user.getFirstName())
+                    && !isEmptyString(user.getLastName())
+                    && !isEmptyString(user.getPassword()) && user.getPassword().length() >= 6
+                    && isValidEmailAddressForm(user.getEmail())) {
                 valid = true;
             }
         }
@@ -33,5 +38,16 @@ public class Validator {
 
     public static boolean isEmptyString(String string) {
         return (string == null || (string != null && string.isEmpty()));
+    }
+
+    public static boolean isValidCategory(Category category) {
+        boolean valid = false;
+
+        if (category != null
+                && !isEmptyString(category.getTitle())
+                && category.getCreationDate() != null) {
+            valid = true;
+        }
+        return valid;
     }
 }
