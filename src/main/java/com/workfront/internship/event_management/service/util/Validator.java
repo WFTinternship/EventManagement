@@ -1,8 +1,11 @@
 package com.workfront.internship.event_management.service.util;
 
 import com.workfront.internship.event_management.model.Category;
+import com.workfront.internship.event_management.model.Event;
+import com.workfront.internship.event_management.model.RecurrenceType;
 import com.workfront.internship.event_management.model.User;
 
+import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,14 +43,44 @@ public class Validator {
         return (string == null || (string != null && string.isEmpty()));
     }
 
+    public static boolean isEmptyCollection(Collection collection) {
+        return (collection == null || (collection != null && collection.isEmpty()));
+    }
+
+
     public static boolean isValidCategory(Category category) {
         boolean valid = false;
-
         if (category != null
                 && !isEmptyString(category.getTitle())
                 && category.getCreationDate() != null) {
             valid = true;
         }
         return valid;
+    }
+
+
+    public static boolean isValidRecurrenceType(RecurrenceType recurrenceType) {
+        boolean valid = false;
+        if (recurrenceType != null
+                && !isEmptyString(recurrenceType.getTitle())
+                && !isEmptyString(recurrenceType.getIntervalUnit())) {
+            valid = true;
+        }
+        return valid;
+    }
+
+    public static boolean isValidEvent(Event event) {
+
+        boolean valid = false;
+        if (event != null) {
+            if (!isEmptyString(event.getTitle())
+                    && event.getCategory() != null && event.getCategory().getId() > 0
+                    && event.getStartDate() != null
+                    && event.getEndDate() != null
+                    && event.getCreationDate() != null) {
+                valid = true;
+            }
+        }
+        return false;
     }
 }
