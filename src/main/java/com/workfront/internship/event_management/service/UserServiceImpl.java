@@ -5,7 +5,6 @@ import com.workfront.internship.event_management.dao.UserDAOImpl;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
-import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.util.HashGenerator;
@@ -13,8 +12,7 @@ import org.apache.log4j.Logger;
 
 import java.util.List;
 
-import static com.workfront.internship.event_management.service.util.Validator.isValidEmailAddressForm;
-import static com.workfront.internship.event_management.service.util.Validator.isValidUser;
+import static com.workfront.internship.event_management.service.util.Validator.*;
 
 /**
  * Created by Hermine Turshujyan 7/20/16.
@@ -125,11 +123,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User login(String email, String password) {
         //email/password validation
-        if (email == null || email.isEmpty()) {
+        if (isEmptyString(email)) {
             throw new OperationFailedException("Empty email");
         }
 
-        if (password == null || password.isEmpty()) {
+        if (isEmptyString(password)) {
             throw new OperationFailedException("Empty password");
         }
 

@@ -16,8 +16,7 @@ import org.mockito.internal.util.reflection.Whitebox;
 import static com.workfront.internship.event_management.TestHelper.assertEqualUsers;
 import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by Hermine Turshujyan 7/27/16.
@@ -25,9 +24,9 @@ import static org.mockito.Mockito.when;
 public class UserServiceUnitTest {
 
     private static UserService userService;
-    private User testUser;
     private UserDAO userDAO;
     private EmailService emailService;
+    private User testUser;
 
     @BeforeClass
     public static void setUpClass() throws OperationFailedException {
@@ -53,7 +52,9 @@ public class UserServiceUnitTest {
 
     @After
     public void tearDown() {
+        //delete test user object
         testUser = null;
+
         userDAO = null;
         emailService = null;
     }
@@ -166,7 +167,7 @@ public class UserServiceUnitTest {
         //method under test
         userService.verifyAccount(TestHelper.INVALID_ID);
 
-        Mockito.verify(userDAO).updateVerifiedStatus(TestHelper.INVALID_ID);
+        verify(userDAO).updateVerifiedStatus(TestHelper.INVALID_ID);
     }
 
     @Test
@@ -174,7 +175,7 @@ public class UserServiceUnitTest {
         //method under test
         userService.verifyAccount(TestHelper.VALID_ID);
 
-        Mockito.verify(userDAO).updateVerifiedStatus(TestHelper.VALID_ID);
+        verify(userDAO).updateVerifiedStatus(TestHelper.VALID_ID);
     }
 
     @Test(expected = OperationFailedException.class)
@@ -208,12 +209,6 @@ public class UserServiceUnitTest {
     public void login_EmptyEmail() {
         //method under test
         userService.login("", testUser.getPassword());
-    }
-
-    @Test(expected = OperationFailedException.class)
-    public void login_EmptyPassword() {
-        //method under test
-        userService.login(testUser.getEmail(), "");
     }
 
     @Test(expected = OperationFailedException.class)
@@ -292,7 +287,10 @@ public class UserServiceUnitTest {
 
     @Test
     public void deleteAccount_Success() throws ObjectNotFoundException, DAOException {
-        // TODO: 7/29/16 implement
+        //method under test
+        userService.deleteAccount(TestHelper.VALID_ID);
+
+        verify(userDAO).deleteUser(TestHelper.VALID_ID);
     }
 
     //Testing getUserById method
@@ -320,7 +318,12 @@ public class UserServiceUnitTest {
 
     @Test
     public void getUserById_Success() throws ObjectNotFoundException, DAOException {
-        when(userDAO.getUserById(TestHelper.VALID_ID)).thenReturn(testUser); // TODO: 7/29/16 check
+        testUser.setId(TestHelper.VALID_ID);
+        when(userDAO.getUserById(TestHelper.VALID_ID)).thenReturn(testUser);
+
+        //method under test
+        User actualUser = userService.getUserById(TestHelper.VALID_ID);
+        assertEqualUsers(actualUser, testUser);
     }
 
     //Testing getUserByEmail method
@@ -348,7 +351,45 @@ public class UserServiceUnitTest {
 
     @Test
     public void getUserByEmail_Success() throws ObjectNotFoundException, DAOException {
-        when(userDAO.getUserByEmail(testUser.getEmail())).thenReturn(testUser); // TODO: 7/29/16 check
+        when(userDAO.getUserByEmail(testUser.getEmail())).thenReturn(testUser);
+
+        //method under test
+        User actualUser = userService.getUserByEmail(testUser.getEmail());
+
+        assertEqualUsers(actualUser, testUser);
     }
 
+    //Testing getAllUsers method
+    @Test
+    public void getAllUsers_Success() throws ObjectNotFoundException, DAOException {
+        //method under test
+        userService.getAllUsers();
+
+        verify(userDAO).getAllUsers();
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void getAllUsers_DBError() throws ObjectNotFoundException, DAOException {
+        doThrow(DAOException.class).when(userDAO).getAllUsers();
+
+        //method under test
+        userService.getAllUsers();
+    }
+
+    //Testing deleteAllUsers method
+    @Test
+    public void deleteAllUsers_Success() throws ObjectNotFoundException, DAOException {
+        //method under test
+        userService.deleteAllUsers();
+
+        verify(userDAO).deleteAllUsers();
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void deleteAllUsers_DBError() throws ObjectNotFoundException, DAOException {
+        doThrow(DAOException.class).when(userDAO).deleteAllUsers();
+
+        //method under test
+        userService.deleteAllUsers();
+    }
 }
