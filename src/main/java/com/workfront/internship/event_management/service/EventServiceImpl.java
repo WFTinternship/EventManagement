@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import java.util.List;
 
 import static com.workfront.internship.event_management.service.util.Validator.isEmptyCollection;
+import static com.workfront.internship.event_management.service.util.Validator.isEmptyString;
 import static com.workfront.internship.event_management.service.util.Validator.isValidEvent;
 
 /**
@@ -21,7 +22,6 @@ import static com.workfront.internship.event_management.service.util.Validator.i
 public class EventServiceImpl implements EventService {
 
     private static final Logger LOGGER = Logger.getLogger(EventServiceImpl.class);
-
     private EventDAO eventDAO;
 
     public EventServiceImpl() throws OperationFailedException {
@@ -52,7 +52,7 @@ public class EventServiceImpl implements EventService {
             //set generated id to event
             event.setId(eventId);
 
-            //if event info is successfully inserted, insert also invitations
+            //if event info is successfully inserted into db, insert also invitations
             if (eventId != 0 && !isEmptyCollection(event.getInvitations())) {
                 InvitationDAO invitationDAO = new InvitationDAOImpl();
                 invitationDAO.addInvitations(event.getInvitations());
@@ -75,152 +75,139 @@ public class EventServiceImpl implements EventService {
             return eventDAO.getEventById(eventId);
         } catch (ObjectNotFoundException e) {
             LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Category not found", e);
+            throw new OperationFailedException("Event not found", e);
         } catch (DAOException e) {
             LOGGER.error(e.getMessage(), e);
             throw new OperationFailedException(e.getMessage(), e);
         }
     }
 
-    ////////--------
     @Override
     public void editEvent(Event event) throws OperationFailedException {
+        if (!isValidEvent(event)) {
+            throw new OperationFailedException("Invalid event");
+        }
 
-        boolean success;
+        try {
+            //update event main info
+            eventDAO.updateEvent(event);
 
-        if (isValidEvent(event)) {
-            try {
-                try {
-                    eventDAO.updateEvent(event);
-                } catch (ObjectNotFoundException e) {
-                    e.printStackTrace();
-                }
+            //update event recurrences
+            EventRecurrenceService recurrenceService = new EventRecurrenceServiceImpl();
+            recurrenceService.updateEventRecurrences(event.getEventRecurrences());
 
-                EventRecurrenceService recurrenceService = new EventRecurrenceServiceImpl();
-                InvitationService invitationService = new InvitationServiceImpl();
-                MediaService mediaService = new MediaServiceImpl();
-                // TODO: 7/26/16 add update list methods
+            //update event invitations
+            InvitationService invitationService = new InvitationServiceImpl();
+            invitationService.updateInvitations(event.getInvitations());
 
+            //update media
+            MediaService mediaService = new MediaServiceImpl();
+            mediaService.updateMediaList(event.getMedia());
 
-            } catch (DAOException e) {
-                throw new OperationFailedException("Database error!");
-            }
-        } else {
-            throw new OperationFailedException("Invalid event.");
+        } catch (ObjectNotFoundException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException("Event not found", e);
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
         }
     }
 
-    @Override
-    public void deleteEvent(int eventId) throws OperationFailedException {
-
-        boolean success;
-
-        if (eventId > 0) {
-            try {
-                eventDAO.deleteEvent(eventId);
-            } catch (DAOException e) {
-                throw new OperationFailedException("Database error!");
-            } catch (ObjectNotFoundException e) {
-                e.printStackTrace();
-            }
-        } else {
-            throw new OperationFailedException("Invalid event id.");
-        }
-    }
 
     @Override
     public List<Event> getEventsByCategory(int categoryId) throws OperationFailedException {
-
-        List<Event> eventList;
-
-        if (categoryId > 0) {
-            try {
-                eventList = eventDAO.getEventsByCategory(categoryId);
-            } catch (DAOException e) {
-                throw new OperationFailedException("Database error!");
-            }
-        } else {
-            throw new OperationFailedException("Invalid category id.");
+        if (categoryId < 1) {
+            throw new OperationFailedException("Invalid category id");
         }
-        return eventList;
+
+        try {
+            return eventDAO.getEventsByCategory(categoryId);
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
+        }
     }
 
     @Override
     public List<Event> getUserOrganizedEvents(int userId) throws OperationFailedException {
-
-        List<Event> eventList;
-
-        if (userId > 0) {
-            try {
-                eventList = eventDAO.getUserOrganizedEvents(userId);
-            } catch (DAOException e) {
-                throw new OperationFailedException("Database error!");
-            }
-        } else {
-            throw new OperationFailedException("Invalid user id.");
+        if (userId < 1) {
+            throw new OperationFailedException("Invalid user id");
         }
-        return eventList;
+
+        try {
+            return eventDAO.getUserOrganizedEvents(userId);
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
+        }
     }
 
     @Override
     public List<Event> getUserParticipatedEvents(int userId) throws OperationFailedException {
-
-        List<Event> eventList;
-
-        if (userId > 0) {
-            try {
-                eventList = eventDAO.getUserParticipatedEvents(userId);
-            } catch (DAOException e) {
-                throw new OperationFailedException("Database error!");
-
-            }
-        } else {
-            throw new OperationFailedException("Invalid user id.");
+        if (userId < 1) {
+            throw new OperationFailedException("Invalid user id");
         }
-        return eventList;
+
+        try {
+            return eventDAO.getUserParticipatedEvents(userId);
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
+        }
     }
 
     @Override
     public List<Event> getUserEventsByResponse(int userId, String userResponse) throws OperationFailedException {
-
-        List<Event> eventList;
-
-        if (userId > 0) {
-            try {
-                eventList = eventDAO.getUserEventsByResponse(userId, userResponse);
-            } catch (DAOException e) {
-                throw new OperationFailedException("Database error!");
-            }
-        } else {
-            throw new OperationFailedException("Invalid user id.");
+        if (userId < 1) {
+            throw new OperationFailedException("Invalid user id");
         }
-        return eventList;
-    }
 
-    @Override
-    public List<Event> getAllEvents() throws OperationFailedException {
+        if (isEmptyString(userResponse)) {
+            throw new OperationFailedException("Invalid user response");
+        }
 
-        List<Event> eventList;
         try {
-            eventList = eventDAO.getAllEvents();
+            return eventDAO.getUserEventsByResponse(userId, userResponse);
         } catch (DAOException e) {
-            throw new OperationFailedException("Database error!");
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
         }
-        return eventList;
     }
 
     @Override
-    public void deleteAllEvents() throws OperationFailedException {
+    public List<Event> getAllEvents() {
+        try {
+            return eventDAO.getAllEvents();
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
+        }
+    }
 
-        boolean success;
+    @Override
+    public void deleteEvent(int eventId) {
+        if (eventId < 1) {
+            throw new OperationFailedException("Invalid event id");
+        }
+
+        try {
+            eventDAO.deleteEvent(eventId);
+        } catch (ObjectNotFoundException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException("Event not found", e);
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void deleteAllEvents() {
         try {
             eventDAO.deleteAllEvents();
         } catch (DAOException e) {
-            throw new OperationFailedException("Database error!");
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
         }
     }
-
-    //helper methods
-
-
 }
