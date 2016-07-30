@@ -76,7 +76,7 @@ public class EventRecurrenceDAOIntegrationTest {
     @Test
     public void getEventRecurrenceById_Not_Found() {
         //test method
-        EventRecurrence eventRecurrence = eventRecurrenceDAO.getEventRecurrenceById(TestHelper.NON_EXISTING_ID);
+        EventRecurrence eventRecurrence = eventRecurrenceDAO.getEventRecurrenceById(TestObjectCreator.NON_EXISTING_ID);
 
         assertNull(eventRecurrence);
     }
@@ -94,7 +94,7 @@ public class EventRecurrenceDAOIntegrationTest {
     @Test
     public void getEventRecurrencesByEventId__Empty_List() {
         //test method
-        List<EventRecurrence> eventRecurrenceList = eventRecurrenceDAO.getEventRecurrencesByEventId(TestHelper.NON_EXISTING_ID);
+        List<EventRecurrence> eventRecurrenceList = eventRecurrenceDAO.getEventRecurrencesByEventId(TestObjectCreator.NON_EXISTING_ID);
 
         assertNotNull(eventRecurrenceList);
         assertTrue(eventRecurrenceList.isEmpty());
@@ -141,7 +141,7 @@ public class EventRecurrenceDAOIntegrationTest {
     @Test
     public void updateEventRecurrence_Not_Found() {
         //create new event recurrence  object with no id
-        EventRecurrence newEventRecurrence = TestHelper.createTestEventRecurrence();
+        EventRecurrence newEventRecurrence = TestObjectCreator.createTestEventRecurrence();
 
         //test method
         boolean updated = eventRecurrenceDAO.updateEventRecurrence(newEventRecurrence);
@@ -162,7 +162,7 @@ public class EventRecurrenceDAOIntegrationTest {
     @Test
     public void deleteEventRecurrence_Not_Found() throws DAOException {
         //test method
-        boolean deleted = eventRecurrenceDAO.deleteEventRecurrence(TestHelper.NON_EXISTING_ID);
+        boolean deleted = eventRecurrenceDAO.deleteEventRecurrence(TestObjectCreator.NON_EXISTING_ID);
 
         assertFalse(deleted);
     }
@@ -193,11 +193,11 @@ public class EventRecurrenceDAOIntegrationTest {
 
     //helper methods
     private void createTestObjects() {
-        testCategory = TestHelper.createTestCategory();
-        testEvent = TestHelper.createTestEvent();
-        testRecurrenceType = TestHelper.createTestRecurrenceType();
-        testEventRecurrence = TestHelper.createTestEventRecurrence();
-        testRecurrenceOption = TestHelper.createTestRecurrenceOption();
+        testCategory = TestObjectCreator.createTestCategory();
+        testEvent = TestObjectCreator.createTestEvent();
+        testRecurrenceType = TestObjectCreator.createTestRecurrenceType();
+        testEventRecurrence = TestObjectCreator.createTestEventRecurrence();
+        testRecurrenceOption = TestObjectCreator.createTestRecurrenceOption();
     }
 
     private void insertTestObjectsIntoDB() throws DAOException {

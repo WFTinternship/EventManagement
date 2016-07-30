@@ -97,7 +97,7 @@ public class MediaDAOIntegrationTest {
     @Test
     public void getMediaById_Not_Found() {
         //testing method
-        Media media = mediaDAO.getMediaById(TestHelper.NON_EXISTING_ID);
+        Media media = mediaDAO.getMediaById(TestObjectCreator.NON_EXISTING_ID);
 
         assertNull(media);
     }
@@ -114,7 +114,7 @@ public class MediaDAOIntegrationTest {
     @Test
     public void getMediaByEventId_Not_Found() {
         //testing method
-        List<Media> mediaList = mediaDAO.getMediaByEventId(TestHelper.NON_EXISTING_ID);
+        List<Media> mediaList = mediaDAO.getMediaByEventId(TestObjectCreator.NON_EXISTING_ID);
 
         assertNotNull(mediaList);
         assertTrue(mediaList.isEmpty());
@@ -133,7 +133,7 @@ public class MediaDAOIntegrationTest {
     @Test
     public void getMediaByType_Not_Found() {
         //testing method
-        List<Media> mediaList = mediaDAO.getMediaByType(TestHelper.NON_EXISTING_ID);
+        List<Media> mediaList = mediaDAO.getMediaByType(TestObjectCreator.NON_EXISTING_ID);
 
         assertNotNull(mediaList);
         assertTrue(mediaList.isEmpty());
@@ -151,7 +151,7 @@ public class MediaDAOIntegrationTest {
     @Test
     public void getMediaByUploader_Not_Found() {
         //testing method
-        List<Media> mediaList = mediaDAO.getMediaByUploaderId(TestHelper.NON_EXISTING_ID);
+        List<Media> mediaList = mediaDAO.getMediaByUploaderId(TestObjectCreator.NON_EXISTING_ID);
 
         assertNotNull(mediaList);
         assertTrue(mediaList.isEmpty());
@@ -178,7 +178,7 @@ public class MediaDAOIntegrationTest {
         String description = "Updated description";
 
         //test method
-        boolean updated = mediaDAO.updateMediaDescription(TestHelper.NON_EXISTING_ID, description);
+        boolean updated = mediaDAO.updateMediaDescription(TestObjectCreator.NON_EXISTING_ID, description);
 
         assertFalse(updated);
     }
@@ -197,7 +197,7 @@ public class MediaDAOIntegrationTest {
     @Test
     public void deleteMedia_Not_Found() {
         //testing method
-        boolean deleted = mediaDAO.deleteMedia(TestHelper.NON_EXISTING_ID);
+        boolean deleted = mediaDAO.deleteMedia(TestObjectCreator.NON_EXISTING_ID);
 
         assertFalse(deleted);
     }
@@ -227,11 +227,11 @@ public class MediaDAOIntegrationTest {
 
     //helper methods
     private void createTestObjects() {
-        testUser = TestHelper.createTestUser();
-        testCategory = TestHelper.createTestCategory();
-        testEvent = TestHelper.createTestEvent();
-        testMedia = TestHelper.createTestMedia();
-        testMediaType = TestHelper.createTestMediaType();
+        testUser = TestObjectCreator.createTestUser();
+        testCategory = TestObjectCreator.createTestCategory();
+        testEvent = TestObjectCreator.createTestEvent();
+        testMedia = TestObjectCreator.createTestMedia();
+        testMediaType = TestObjectCreator.createTestMediaType();
     }
 
     private void insertTestObjectsIntoDB() {

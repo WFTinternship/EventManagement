@@ -104,7 +104,7 @@ public class GenericDAO {
         }
     }
 
-    void deleteRecord(String tableName, String columnName, Object columnValue) throws DAOException, ObjectNotFoundException {
+    void deleteRecord(String tableName, String columnName, Object columnValue) throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -120,10 +120,7 @@ public class GenericDAO {
             stmt.setObject(1, columnValue);
 
             //execute query
-            int affectedRows = stmt.executeUpdate();
-            if (affectedRows == 0) {
-                throw new ObjectNotFoundException("Object with " + columnName + " " + columnValue + " not found!");
-            }
+            stmt.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error("SQL exception", e);
             throw new DAOException(e);

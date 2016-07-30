@@ -6,7 +6,9 @@ package com.workfront.internship.event_management.exception.dao;
 public class DuplicateEntryException extends Exception {
 
     public DuplicateEntryException(String message, Exception e) {
-        super(message, e);
+
     }
 
+    public DuplicateEntryException(String s) {
+    }
 }

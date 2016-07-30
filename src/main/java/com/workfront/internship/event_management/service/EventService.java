@@ -9,9 +9,10 @@ import java.util.List;
  */
 interface EventService {
 
-    //CRUD operations with event
+    //Create
     Event createEvent(Event event);
 
+    //Read
     Event getEventById(int eventId);
 
     List<Event> getEventsByCategory(int categoryId);
@@ -24,14 +25,13 @@ interface EventService {
 
     List<Event> getAllEvents();
 
+    //Update
     void editEvent(Event event);
 
+    //Delete
     void deleteEvent(int eventId);
 
     void deleteAllEvents();
-
-
-
 
 
 }

@@ -20,10 +20,15 @@ public interface EventRecurrenceService {
 
     List<EventRecurrence> getAllEventRecurrences();
 
-    boolean updateEventRecurrence(EventRecurrence recurrence);
+    void updateEventRecurrence(EventRecurrence recurrence);
 
-    boolean deleteEventRecurrence(int id);
+    void updateEventRecurrences(List<EventRecurrence> recurrences);
 
-    boolean deleteAllEventRecurrences();
+    void deleteEventRecurrence(int id);
+
+    void deleteEventRecurrencesByEventId(int eventId);
+
+
+    void deleteAllEventRecurrences();
 
 }

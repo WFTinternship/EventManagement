@@ -22,7 +22,7 @@ public class MediaTypeDAOIntegrationTest {
     @Before
     public void setUp() {
         //create test media type
-        testMediaType = TestHelper.createTestMediaType();
+        testMediaType = TestObjectCreator.createTestMediaType();
 
         //insert test user into db, get generated id
         int mediaTypeId = mediaTypeDAO.addMediaType(testMediaType);
@@ -87,7 +87,7 @@ public class MediaTypeDAOIntegrationTest {
     @Test
     public void getMediaTypeById_Not_Found() {
         //test method
-        MediaType mediaType = mediaTypeDAO.getMediaTypeById(TestHelper.NON_EXISTING_ID);
+        MediaType mediaType = mediaTypeDAO.getMediaTypeById(TestObjectCreator.NON_EXISTING_ID);
 
         assertNull(mediaType);
     }
@@ -95,7 +95,7 @@ public class MediaTypeDAOIntegrationTest {
     @Test
     public void updateMediaType_Found() {
         //create new media type with the same id
-        MediaType updatedMediaType = TestHelper.createTestMediaType();
+        MediaType updatedMediaType = TestObjectCreator.createTestMediaType();
         updatedMediaType.setId(testMediaType.getId());
 
         //test method
@@ -111,7 +111,7 @@ public class MediaTypeDAOIntegrationTest {
     @Test
     public void updateMediaType_Not_Found() {
         //create new media type object with non-existing id
-        MediaType mediaType = TestHelper.createTestMediaType();
+        MediaType mediaType = TestObjectCreator.createTestMediaType();
 
         //test method
         boolean updated = mediaTypeDAO.updateMediaType(mediaType);
@@ -133,7 +133,7 @@ public class MediaTypeDAOIntegrationTest {
     @Test
     public void deleteCategory_Not_Found() throws DAOException {
         //testing method
-        boolean deleted = mediaTypeDAO.deleteMediaType(TestHelper.NON_EXISTING_ID);
+        boolean deleted = mediaTypeDAO.deleteMediaType(TestObjectCreator.NON_EXISTING_ID);
 
         assertFalse(deleted);
     }

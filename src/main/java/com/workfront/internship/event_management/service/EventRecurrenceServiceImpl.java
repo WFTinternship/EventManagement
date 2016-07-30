@@ -34,17 +34,24 @@ public class EventRecurrenceServiceImpl implements EventRecurrenceService {
     }
 
     @Override
-    public boolean updateEventRecurrence(EventRecurrence recurrence) {
-        return false;
+    public void updateEventRecurrence(EventRecurrence recurrence) {
     }
 
     @Override
-    public boolean deleteEventRecurrence(int id) {
-        return false;
+    public void updateEventRecurrences(List<EventRecurrence> recurrences) {
+
     }
 
     @Override
-    public boolean deleteAllEventRecurrences() {
-        return false;
+    public void deleteEventRecurrence(int id) {
+    }
+
+    @Override
+    public void deleteEventRecurrencesByEventId(int eventId) {
+
+    }
+
+    @Override
+    public void deleteAllEventRecurrences() {
     }
 }
