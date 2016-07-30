@@ -1,6 +1,7 @@
 package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.Invitation;
 import com.workfront.internship.event_management.model.User;
@@ -8,10 +9,7 @@ import com.workfront.internship.event_management.model.UserResponse;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +36,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
     }
 
     @Override
-    public int addInvitation(Invitation invitation) throws DAOException {
+    public int addInvitation(Invitation invitation) throws DAOException, DuplicateEntryException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -71,6 +69,10 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             //execute query
             stmt.executeUpdate();
 
+        } catch (SQLIntegrityConstraintViolationException e) {
+            LOGGER.error("Duplicate invitation entry", e);
+            throw new DuplicateEntryException("Invitation for user with id "
+                    + invitation.getUser().getId() + " and event with id " + invitation.getEventId() + " already exists", e);
         } catch (SQLException e) {
             LOGGER.error("SQL Exception", e);
             throw new DAOException(e);

@@ -1,21 +1,60 @@
 package com.workfront.internship.event_management.service;
 
+import com.workfront.internship.event_management.dao.InvitationDAO;
+import com.workfront.internship.event_management.dao.InvitationDAOImpl;
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Invitation;
+import org.apache.log4j.Logger;
 
 import java.util.List;
+
+import static com.workfront.internship.event_management.service.util.Validator.isValidInvitation;
 
 /**
  * Created by Hermine Turshujyan 7/26/16.
  */
 public class InvitationServiceImpl implements InvitationService {
-    @Override
-    public int addInvitation(Invitation invitation) {
-        return 0;
+
+    private static final Logger LOGGER = Logger.getLogger(InvitationServiceImpl.class);
+    private InvitationDAO invitationDAO;
+
+    public InvitationServiceImpl() {
+        try {
+            invitationDAO = new InvitationDAOImpl();
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
+        }
     }
 
     @Override
-    public int addInvitations(List<Invitation> invitation) {
-        return 0;
+    public Invitation addInvitation(Invitation invitation) {
+
+        if (!isValidInvitation(invitation)) {
+            throw new OperationFailedException("Invalid invitation");
+        }
+
+        try {
+            //insert category into db
+            int invitationId = invitationDAO.addInvitation(invitation);
+
+            //set generated it to category
+            invitation.setId(invitationId);
+        } catch (DuplicateEntryException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException("Invitation for user with id "
+                    + invitation.getUser().getId() + " and event with id " + invitation.getEventId() + " already exists!", e);
+        } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
+        }
+        return invitation;
+    }
+
+    @Override
+    public void addInvitations(List<Invitation> invitation) {
     }
 
     @Override
@@ -39,27 +78,28 @@ public class InvitationServiceImpl implements InvitationService {
     }
 
     @Override
-    public boolean updateInvitation(Invitation invitation) {
-        return false;
+    public void updateInvitation(Invitation invitation) {
+
     }
 
     @Override
-    public boolean deleteInvitation(int invitationId) {
-        return false;
+    public void updateInvitations(List<Invitation> invitations) {
+
     }
 
     @Override
-    public boolean deleteInvitationsByEventId(int eventId) {
-        return false;
+    public void deleteInvitation(int invitationId) {
     }
 
     @Override
-    public boolean deleteInvitationsByUserId(int userId) {
-        return false;
+    public void deleteInvitationsByEventId(int eventId) {
     }
 
     @Override
-    public boolean deleteAllInvitations() {
-        return false;
+    public void deleteInvitationsByUserId(int userId) {
+    }
+
+    @Override
+    public void deleteAllInvitations() {
     }
 }

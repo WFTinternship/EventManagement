@@ -5,6 +5,7 @@ package com.workfront.internship.event_management.model;
  */
 public class Invitation {
 
+
     private int id;
     private int eventId;
     private User user;

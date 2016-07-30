@@ -1,6 +1,7 @@
 package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.Invitation;
 
@@ -12,7 +13,7 @@ import java.util.List;
 public interface InvitationDAO {
 
     //insert invitation into db
-    int addInvitation(Invitation invitation) throws DAOException;
+    int addInvitation(Invitation invitation) throws DAOException, DuplicateEntryException;
 
     void addInvitations(List<Invitation> invitation) throws DAOException;
 

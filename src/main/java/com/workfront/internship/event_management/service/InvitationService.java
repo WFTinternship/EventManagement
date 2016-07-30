@@ -9,10 +9,9 @@ import java.util.List;
  */
 public interface InvitationService {
 
-    int addInvitation(Invitation invitation);
+    Invitation addInvitation(Invitation invitation);
 
-    int addInvitations(List<Invitation> invitation);
-
+    void addInvitations(List<Invitation> invitations);
 
     //get records from db
     Invitation getInvitationById(int invitationId);
@@ -25,15 +24,17 @@ public interface InvitationService {
 
 
     //update record in db
-    boolean updateInvitation(Invitation invitation);
+    void updateInvitation(Invitation invitation);
+
+    void updateInvitations(List<Invitation> invitations);
 
     //delete records from db
-    boolean deleteInvitation(int invitationId);
+    void deleteInvitation(int invitationId);
 
-    boolean deleteInvitationsByEventId(int eventId);
+    void deleteInvitationsByEventId(int eventId);
 
-    boolean deleteInvitationsByUserId(int userId);
+    void deleteInvitationsByUserId(int userId);
 
-    boolean deleteAllInvitations();
+    void deleteAllInvitations();
 
 }

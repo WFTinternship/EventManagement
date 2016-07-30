@@ -74,7 +74,7 @@ public class InvitationDAOIntegrationTest {
     @Test
     public void getInvitationById_Not_Found() {
         //test method
-        Invitation invitation = invitationDAO.getInvitationById(TestHelper.NON_EXISTING_ID);
+        Invitation invitation = invitationDAO.getInvitationById(TestObjectCreator.NON_EXISTING_ID);
 
         assertNull(invitation);
     }
@@ -92,7 +92,7 @@ public class InvitationDAOIntegrationTest {
     @Test
     public void getInvitationsByEventId_Not_Found() {
         //test method
-        List<Invitation> invitationList = invitationDAO.getInvitationsByEventId(TestHelper.NON_EXISTING_ID);
+        List<Invitation> invitationList = invitationDAO.getInvitationsByEventId(TestObjectCreator.NON_EXISTING_ID);
 
         assertNotNull(invitationList);
         assertTrue(invitationList.isEmpty());
@@ -111,7 +111,7 @@ public class InvitationDAOIntegrationTest {
     @Test
     public void getInvitationsByUserId_Not_Found() {
         //test method
-        List<Invitation> invitationList = invitationDAO.getInvitationsByUserId(TestHelper.NON_EXISTING_ID);
+        List<Invitation> invitationList = invitationDAO.getInvitationsByUserId(TestObjectCreator.NON_EXISTING_ID);
 
         assertNotNull(invitationList);
         assertTrue(invitationList.isEmpty());
@@ -137,7 +137,7 @@ public class InvitationDAOIntegrationTest {
     @Test
     public void updateInvitation_Not_Found() {
         //create new invitation with no id
-        Invitation newTestInvitation = TestHelper.createTestInvitation();
+        Invitation newTestInvitation = TestObjectCreator.createTestInvitation();
 
         //test method
         boolean updated = invitationDAO.updateInvitation(newTestInvitation);
@@ -158,7 +158,7 @@ public class InvitationDAOIntegrationTest {
 
     @Test
     public void deleteInvitation_Not_Found() throws DAOException {
-        boolean deleted = invitationDAO.deleteInvitation(TestHelper.NON_EXISTING_ID);
+        boolean deleted = invitationDAO.deleteInvitation(TestObjectCreator.NON_EXISTING_ID);
 
         assertFalse(deleted);
     }
@@ -177,7 +177,7 @@ public class InvitationDAOIntegrationTest {
 
     @Test
     public void deleteInvitationsByEventId_Not_Found() throws DAOException {
-        boolean deleted = invitationDAO.deleteInvitationsByEventId(TestHelper.NON_EXISTING_ID);
+        boolean deleted = invitationDAO.deleteInvitationsByEventId(TestObjectCreator.NON_EXISTING_ID);
 
         assertFalse(deleted);
     }
@@ -197,7 +197,7 @@ public class InvitationDAOIntegrationTest {
     @Test
     public void deleteInvitationsByUserId_Not_Found() throws DAOException {
         //test method
-        boolean deleted = invitationDAO.deleteInvitationsByUserId(TestHelper.NON_EXISTING_ID);
+        boolean deleted = invitationDAO.deleteInvitationsByUserId(TestObjectCreator.NON_EXISTING_ID);
 
         assertFalse(deleted);
     }
@@ -250,10 +250,10 @@ public class InvitationDAOIntegrationTest {
     }
 
     private void createTestObjects() {
-        testUser = TestHelper.createTestUser();
-        testCategory = TestHelper.createTestCategory();
-        testEvent = TestHelper.createTestEvent();
-        testInvitation = TestHelper.createTestInvitation();
+        testUser = TestObjectCreator.createTestUser();
+        testCategory = TestObjectCreator.createTestCategory();
+        testEvent = TestObjectCreator.createTestEvent();
+        testInvitation = TestObjectCreator.createTestInvitation();
     }
 
     private void deleteTestRecordsFromDB() throws DAOException {
@@ -290,7 +290,7 @@ public class InvitationDAOIntegrationTest {
 
     private List<Invitation> createTestInvitationsList() throws DAOException {
         //create second test invitation
-        Invitation secondTestInvitation = TestHelper.createTestInvitation();
+        Invitation secondTestInvitation = TestObjectCreator.createTestInvitation();
 
         //insert second category into db
         int invitationId = invitationDAO.addInvitation(secondTestInvitation);
