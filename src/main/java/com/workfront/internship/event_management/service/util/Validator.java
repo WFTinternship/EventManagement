@@ -1,9 +1,6 @@
 package com.workfront.internship.event_management.service.util;
 
-import com.workfront.internship.event_management.model.Category;
-import com.workfront.internship.event_management.model.Event;
-import com.workfront.internship.event_management.model.RecurrenceType;
-import com.workfront.internship.event_management.model.User;
+import com.workfront.internship.event_management.model.*;
 
 import java.util.Collection;
 import java.util.regex.Matcher;
@@ -32,7 +29,8 @@ public class Validator {
             if (!isEmptyString(user.getFirstName())
                     && !isEmptyString(user.getLastName())
                     && !isEmptyString(user.getPassword()) && user.getPassword().length() >= 6
-                    && isValidEmailAddressForm(user.getEmail())) {
+                    && isValidEmailAddressForm(user.getEmail())
+                    && user.getRegistrationDate() != null) {
                 valid = true;
             }
         }
@@ -40,11 +38,11 @@ public class Validator {
     }
 
     public static boolean isEmptyString(String string) {
-        return (string == null || (string != null && string.isEmpty()));
+        return (string != null && string.isEmpty());
     }
 
     public static boolean isEmptyCollection(Collection collection) {
-        return (collection == null || (collection != null && collection.isEmpty()));
+        return (collection != null && collection.isEmpty());
     }
 
 
@@ -58,12 +56,28 @@ public class Validator {
         return valid;
     }
 
+    public static boolean isValidUserResponse(UserResponse userResponse) {
+        boolean valid = false;
+        // TODO: 7/30/16  implement
+        return valid;
+    }
+
 
     public static boolean isValidRecurrenceType(RecurrenceType recurrenceType) {
         boolean valid = false;
         if (recurrenceType != null
                 && !isEmptyString(recurrenceType.getTitle())
                 && !isEmptyString(recurrenceType.getIntervalUnit())) {
+            valid = true;
+        }
+        return valid;
+    }
+
+    public static boolean isValidRecurrenceOption(RecurrenceOption recurrenceOption) {
+        boolean valid = false;
+        if (recurrenceOption != null
+                && !isEmptyString(recurrenceOption.getTitle())
+                && recurrenceOption.getRecurrenceTypeId() > 0) {
             valid = true;
         }
         return valid;
@@ -81,6 +95,21 @@ public class Validator {
                 valid = true;
             }
         }
-        return false;
+        return valid;
     }
+
+    public static boolean isValidInvitation(Invitation invitation) {
+
+        boolean valid = false;
+        if (invitation != null) {
+            if (invitation.getId() > 0 && invitation.getEventId() > 0
+                    && isValidUser(invitation.getUser())
+                    && !isEmptyString(invitation.getUserRole())
+                    && (invitation.getUserResponse() != null)) {
+                valid = true;
+            }
+        }
+        return valid;
+    }
+
 }
