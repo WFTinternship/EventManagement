@@ -136,40 +136,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
     }
 
     @Override
-    public RecurrenceType getRecurrenceTypeById(int id) throws DAOException {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        RecurrenceType recurrenceType = null;
-        String query = "SELECT * FROM recurrence_type WHERE recurrence_type.id = ?";
-        try {
-            //get connection
-            conn = dataSourceManager.getConnection();
-
-            //create and initialize statement
-            stmt = conn.prepareStatement(query);
-            stmt.setInt(1, id);
-
-            //execute query
-            rs = stmt.executeQuery();
-
-            //get result
-            List<RecurrenceType> recurrenceTypes = createRecurrenceTypeListFromRS(rs);
-            if (recurrenceTypes != null && recurrenceTypes.size() == 1) {
-                recurrenceType = recurrenceTypes.get(0);
-            }
-        } catch (SQLException e) {
-            LOGGER.error("SQL Exception ", e);
-            throw new DAOException(e);
-        } finally {
-            closeResources(rs, stmt, conn);
-        }
-        return recurrenceType;
-    }
-
-    @Override
-    public RecurrenceType getRecurrenceTypeWithOptionsById(int id) throws DAOException {
+    public RecurrenceType getRecurrenceTypeById(int recurrenceTypeId) throws DAOException, ObjectNotFoundException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -185,14 +152,16 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
             //create and initialize statement
             stmt = conn.prepareStatement(query);
-            stmt.setInt(1, id);
+            stmt.setInt(1, recurrenceTypeId);
 
             //execute query
             rs = stmt.executeQuery();
 
             //get result
             recurrenceType = createRecurrenceTypeWithOptionsFromRS(rs);
-
+            if (recurrenceType != null) {
+                throw new ObjectNotFoundException("Recurrence type with id " + recurrenceTypeId + " not found!");
+            }
         } catch (SQLException e) {
             LOGGER.error("SQL Exception ", e);
             throw new DAOException(e);

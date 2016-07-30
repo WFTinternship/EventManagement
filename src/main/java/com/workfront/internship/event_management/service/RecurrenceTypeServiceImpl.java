@@ -6,13 +6,13 @@ import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
-import com.workfront.internship.event_management.model.RecurrenceOption;
 import com.workfront.internship.event_management.model.RecurrenceType;
 import org.apache.log4j.Logger;
 
 import java.util.List;
 
-import static com.workfront.internship.event_management.util.Validator.*;
+import static com.workfront.internship.event_management.service.util.Validator.isEmptyCollection;
+import static com.workfront.internship.event_management.service.util.Validator.isValidRecurrenceType;
 
 /**
  * Created by Hermine Turshujyan 7/27/16.
@@ -49,7 +49,6 @@ public class RecurrenceTypeServiceImpl implements RecurrenceTypeService {
 
             //set generated it to recurrence type
             recurrenceType.setId(recurrenceTypeId);
-
         } catch (DuplicateEntryException e) {
             LOGGER.error(e.getMessage(), e);
             throw new OperationFailedException("Recurrence type with title " + recurrenceType.getTitle() + " already exists!", e);
@@ -62,18 +61,20 @@ public class RecurrenceTypeServiceImpl implements RecurrenceTypeService {
 
     @Override
     public RecurrenceType getRecurrenceTypeById(int id) {
-       /* if (id < 0) {
+        if (id < 0) {
             throw new OperationFailedException("Invalid recurrence type id");
         }
 
         try {
-            return recurrenceTypeDAO.getRecurrenceTypeWithOptionsById(id);
+            return recurrenceTypeDAO.getRecurrenceTypeById(id);
+        } catch (ObjectNotFoundException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException("Recurrence type not found");
         } catch (DAOException e) {
-            e.printStackTrace();
-        }*/
-        return null;
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException(e.getMessage(), e);
+        }
     }
-
 
     @Override
     public List<RecurrenceType> getAllRecurrenceTypes() {
@@ -87,7 +88,6 @@ public class RecurrenceTypeServiceImpl implements RecurrenceTypeService {
 
     @Override
     public void updateRecurrenceType(RecurrenceType recurrenceType) {
-        // TODO: 7/29/16 check
         if (!isValidRecurrenceType(recurrenceType)) {
             throw new OperationFailedException("Invalid recurrence type");
         }
@@ -96,42 +96,9 @@ public class RecurrenceTypeServiceImpl implements RecurrenceTypeService {
             //update recurrence type in db
             recurrenceTypeDAO.updateRecurrenceType(recurrenceType);
 
+            //update recurrence type options
             RecurrenceOptionService recurrenceOptionService = new RecurrenceOptionServiceImpl();
-
-            //get new recurrence type's options
-            List<RecurrenceOption> newOptions = recurrenceType.getRecurrenceOptions();
-
-            //if new recurrenceType does not contain options, delete existing options from db
-            if (isEmptyCollection(newOptions)) {
-                recurrenceOptionService.deleteRecurrenceOptionsByRecurrenceType(recurrenceType.getId());
-            } else {
-                //get recurrence type's current options from db
-                List<RecurrenceOption> dbOptions = recurrenceOptionService.getRecurrenceOptionsByRecurrenceType(recurrenceType.getId());
-
-                //if there is no options in db, insert new options list
-                if (isEmptyCollection(dbOptions)) {
-                    recurrenceOptionService.addRecurrenceOptions(newOptions);
-                } else {
-                    // compare option's list from db with new option's list
-                    for (RecurrenceOption option : dbOptions) {
-                        if (!newOptions.contains(option)) {
-                            recurrenceOptionService.deleteRecurrenceOption(option.getId());
-                        } else if (option != newOptions.get(option.getId())) {
-                            recurrenceOptionService.updateRecurrenceOption(newOptions.get(option.getId()));
-                        }
-                    }
-
-                    for (RecurrenceOption option : newOptions) {
-                        if (!dbOptions.contains(option)) {
-                            recurrenceOptionService.addRecurrenceOption(option);
-                        }
-                    }
-
-
-                }
-            }
-
-
+            recurrenceOptionService.updateRecurrenceOptions(recurrenceType.getRecurrenceOptions());
         } catch (DuplicateEntryException e) {
             LOGGER.error(e.getMessage(), e);
             throw new OperationFailedException("Recurrence type with title " + recurrenceType.getTitle() + " already exists!", e);

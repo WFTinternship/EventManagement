@@ -20,9 +20,7 @@ public interface RecurrenceTypeDAO {
     //read data from db
     List<RecurrenceType> getAllRecurrenceTypes() throws DAOException;
 
-    RecurrenceType getRecurrenceTypeById(int id) throws DAOException;
-
-    RecurrenceType getRecurrenceTypeWithOptionsById(int id) throws DAOException;
+    RecurrenceType getRecurrenceTypeById(int id) throws DAOException, ObjectNotFoundException;
 
     //update record in db
     void updateRecurrenceType(RecurrenceType recurrenceType) throws DAOException, DuplicateEntryException, ObjectNotFoundException;
