@@ -83,7 +83,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
     }
 
     @Override
-    public void addInvitations(List<Invitation> invitationList) throws DAOException {
+    public void addInvitations(List<Invitation> invitationList) throws DAOException, DuplicateEntryException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -128,6 +128,9 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             }
             //execute query
             stmt.executeBatch();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            LOGGER.error("Duplicate invitation entry", e);
+            throw new DuplicateEntryException("Invitation already exists", e);
         } catch (SQLException e) {
             LOGGER.error("SQL Exception", e);
             throw new DAOException(e);
@@ -189,7 +192,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
     }
 
     @Override
-    public void updateInvitation(Invitation invitation) throws ObjectNotFoundException {
+    public void updateInvitation(Invitation invitation) throws ObjectNotFoundException, DuplicateEntryException, DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -214,9 +217,13 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             if (affectedRows == 0) {
                 throw new ObjectNotFoundException("Invitation with id " + invitation.getId() + " not found!");
             }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            LOGGER.error("Duplicate invitation entry", e);
+            throw new DuplicateEntryException("Invitation for user with id "
+                    + invitation.getUser().getId() + " and event with id " + invitation.getEventId() + " already exists", e);
         } catch (SQLException e) {
-            LOGGER.error("Exception ", e);
-            throw new RuntimeException(e);
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
         } finally {
             closeResources(stmt, conn);
         }
@@ -228,12 +235,12 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
     }
 
     @Override
-    public void deleteInvitationsByEventId(int eventId) throws DAOException, ObjectNotFoundException {
+    public void deleteInvitationsByEventId(int eventId) throws DAOException {
         deleteRecord("event_invitation", "event_id", eventId);
     }
 
     @Override
-    public void deleteInvitationsByUserId(int userId) throws DAOException, ObjectNotFoundException {
+    public void deleteInvitationsByUserId(int userId) throws DAOException {
         deleteRecord("event_invitation", "user_id", userId);
     }
 
@@ -254,7 +261,6 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
                 "LEFT JOIN user ON event_invitation.user_id = user.id " +
                 "LEFT JOIN user_response ON event_invitation.user_response_id = user_response.id " +
                 "WHERE " + columnName + " = ?";
-
         try {
             //get connection
             conn = dataSourceManager.getConnection();
@@ -268,7 +274,6 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
             //get results
             invitationsList = createInvitationsFromRS(rs);
-
         } catch (SQLException e) {
             LOGGER.error("SQL Exception", e);
             throw new DAOException(e);

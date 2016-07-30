@@ -11,10 +11,10 @@ public interface InvitationService {
 
     Invitation addInvitation(Invitation invitation);
 
-    void addInvitations(List<Invitation> invitations);
+    void addInvitations(List<Invitation> invitationList);
 
     //get records from db
-    Invitation getInvitationById(int invitationId);
+    Invitation getInvitation(int invitationId);
 
     List<Invitation> getAllInvitations();
 
@@ -26,7 +26,7 @@ public interface InvitationService {
     //update record in db
     void updateInvitation(Invitation invitation);
 
-    void updateInvitations(List<Invitation> invitations);
+    void updateInvitations(int eventId, List<Invitation> invitationList);
 
     //delete records from db
     void deleteInvitation(int invitationId);

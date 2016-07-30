@@ -33,7 +33,7 @@ public class InvitationDAOUnitTest {
 
     @Test(expected = RuntimeException.class)
     public void getInvitationById_dbError() {
-        invitationDAO.getInvitationById(1);
+        invitationDAO.getInvitation(1);
     }
 
     @Test(expected = RuntimeException.class)

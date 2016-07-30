@@ -50,7 +50,7 @@ public class InvitationDAOIntegrationTest {
     @Test
     public void addInvitation_Success() {
         //test invitation already inserted in setup, read record from db
-        Invitation invitation = invitationDAO.getInvitationById(testInvitation.getId());
+        Invitation invitation = invitationDAO.getInvitation(testInvitation.getId());
 
         assertNotNull(invitation);
         assertEqualInvitations(invitation, testInvitation);
@@ -65,7 +65,7 @@ public class InvitationDAOIntegrationTest {
     @Test
     public void getInvitationById_Found() {
         //test method
-        Invitation invitation = invitationDAO.getInvitationById(testInvitation.getId());
+        Invitation invitation = invitationDAO.getInvitation(testInvitation.getId());
 
         assertNotNull(invitation);
         assertEqualInvitations(invitation, testInvitation);
@@ -74,7 +74,7 @@ public class InvitationDAOIntegrationTest {
     @Test
     public void getInvitationById_Not_Found() {
         //test method
-        Invitation invitation = invitationDAO.getInvitationById(TestObjectCreator.NON_EXISTING_ID);
+        Invitation invitation = invitationDAO.getInvitation(TestObjectCreator.NON_EXISTING_ID);
 
         assertNull(invitation);
     }
@@ -127,7 +127,7 @@ public class InvitationDAOIntegrationTest {
         boolean updated = invitationDAO.updateInvitation(testInvitation);
 
         //read updated method from db
-        Invitation invitation = invitationDAO.getInvitationById(testInvitation.getId());
+        Invitation invitation = invitationDAO.getInvitation(testInvitation.getId());
 
         assertNotNull(invitation);
         assertEqualInvitations(invitation, testInvitation);
@@ -150,7 +150,7 @@ public class InvitationDAOIntegrationTest {
         //test method
         boolean deleted = invitationDAO.deleteInvitation(testInvitation.getId());
 
-        Invitation invitation = invitationDAO.getInvitationById(testInvitation.getId());
+        Invitation invitation = invitationDAO.getInvitation(testInvitation.getId());
 
         assertTrue(deleted);
         assertNull(invitation);
