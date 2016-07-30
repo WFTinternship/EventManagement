@@ -3,6 +3,7 @@ package com.workfront.internship.event_management.dao;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.*;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.*;
@@ -14,6 +15,7 @@ import java.util.List;
  */
 public class EventDAOImpl extends GenericDAO implements EventDAO {
 
+    static final Logger LOGGER = Logger.getLogger(EventDAOImpl.class);
     private DataSourceManager dataSourceManager;
 
     public EventDAOImpl(DataSourceManager dataSourceManager) throws Exception {
@@ -144,7 +146,6 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             if (!media.isEmpty()) {
                 event.setMedia(media);
             }
-
         } catch (SQLException e) {
             LOGGER.error("SQL Exception ", e);
             throw new DAOException(e);
@@ -213,7 +214,6 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         String query = "SELECT * FROM event " +
                 "LEFT JOIN event_category ON event.category_id = event_category.id ";
-
         try {
             //get connection
             conn = dataSourceManager.getConnection();
@@ -226,7 +226,6 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
             //get results
             eventsList = createEventListFromRS(rs);
-
         } catch (SQLException e) {
             LOGGER.error("SQL Exception", e);
             throw new DAOException(e);
@@ -302,7 +301,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                 throw new ObjectNotFoundException("Event with id " + event.getId() + " not found!");
             }
         } catch (SQLException e) {
-            LOGGER.error("Exception ", e);
+            LOGGER.error("SQL Exception ", e);
             throw new DAOException(e);
         } finally {
             closeResources(null, stmt, conn);
