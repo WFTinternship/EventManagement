@@ -1,7 +1,6 @@
 package com.workfront.internship.event_management.service;
 
 import com.workfront.internship.event_management.model.Media;
-import com.workfront.internship.event_management.model.MediaType;
 
 import java.util.List;
 
@@ -10,26 +9,27 @@ import java.util.List;
  */
 public interface MediaService {
 
-    //CRUD operations with media
+    //Create
     int addMedia(Media media);
+
+    //Read
     Media getMediaById(int mediaId);
-    boolean updateMediaDescription(int mediaId, String description);
 
-    boolean deleteMedia(int mediaId);
-    List<Media> getAllMedia();
-
-    boolean deleteAllMedia();
     List<Media> getMediaByEventId(int eventId);
+
     List<Media> getMediaByType(int typeId);
+
     List<Media> getMediaByUploaderId(int uploaderId);
 
-    //CRUD operations with media type
-    int addMediaType(MediaType mediaType);
-    MediaType getMediaTypeById(int mediaTypeId);
-    boolean updateMediaType(MediaType mediaType);
+    List<Media> getAllMedia();
 
-    boolean deleteMediaType(int mediaTypeId);
-    List<MediaType> getAllMediaTypes();
+    //Update
+    void updateMediaDescription(int mediaId, String description);
 
-    boolean deleteAllMediaTypes();
+    void updateMediaList(List<Media> media);
+
+    //Delete
+    void deleteMedia(int mediaId);
+
+    void deleteAllMedia();
 }
