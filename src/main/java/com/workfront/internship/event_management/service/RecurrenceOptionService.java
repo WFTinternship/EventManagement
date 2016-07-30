@@ -9,22 +9,27 @@ import java.util.List;
  */
 public interface RecurrenceOptionService {
 
-    //CRUD methods for recurrence option
-    int addRecurrenceOption(RecurrenceOption option);
+    //Create
+    RecurrenceOption addRecurrenceOption(RecurrenceOption option);
 
-    int addRecurrenceOptions(List<RecurrenceOption> options);
+    void addRecurrenceOptions(List<RecurrenceOption> options);
 
+    //Read
     List<RecurrenceOption> getAllRecurrenceOptions();
 
     RecurrenceOption getRecurrenceOption(int optionId);
 
     List<RecurrenceOption> getRecurrenceOptionsByRecurrenceType(int recurrenceTypeId);
 
-    boolean updateRecurrenceOption(RecurrenceOption option);
+    //Update
+    void updateRecurrenceOption(RecurrenceOption option);
 
-    boolean deleteRecurrenceOption(int optionId);
+    void updateRecurrenceOptions(int recurrenceTypeId, List<RecurrenceOption> options);
 
-    boolean deleteRecurrenceOptionsByRecurrenceType(int recurrenceTypeId);
+    //Delete
+    void deleteRecurrenceOption(int optionId);
 
-    boolean deleteAllRecurrenceOptions();
+    void deleteRecurrenceOptionsByRecurrenceType(int recurrenceTypeId);
+
+    void deleteAllRecurrenceOptions();
 }

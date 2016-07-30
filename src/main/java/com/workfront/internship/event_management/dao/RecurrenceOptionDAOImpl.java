@@ -1,15 +1,13 @@
 package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.RecurrenceOption;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +34,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
     }
 
     @Override
-    public int addRecurrenceOption(RecurrenceOption recurrenceOption) throws DAOException {
+    public int addRecurrenceOption(RecurrenceOption recurrenceOption) throws DAOException, DuplicateEntryException {
         Connection conn = null;
         int id = 0;
 
@@ -56,7 +54,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
     }
 
     @Override
-    public void addRecurrenceOptions(List<RecurrenceOption> options) throws DAOException {
+    public void addRecurrenceOptions(List<RecurrenceOption> options) throws DAOException, DuplicateEntryException {
         Connection conn = null;
         try {
             //get connection
@@ -72,7 +70,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
         }
     }
 
-    private int addRecurrenceOption(RecurrenceOption option, Connection conn) throws DAOException {
+    private int addRecurrenceOption(RecurrenceOption option, Connection conn) throws DAOException, DuplicateEntryException {
         PreparedStatement stmt = null;
 
         int id = 0;
@@ -90,6 +88,9 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
 
             //get generated id
             id = getInsertedId(stmt);
+        } catch (SQLIntegrityConstraintViolationException e) {
+            LOGGER.error("Duplicate recurrence option entry", e);
+            throw new DuplicateEntryException("Recurrence option with title " + option.getTitle() + " already exists!", e);
         } catch (SQLException e) {
             LOGGER.error("SQL Exception", e);
             throw new DAOException(e);
@@ -99,7 +100,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
         return id;
     }
 
-    void addRecurrenceOptions(List<RecurrenceOption> options, Connection conn) throws DAOException {
+    void addRecurrenceOptions(List<RecurrenceOption> options, Connection conn) throws DAOException, DuplicateEntryException {
         PreparedStatement stmt = null;
 
         String query = "INSERT INTO recurrence_option " +
@@ -117,9 +118,10 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
 
             //execute query
             stmt.executeBatch();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            LOGGER.error("Duplicate recurrence option entry", e);
+            throw new DuplicateEntryException("Recurrence option already exists!", e);
         } catch (SQLException e) {
-            LOGGER.error("SQL Exception", e);
-            throw new DAOException(e);
         } finally {
             closeResources(stmt);
         }
@@ -223,7 +225,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
     }
 
     @Override
-    public void updateRecurrenceOption(RecurrenceOption option) throws DAOException, ObjectNotFoundException {
+    public void updateRecurrenceOption(RecurrenceOption option) throws DAOException, ObjectNotFoundException, DuplicateEntryException {
         Connection conn = null;
         PreparedStatement stmt = null;
 
@@ -245,6 +247,9 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
             if (affectedRows == 0) {
                 throw new ObjectNotFoundException("Recurrence option with id " + option.getId() + " not found!");
             }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            LOGGER.error("Duplicate recurrence option entry", e);
+            throw new DuplicateEntryException("Recurrence option with title " + option.getTitle() + " already exists!", e);
         } catch (SQLException e) {
             LOGGER.error("SQL Exception", e);
             throw new DAOException(e);

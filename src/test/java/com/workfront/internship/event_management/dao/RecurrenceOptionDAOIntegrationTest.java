@@ -26,8 +26,8 @@ public class RecurrenceOptionDAOIntegrationTest {
     public void setUp() {
 
         //create test recurrence type and option objects
-        testRecurrenceType = TestHelper.createTestRecurrenceType();
-        testRecurrenceOption = TestHelper.createTestRecurrenceOption();
+        testRecurrenceType = TestObjectCreator.createTestRecurrenceType();
+        testRecurrenceOption = TestObjectCreator.createTestRecurrenceOption();
 
         //insert into db
         int recurrenceTypeId = recurrenceTypeDAO.addRecurrenceType(testRecurrenceType);
@@ -100,7 +100,7 @@ public class RecurrenceOptionDAOIntegrationTest {
     @Test
     public void getRecurrenceOptionById_Not_Found() {
         //test method
-        RecurrenceOption recurrenceOption = recurrenceOptionDAO.getRecurrenceOption(TestHelper.NON_EXISTING_ID);
+        RecurrenceOption recurrenceOption = recurrenceOptionDAO.getRecurrenceOption(TestObjectCreator.NON_EXISTING_ID);
 
         assertNull(recurrenceOption);
     }
@@ -119,7 +119,7 @@ public class RecurrenceOptionDAOIntegrationTest {
     @Test
     public void getRecurrenceOptionsByRecurrenceType_Not_Found() {
         //test method
-        List<RecurrenceOption> recurrenceOption = recurrenceOptionDAO.getRecurrenceOptionsByRecurrenceType(TestHelper.NON_EXISTING_ID);
+        List<RecurrenceOption> recurrenceOption = recurrenceOptionDAO.getRecurrenceOptionsByRecurrenceType(TestObjectCreator.NON_EXISTING_ID);
 
         assertNotNull(recurrenceOption);
         assertTrue(recurrenceOption.isEmpty());
@@ -143,7 +143,7 @@ public class RecurrenceOptionDAOIntegrationTest {
     @Test
     public void updateRepeatOption_Not_Found() {
         //create new recurrence option with non-existing id
-        RecurrenceOption recurrenceOption = TestHelper.createTestRecurrenceOption();
+        RecurrenceOption recurrenceOption = TestObjectCreator.createTestRecurrenceOption();
 
         //test method
         boolean updated = recurrenceOptionDAO.updateRecurrenceOption(recurrenceOption);
@@ -165,7 +165,7 @@ public class RecurrenceOptionDAOIntegrationTest {
     @Test
     public void deleteRecurrencetOption_NotFound() throws DAOException {
         //testing method
-        boolean deleted = recurrenceOptionDAO.deleteRecurrenceOption(TestHelper.NON_EXISTING_ID);
+        boolean deleted = recurrenceOptionDAO.deleteRecurrenceOption(TestObjectCreator.NON_EXISTING_ID);
 
         assertFalse(deleted);
     }
@@ -185,7 +185,7 @@ public class RecurrenceOptionDAOIntegrationTest {
     @Test
     public void deleteRepeatOptionsByRecurrenceType_Not_Found() throws DAOException {
         //testing method
-        boolean deleted = recurrenceOptionDAO.deleteRecurrenceOptionsByRecurrenceType(TestHelper.NON_EXISTING_ID);
+        boolean deleted = recurrenceOptionDAO.deleteRecurrenceOptionsByRecurrenceType(TestObjectCreator.NON_EXISTING_ID);
 
         assertFalse(deleted);
     }

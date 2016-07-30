@@ -1,6 +1,7 @@
 package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.RecurrenceOption;
 
@@ -12,9 +13,9 @@ import java.util.List;
 public interface RecurrenceOptionDAO {
 
     //insert data into db
-    int addRecurrenceOption(RecurrenceOption option) throws DAOException;
+    int addRecurrenceOption(RecurrenceOption option) throws DAOException, DuplicateEntryException;
 
-    void addRecurrenceOptions(List<RecurrenceOption> options) throws DAOException;
+    void addRecurrenceOptions(List<RecurrenceOption> options) throws DAOException, DuplicateEntryException;
 
     //read data from db
     List<RecurrenceOption> getAllRecurrenceOptions() throws DAOException;
@@ -24,7 +25,7 @@ public interface RecurrenceOptionDAO {
     List<RecurrenceOption> getRecurrenceOptionsByRecurrenceType(int recurrenceTypeId) throws DAOException;
 
     //update data in db
-    void updateRecurrenceOption(RecurrenceOption option) throws DAOException, ObjectNotFoundException;
+    void updateRecurrenceOption(RecurrenceOption option) throws DAOException, ObjectNotFoundException, DuplicateEntryException;
 
     //delete data from db
     void deleteRecurrenceOption(int optionId) throws ObjectNotFoundException, DAOException;
