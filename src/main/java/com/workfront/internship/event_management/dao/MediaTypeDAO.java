@@ -22,7 +22,7 @@ public interface MediaTypeDAO {
     MediaType getMediaTypeById(int mediaTypeId) throws ObjectNotFoundException, DAOException;
 
     //update data in db
-    void updateMediaType(MediaType mediaType) throws DuplicateEntryException, DAOException;
+    void updateMediaType(MediaType mediaType) throws DuplicateEntryException, DAOException, ObjectNotFoundException;
 
     //delete data from db
     void deleteMediaType(int mediaTypeId) throws ObjectNotFoundException, DAOException;

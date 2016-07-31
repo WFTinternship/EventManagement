@@ -75,13 +75,13 @@ public class MediaTypeDAOImpl extends GenericDAO implements MediaTypeDAO {
         ResultSet rs = null;
 
         List<MediaType> mediaTypesList = new ArrayList<>();
+        String query = "SELECT * FROM media_type";
 
         try {
             //get connection
             conn = dataSourceManager.getConnection();
 
             //create statement
-            String query = "SELECT * FROM media_type";
             stmt = conn.prepareStatement(query);
 
             //execute query
@@ -137,25 +137,28 @@ public class MediaTypeDAOImpl extends GenericDAO implements MediaTypeDAO {
     }
 
     @Override
-    public void updateMediaType(MediaType mediaType) throws DuplicateEntryException, DAOException {
+    public void updateMediaType(MediaType mediaType) throws DuplicateEntryException, DAOException, ObjectNotFoundException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
+
         int affectedRows = 0;
+        String sqlStr = "UPDATE media_type SET title = ? WHERE id = ?";
 
         try {
             //get connection
             conn = dataSourceManager.getConnection();
 
             //create and initialize statement
-            String sqlStr = "UPDATE media_type SET title = ? WHERE id = ?";
             stmt = conn.prepareStatement(sqlStr);
             stmt.setString(1, mediaType.getTitle());
             stmt.setString(2, mediaType.getTitle());
 
             //execute query
             affectedRows = stmt.executeUpdate();
-
+            if (affectedRows == 0) {
+                throw new ObjectNotFoundException("Media type with id " + mediaType.getId() + " not found!");
+            }
         } catch (SQLIntegrityConstraintViolationException e) {
             LOGGER.error("Duplicate media type entry", e);
             throw new DuplicateEntryException("Media type with title " + mediaType.getTitle() + " already exists!", e);
