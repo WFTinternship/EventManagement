@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 import java.util.List;
 
 import static com.workfront.internship.event_management.service.util.Validator.isValidMediaType;
-import static com.workfront.internship.event_management.service.util.Validator.isValidRecurrenceOption;
 
 /**
  * Created by Hermine Turshujyan 7/30/16.
@@ -30,6 +29,7 @@ public class MediaTypeServiceImpl implements MediaTypeService {
             throw new OperationFailedException(e.getMessage(), e);
         }
     }
+
     @Override
     public MediaType addMediaType(MediaType mediaType) {
         if (!isValidMediaType(mediaType)) {

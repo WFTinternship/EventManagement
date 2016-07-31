@@ -10,23 +10,21 @@ import java.util.List;
 public interface MediaService {
 
     //Create
-    int addMedia(Media media);
+    Media addMedia(Media media);
 
     //Read
-    Media getMediaById(int mediaId);
+    Media getMedia(int mediaId);
 
-    List<Media> getMediaByEventId(int eventId);
+    List<Media> getMediaByEvent(int eventId);
 
     List<Media> getMediaByType(int typeId);
 
-    List<Media> getMediaByUploaderId(int uploaderId);
+    List<Media> getMediaByUploader(int uploaderId);
 
     List<Media> getAllMedia();
 
     //Update
     void updateMediaDescription(int mediaId, String description);
-
-    void updateMediaList(List<Media> media);
 
     //Delete
     void deleteMedia(int mediaId);
