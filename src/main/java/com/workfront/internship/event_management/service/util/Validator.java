@@ -3,7 +3,6 @@ package com.workfront.internship.event_management.service.util;
 import com.workfront.internship.event_management.model.*;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,7 +12,7 @@ import java.util.regex.Pattern;
 public class Validator {
     private static final String EMAIL_PATTERN =
             "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
-    private static final Pattern pattern = Pattern.compile(EMAIL_PATTERN); // TODO: 7/28/16 read more
+    private static final Pattern pattern = Pattern.compile(EMAIL_PATTERN);
 
     public static boolean isValidEmailAddressForm(String email) {
         if (isEmptyString(email)) {
@@ -39,11 +38,11 @@ public class Validator {
     }
 
     public static boolean isEmptyString(String string) {
-        return (string != null && string.isEmpty());
+        return (string == null || string.isEmpty());
     }
 
     public static boolean isEmptyCollection(Collection collection) {
-        return (collection != null && collection.isEmpty());
+        return (collection == null || collection.isEmpty());
     }
 
 
@@ -70,15 +69,6 @@ public class Validator {
         }
         return valid;
     }
-
-    private int id;
-    private MediaType type;
-    private String path;
-    private String description;
-    private int eventId;
-    private int uploaderId;
-    private Date uploadDate;
-
 
     public static boolean isValidMedia(Media media) {
         boolean valid = false;
