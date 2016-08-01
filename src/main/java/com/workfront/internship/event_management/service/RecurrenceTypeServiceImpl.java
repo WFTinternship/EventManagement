@@ -17,12 +17,12 @@ import static com.workfront.internship.event_management.service.util.Validator.i
 /**
  * Created by Hermine Turshujyan 7/27/16.
  */
-public class RecurrenceTypeServiceImpl implements RecurrenceTypeService {
+class RecurrenceTypeServiceImpl implements RecurrenceTypeService {
 
     private static final Logger LOGGER = Logger.getLogger(RecurrenceTypeServiceImpl.class);
     private RecurrenceTypeDAO recurrenceTypeDAO;
 
-    public RecurrenceTypeServiceImpl() {
+    RecurrenceTypeServiceImpl() {
         try {
             recurrenceTypeDAO = new RecurrenceTypeDAOImpl();
         } catch (DAOException e) {
@@ -87,7 +87,7 @@ public class RecurrenceTypeServiceImpl implements RecurrenceTypeService {
     }
 
     @Override
-    public void updateRecurrenceType(RecurrenceType recurrenceType) {
+    public void editRecurrenceType(RecurrenceType recurrenceType) {
         if (!isValidRecurrenceType(recurrenceType)) {
             throw new OperationFailedException("Invalid recurrence type");
         }

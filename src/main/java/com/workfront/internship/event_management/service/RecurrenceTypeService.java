@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by Hermine Turshujyan 7/27/16.
  */
-public interface RecurrenceTypeService {
+interface RecurrenceTypeService {
 
     //CRUD methods for recurrence type
     RecurrenceType addRecurrenceType(RecurrenceType recurrenceType);
@@ -16,7 +16,7 @@ public interface RecurrenceTypeService {
 
     RecurrenceType getRecurrenceTypeById(int recurrenceTypeId);
 
-    void updateRecurrenceType(RecurrenceType recurrenceType);
+    void editRecurrenceType(RecurrenceType recurrenceType);
 
     void deleteRecurrenceType(int id);
 

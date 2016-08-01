@@ -1,15 +1,28 @@
 package com.workfront.internship.event_management.dao;
 
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
+import com.workfront.internship.event_management.model.RecurrenceType;
+import org.junit.*;
+
+import java.util.List;
+
+import static com.workfront.internship.event_management.AssertionHelper.assertEqualRecurrenceTypes;
+import static com.workfront.internship.event_management.AssertionHelper.assertEqualRecurrenceTypesWithOptions;
+import static com.workfront.internship.event_management.TestObjectCreator.*;
+import static junit.framework.TestCase.*;
+
 /**
  * Created by Hermine Turshujyan 7/11/16.
  */
 public class RecurrenceTypeDAOIntegrationTest {
-/*
+
     private static RecurrenceTypeDAO recurrenceTypeDAO = null;
     private RecurrenceType testRecurrenceType = null;
 
     @BeforeClass
-    public static void setUpClass(){
+    public static void setUpClass() throws DAOException {
         recurrenceTypeDAO = new RecurrenceTypeDAOImpl();
     }
 
@@ -19,12 +32,12 @@ public class RecurrenceTypeDAOIntegrationTest {
     }
 
     @Before
-    public void setUp() {
+    public void setUp() throws DuplicateEntryException, DAOException {
         //create test recurrence type
-        testRecurrenceType = TestObjectCreator.createTestRecurrenceTypeWithOptions();
+        testRecurrenceType = createTestRecurrenceTypeWithOptions();
 
         //insert test record into db and get generated id
-        int recurrenceTypeId = recurrenceTypeDAO.addRecurrenceType(testRecurrenceType);
+        int recurrenceTypeId = recurrenceTypeDAO.addRecurrenceTypeWithOptions(testRecurrenceType);
         testRecurrenceType.setId(recurrenceTypeId);
     }
 
@@ -38,7 +51,7 @@ public class RecurrenceTypeDAOIntegrationTest {
     }
 
     @Test
-    public void addRecurrenceTypeWithOptions_Success() {
+    public void addRecurrenceTypeWithOptions_Success() throws ObjectNotFoundException, DAOException {
         //test record already inserted in setup, read record by id
         RecurrenceType recurrenceType = recurrenceTypeDAO.getRecurrenceTypeById(testRecurrenceType.getId());
 
@@ -47,9 +60,9 @@ public class RecurrenceTypeDAOIntegrationTest {
     }
 
     @Test
-    public void addRecurrenceTypeWithoutOptions_Success() {
+    public void addRecurrenceType_Success() throws DuplicateEntryException, DAOException, ObjectNotFoundException {
         //create recurrence type without options
-        RecurrenceType newTestRecurrenceType = TestObjectCreator.createTestRecurrenceType();
+        RecurrenceType newTestRecurrenceType = createTestRecurrenceType();
         int id = recurrenceTypeDAO.addRecurrenceType(newTestRecurrenceType);
         newTestRecurrenceType.setId(id);
 
@@ -60,15 +73,14 @@ public class RecurrenceTypeDAOIntegrationTest {
         assertEqualRecurrenceTypes(recurrenceType, newTestRecurrenceType);
     }
 
-    @Test(expected = RuntimeException.class)
-    public void addRecurrenceType_Dublicate_Entry() {
-        //test recurrence type inserted in setup, insert dublicate entry
+    @Test(expected = DuplicateEntryException.class)
+    public void addRecurrenceType_Duplicate_Entry() throws DuplicateEntryException, DAOException {
+        //test recurrence type inserted in setup, insert duplicate entry
         recurrenceTypeDAO.addRecurrenceType(testRecurrenceType);
     }
 
-
     @Test
-    public void getAllRecurrenceTypes_Found() {
+    public void getAllRecurrenceTypes_Found() throws DAOException {
         //test method
         List<RecurrenceType> recurrenceTypeList = recurrenceTypeDAO.getAllRecurrenceTypes();
 
@@ -80,7 +92,7 @@ public class RecurrenceTypeDAOIntegrationTest {
     }
 
     @Test
-    public void getAllRecurrenceTypes_Empty_List() throws DAOException {
+    public void getAllRecurrenceTypes_Empty_List() throws DAOException, ObjectNotFoundException {
         //delete inserted record from db
         recurrenceTypeDAO.deleteRecurrenceType(testRecurrenceType.getId());
 
@@ -92,7 +104,7 @@ public class RecurrenceTypeDAOIntegrationTest {
     }
 
     @Test
-    public void getRecurrenceTypeById_Found() {
+    public void getRecurrenceTypeById_Found() throws ObjectNotFoundException, DAOException {
         //test method (test record already inserted in seUp())
         RecurrenceType recurrenceType = recurrenceTypeDAO.getRecurrenceTypeById(testRecurrenceType.getId());
 
@@ -100,22 +112,20 @@ public class RecurrenceTypeDAOIntegrationTest {
         assertEqualRecurrenceTypesWithOptions(recurrenceType, testRecurrenceType);
     }
 
-    @Test
-    public void getRecurrenceTypeById_Not_Found() {
+    @Test(expected = ObjectNotFoundException.class)
+    public void getRecurrenceTypeById_Not_Found() throws ObjectNotFoundException, DAOException {
         //test method
-        RecurrenceType recurrenceType = recurrenceTypeDAO.getRecurrenceTypeById(TestObjectCreator.NON_EXISTING_ID);
-
-        assertNull(recurrenceType);
+        RecurrenceType recurrenceType = recurrenceTypeDAO.getRecurrenceTypeById(NON_EXISTING_ID);
     }
 
     @Test
-    public void updateRecurrenceType_Found() {
+    public void updateRecurrenceType_Found() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
         //update recurrence type info
         testRecurrenceType.setTitle("updated title")
                 .setIntervalUnit("updated unit");
 
         //test method
-        boolean updated = recurrenceTypeDAO.updateRecurrenceType(testRecurrenceType);
+        recurrenceTypeDAO.updateRecurrenceType(testRecurrenceType);
 
         //read updated record from db
         RecurrenceType recurrenceType = recurrenceTypeDAO.getRecurrenceTypeById(testRecurrenceType.getId());
@@ -124,76 +134,46 @@ public class RecurrenceTypeDAOIntegrationTest {
         assertEqualRecurrenceTypes(recurrenceType, testRecurrenceType);
     }
 
-    @Test
-    public void updateRecurrenceType_Not_Found() {
+    @Test(expected = ObjectNotFoundException.class)
+    public void updateRecurrenceType_Not_Found() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
         //create new recurrence type with non-existing id
-        RecurrenceType recurrenceType = TestObjectCreator.createTestRecurrenceType();
+        RecurrenceType recurrenceType = createTestRecurrenceType();
 
         //test method
-        boolean updated = recurrenceTypeDAO.updateRecurrenceType(recurrenceType);
-
-        assertFalse(updated);
+        recurrenceTypeDAO.updateRecurrenceType(recurrenceType);
     }
 
-    @Test
-    public void deleteRecurrenceType_Found() throws DAOException {
+    @Test(expected = ObjectNotFoundException.class)
+    public void deleteRecurrenceType_Found() throws DAOException, ObjectNotFoundException {
         //testing method
-        boolean deleted = recurrenceTypeDAO.deleteRecurrenceType(testRecurrenceType.getId());
+        recurrenceTypeDAO.deleteRecurrenceType(testRecurrenceType.getId());
 
         RecurrenceType recurrenceType = recurrenceTypeDAO.getRecurrenceTypeById(testRecurrenceType.getId());
-
-        assertTrue(deleted);
-        assertNull(recurrenceType);
     }
 
-    @Test
-    public void deleteRecurrenceType_Not_Found() throws DAOException {
+    @Test(expected = ObjectNotFoundException.class)
+    public void deleteRecurrenceType_Not_Found() throws DAOException, ObjectNotFoundException {
         //testing method
-        boolean deleted = recurrenceTypeDAO.deleteRecurrenceType(TestObjectCreator.NON_EXISTING_ID);
-
-        assertFalse(deleted);
+        recurrenceTypeDAO.deleteRecurrenceType(NON_EXISTING_ID);
     }
 
     @Test
     public void deleteAllRecurrenceTypes_Found() throws DAOException {
         //testing method
-        boolean deleted = recurrenceTypeDAO.deleteAllRecurrenceTypes();
+        recurrenceTypeDAO.deleteAllRecurrenceTypes();
 
         List<RecurrenceType> recurrenceTypeList = recurrenceTypeDAO.getAllRecurrenceTypes();
 
         assertNotNull(recurrenceTypeList);
         assertTrue(recurrenceTypeList.isEmpty());
-        assertTrue(deleted);
     }
 
     @Test
-    public void deleteAllRecurrenceTypes_Not_Found() throws DAOException {
+    public void deleteAllRecurrenceTypes_Not_Found() throws DAOException, ObjectNotFoundException {
         //delete inserted test record
         recurrenceTypeDAO.deleteRecurrenceType(testRecurrenceType.getId());
 
         //testing method
-        boolean deleted = recurrenceTypeDAO.deleteAllRecurrenceTypes();
-
-        assertFalse(deleted);
+        recurrenceTypeDAO.deleteAllRecurrenceTypes();
     }
-
-
-    //helper methods
-    private void assertEqualRecurrenceTypesWithOptions(RecurrenceType actualRecurrenceType, RecurrenceType expectedRecurrenceType) {
-
-        assertEqualRecurrenceTypes(actualRecurrenceType, expectedRecurrenceType);
-
-        assertNotNull(actualRecurrenceType.getRecurrenceOptions());
-        assertEquals(actualRecurrenceType.getRecurrenceOptions().size(), expectedRecurrenceType.getRecurrenceOptions().size());
-    }
-
-    private void assertEqualRecurrenceTypes(RecurrenceType actualRecurrenceType, RecurrenceType expectedRecurrenceType) {
-
-        assertEquals(actualRecurrenceType.getTitle(), expectedRecurrenceType.getTitle());
-        assertEquals(actualRecurrenceType.getIntervalUnit(), expectedRecurrenceType.getIntervalUnit());
-
-        // assertNull(actualRecurrenceType.getRecurrenceOptions());
-    }
-*/
-
 }
