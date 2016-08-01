@@ -29,12 +29,12 @@ public class EventRecurrenceDAOUnitTest {
 
     @Test(expected = RuntimeException.class)
     public void getEventRecurrenceById_dbError() {
-        eventRecurrenceDAO.getEventRecurrenceById(1);
+        eventRecurrenceDAO.getEventRecurrence(1);
     }
 
     @Test(expected = RuntimeException.class)
     public void getEventRecurrencesByEventId_dbError() {
-        eventRecurrenceDAO.getEventRecurrencesByEventId(1);
+        eventRecurrenceDAO.getEventRecurrencesByEvent(1);
     }
 
     @Test(expected = RuntimeException.class)

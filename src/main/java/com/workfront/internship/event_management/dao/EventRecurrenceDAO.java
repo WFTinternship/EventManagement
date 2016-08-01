@@ -14,7 +14,7 @@ public interface EventRecurrenceDAO {
     //insert data into db
     int addEventRecurrence(EventRecurrence recurrence) throws DAOException;
 
-    void addEventRecurrences(List<EventRecurrence> recurrenceList);
+    void addEventRecurrences(List<EventRecurrence> recurrenceList) throws DAOException;
 
     //read data from db
     EventRecurrence getEventRecurrenceById(int id) throws ObjectNotFoundException, DAOException;
@@ -24,7 +24,7 @@ public interface EventRecurrenceDAO {
     List<EventRecurrence> getAllEventRecurrences() throws DAOException;
 
     //update db record
-    void updateEventRecurrence(EventRecurrence recurrence);
+    void updateEventRecurrence(EventRecurrence recurrence) throws ObjectNotFoundException, DAOException;
 
     //delete data from db
     void deleteEventRecurrence(int id) throws ObjectNotFoundException, DAOException;

@@ -52,7 +52,7 @@ public class EventRecurrenceDAOIntegrationTest {
     @Test
     public void addEventRecurrence_Success() {
         //test category already inserted in setup, read record by categoryId
-        EventRecurrence eventRecurrence = eventRecurrenceDAO.getEventRecurrenceById(testEventRecurrence.getId());
+        EventRecurrence eventRecurrence = eventRecurrenceDAO.getEventRecurrence(testEventRecurrence.getId());
 
         assertNotNull(eventRecurrence);
         assertEqualEventRecurrences(eventRecurrence, testEventRecurrence);
@@ -67,7 +67,7 @@ public class EventRecurrenceDAOIntegrationTest {
     @Test
     public void getEventRecurrenceById_Found() {
         //test method
-        EventRecurrence eventRecurrence = eventRecurrenceDAO.getEventRecurrenceById(testEventRecurrence.getId());
+        EventRecurrence eventRecurrence = eventRecurrenceDAO.getEventRecurrence(testEventRecurrence.getId());
 
         assertNotNull(eventRecurrence);
         assertEqualEventRecurrences(eventRecurrence, testEventRecurrence);
@@ -76,7 +76,7 @@ public class EventRecurrenceDAOIntegrationTest {
     @Test
     public void getEventRecurrenceById_Not_Found() {
         //test method
-        EventRecurrence eventRecurrence = eventRecurrenceDAO.getEventRecurrenceById(TestObjectCreator.NON_EXISTING_ID);
+        EventRecurrence eventRecurrence = eventRecurrenceDAO.getEventRecurrence(TestObjectCreator.NON_EXISTING_ID);
 
         assertNull(eventRecurrence);
     }
@@ -84,7 +84,7 @@ public class EventRecurrenceDAOIntegrationTest {
     @Test
     public void getEventRecurrencesByEventId_Found() {
         //test method
-        List<EventRecurrence> eventRecurrenceList = eventRecurrenceDAO.getEventRecurrencesByEventId(testEvent.getId());
+        List<EventRecurrence> eventRecurrenceList = eventRecurrenceDAO.getEventRecurrencesByEvent(testEvent.getId());
 
         assertNotNull(eventRecurrenceList);
         assertEquals(eventRecurrenceList.size(), 1);
@@ -94,7 +94,7 @@ public class EventRecurrenceDAOIntegrationTest {
     @Test
     public void getEventRecurrencesByEventId__Empty_List() {
         //test method
-        List<EventRecurrence> eventRecurrenceList = eventRecurrenceDAO.getEventRecurrencesByEventId(TestObjectCreator.NON_EXISTING_ID);
+        List<EventRecurrence> eventRecurrenceList = eventRecurrenceDAO.getEventRecurrencesByEvent(TestObjectCreator.NON_EXISTING_ID);
 
         assertNotNull(eventRecurrenceList);
         assertTrue(eventRecurrenceList.isEmpty());
@@ -132,7 +132,7 @@ public class EventRecurrenceDAOIntegrationTest {
         boolean updated = eventRecurrenceDAO.updateEventRecurrence(testEventRecurrence);
 
         //read updated record from db
-        EventRecurrence eventRecurrence = eventRecurrenceDAO.getEventRecurrenceById(testEventRecurrence.getId());
+        EventRecurrence eventRecurrence = eventRecurrenceDAO.getEventRecurrence(testEventRecurrence.getId());
 
         assertNotNull(eventRecurrence);
         assertEqualEventRecurrences(eventRecurrence, testEventRecurrence);
@@ -153,7 +153,7 @@ public class EventRecurrenceDAOIntegrationTest {
         //testing method
         boolean deleted = eventRecurrenceDAO.deleteEventRecurrence(testEventRecurrence.getId());
 
-        EventRecurrence eventRecurrence = eventRecurrenceDAO.getEventRecurrenceById(testEventRecurrence.getId());
+        EventRecurrence eventRecurrence = eventRecurrenceDAO.getEventRecurrence(testEventRecurrence.getId());
 
         assertTrue(deleted);
         assertNull(eventRecurrence);

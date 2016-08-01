@@ -10,11 +10,11 @@ import java.util.List;
 public interface EventRecurrenceService {
 
     //CRUD methods for event recurrence
-    int addEventRecurrence(EventRecurrence recurrence);
+    EventRecurrence addEventRecurrence(EventRecurrence recurrence);
 
-    int addEventRecurrences(List<EventRecurrence> recurrenceList);
+    void addEventRecurrences(List<EventRecurrence> recurrenceList);
 
-    EventRecurrence getEventRecurrenceById(int id);
+    EventRecurrence getEventRecurrence(int recurrenceId);
 
     List<EventRecurrence> getEventRecurrencesByEventId(int eventId);
 
@@ -22,7 +22,7 @@ public interface EventRecurrenceService {
 
     void updateEventRecurrence(EventRecurrence recurrence);
 
-    void updateEventRecurrences(List<EventRecurrence> recurrences);
+    void updateEventRecurrences(int eventId, List<EventRecurrence> recurrences);
 
     void deleteEventRecurrence(int id);
 
