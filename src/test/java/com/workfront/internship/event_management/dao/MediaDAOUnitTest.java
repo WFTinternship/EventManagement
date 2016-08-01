@@ -1,10 +1,26 @@
 package com.workfront.internship.event_management.dao;
 
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
+import com.workfront.internship.event_management.model.Media;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.when;
+
 /**
  * Created by Hermine Turshujyan 7/18/16.
  */
 public class MediaDAOUnitTest {
-/*
+
     private DataSourceManager dataSourceManager;
     private MediaDAO mediaDAO;
 
@@ -23,52 +39,45 @@ public class MediaDAOUnitTest {
     }
 
 
-    @Test(expected = RuntimeException.class)
-    public void addMedia_dbError() {
+    @Test(expected = DAOException.class)
+    public void addMedia_dbError() throws DuplicateEntryException, DAOException {
         mediaDAO.addMedia(new Media());
     }
 
-    @Test(expected = RuntimeException.class)
-    public void getMediaById_dbError() {
+    @Test(expected = DAOException.class)
+    public void getMediaById_dbError() throws DAOException, ObjectNotFoundException {
         mediaDAO.getMediaById(1);
     }
 
-    @Test(expected = RuntimeException.class)
-    public void getMediaByEventId_dbError() {
+    @Test(expected = DAOException.class)
+    public void getMediaByEventId_dbError() throws DAOException {
         mediaDAO.getMediaByEventId(1);
 
     }
 
-    @Test(expected = RuntimeException.class)
-    public void getMediaByType_dbError() {
-        // mediaDAO.getMediaByType("Image");
-
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void getMediaByUploaderId_dbError() {
+    @Test(expected = DAOException.class)
+    public void getMediaByUploaderId_dbError() throws DAOException {
         mediaDAO.getMediaByUploaderId(1);
     }
 
-    @Test(expected = RuntimeException.class)
-    public void getAllMedia_dbError() {
+    @Test(expected = DAOException.class)
+    public void getAllMedia_dbError() throws DAOException {
         mediaDAO.getAllMedia();
     }
 
-    @Test(expected = RuntimeException.class)
-    public void updateMediaDescription_dbError() {
+    @Test(expected = DAOException.class)
+    public void updateMediaDescription_dbError() throws ObjectNotFoundException, DAOException {
         mediaDAO.updateMediaDescription(1, "description");
     }
 
-    @Test(expected = RuntimeException.class)
-    public void deleteMedia_dbError() throws DAOException {
+    @Test(expected = DAOException.class)
+    public void deleteMedia_dbError() throws DAOException, ObjectNotFoundException {
         mediaDAO.deleteMedia(1);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = DAOException.class)
     public void deleteAllMedia_dbError() throws DAOException {
         mediaDAO.deleteAllMedia();
 
-    }*/
-
+    }
 }

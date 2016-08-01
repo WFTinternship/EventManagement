@@ -1,10 +1,23 @@
 package com.workfront.internship.event_management.dao;
 
+import com.workfront.internship.event_management.TestObjectCreator;
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
+import com.workfront.internship.event_management.model.*;
+import org.junit.*;
+
+import java.util.List;
+
+import static com.workfront.internship.event_management.AssertionHelper.assertEqualMedia;
+import static com.workfront.internship.event_management.TestObjectCreator.NON_EXISTING_ID;
+import static junit.framework.TestCase.*;
+
 /**
  * Created by Hermine Turshujyan 7/9/16.
  */
 public class MediaDAOIntegrationTest {
-/*
+
     private static UserDAO userDAO;
     private static CategoryDAO categoryDAO;
     private static EventDAO eventDAO;
@@ -37,44 +50,44 @@ public class MediaDAOIntegrationTest {
     }
 
     @Before
-    public void setUp() {
+    public void setUp() throws DuplicateEntryException, DAOException {
         createTestObjects();
         insertTestObjectsIntoDB();
     }
 
     @After
-    public void tearDown() {
+    public void tearDown() throws DAOException {
         deleteTestRecordsFromDB();
         deleteTestObjects();
     }
 
 
     @Test
-    public void insertMedia_Success() {
-        //test media already inserted in setup, read record by mediId
+    public void insertMedia_Success() throws DAOException, ObjectNotFoundException {
+        //test media already inserted in setup, read record by mediaId
         Media media = mediaDAO.getMediaById(testMedia.getId());
 
         assertNotNull(media);
-        assertMedia(media, testMedia);
+        assertEqualMedia(media, testMedia);
     }
 
-    @Test(expected = RuntimeException.class)
-    public void insertMedia_Dublicate_Entry() {
+    @Test(expected = DuplicateEntryException.class)
+    public void insertMedia_Duplicate() throws DuplicateEntryException, DAOException {
         mediaDAO.addMedia(testMedia);  //media.path field is unique
     }
 
     @Test
-    public void getAllMedia_Found() {
+    public void getAllMedia_Found() throws DAOException {
         //testing method
         List<Media> mediaList = mediaDAO.getAllMedia();
 
         assertNotNull(mediaList);
         assertFalse(mediaList.isEmpty());
-        assertMedia(mediaList.get(0), testMedia);
+        assertEqualMedia(mediaList.get(0), testMedia);
     }
 
     @Test
-    public void getAllMedia_Empty_List() {
+    public void getAllMedia_Empty_List() throws DAOException, ObjectNotFoundException {
         //delete inserted media from db
         mediaDAO.deleteMedia(testMedia.getId());
 
@@ -86,70 +99,49 @@ public class MediaDAOIntegrationTest {
     }
 
     @Test
-    public void getMediaById_Found() {
+    public void getMediaById_Found() throws DAOException, ObjectNotFoundException {
         //testing method
         Media media = mediaDAO.getMediaById(testMedia.getId());
 
         assertNotNull(media);
-        assertMedia(media, testMedia);
+        assertEqualMedia(media, testMedia);
     }
 
-    @Test
-    public void getMediaById_Not_Found() {
+    @Test(expected = ObjectNotFoundException.class)
+    public void getMediaById_Not_Found() throws DAOException, ObjectNotFoundException {
         //testing method
-        Media media = mediaDAO.getMediaById(TestObjectCreator.NON_EXISTING_ID);
-
-        assertNull(media);
+        mediaDAO.getMediaById(NON_EXISTING_ID);
     }
 
     @Test
-    public void getMediaByEventId_Found() {
+    public void getMediaByEventId_Found() throws DAOException {
         List<Media> mediaList = mediaDAO.getMediaByEventId(testEvent.getId());
 
         assertNotNull(mediaList);
         assertFalse(mediaList.isEmpty());
-        assertMedia(mediaList.get(0), testMedia);
+        assertEqualMedia(mediaList.get(0), testMedia);
     }
 
     @Test
-    public void getMediaByEventId_Not_Found() {
+    public void getMediaByEventId_Not_Found() throws DAOException {
         //testing method
-        List<Media> mediaList = mediaDAO.getMediaByEventId(TestObjectCreator.NON_EXISTING_ID);
+        List<Media> mediaList = mediaDAO.getMediaByEventId(NON_EXISTING_ID);
 
         assertNotNull(mediaList);
         assertTrue(mediaList.isEmpty());
     }
 
     @Test
-    public void getMediaByType_Found() {
-        //testing method
-        List<Media> mediaList = mediaDAO.getMediaByType(testMedia.getType().getId());
-
-        assertNotNull(mediaList);
-        assertFalse(mediaList.isEmpty());
-        assertMedia(mediaList.get(0), testMedia);
-    }
-
-    @Test
-    public void getMediaByType_Not_Found() {
-        //testing method
-        List<Media> mediaList = mediaDAO.getMediaByType(TestObjectCreator.NON_EXISTING_ID);
-
-        assertNotNull(mediaList);
-        assertTrue(mediaList.isEmpty());
-    }
-
-    @Test
-    public void getMediaByUploader_Found() {
+    public void getMediaByUploader_Found() throws DAOException {
         List<Media> mediaList = mediaDAO.getMediaByUploaderId(testMedia.getUploaderId());
 
         assertNotNull(mediaList);
         assertFalse(mediaList.isEmpty());
-        assertMedia(mediaList.get(0), testMedia);
+        assertEqualMedia(mediaList.get(0), testMedia);
     }
 
     @Test
-    public void getMediaByUploader_Not_Found() {
+    public void getMediaByUploader_Not_Found() throws DAOException {
         //testing method
         List<Media> mediaList = mediaDAO.getMediaByUploaderId(TestObjectCreator.NON_EXISTING_ID);
 
@@ -158,7 +150,7 @@ public class MediaDAOIntegrationTest {
     }
 
     @Test
-    public void updateMediaDescription_Found() {
+    public void updateMediaDescription_Found() throws DAOException, ObjectNotFoundException {
         String description = "Updated description";
         //update expected media description
         testMedia.setDescription(description);
@@ -170,59 +162,51 @@ public class MediaDAOIntegrationTest {
         Media media = mediaDAO.getMediaById(testMedia.getId());
 
         assertNotNull(media);
-        assertMedia(media, testMedia);
+        assertEqualMedia(media, testMedia);
     }
 
-    @Test
-    public void updateMediaDescription_Not_Found() {
+    @Test(expected = ObjectNotFoundException.class)
+    public void updateMediaDescription_Not_Found() throws ObjectNotFoundException, DAOException {
         String description = "Updated description";
 
         //test method
-        boolean updated = mediaDAO.updateMediaDescription(TestObjectCreator.NON_EXISTING_ID, description);
-
-        assertFalse(updated);
+        mediaDAO.updateMediaDescription(TestObjectCreator.NON_EXISTING_ID, description);
     }
 
-    @Test
-    public void deleteMedia_Found() {
+    @Test(expected = ObjectNotFoundException.class)
+    public void deleteMedia_Found() throws DAOException, ObjectNotFoundException {
         //testing method
-        boolean deleted = mediaDAO.deleteMedia(testMedia.getId());
+        mediaDAO.deleteMedia(testMedia.getId());
 
         Media media = mediaDAO.getMediaById(testMedia.getId());
 
-        assertTrue(deleted);
         assertNull(media);
     }
 
-    @Test
-    public void deleteMedia_Not_Found() {
+    @Test(expected = ObjectNotFoundException.class)
+    public void deleteMedia_Not_Found() throws DAOException, ObjectNotFoundException {
         //testing method
-        boolean deleted = mediaDAO.deleteMedia(TestObjectCreator.NON_EXISTING_ID);
-
-        assertFalse(deleted);
+        mediaDAO.deleteMedia(TestObjectCreator.NON_EXISTING_ID);
     }
 
     @Test
-    public void deleteAllMedia_Found() {
+    public void deleteAllMedia_Found() throws DAOException {
         //testing method
-        boolean deleted = mediaDAO.deleteAllMedia();
+        mediaDAO.deleteAllMedia();
 
         List<Media> mediaList = mediaDAO.getAllMedia();
 
         assertNotNull(mediaList);
         assertTrue(mediaList.isEmpty());
-        assertTrue(deleted);
     }
 
     @Test
-    public void deleteAllMedia_Not_Found() throws DAOException {
+    public void deleteAllMedia_Not_Found() throws DAOException, ObjectNotFoundException {
         //delete inserted test media
         mediaDAO.deleteMedia(testMedia.getId());
 
         //testing method
-        boolean deleted = mediaDAO.deleteAllMedia();
-
-        assertFalse(deleted);
+        mediaDAO.deleteAllMedia();
     }
 
     //helper methods
@@ -234,7 +218,7 @@ public class MediaDAOIntegrationTest {
         testMediaType = TestObjectCreator.createTestMediaType();
     }
 
-    private void insertTestObjectsIntoDB() {
+    private void insertTestObjectsIntoDB() throws DuplicateEntryException, DAOException {
         //insert user into db and get generated id
         int userId = userDAO.addUser(testUser);
         testUser.setId(userId);
@@ -245,7 +229,7 @@ public class MediaDAOIntegrationTest {
 
         //insert event into db and get generated id
         testEvent.setCategory(testCategory);
-        int eventId = eventDAO.createEvent(testEvent);
+        int eventId = eventDAO.addEvent(testEvent);
         testEvent.setId(eventId);
 
         //insert media type into db
@@ -267,21 +251,10 @@ public class MediaDAOIntegrationTest {
         testUser = null;
     }
 
-    private void deleteTestRecordsFromDB() {
+    private void deleteTestRecordsFromDB() throws DAOException {
         mediaDAO.deleteAllMedia();
         eventDAO.deleteAllEvents();
         categoryDAO.deleteAllCategories();
         userDAO.getAllUsers();
     }
-
-    private void assertMedia(Media expectedMedia, Media actualMedia) {
-        assertEquals(actualMedia.getId(), expectedMedia.getId());
-        assertEquals(actualMedia.getEventId(), expectedMedia.getEventId());
-        assertEquals(actualMedia.getPath(), expectedMedia.getPath());
-        assertEquals(actualMedia.getType().getId(), expectedMedia.getType().getId());
-        assertEquals(actualMedia.getType().getTitle(), expectedMedia.getType().getTitle());
-        assertEquals(actualMedia.getDescription(), expectedMedia.getDescription());
-        assertEquals(actualMedia.getUploaderId(), expectedMedia.getUploaderId());
-        assertNotNull(actualMedia.getUploadDate());
-    }*/
 }

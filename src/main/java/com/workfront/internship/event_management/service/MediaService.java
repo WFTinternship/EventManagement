@@ -13,18 +13,16 @@ public interface MediaService {
     Media addMedia(Media media);
 
     //Read
-    Media getMedia(int mediaId);
+    Media getMediaById(int mediaId);
 
     List<Media> getMediaByEvent(int eventId);
-
-    List<Media> getMediaByType(int typeId);
 
     List<Media> getMediaByUploader(int uploaderId);
 
     List<Media> getAllMedia();
 
     //Update
-    void updateMediaDescription(int mediaId, String description);
+    void editMediaDescription(int mediaId, String description);
 
     //Delete
     void deleteMedia(int mediaId);

@@ -54,8 +54,8 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public Media getMedia(int mediaId) {
-        if (mediaId < 0) {
+    public Media getMediaById(int mediaId) {
+        if (mediaId < 1) {
             throw new OperationFailedException("Invalid media id");
         }
 
@@ -71,8 +71,8 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public void updateMediaDescription(int mediaId, String description) {
-        if (mediaId < 0) {
+    public void editMediaDescription(int mediaId, String description) {
+        if (mediaId < 1) {
             throw new OperationFailedException("Invalid media id");
         }
 
@@ -93,7 +93,7 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public void deleteMedia(int mediaId) {
-        if (mediaId < 0) {
+        if (mediaId < 1) {
             throw new OperationFailedException("Invalid media id");
         }
 
@@ -130,7 +130,7 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public List<Media> getMediaByEvent(int eventId) {
-        if (eventId < 0) {
+        if (eventId < 1) {
             throw new OperationFailedException("Invalid event id");
         }
 
@@ -143,22 +143,8 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public List<Media> getMediaByType(int typeId) {
-        if (typeId < 0) {
-            throw new OperationFailedException("Invalid type id");
-        }
-
-        try {
-            return mediaDAO.getMediaByType(typeId);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
-    }
-
-    @Override
     public List<Media> getMediaByUploader(int uploaderId) {
-        if (uploaderId < 0) {
+        if (uploaderId < 1) {
             throw new OperationFailedException("Invalid uploader id");
         }
 

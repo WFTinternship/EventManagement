@@ -23,8 +23,6 @@ public interface MediaDAO {
 
     List<Media> getMediaByEventId(int eventId) throws DAOException;
 
-    List<Media> getMediaByType(int typeId) throws DAOException;
-
     List<Media> getMediaByUploaderId(int uploaderId) throws DAOException;
 
     List<Media> getAllMedia() throws DAOException;

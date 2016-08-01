@@ -129,11 +129,6 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
     }
 
     @Override
-    public List<Media> getMediaByType(int typeId) throws DAOException {
-        return getMediaByField("media_type_id", typeId);
-    }
-
-    @Override
     public List<Media> getMediaByUploaderId(int uploaderId) throws DAOException {
         return getMediaByField("uploader_id", uploaderId);
     }
