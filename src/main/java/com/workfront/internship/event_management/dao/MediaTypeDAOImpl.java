@@ -152,7 +152,7 @@ public class MediaTypeDAOImpl extends GenericDAO implements MediaTypeDAO {
             //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);
             stmt.setString(1, mediaType.getTitle());
-            stmt.setString(2, mediaType.getTitle());
+            stmt.setInt(2, mediaType.getId());
 
             //execute query
             affectedRows = stmt.executeUpdate();

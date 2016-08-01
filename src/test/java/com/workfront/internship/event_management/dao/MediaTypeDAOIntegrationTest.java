@@ -1,17 +1,28 @@
 package com.workfront.internship.event_management.dao;
 
+import com.workfront.internship.event_management.TestObjectCreator;
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
+import com.workfront.internship.event_management.model.MediaType;
+import org.junit.*;
+
+import java.util.List;
+
+import static com.workfront.internship.event_management.AssertionHelper.assertEqualMediaTypes;
+import static junit.framework.TestCase.*;
+
 /**
  * Created by Hermine Turshujyan 7/21/16.
  */
 public class MediaTypeDAOIntegrationTest {
-/*
+
     private static MediaTypeDAO mediaTypeDAO;
     private MediaType testMediaType;
 
     @BeforeClass
-    public static void setUpClass() {
-        mediaTypeDAO = new MediaTypeDAOImpl() {
-        };
+    public static void setUpClass() throws DAOException {
+        mediaTypeDAO = new MediaTypeDAOImpl();
     }
 
     @AfterClass
@@ -20,7 +31,7 @@ public class MediaTypeDAOIntegrationTest {
     }
 
     @Before
-    public void setUp() {
+    public void setUp() throws DuplicateEntryException, DAOException {
         //create test media type
         testMediaType = TestObjectCreator.createTestMediaType();
 
@@ -39,7 +50,7 @@ public class MediaTypeDAOIntegrationTest {
     }
 
     @Test
-    public void addMediaType_Success() {
+    public void addMediaType_Success() throws DAOException, ObjectNotFoundException {
         //test media type already inserted in setup, read record by id
         MediaType mediaType = mediaTypeDAO.getMediaTypeById(testMediaType.getId());
 
@@ -47,15 +58,15 @@ public class MediaTypeDAOIntegrationTest {
         assertEqualMediaTypes(mediaType, testMediaType);
     }
 
-    @Test(expected = RuntimeException.class)
-    public void addMediaType_Dublicate_Entry() {
-        //test media type already inserted into db, insert dublicate category
-        mediaTypeDAO.addMediaType(testMediaType);  //event_category.title field in db is unique
+    @Test(expected = DuplicateEntryException.class)
+    public void addMediaType_Duplicate() throws DuplicateEntryException, DAOException {
+        //method under test
+        mediaTypeDAO.addMediaType(testMediaType);
     }
 
     @Test
-    public void getAllMediaTypes_Found() {
-
+    public void getAllMediaTypes_Found() throws DAOException {
+        //method under test
         List<MediaType> mediaTypeList = mediaTypeDAO.getAllMediaTypes();
 
         assertNotNull(mediaTypeList);
@@ -64,11 +75,11 @@ public class MediaTypeDAOIntegrationTest {
     }
 
     @Test
-    public void getAllMediaTypes_Empty_List() throws DAOException {
+    public void getAllMediaTypes_Empty_List() throws DAOException, ObjectNotFoundException {
         //delete inserted category from db
         mediaTypeDAO.deleteMediaType(testMediaType.getId());
 
-        //test method
+        //method under test
         List<MediaType> mediaTypeList = mediaTypeDAO.getAllMediaTypes();
 
         assertNotNull(mediaTypeList);
@@ -76,16 +87,16 @@ public class MediaTypeDAOIntegrationTest {
     }
 
     @Test
-    public void getMediaTypeById_Found() {
-        //test method
+    public void getMediaTypeById_Found() throws DAOException, ObjectNotFoundException {
+        //method under test
         MediaType mediaType = mediaTypeDAO.getMediaTypeById(testMediaType.getId());
 
         assertNotNull(mediaType);
         assertEqualMediaTypes(mediaType, testMediaType);
     }
 
-    @Test
-    public void getMediaTypeById_Not_Found() {
+    @Test(expected = ObjectNotFoundException.class)
+    public void getMediaTypeById_Not_Found() throws DAOException, ObjectNotFoundException {
         //test method
         MediaType mediaType = mediaTypeDAO.getMediaTypeById(TestObjectCreator.NON_EXISTING_ID);
 
@@ -93,78 +104,60 @@ public class MediaTypeDAOIntegrationTest {
     }
 
     @Test
-    public void updateMediaType_Found() {
+    public void updateMediaType_Success() throws DuplicateEntryException, DAOException, ObjectNotFoundException {
         //create new media type with the same id
-        MediaType updatedMediaType = TestObjectCreator.createTestMediaType();
-        updatedMediaType.setId(testMediaType.getId());
+        testMediaType.setTitle("new changed title");
 
         //test method
-        mediaTypeDAO.updateMediaType(updatedMediaType);
+        mediaTypeDAO.updateMediaType(testMediaType);
 
         //read updated record from db
-        MediaType mediaType = mediaTypeDAO.getMediaTypeById(updatedMediaType.getId());
+        MediaType mediaType = mediaTypeDAO.getMediaTypeById(testMediaType.getId());
 
         assertNotNull(mediaType);
-        assertEqualMediaTypes(mediaType, updatedMediaType);
+        assertEqualMediaTypes(mediaType, testMediaType);
     }
 
-    @Test
-    public void updateMediaType_Not_Found() {
+    @Test(expected = ObjectNotFoundException.class)
+    public void updateMediaType_Not_Found() throws DuplicateEntryException, DAOException, ObjectNotFoundException {
         //create new media type object with non-existing id
         MediaType mediaType = TestObjectCreator.createTestMediaType();
 
         //test method
-        boolean updated = mediaTypeDAO.updateMediaType(mediaType);
+        mediaTypeDAO.updateMediaType(mediaType);
+    }
 
-        assertFalse(updated);
+    @Test(expected = ObjectNotFoundException.class)
+    public void deleteMediaType_Success() throws DAOException, ObjectNotFoundException {
+        //testing method
+        mediaTypeDAO.deleteMediaType(testMediaType.getId());
+
+        mediaTypeDAO.getMediaTypeById(testMediaType.getId());
+    }
+
+    @Test(expected = ObjectNotFoundException.class)
+    public void deleteMediaType_Not_Found() throws DAOException, ObjectNotFoundException {
+        //testing method
+        mediaTypeDAO.deleteMediaType(TestObjectCreator.NON_EXISTING_ID);
     }
 
     @Test
-    public void deleteMediaType_Found() throws DAOException {
+    public void deleteAllMediaTypes_Success() throws DAOException {
         //testing method
-        boolean deleted = mediaTypeDAO.deleteMediaType(testMediaType.getId());
-
-        MediaType mediaType = mediaTypeDAO.getMediaTypeById(testMediaType.getId());
-
-        assertTrue(deleted);
-        assertNull(mediaType);
-    }
-
-    @Test
-    public void deleteCategory_Not_Found() throws DAOException {
-        //testing method
-        boolean deleted = mediaTypeDAO.deleteMediaType(TestObjectCreator.NON_EXISTING_ID);
-
-        assertFalse(deleted);
-    }
-
-    @Test
-    public void deleteAllCategories_Found() throws DAOException {
-        //testing method
-        boolean deleted = mediaTypeDAO.deleteAllMediaTypes();
+        mediaTypeDAO.deleteAllMediaTypes();
 
         List<MediaType> mediaTypeList = mediaTypeDAO.getAllMediaTypes();
 
         assertNotNull(mediaTypeList);
         assertTrue(mediaTypeList.isEmpty());
-        assertTrue(deleted);
     }
 
     @Test
-    public void deleteAllMediaTypes_Not_Found() throws DAOException {
+    public void deleteAllMediaTypes_Not_Found() throws DAOException, ObjectNotFoundException {
         //delete inserted media type
         mediaTypeDAO.deleteMediaType(testMediaType.getId());
 
         //testing method
-        boolean deleted = mediaTypeDAO.deleteAllMediaTypes();
-
-        assertFalse(deleted);
+        mediaTypeDAO.deleteAllMediaTypes();
     }
-
-    //helper methods
-    private void assertEqualMediaTypes(MediaType expectedMediaType, MediaType actualMediaType) {
-        assertEquals(expectedMediaType.getId(), actualMediaType.getId());
-        assertEquals(expectedMediaType.getTitle(), actualMediaType.getTitle());
-    }*/
-
 }

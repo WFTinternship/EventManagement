@@ -18,7 +18,7 @@ public interface MediaTypeService {
     List<MediaType> getAllMediaTypes();
 
     //Update
-    void updateMediaType(MediaType mediaType);
+    void editMediaType(MediaType mediaType);
 
     //Delete
     void deleteMediaType(int mediaTypeId);

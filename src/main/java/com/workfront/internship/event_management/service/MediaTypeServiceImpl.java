@@ -80,7 +80,7 @@ public class MediaTypeServiceImpl implements MediaTypeService {
     }
 
     @Override
-    public void updateMediaType(MediaType mediaType) {
+    public void editMediaType(MediaType mediaType) {
         if (!isValidMediaType(mediaType)) {
             throw new OperationFailedException("Invalid recurrence option");
         }
