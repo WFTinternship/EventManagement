@@ -30,6 +30,7 @@ public class RecurrenceOptionServiceImpl implements RecurrenceOptionService {
             throw new OperationFailedException(e.getMessage(), e);
         }
     }
+
     @Override
     public RecurrenceOption addRecurrenceOption(RecurrenceOption option) {
         if (!isValidRecurrenceOption(option)) {
@@ -148,40 +149,36 @@ public class RecurrenceOptionServiceImpl implements RecurrenceOptionService {
             }
         }
 
-        try {
-            //if recurrence option list is empty, delete existing options from db
-            if (isEmptyCollection(recurrenceOptions)) {
-                deleteRecurrenceOptionsByRecurrenceType(recurrenceTypeId);
+        //if recurrence option list is empty, delete existing options from db
+        if (isEmptyCollection(recurrenceOptions)) {
+            deleteRecurrenceOptionsByRecurrenceType(recurrenceTypeId);
+        } else {
+            //get recurrence type's current options from db
+            List<RecurrenceOption> dbOptions = getRecurrenceOptionsByRecurrenceType(recurrenceTypeId);
+
+            //if there is no options in db, insert new options list
+            if (isEmptyCollection(dbOptions)) {
+                addRecurrenceOptions(recurrenceOptions);
             } else {
-                //get recurrence type's current options from db
-                List<RecurrenceOption> dbOptions = getRecurrenceOptionsByRecurrenceType(recurrenceTypeId);
+                // compare option's list from db with new option's list
+                for (RecurrenceOption dbOption : dbOptions) {
+                    int optionId = dbOption.getId();
 
-                //if there is no options in db, insert new options list
-                if (isEmptyCollection(dbOptions)) {
-                    addRecurrenceOptions(recurrenceOptions);
-                } else {
-                    // compare option's list from db with new option's list
-                    for (RecurrenceOption option : dbOptions) {
-                        if (!recurrenceOptions.contains(option)) {
-                            deleteRecurrenceOption(option.getId());
-                        } else if (option != recurrenceOptions.get(option.getId())) {
-                            editRecurrenceOption(option);
-                        }
+                    if (getRecurrenceOptionWithId(recurrenceOptions, optionId) == null) {
+                        deleteRecurrenceOption(optionId);
+                    } else if (dbOption != getRecurrenceOptionWithId(recurrenceOptions, optionId)) {
+                        editRecurrenceOption(getRecurrenceOptionWithId(recurrenceOptions, dbOption.getId()));
                     }
+                }
 
-                    for (RecurrenceOption option : recurrenceOptions) {
-                        if (!dbOptions.contains(option)) {
-                            recurrenceOptionDAO.addRecurrenceOption(option);
-                        }
+                for (RecurrenceOption option : recurrenceOptions) {
+                    int optionId = option.getId();
+
+                    if (getRecurrenceOptionWithId(dbOptions, optionId) == null) {
+                        addRecurrenceOption(option);
                     }
                 }
             }
-        } catch (DuplicateEntryException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Recurrence option already exists!", e);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
         }
     }
 
@@ -227,4 +224,16 @@ public class RecurrenceOptionServiceImpl implements RecurrenceOptionService {
             throw new OperationFailedException(e.getMessage(), e);
         }
     }
+
+
+    //helper methods
+    private RecurrenceOption getRecurrenceOptionWithId(List<RecurrenceOption> recurrenceOptionList, int id) {
+        for (RecurrenceOption recurrenceOption : recurrenceOptionList) {
+            if (recurrenceOption.getId() == id) {
+                return recurrenceOption;
+            }
+        }
+        return null;
+    }
+
 }

@@ -98,7 +98,7 @@ public class RecurrenceTypeServiceImpl implements RecurrenceTypeService {
 
             //update recurrence type options
             RecurrenceOptionService recurrenceOptionService = new RecurrenceOptionServiceImpl();
-            recurrenceOptionService.updateRecurrenceOptions(recurrenceType.getId(), recurrenceType.getRecurrenceOptions());
+            recurrenceOptionService.editRecurrenceOptionList(recurrenceType.getId(), recurrenceType.getRecurrenceOptions());
         } catch (DuplicateEntryException e) {
             LOGGER.error(e.getMessage(), e);
             throw new OperationFailedException("Recurrence type with title " + recurrenceType.getTitle() + " already exists!", e);

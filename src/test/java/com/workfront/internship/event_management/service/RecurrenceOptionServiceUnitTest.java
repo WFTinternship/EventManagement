@@ -25,23 +25,10 @@ import static org.mockito.Mockito.*;
 public class RecurrenceOptionServiceUnitTest {
 
     private static RecurrenceOptionService recurrenceOptionService;
-    private static RecurrenceOptionService recurrenceOptionServiceMock;
 
     private RecurrenceOptionDAO recurrenceOptionDAO;
     private RecurrenceOption testRecurrenceOption;
     private List<RecurrenceOption> testRecurrenceOptionList;
-
-
-    @BeforeClass
-    public static void setUpClass() throws OperationFailedException {
-        recurrenceOptionService = spy(new RecurrenceOptionServiceImpl());
-        // recurrenceOptionServiceMock = Mockito.mock(RecurrenceOptionServiceImpl.class);
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-        recurrenceOptionService = null;
-    }
 
     @Before
     public void setUp() {
@@ -50,6 +37,7 @@ public class RecurrenceOptionServiceUnitTest {
         testRecurrenceOptionList = new ArrayList<>();
         testRecurrenceOptionList.add(testRecurrenceOption);
 
+        recurrenceOptionService = spy(new RecurrenceOptionServiceImpl());
         recurrenceOptionDAO = Mockito.mock(RecurrenceOptionDAO.class);
         Whitebox.setInternalState(recurrenceOptionService, "recurrenceOptionDAO", recurrenceOptionDAO);
     }
@@ -58,6 +46,7 @@ public class RecurrenceOptionServiceUnitTest {
     public void tearDown() {
         testRecurrenceOption = null;
         recurrenceOptionDAO = null;
+        recurrenceOptionService = null;
     }
 
     //Testing addRecurrenceOption method
@@ -247,17 +236,15 @@ public class RecurrenceOptionServiceUnitTest {
 
     @Test
     public void editRecurrenceOptionList_Empty_List() throws DAOException, ObjectNotFoundException {
-        testRecurrenceOptionList.remove(0); // now list is empty
-
         //method under test
-        recurrenceOptionService.editRecurrenceOptionList(VALID_ID, testRecurrenceOptionList);
+        recurrenceOptionService.editRecurrenceOptionList(VALID_ID, new ArrayList<RecurrenceOption>());
 
         verify(recurrenceOptionDAO).deleteRecurrenceOptionsByRecurrenceType(VALID_ID); //??????
 
     }
 
     @Test
-    public void editRecurrenceOptionList_Empty_DB_List() throws DAOException, ObjectNotFoundException {
+    public void editRecurrenceOptionList_InsertOptions_EmptyDBList() throws DAOException, ObjectNotFoundException {
         when(recurrenceOptionService.getRecurrenceOptionsByRecurrenceType(TestObjectCreator.VALID_ID)).thenReturn(null);
 
         //method under test
@@ -266,6 +253,57 @@ public class RecurrenceOptionServiceUnitTest {
         // verify(recurrenceOptionDAO).deleteRecurrenceOptionsByRecurrenceType(VALID_ID);
         verify(recurrenceOptionService).addRecurrenceOptions(testRecurrenceOptionList);
 
+    }
+
+    @Test
+    public void editRecurrenceOptionList_InsertOption_NonEmptyDBList() throws DAOException, ObjectNotFoundException {
+        //db list does not contains testRecurrenceOption object, method should add it to db
+        List<RecurrenceOption> dbList = new ArrayList<>();
+        RecurrenceOption dbOption = createTestRecurrenceOption().setId(VALID_ID);
+        dbList.add(dbOption);
+
+        when(recurrenceOptionService.getRecurrenceOptionsByRecurrenceType(TestObjectCreator.VALID_ID)).thenReturn(dbList);
+
+        //method under test
+        recurrenceOptionService.editRecurrenceOptionList(VALID_ID, testRecurrenceOptionList);
+
+        // verify(recurrenceOptionDAO).deleteRecurrenceOptionsByRecurrenceType(VALID_ID);
+        verify(recurrenceOptionService).addRecurrenceOption(testRecurrenceOptionList.get(0));
+    }
+
+    @Test
+    public void editRecurrenceOptionList_UpdateOption_NonEmptyDBList() throws DAOException, ObjectNotFoundException {
+        //create db list, that contains recurrence option with the same id as testRecurrenceOption
+        testRecurrenceOption.setId(VALID_ID);
+        RecurrenceOption dbOption = new RecurrenceOption(testRecurrenceOption);
+        dbOption.setTitle("changed title");
+
+        List<RecurrenceOption> dbList = new ArrayList<>();
+        dbList.add(dbOption);
+
+        when(recurrenceOptionService.getRecurrenceOptionsByRecurrenceType(TestObjectCreator.VALID_ID)).thenReturn(dbList);
+
+        //method under test
+        recurrenceOptionService.editRecurrenceOptionList(VALID_ID, testRecurrenceOptionList);
+
+        // verify(recurrenceOptionDAO).deleteRecurrenceOptionsByRecurrenceType(VALID_ID);
+        verify(recurrenceOptionService).editRecurrenceOption(testRecurrenceOption);
+    }
+
+    @Test
+    public void editRecurrenceOptionList_DeleteOption_FromDB() throws DAOException, ObjectNotFoundException {
+        //create db list, that contains recurrence option with the same id as testRecurrenceOption
+        List<RecurrenceOption> dbList = new ArrayList<>();
+        RecurrenceOption dbOption = createTestRecurrenceOption().setId(VALID_ID);
+        dbList.add(dbOption);
+
+        when(recurrenceOptionService.getRecurrenceOptionsByRecurrenceType(TestObjectCreator.VALID_ID)).thenReturn(dbList);
+
+        //method under test
+        recurrenceOptionService.editRecurrenceOptionList(VALID_ID, testRecurrenceOptionList);
+
+        // verify(recurrenceOptionDAO).deleteRecurrenceOptionsByRecurrenceType(VALID_ID);
+        verify(recurrenceOptionService).deleteRecurrenceOption(dbOption.getId());
     }
 
 
