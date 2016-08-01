@@ -20,7 +20,7 @@ public interface RecurrenceOptionDAO {
     //read data from db
     List<RecurrenceOption> getAllRecurrenceOptions() throws DAOException;
 
-    RecurrenceOption getRecurrenceOption(int optionId) throws DAOException, ObjectNotFoundException;
+    RecurrenceOption getRecurrenceOptionById(int optionId) throws DAOException, ObjectNotFoundException;
 
     List<RecurrenceOption> getRecurrenceOptionsByRecurrenceType(int recurrenceTypeId) throws DAOException;
 

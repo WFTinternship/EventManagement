@@ -22,9 +22,9 @@ public interface RecurrenceOptionService {
     List<RecurrenceOption> getRecurrenceOptionsByRecurrenceType(int recurrenceTypeId);
 
     //Update
-    void updateRecurrenceOption(RecurrenceOption option);
+    void editRecurrenceOption(RecurrenceOption option);
 
-    void updateRecurrenceOptions(int recurrenceTypeId, List<RecurrenceOption> options);
+    void editRecurrenceOptionList(int recurrenceTypeId, List<RecurrenceOption> options);
 
     //Delete
     void deleteRecurrenceOption(int optionId);

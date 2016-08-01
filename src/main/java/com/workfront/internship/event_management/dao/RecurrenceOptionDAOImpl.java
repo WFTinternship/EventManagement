@@ -158,7 +158,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
     }
 
     @Override
-    public RecurrenceOption getRecurrenceOption(int optionId) throws DAOException, ObjectNotFoundException {
+    public RecurrenceOption getRecurrenceOptionById(int optionId) throws DAOException, ObjectNotFoundException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
