@@ -3,6 +3,7 @@ package com.workfront.internship.event_management.service.util;
 import com.workfront.internship.event_management.model.*;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,6 +63,35 @@ public class Validator {
         return valid;
     }
 
+    public static boolean isValidMediaType(MediaType mediaType) {
+        boolean valid = false;
+        if (mediaType != null && !isEmptyString(mediaType.getTitle())) {
+            valid = true;
+        }
+        return valid;
+    }
+
+    private int id;
+    private MediaType type;
+    private String path;
+    private String description;
+    private int eventId;
+    private int uploaderId;
+    private Date uploadDate;
+
+
+    public static boolean isValidMedia(Media media) {
+        boolean valid = false;
+        if (media != null
+                && (isValidMediaType(media.getType())
+                && !isEmptyString(media.getPath()))
+                && media.getEventId() != 0
+                && media.getUploaderId() != 0
+                && media.getUploadDate() != null) {
+            valid = true;
+        }
+        return valid;
+    }
 
     public static boolean isValidRecurrenceType(RecurrenceType recurrenceType) {
         boolean valid = false;
@@ -72,6 +102,18 @@ public class Validator {
         }
         return valid;
     }
+
+    public static boolean isValidEventRecurrence(EventRecurrence eventRecurrence) {
+        boolean valid = false;
+        if (eventRecurrence != null
+                && isValidRecurrenceType(eventRecurrence.getRecurrenceType())
+                && eventRecurrence.getEventId() != 0
+                && eventRecurrence.getRepeatInterval() != 0) {
+            valid = true;
+        }
+        return valid;
+    }
+
 
     public static boolean isValidRecurrenceOption(RecurrenceOption recurrenceOption) {
         boolean valid = false;
