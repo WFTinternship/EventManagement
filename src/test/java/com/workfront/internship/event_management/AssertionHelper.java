@@ -1,7 +1,7 @@
 package com.workfront.internship.event_management;
 
-import com.workfront.internship.event_management.model.Category;
-import com.workfront.internship.event_management.model.User;
+import com.workfront.internship.event_management.model.*;
+import junit.framework.TestCase;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -30,4 +30,64 @@ public class AssertionHelper {
         assertEquals(expectedCategory.getDescription(), actualCategory.getDescription());
         assertNotNull(expectedCategory.getCreationDate());
     }
+
+    public static void assertEqualRecurrenceOptions(RecurrenceOption actualRecurrenceOption, RecurrenceOption expectedRecurrenceOption) {
+        TestCase.assertEquals(actualRecurrenceOption.getId(), expectedRecurrenceOption.getId());
+        TestCase.assertEquals(actualRecurrenceOption.getRecurrenceTypeId(), expectedRecurrenceOption.getRecurrenceTypeId());
+        TestCase.assertEquals(actualRecurrenceOption.getAbbreviation(), expectedRecurrenceOption.getAbbreviation());
+        TestCase.assertEquals(actualRecurrenceOption.getTitle(), expectedRecurrenceOption.getTitle());
+
+    }
+
+    public static void assertEqualMediaTypes(MediaType expectedMediaType, MediaType actualMediaType) {
+        assertEquals(expectedMediaType.getId(), actualMediaType.getId());
+        assertEquals(expectedMediaType.getTitle(), actualMediaType.getTitle());
+    }
+
+    public static void assertEqualMedia(Media expectedMedia, Media actualMedia) {
+        assertEquals(actualMedia.getId(), expectedMedia.getId());
+        assertEquals(actualMedia.getEventId(), expectedMedia.getEventId());
+        assertEquals(actualMedia.getPath(), expectedMedia.getPath());
+        assertEquals(actualMedia.getType().getId(), expectedMedia.getType().getId());
+        assertEquals(actualMedia.getType().getTitle(), expectedMedia.getType().getTitle());
+        assertEquals(actualMedia.getDescription(), expectedMedia.getDescription());
+        assertEquals(actualMedia.getUploaderId(), expectedMedia.getUploaderId());
+        assertNotNull(actualMedia.getUploadDate());
+    }
+
+    public static void assertEqualRecurrenceTypesWithOptions(RecurrenceType actualRecurrenceType, RecurrenceType expectedRecurrenceType) {
+
+        assertEqualRecurrenceTypes(actualRecurrenceType, expectedRecurrenceType);
+
+        assertNotNull(actualRecurrenceType.getRecurrenceOptions());
+        assertEquals(actualRecurrenceType.getRecurrenceOptions().size(), expectedRecurrenceType.getRecurrenceOptions().size());
+    }
+
+    public static void assertEqualRecurrenceTypes(RecurrenceType actualRecurrenceType, RecurrenceType expectedRecurrenceType) {
+
+        assertEquals(actualRecurrenceType.getTitle(), expectedRecurrenceType.getTitle());
+        assertEquals(actualRecurrenceType.getIntervalUnit(), expectedRecurrenceType.getIntervalUnit());
+    }
+
+    public static void assertEqualRecurrences(Recurrence actualEventRecurrence, Recurrence expectedEventRecurrence) {
+        assertEquals(actualEventRecurrence.getEventId(), expectedEventRecurrence.getEventId());
+        assertEquals(actualEventRecurrence.getRecurrenceType().getId(), expectedEventRecurrence.getRecurrenceType().getId());
+
+        if (actualEventRecurrence.getRecurrenceOption() != null)
+            assertEqualRecurrenceOptions(actualEventRecurrence.getRecurrenceOption(), expectedEventRecurrence.getRecurrenceOption());
+
+        assertEquals(actualEventRecurrence.getRepeatInterval(), expectedEventRecurrence.getRepeatInterval());
+        assertNotNull(actualEventRecurrence.getRepeatEndDate());
+    }
+
+    public static void assertEqualInvitations(Invitation expectedInvitation, Invitation actualInvitation) {
+        TestCase.assertEquals(actualInvitation.getId(), expectedInvitation.getId());
+        TestCase.assertEquals(actualInvitation.getEventId(), expectedInvitation.getEventId());
+        TestCase.assertEquals(actualInvitation.getUser().getId(), expectedInvitation.getUser().getId());
+        TestCase.assertEquals(actualInvitation.getUserRole(), expectedInvitation.getUserRole());
+        TestCase.assertEquals(actualInvitation.getUserResponse(), expectedInvitation.getUserResponse());
+        TestCase.assertEquals(actualInvitation.getAttendeesCount(), expectedInvitation.getAttendeesCount());
+        TestCase.assertEquals(actualInvitation.isParticipated(), expectedInvitation.isParticipated());
+    }
+
 }

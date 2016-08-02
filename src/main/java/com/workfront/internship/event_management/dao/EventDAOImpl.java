@@ -71,13 +71,13 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             event.setId(eventId);
 
             //set event id to recurrences
-            for (EventRecurrence recurrence : event.getEventRecurrences()) {
+            for (Recurrence recurrence : event.getEventRecurrences()) {
                 recurrence.setEventId(eventId);
             }
 
             //insert event recurrence info
-            EventRecurrenceDAO recurrenceDAO = new EventRecurrenceDAOImpl();
-            ((EventRecurrenceDAOImpl) recurrenceDAO).addEventRecurrences(event.getEventRecurrences(), conn);
+            RecurrenceDAO recurrenceDAO = new RecurrenceDAOImpl();
+            ((RecurrenceDAOImpl) recurrenceDAO).addEventRecurrences(event.getEventRecurrences(), conn);
 
             //commit transaction
             conn.commit();
@@ -134,8 +134,8 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             }
 
             //get event recurrences
-            EventRecurrenceDAO recurrenceDAO = new EventRecurrenceDAOImpl();
-            List<EventRecurrence> recurrences = recurrenceDAO.getEventRecurrencesByEventId(eventId);
+            RecurrenceDAO recurrenceDAO = new RecurrenceDAOImpl();
+            List<Recurrence> recurrences = recurrenceDAO.getRecurrencesByEventId(eventId);
             if (!recurrences.isEmpty()) {
                 event.setEventRecurrences(recurrences);
             }

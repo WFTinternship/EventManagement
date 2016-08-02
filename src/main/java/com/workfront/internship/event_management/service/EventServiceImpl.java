@@ -5,6 +5,7 @@ import com.workfront.internship.event_management.dao.EventDAOImpl;
 import com.workfront.internship.event_management.dao.InvitationDAO;
 import com.workfront.internship.event_management.dao.InvitationDAOImpl;
 import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Event;
@@ -34,7 +35,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event createEvent(Event event) {
+    public Event createEvent(Event event) throws DuplicateEntryException {
         //check if event object is valid
         if (isValidEvent(event)) {
             throw new OperationFailedException("Invalid event");
@@ -65,7 +66,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event getEventById(int eventId) {
+    public Event getEvent(int eventId) {
         if (eventId < 1) {
             throw new OperationFailedException("Invalid event id");
         }
@@ -93,16 +94,12 @@ public class EventServiceImpl implements EventService {
             eventDAO.updateEvent(event);
 
             //update event recurrences
-            EventRecurrenceService recurrenceService = new EventRecurrenceServiceImpl();
-            recurrenceService.updateEventRecurrences(event.getEventRecurrences());
+            RecurrenceService recurrenceService = new RecurrenceServiceImpl();
+            recurrenceService.editRecurrenceList(event.getId(), event.getEventRecurrences());
 
             //update event invitations
             InvitationService invitationService = new InvitationServiceImpl();
-            invitationService.updateInvitations(event.getInvitations());
-
-            //update media
-            MediaService mediaService = new MediaServiceImpl();
-            mediaService.updateMediaList(event.getMedia());
+            invitationService.editInvitationList(event.getId(), event.getInvitations());
 
         } catch (ObjectNotFoundException e) {
             LOGGER.error(e.getMessage(), e);

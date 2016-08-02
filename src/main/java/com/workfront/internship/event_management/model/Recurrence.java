@@ -5,7 +5,20 @@ import java.util.Date;
 /**
  * Created by Hermine Turshujyan 7/1/16.
  */
-public class EventRecurrence {
+public class Recurrence {
+
+    public Recurrence(Recurrence recurrence) {
+        this.id = recurrence.id;
+        this.recurrenceType = recurrence.recurrenceType;
+        this.eventId = recurrence.eventId;
+        this.repeatInterval = recurrence.repeatInterval;
+        this.recurrenceOption = recurrence.recurrenceOption;
+        this.repeatEndDate = recurrence.repeatEndDate;
+    }
+
+    public Recurrence() {
+    }
+
     private int id;
     private RecurrenceType recurrenceType;
     private int eventId;
@@ -17,7 +30,7 @@ public class EventRecurrence {
         return id;
     }
 
-    public EventRecurrence setId(int id) {
+    public Recurrence setId(int id) {
         this.id = id;
         return this;
     }
@@ -26,7 +39,7 @@ public class EventRecurrence {
         return recurrenceType;
     }
 
-    public EventRecurrence setRecurrenceType(RecurrenceType recurrenceType) {
+    public Recurrence setRecurrenceType(RecurrenceType recurrenceType) {
         this.recurrenceType = recurrenceType;
         return this;
     }
@@ -35,7 +48,7 @@ public class EventRecurrence {
         return eventId;
     }
 
-    public EventRecurrence setEventId(int eventId) {
+    public Recurrence setEventId(int eventId) {
         this.eventId = eventId;
         return this;
     }
@@ -44,7 +57,7 @@ public class EventRecurrence {
         return repeatInterval;
     }
 
-    public EventRecurrence setRepeatInterval(int repeatInterval) {
+    public Recurrence setRepeatInterval(int repeatInterval) {
         this.repeatInterval = repeatInterval;
         return this;
     }
@@ -53,7 +66,7 @@ public class EventRecurrence {
         return recurrenceOption;
     }
 
-    public EventRecurrence setRecurrenceOptionId(RecurrenceOption recurrenceOption) {
+    public Recurrence setRecurrenceOption(RecurrenceOption recurrenceOption) {
         this.recurrenceOption = recurrenceOption;
         return this;
     }
@@ -62,7 +75,7 @@ public class EventRecurrence {
         return repeatEndDate;
     }
 
-    public EventRecurrence setRepeatEndDate(Date repeatEndDate) {
+    public Recurrence setRepeatEndDate(Date repeatEndDate) {
         this.repeatEndDate = repeatEndDate;
         return this;
     }

@@ -141,14 +141,6 @@ public class RecurrenceOptionServiceImpl implements RecurrenceOptionService {
 
     @Override
     public void editRecurrenceOptionList(int recurrenceTypeId, List<RecurrenceOption> recurrenceOptions) {
-        if (!isEmptyCollection(recurrenceOptions)) {
-            for (RecurrenceOption option : recurrenceOptions) {
-                if (!isValidRecurrenceOption(option)) {
-                    throw new OperationFailedException("Invalid recurrence option");
-                }
-            }
-        }
-
         //if recurrence option list is empty, delete existing options from db
         if (isEmptyCollection(recurrenceOptions)) {
             deleteRecurrenceOptionsByRecurrenceType(recurrenceTypeId);
@@ -167,7 +159,7 @@ public class RecurrenceOptionServiceImpl implements RecurrenceOptionService {
                     if (getRecurrenceOptionWithId(recurrenceOptions, optionId) == null) {
                         deleteRecurrenceOption(optionId);
                     } else if (dbOption != getRecurrenceOptionWithId(recurrenceOptions, optionId)) {
-                        editRecurrenceOption(getRecurrenceOptionWithId(recurrenceOptions, dbOption.getId()));
+                        editRecurrenceOption(getRecurrenceOptionWithId(recurrenceOptions, optionId));
                     }
                 }
 

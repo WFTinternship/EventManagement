@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.service;
 
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.model.Event;
 
 import java.util.List;
@@ -10,10 +11,10 @@ import java.util.List;
 interface EventService {
 
     //Create
-    Event createEvent(Event event);
+    Event createEvent(Event event) throws DuplicateEntryException;
 
     //Read
-    Event getEventById(int eventId);
+    Event getEvent(int eventId);
 
     List<Event> getEventsByCategory(int categoryId);
 

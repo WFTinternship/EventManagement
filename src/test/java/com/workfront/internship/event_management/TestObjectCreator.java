@@ -70,12 +70,12 @@ public class TestObjectCreator {
         Event testEvent = createTestEvent();
 
         //create recurrence list
-        EventRecurrence recurrence1 = createTestEventRecurrence();
-        EventRecurrence recurrence2 = createTestEventRecurrence();
+        Recurrence recurrence1 = createTestRecurrence();
+        Recurrence recurrence2 = createTestRecurrence();
         recurrence1.setRecurrenceType(recurrenceType);
         recurrence2.setRecurrenceType(recurrenceType);
 
-        List<EventRecurrence> recurrenceList = new ArrayList<>();
+        List<Recurrence> recurrenceList = new ArrayList<>();
         recurrenceList.add(recurrence1);
 
         //set to event
@@ -86,11 +86,17 @@ public class TestObjectCreator {
 
 
     public static Invitation createTestInvitation() {
+        User user = createTestUser();
+        user.setId(1);
+
         Invitation invitation = new Invitation();
         invitation.setUserRole("Member")
                 .setAttendeesCount(1)
                 .setParticipated(false)
-                .setUserResponse(new UserResponse(1, "Yes"));
+                .setUserResponse("Yes")
+                .setEventId(1)
+                .setUser(user);
+
         return invitation;
     }
 
@@ -99,7 +105,9 @@ public class TestObjectCreator {
         media.setPath("/event/111/test_path" + getRandomNumber() + ".jpg")
                 .setType(new MediaType(0, "Image"))
                 .setDescription("Test description")
-                .setUploadDate(new Date());
+                .setUploadDate(new Date())
+                .setEventId(1)
+                .setUploaderId(1);
         return media;
     }
 
@@ -114,7 +122,8 @@ public class TestObjectCreator {
     public static RecurrenceOption createTestRecurrenceOption() {
         RecurrenceOption option = new RecurrenceOption();
         option.setTitle("Test repeat option" + getRandomNumber())
-                .setAbbreviation("RO");
+                .setAbbreviation("RO")
+                .setRecurrenceTypeId(VALID_ID);
         return option;
     }
 
@@ -143,10 +152,14 @@ public class TestObjectCreator {
         return recurrenceType;
     }
 
-    public static EventRecurrence createTestEventRecurrence() {
-        EventRecurrence eventRecurrence = new EventRecurrence();
+    public static Recurrence createTestRecurrence() {
+        RecurrenceType recurrenceType = createTestRecurrenceType();
+
+        Recurrence eventRecurrence = new Recurrence();
         eventRecurrence.setRepeatInterval(2)
-                .setRepeatEndDate(new Date());
+                .setRepeatEndDate(new Date())
+                .setRecurrenceType(recurrenceType)
+                .setEventId(VALID_ID);
 
         return eventRecurrence;
     }
@@ -157,6 +170,4 @@ public class TestObjectCreator {
         int n = rand.nextInt(100000) + 1;
         return n;
     }
-
-
 }

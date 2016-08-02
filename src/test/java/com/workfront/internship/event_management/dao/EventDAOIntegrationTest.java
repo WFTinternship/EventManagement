@@ -9,7 +9,7 @@ public class EventDAOIntegrationTest {
     private static CategoryDAO categoryDAO;
     private static RecurrenceTypeDAO recurrenceTypeDAO;
     private static RecurrenceOptionDAO recurrenceOptionDAO;
-    private static EventRecurrenceDAO eventRecurrenceDAO;
+    private static RecurrenceDAO eventRecurrenceDAO;
 
 
     private Category testCategory;
@@ -18,7 +18,7 @@ public class EventDAOIntegrationTest {
     private User testUser2;
     private RecurrenceType testRecurrenceType;
     private RecurrenceOption testRecurrenceOption;
-    private EventRecurrence testEventRecurrence;
+    private Recurrence testEventRecurrence;
 
     @BeforeClass
     public static void setUpClass() throws DAOException {
@@ -27,7 +27,7 @@ public class EventDAOIntegrationTest {
         eventDAO = new EventDAOImpl();
         recurrenceTypeDAO = new RecurrenceTypeDAOImpl();
         recurrenceOptionDAO = new RecurrenceOptionDAOImpl();
-        eventRecurrenceDAO = new EventRecurrenceDAOImpl();
+        eventRecurrenceDAO = new RecurrenceDAOImpl();
     }
 
     @AfterClass
@@ -70,11 +70,11 @@ public class EventDAOIntegrationTest {
 
         //create test event recurrence
         testEventRecurrence = TestObjectCreator.createTestEventRecurrence();
-        testEventRecurrence.setRecurrenceOptionId(recurrenceOptionId)
+        testEventRecurrence.setRecurrenceOption(recurrenceOptionId)
                 .setRecurrenceType(testRecurrenceType);
 
         //create test event, insert into db
-        List<EventRecurrence> testRecurrenceList = new ArrayList<>();
+        List<Recurrence> testRecurrenceList = new ArrayList<>();
         testRecurrenceList.add(testEventRecurrence);
 
         testEvent = TestObjectCreator.createTestEvent();
@@ -98,7 +98,7 @@ public class EventDAOIntegrationTest {
         int eventId = eventDAO.addEvent(testEvent);
         testEvent.setId(eventId);
 
-        Event event = eventDAO.getEventById(testEvent.getId());
+        Event event = eventDAO.getEvent(testEvent.getId());
 
         assertNotNull(event);
         assertEqualEvents(event, testEvent);
@@ -107,7 +107,7 @@ public class EventDAOIntegrationTest {
     @Test
     public void addEventWithRecurrences_Success() throws DAOException {
         //test record already inserted, read inserted data
-        Event event = eventDAO.getEventById(testEvent.getId());
+        Event event = eventDAO.getEvent(testEvent.getId());
 
         assertNotNull(event);
         assertEqualEvents(event, testEvent);
@@ -117,7 +117,7 @@ public class EventDAOIntegrationTest {
     @Test
     public void getEventById_Found() throws DAOException {
         //test method
-        Event event = eventDAO.getEventById(testEvent.getId());
+        Event event = eventDAO.getEvent(testEvent.getId());
 
         assertNotNull(event);
         assertEqualEventsWithFullInfo(event, testEvent);
@@ -126,7 +126,7 @@ public class EventDAOIntegrationTest {
     @Test
     public void getEventById_Not_Found() throws DAOException {
         //test method
-        Event event = eventDAO.getEventById(TestObjectCreator.NON_EXISTING_ID);
+        Event event = eventDAO.getEvent(TestObjectCreator.NON_EXISTING_ID);
 
         assertNull(event);
     }
@@ -177,7 +177,7 @@ public class EventDAOIntegrationTest {
         //testing method
         boolean deleted = eventDAO.deleteEvent(testEvent.getId());
 
-        Event event = eventDAO.getEventById(testEvent.getId());
+        Event event = eventDAO.getEvent(testEvent.getId());
 
         assertTrue(deleted);
         assertNull(event);

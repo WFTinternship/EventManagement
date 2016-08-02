@@ -41,7 +41,7 @@ public class CategoryServiceUnitTest {
 
     @Before
     public void setUp() {
-        //create test user object
+        //create test category object
         testCategory = TestObjectCreator.createTestCategory();
 
         categoryDAO = Mockito.mock(CategoryDAOImpl.class);
@@ -64,7 +64,7 @@ public class CategoryServiceUnitTest {
     }
 
     @Test(expected = OperationFailedException.class)
-    public void addCategory_InsertFailed_DuplicateCategory() throws DuplicateEntryException, DAOException {
+    public void addCategory_DuplicateCategory() throws DuplicateEntryException, DAOException {
         when(categoryDAO.addCategory(testCategory)).thenThrow(DuplicateEntryException.class);
 
         //method under test
@@ -72,7 +72,7 @@ public class CategoryServiceUnitTest {
     }
 
     @Test(expected = OperationFailedException.class)
-    public void addCategory_InsertFailed_DBError() throws DuplicateEntryException, DAOException {
+    public void addCategory_DBError() throws DuplicateEntryException, DAOException {
         when(categoryDAO.addCategory(testCategory)).thenThrow(DAOException.class);
 
         //method under test
@@ -92,13 +92,13 @@ public class CategoryServiceUnitTest {
 
     //Testing getCategoryById method
     @Test(expected = OperationFailedException.class)
-    public void getCategoryById_InvalidId() {
+    public void getCategoryById_Invalid_Id() {
         //method under test
         categoryService.getCategoryById(TestObjectCreator.INVALID_ID);
     }
 
     @Test(expected = OperationFailedException.class)
-    public void getCategoryById_DBError() throws ObjectNotFoundException, DAOException {
+    public void getCategoryById_DB_Error() throws ObjectNotFoundException, DAOException {
         doThrow(DAOException.class).when(categoryDAO).getCategoryById(TestObjectCreator.VALID_ID);
 
         //method under test
@@ -106,7 +106,7 @@ public class CategoryServiceUnitTest {
     }
 
     @Test(expected = OperationFailedException.class)
-    public void getCategoryById_NotFound() throws ObjectNotFoundException, DAOException {
+    public void getCategoryById_Not_Found() throws ObjectNotFoundException, DAOException {
         doThrow(ObjectNotFoundException.class).when(categoryDAO).getCategoryById(TestObjectCreator.NON_EXISTING_ID);
 
         //method under test
@@ -125,7 +125,7 @@ public class CategoryServiceUnitTest {
 
     //Testing editCategory method
     @Test(expected = OperationFailedException.class)
-    public void editCategory_InvalidCategory() {
+    public void editCategory_Invalid_Category() {
         testCategory.setCreationDate(null);
 
         //method under test
@@ -133,7 +133,7 @@ public class CategoryServiceUnitTest {
     }
 
     @Test(expected = OperationFailedException.class)
-    public void editCategory_CategorNotFound() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
+    public void editCategory_Not_Found() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
         doThrow(ObjectNotFoundException.class).when(categoryDAO).updateCategory(testCategory);
 
         //method under test
@@ -141,7 +141,7 @@ public class CategoryServiceUnitTest {
     }
 
     @Test(expected = OperationFailedException.class)
-    public void editCategory_DuplicateCategory() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
+    public void editCategory_Duplicate() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
         doThrow(DuplicateEntryException.class).when(categoryDAO).updateCategory(testCategory);
 
         //method under test
@@ -149,7 +149,7 @@ public class CategoryServiceUnitTest {
     }
 
     @Test(expected = OperationFailedException.class)
-    public void editCategory_DBError() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
+    public void editCategory_DB_Error() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
         doThrow(DAOException.class).when(categoryDAO).updateCategory(testCategory);
 
         //method under test
@@ -166,13 +166,13 @@ public class CategoryServiceUnitTest {
 
     //Testing deleteCategory method
     @Test(expected = OperationFailedException.class)
-    public void deleteCategory_InvalidId() {
+    public void deleteCategory_Invalid_Id() {
         //method under test
         categoryService.deleteCategory(INVALID_ID);
     }
 
     @Test(expected = OperationFailedException.class)
-    public void deleteCategory_DBError() throws ObjectNotFoundException, DAOException {
+    public void deleteCategory_DB_Error() throws ObjectNotFoundException, DAOException {
         doThrow(DAOException.class).when(categoryDAO).deleteCategory(VALID_ID);
 
         //method under test
@@ -180,7 +180,7 @@ public class CategoryServiceUnitTest {
     }
 
     @Test(expected = OperationFailedException.class)
-    public void deleteCategory_NotFound() throws ObjectNotFoundException, DAOException {
+    public void deleteCategory_Not_Found() throws ObjectNotFoundException, DAOException {
         doThrow(ObjectNotFoundException.class).when(categoryDAO).deleteCategory(NON_EXISTING_ID);
 
         //method under test
@@ -205,7 +205,7 @@ public class CategoryServiceUnitTest {
     }
 
     @Test(expected = OperationFailedException.class)
-    public void getAllCategories_DBError() throws ObjectNotFoundException, DAOException {
+    public void getAllCategories_DB_Error() throws ObjectNotFoundException, DAOException {
         doThrow(DAOException.class).when(categoryDAO).getAllCategories();
 
         //method under test
@@ -222,7 +222,7 @@ public class CategoryServiceUnitTest {
     }
 
     @Test(expected = OperationFailedException.class)
-    public void deleteAllCategories_DBError() throws ObjectNotFoundException, DAOException {
+    public void deleteAllCategories_DB_Error() throws ObjectNotFoundException, DAOException {
         doThrow(DAOException.class).when(categoryDAO).deleteAllCategories();
 
         //method under test

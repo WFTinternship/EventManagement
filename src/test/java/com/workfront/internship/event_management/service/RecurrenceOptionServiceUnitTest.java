@@ -24,8 +24,7 @@ import static org.mockito.Mockito.*;
  */
 public class RecurrenceOptionServiceUnitTest {
 
-    private static RecurrenceOptionService recurrenceOptionService;
-
+    private RecurrenceOptionService recurrenceOptionService;
     private RecurrenceOptionDAO recurrenceOptionDAO;
     private RecurrenceOption testRecurrenceOption;
     private List<RecurrenceOption> testRecurrenceOptionList;
@@ -225,15 +224,6 @@ public class RecurrenceOptionServiceUnitTest {
         verify(recurrenceOptionDAO).updateRecurrenceOption(testRecurrenceOption);
     }
 
-    //Testing editRecurrenceOptionList method
-    @Test(expected = OperationFailedException.class)
-    public void editRecurrenceOptionList_Invalid_Option() {
-        testRecurrenceOption.setRecurrenceTypeId(0); //option is invalid
-
-        //method under test
-        recurrenceOptionService.editRecurrenceOptionList(VALID_ID, testRecurrenceOptionList);
-    }
-
     @Test
     public void editRecurrenceOptionList_Empty_List() throws DAOException, ObjectNotFoundException {
         //method under test
@@ -394,6 +384,4 @@ public class RecurrenceOptionServiceUnitTest {
         //method under test
         recurrenceOptionService.deleteAllRecurrenceOptions();
     }
-
-
 }

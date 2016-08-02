@@ -34,7 +34,7 @@ public class EventDAOUnitTest {
 
     @Test(expected = RuntimeException.class)
     public void getEventById_dbError() throws DAOException {
-        eventDAO.getEventById(1);
+        eventDAO.getEvent(1);
     }
 
     @Test(expected = RuntimeException.class)

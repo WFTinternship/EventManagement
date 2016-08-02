@@ -56,12 +56,6 @@ public class Validator {
         return valid;
     }
 
-    public static boolean isValidUserResponse(UserResponse userResponse) {
-        boolean valid = false;
-        // TODO: 7/30/16  implement
-        return valid;
-    }
-
     public static boolean isValidMediaType(MediaType mediaType) {
         boolean valid = false;
         if (mediaType != null && !isEmptyString(mediaType.getTitle())) {
@@ -93,7 +87,7 @@ public class Validator {
         return valid;
     }
 
-    public static boolean isValidEventRecurrence(EventRecurrence eventRecurrence) {
+    public static boolean isValidRecurrence(Recurrence eventRecurrence) {
         boolean valid = false;
         if (eventRecurrence != null
                 && isValidRecurrenceType(eventRecurrence.getRecurrenceType())
@@ -134,7 +128,7 @@ public class Validator {
 
         boolean valid = false;
         if (invitation != null) {
-            if (invitation.getId() > 0 && invitation.getEventId() > 0
+            if (invitation.getEventId() > 0
                     && isValidUser(invitation.getUser())
                     && !isEmptyString(invitation.getUserRole())
                     && (invitation.getUserResponse() != null)) {

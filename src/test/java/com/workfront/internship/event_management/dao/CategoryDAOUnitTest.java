@@ -76,5 +76,4 @@ public class CategoryDAOUnitTest {
     public void deleteAllUsers_dbError() throws DAOException {
         categoryDAO.deleteAllCategories();
     }
-
 }
