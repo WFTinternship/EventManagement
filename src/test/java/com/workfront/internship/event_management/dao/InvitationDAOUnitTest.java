@@ -1,13 +1,24 @@
 package com.workfront.internship.event_management.dao;
 
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
+import com.workfront.internship.event_management.model.Invitation;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import static org.mockito.Mockito.*;
+
 /**
  * Created by Hermine Turshujyan 7/18/16.
  */
 public class InvitationDAOUnitTest {
 
-    //todo add test for checking conn.close()
-    //todo add method call validation
-/*
     private DataSourceManager dataSourceManager;
     private InvitationDAO invitationDAO;
 
@@ -26,54 +37,54 @@ public class InvitationDAOUnitTest {
     }
 
 
-    @Test(expected = RuntimeException.class)
-    public void addInvitation_dbError() throws DAOException {
+    @Test(expected = DAOException.class)
+    public void addInvitation_dbError() throws DAOException, DuplicateEntryException {
         invitationDAO.addInvitation(new Invitation());
     }
 
-    @Test(expected = RuntimeException.class)
-    public void getInvitationById_dbError() {
-        invitationDAO.getInvitation(1);
+    @Test(expected = DAOException.class)
+    public void getInvitationById_dbError() throws DAOException, ObjectNotFoundException {
+        invitationDAO.getInvitationById(1);
     }
 
-    @Test(expected = RuntimeException.class)
-    public void getAllInvitations_dbError() {
+    @Test(expected = DAOException.class)
+    public void getAllInvitations_dbError() throws DAOException {
         invitationDAO.getAllInvitations();
     }
 
-    @Test(expected = RuntimeException.class)
-    public void getInvitationsByEventId_dbError() {
+    @Test(expected = DAOException.class)
+    public void getInvitationsByEventId_dbError() throws DAOException {
         invitationDAO.getInvitationsByEventId(1);
     }
 
-    @Test(expected = RuntimeException.class)
-    public void getInvitationsByUserId_dbError() {
+    @Test(expected = DAOException.class)
+    public void getInvitationsByUserId_dbError() throws DAOException {
         invitationDAO.getInvitationsByUserId(1);
     }
 
 
-    @Test(expected = RuntimeException.class)
-    public void updateInvitation_dbError() {
+    @Test(expected = DAOException.class)
+    public void updateInvitation_dbError() throws DuplicateEntryException, ObjectNotFoundException, DAOException {
         invitationDAO.updateInvitation(new Invitation());
     }
 
-    @Test(expected = RuntimeException.class)
-    public void deleteInvitation_dbError() throws DAOException {
+    @Test(expected = DAOException.class)
+    public void deleteInvitation_dbError() throws DAOException, ObjectNotFoundException {
         invitationDAO.deleteInvitation(1);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = DAOException.class)
     public void deleteInvitationsByEventId_dbError() throws DAOException {
         invitationDAO.deleteInvitationsByEventId(1);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = DAOException.class)
     public void deleteInvitationsByUserId_dbError() throws DAOException {
         invitationDAO.deleteInvitationsByUserId(1);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = DAOException.class)
     public void deleteAllInvitations_dbError() throws DAOException {
         invitationDAO.deleteAllInvitations();
-    }*/
+    }
 }

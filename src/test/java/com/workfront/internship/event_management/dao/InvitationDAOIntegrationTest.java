@@ -1,11 +1,19 @@
 package com.workfront.internship.event_management.dao;
 
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.model.Category;
+import com.workfront.internship.event_management.model.Event;
+import com.workfront.internship.event_management.model.Invitation;
+import com.workfront.internship.event_management.model.User;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+
 /**
  * Created by Hermine Turshujyan 7/9/16.
  */
 
 public class InvitationDAOIntegrationTest {
-/*
+
     private static UserDAO userDAO;
     private static CategoryDAO categoryDAO;
     private static EventDAO eventDAO;
@@ -32,13 +40,12 @@ public class InvitationDAOIntegrationTest {
         eventDAO = null;
         invitationDAO = null;
     }
-
+/*
     @Before
     public void setUp() throws DAOException, DuplicateEntryException {
         createTestObjects();
         insertTestObjectsIntoDB();
     }
-
 
     @After
     public void tearDown() throws DAOException {
@@ -48,39 +55,40 @@ public class InvitationDAOIntegrationTest {
 
 
     @Test
-    public void addInvitation_Success() {
+    public void addInvitation_Success() throws DAOException, ObjectNotFoundException {
         //test invitation already inserted in setup, read record from db
-        Invitation invitation = invitationDAO.getInvitation(testInvitation.getId());
+        Invitation invitation = invitationDAO.getInvitationById(testInvitation.getId());
 
         assertNotNull(invitation);
         assertEqualInvitations(invitation, testInvitation);
     }
 
-    @Test(expected = RuntimeException.class)
-    public void addInvitation_Dublicate_Entry() throws DAOException {
-        //insert dublicate entry (the same eventId - userId pair)
+    @Test(expected = DuplicateEntryException.class)
+    public void addInvitation_Duplicate_Entry() throws DAOException, DuplicateEntryException {
+        //insert duplicate entry (the same eventId - userId pair)
         invitationDAO.addInvitation(testInvitation);
     }
 
     @Test
-    public void getInvitationById_Found() {
+    public void getInvitationById_Found() throws DAOException, ObjectNotFoundException {
         //test method
-        Invitation invitation = invitationDAO.getInvitation(testInvitation.getId());
+        Invitation invitation = invitationDAO.getInvitationById(testInvitation.getId());
 
         assertNotNull(invitation);
         assertEqualInvitations(invitation, testInvitation);
     }
 
     @Test
-    public void getInvitationById_Not_Found() {
+    public void getInvitationById_Not_Found() throws DAOException, ObjectNotFoundException {
         //test method
-        Invitation invitation = invitationDAO.getInvitation(TestObjectCreator.NON_EXISTING_ID);
+        Invitation invitation = invitationDAO.getInvitationById(TestObjectCreator.NON_EXISTING_ID);
 
         assertNull(invitation);
     }
 
+    @Ignore
     @Test
-    public void getInvitationsByEventId_Found() {
+    public void getInvitationsByEventId_Found() throws DAOException {
         //test method
         List<Invitation> invitationList = invitationDAO.getInvitationsByEventId(testEvent.getId());
 
@@ -90,7 +98,7 @@ public class InvitationDAOIntegrationTest {
     }
 
     @Test
-    public void getInvitationsByEventId_Not_Found() {
+    public void getInvitationsByEventId_Not_Found() throws DAOException {
         //test method
         List<Invitation> invitationList = invitationDAO.getInvitationsByEventId(TestObjectCreator.NON_EXISTING_ID);
 
@@ -98,8 +106,9 @@ public class InvitationDAOIntegrationTest {
         assertTrue(invitationList.isEmpty());
     }
 
+    @Ignore
     @Test
-    public void getInvitationsByUserId_Found() {
+    public void getInvitationsByUserId_Found() throws DAOException {
         //test method
         List<Invitation> invitationList = invitationDAO.getInvitationsByUserId(testUser.getId());
 
@@ -109,7 +118,7 @@ public class InvitationDAOIntegrationTest {
     }
 
     @Test
-    public void getInvitationsByUserId_Not_Found() {
+    public void getInvitationsByUserId_Not_Found() throws DAOException {
         //test method
         List<Invitation> invitationList = invitationDAO.getInvitationsByUserId(TestObjectCreator.NON_EXISTING_ID);
 
@@ -117,79 +126,70 @@ public class InvitationDAOIntegrationTest {
         assertTrue(invitationList.isEmpty());
     }
 
+    @Ignore
     @Test
-    public void updateInvitation_Success() {
+    public void updateInvitation_Success() throws DuplicateEntryException, ObjectNotFoundException, DAOException {
         //change test invitation object
         testInvitation.setAttendeesCount(10)
                 .setUserRole("Organizer");
 
         //test method
-        boolean updated = invitationDAO.updateInvitation(testInvitation);
+        invitationDAO.updateInvitation(testInvitation);
 
         //read updated method from db
-        Invitation invitation = invitationDAO.getInvitation(testInvitation.getId());
+        Invitation invitation = invitationDAO.getInvitationById(testInvitation.getId());
 
         assertNotNull(invitation);
         assertEqualInvitations(invitation, testInvitation);
-        assertTrue(updated);
     }
 
-    @Test
-    public void updateInvitation_Not_Found() {
+    @Test(expected = ObjectNotFoundException.class)
+    public void updateInvitation_Not_Found() throws DuplicateEntryException, ObjectNotFoundException, DAOException {
         //create new invitation with no id
         Invitation newTestInvitation = TestObjectCreator.createTestInvitation();
 
         //test method
-        boolean updated = invitationDAO.updateInvitation(newTestInvitation);
-
-        assertFalse(updated);
+        invitationDAO.updateInvitation(newTestInvitation);
     }
 
-    @Test
-    public void deleteInvitation_Success() throws DAOException {
+    @Test(expected = ObjectNotFoundException.class)
+    public void deleteInvitation_Success() throws DAOException, ObjectNotFoundException {
         //test method
-        boolean deleted = invitationDAO.deleteInvitation(testInvitation.getId());
+        invitationDAO.deleteInvitation(testInvitation.getId());
 
-        Invitation invitation = invitationDAO.getInvitation(testInvitation.getId());
+        Invitation invitation = invitationDAO.getInvitationById(testInvitation.getId());
 
-        assertTrue(deleted);
         assertNull(invitation);
     }
 
-    @Test
-    public void deleteInvitation_Not_Found() throws DAOException {
-        boolean deleted = invitationDAO.deleteInvitation(TestObjectCreator.NON_EXISTING_ID);
-
-        assertFalse(deleted);
+    @Test(expected = ObjectNotFoundException.class)
+    public void deleteInvitation_Not_Found() throws DAOException, ObjectNotFoundException {
+        invitationDAO.deleteInvitation(TestObjectCreator.NON_EXISTING_ID);
     }
 
     @Test
     public void deleteInvitationsByEventId_Success() throws DAOException {
         //test method
-        boolean deleted = invitationDAO.deleteInvitationsByEventId(testEvent.getId());
+        invitationDAO.deleteInvitationsByEventId(testEvent.getId());
 
         List<Invitation> invitationsList = invitationDAO.getInvitationsByEventId(testEvent.getId());
 
-        assertTrue(deleted);
         assertNotNull(invitationsList);
         assertTrue(invitationsList.isEmpty());
     }
 
     @Test
     public void deleteInvitationsByEventId_Not_Found() throws DAOException {
-        boolean deleted = invitationDAO.deleteInvitationsByEventId(TestObjectCreator.NON_EXISTING_ID);
-
-        assertFalse(deleted);
+        invitationDAO.deleteInvitationsByEventId(TestObjectCreator.NON_EXISTING_ID);
     }
 
     @Test
     public void deleteInvitationsByUserId_Success() throws DAOException {
         //test method
-        boolean deleted = invitationDAO.deleteInvitationsByUserId(testUser.getId());
+        invitationDAO.deleteInvitationsByUserId(testUser.getId());
 
         List<Invitation> invitationsList = invitationDAO.getInvitationsByUserId(testUser.getId());
 
-        assertTrue(deleted);
         assertNotNull(invitationsList);
         assertTrue(invitationsList.isEmpty());
     }
@@ -197,34 +197,19 @@ public class InvitationDAOIntegrationTest {
     @Test
     public void deleteInvitationsByUserId_Not_Found() throws DAOException {
         //test method
-        boolean deleted = invitationDAO.deleteInvitationsByUserId(TestObjectCreator.NON_EXISTING_ID);
-
-        assertFalse(deleted);
+        invitationDAO.deleteInvitationsByUserId(TestObjectCreator.NON_EXISTING_ID);
     }
 
     @Test
     public void deleteAllInvitations_Success() throws DAOException {
         //test method
-        boolean deleted = invitationDAO.deleteAllInvitations();
+        invitationDAO.deleteAllInvitations();
 
         List<Invitation> invitationList = invitationDAO.getAllInvitations();
 
-        assertTrue(deleted);
         assertNotNull(invitationList);
         assertTrue(invitationList.isEmpty());
     }
-
-    @Test
-    public void deleteAllInvitations_Not_Found() throws DAOException {
-        //delete inserted invitation from db
-        invitationDAO.deleteInvitation(testInvitation.getId());
-
-        //test method
-        boolean deleted = invitationDAO.deleteAllInvitations();
-
-        assertFalse(deleted);
-    }
-
 
     //private methods
 
@@ -268,41 +253,5 @@ public class InvitationDAOIntegrationTest {
         testEvent = null;
         testCategory = null;
         testUser = null;
-    }
-
-
-    private void assertEqualInvitations(Invitation expectedInvitation, Invitation actualInvitation) {
-        assertEquals(actualInvitation.getId(), expectedInvitation.getId());
-        assertEquals(actualInvitation.getEventId(), expectedInvitation.getEventId());
-        assertEquals(actualInvitation.getUser().getId(), expectedInvitation.getUser().getId());
-        assertEquals(actualInvitation.getUserRole(), expectedInvitation.getUserRole());
-        assertEquals(actualInvitation.getUserResponse(), expectedInvitation.getUserResponse());
-        assertEquals(actualInvitation.getAttendeesCount(), expectedInvitation.getAttendeesCount());
-        assertEquals(actualInvitation.isParticipated(), expectedInvitation.isParticipated());
-    }
-
-    private void assertEqualInvitationLists(List<Invitation> expectedList, List<Invitation> actualList) {
-        assertEquals(actualList.size(), expectedList.size());
-        for (int i = 0; i < actualList.size(); i++) {
-            assertEqualInvitations(actualList.get(i), expectedList.get(i));
-        }
-    }
-
-    private List<Invitation> createTestInvitationsList() throws DAOException {
-        //create second test invitation
-        Invitation secondTestInvitation = TestObjectCreator.createTestInvitation();
-
-        //insert second category into db
-        int invitationId = invitationDAO.addInvitation(secondTestInvitation);
-        secondTestInvitation.setId(invitationId);
-
-        //create test media list
-        List<Invitation> testInvitationList = new ArrayList<>();
-        testInvitationList.add(testInvitation);
-        testInvitationList.add(secondTestInvitation);
-
-        return testInvitationList;
     }*/
-
-
 }

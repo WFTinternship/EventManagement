@@ -60,13 +60,6 @@ public class InvitationServiceImpl implements InvitationService {
             throw new OperationFailedException("Empty invitation list");
         }
 
-        for (Invitation invitation : invitationList) {
-            if (!isValidInvitation(invitation)) {
-                throw new OperationFailedException("Invalid invitation");
-            }
-        }
-
-
         try {
             //insert invitation list into db
             invitationDAO.addInvitations(invitationList);
@@ -82,7 +75,7 @@ public class InvitationServiceImpl implements InvitationService {
 
     @Override
     public Invitation getInvitation(int invitationId) {
-        if (invitationId < 0) {
+        if (invitationId < 1) {
             throw new OperationFailedException("Invalid invitation id");
         }
 
@@ -108,8 +101,8 @@ public class InvitationServiceImpl implements InvitationService {
     }
 
     @Override
-    public List<Invitation> getInvitationsByEventId(int eventId) {
-        if (eventId < 0) {
+    public List<Invitation> getInvitationsByEvent(int eventId) {
+        if (eventId < 1) {
             throw new OperationFailedException("Invalid event id");
         }
 
@@ -122,12 +115,12 @@ public class InvitationServiceImpl implements InvitationService {
     }
 
     @Override
-    public List<Invitation> getInvitationsByUserId(int userId) {
-        if (userId < 0) {
+    public List<Invitation> getInvitationsByUser(int userId) {
+        if (userId < 1) {
             throw new OperationFailedException("Invalid user id");
         }
         try {
-            return invitationDAO.getInvitationsByEventId(userId);
+            return invitationDAO.getInvitationsByUserId(userId);
         } catch (DAOException e) {
             LOGGER.error(e.getMessage(), e);
             throw new OperationFailedException(e.getMessage(), e);
@@ -135,7 +128,7 @@ public class InvitationServiceImpl implements InvitationService {
     }
 
     @Override
-    public void updateInvitation(Invitation invitation) {
+    public void editInvitation(Invitation invitation) {
         if (!isValidInvitation(invitation)) {
             throw new OperationFailedException("Invalid invitation");
         }
@@ -157,37 +150,31 @@ public class InvitationServiceImpl implements InvitationService {
     }
 
     @Override
-    public void updateInvitations(int eventId, List<Invitation> invitationList) {
-        if (!isEmptyCollection(invitationList)) {
-            for (Invitation invitation : invitationList) {
-                if (!isValidInvitation(invitation)) {
-                    throw new OperationFailedException("Invalid invitation");
-                }
-            }
-        }
+    public void editInvitationList(int eventId, List<Invitation> invitationList) {
 
-        //if invitation's list is empty, delete existing invitations from db
         if (isEmptyCollection(invitationList)) {
-            deleteInvitationsByEventId(eventId);
+            deleteInvitationsByEvent(eventId);
         } else {
-            //get current invitations from db
-            List<Invitation> dbInvitationList = getInvitationsByEventId(eventId);
+            List<Invitation> dbInvitationList = getInvitationsByEvent(eventId);
 
-            //if there is no invitations in db, insert new invitation list
             if (isEmptyCollection(dbInvitationList)) {
                 addInvitations(invitationList);
             } else {
-                // compare invitation's list from db with new invitations's list
+
                 for (Invitation dbInvitation : dbInvitationList) {
-                    if (!invitationList.contains(dbInvitation)) {
-                        deleteInvitation(dbInvitation.getId());
-                    } else if (dbInvitation != invitationList.get(dbInvitation.getId())) {
-                        updateInvitation(dbInvitation);
+                    int invitationId = dbInvitation.getId();
+
+                    if (getInvitationWithIdFromList(invitationList, invitationId) == null) {
+                        deleteInvitation(invitationId);
+                    } else if (dbInvitation != getInvitationWithIdFromList(invitationList, invitationId)) {
+                        editInvitation(getInvitationWithIdFromList(invitationList, invitationId));
                     }
                 }
 
                 for (Invitation invitation : invitationList) {
-                    if (!dbInvitationList.contains(invitation)) {
+                    int invitationId = invitation.getId();
+
+                    if (getInvitationWithIdFromList(dbInvitationList, invitationId) == null) {
                         addInvitation(invitation);
                     }
                 }
@@ -213,7 +200,7 @@ public class InvitationServiceImpl implements InvitationService {
     }
 
     @Override
-    public void deleteInvitationsByEventId(int eventId) {
+    public void deleteInvitationsByEvent(int eventId) {
         if (eventId < 1) {
             throw new OperationFailedException("Invalid event id");
         }
@@ -227,7 +214,7 @@ public class InvitationServiceImpl implements InvitationService {
     }
 
     @Override
-    public void deleteInvitationsByUserId(int userId) {
+    public void deleteInvitationsByUser(int userId) {
         if (userId < 1) {
             throw new OperationFailedException("Invalid user id");
         }
@@ -248,5 +235,15 @@ public class InvitationServiceImpl implements InvitationService {
             LOGGER.error(e.getMessage(), e);
             throw new OperationFailedException(e.getMessage(), e);
         }
+    }
+
+    //helper methods
+    private Invitation getInvitationWithIdFromList(List<Invitation> invitationList, int id) {
+        for (Invitation invitation : invitationList) {
+            if (invitation.getId() == id) {
+                return invitation;
+            }
+        }
+        return null;
     }
 }

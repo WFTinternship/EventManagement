@@ -5,12 +5,11 @@ package com.workfront.internship.event_management.model;
  */
 public class Invitation {
 
-
     private int id;
     private int eventId;
     private User user;
     private String userRole;
-    private UserResponse userResponse;
+    private String userResponse;
     private int attendeesCount;
     private boolean participated;
 
@@ -21,6 +20,19 @@ public class Invitation {
     public Invitation setId(int id) {
         this.id = id;
         return this;
+    }
+
+    public Invitation(Invitation invitation) {
+        this.id = invitation.id;
+        this.eventId = invitation.eventId;
+        this.user = invitation.user;
+        this.userRole = invitation.userRole;
+        this.userResponse = invitation.userResponse;
+        this.attendeesCount = invitation.attendeesCount;
+        this.participated = invitation.participated;
+    }
+
+    public Invitation() {
     }
 
     public int getEventId() {
@@ -41,11 +53,11 @@ public class Invitation {
         return this;
     }
 
-    public UserResponse getUserResponse() {
+    public String getUserResponse() {
         return userResponse;
     }
 
-    public Invitation setUserResponse(UserResponse userResponse) {
+    public Invitation setUserResponse(String userResponse) {
         this.userResponse = userResponse;
         return this;
     }
