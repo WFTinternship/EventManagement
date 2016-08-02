@@ -2,8 +2,6 @@ package com.workfront.internship.event_management.service;
 
 import com.workfront.internship.event_management.dao.EventDAO;
 import com.workfront.internship.event_management.dao.EventDAOImpl;
-import com.workfront.internship.event_management.dao.InvitationDAO;
-import com.workfront.internship.event_management.dao.InvitationDAOImpl;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
@@ -13,9 +11,7 @@ import org.apache.log4j.Logger;
 
 import java.util.List;
 
-import static com.workfront.internship.event_management.service.util.Validator.isEmptyCollection;
-import static com.workfront.internship.event_management.service.util.Validator.isEmptyString;
-import static com.workfront.internship.event_management.service.util.Validator.isValidEvent;
+import static com.workfront.internship.event_management.service.util.Validator.*;
 
 /**
  * Created by Hermine Turshujyan 7/20/16.
@@ -24,10 +20,12 @@ public class EventServiceImpl implements EventService {
 
     private static final Logger LOGGER = Logger.getLogger(EventServiceImpl.class);
     private EventDAO eventDAO;
+    private InvitationService invitationService;
 
     public EventServiceImpl() throws OperationFailedException {
         try {
             eventDAO = new EventDAOImpl();
+            invitationService = new InvitationServiceImpl();
         } catch (DAOException e) {
             LOGGER.error(e.getMessage(), e);
             throw new OperationFailedException(e.getMessage(), e);
@@ -37,7 +35,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public Event createEvent(Event event) throws DuplicateEntryException {
         //check if event object is valid
-        if (isValidEvent(event)) {
+        if (!isValidEvent(event)) {
             throw new OperationFailedException("Invalid event");
         }
 
@@ -55,8 +53,7 @@ public class EventServiceImpl implements EventService {
 
             //if event info is successfully inserted into db, insert also invitations
             if (eventId != 0 && !isEmptyCollection(event.getInvitations())) {
-                InvitationDAO invitationDAO = new InvitationDAOImpl();
-                invitationDAO.addInvitations(event.getInvitations());
+                invitationService.addInvitations(event.getInvitations());
             }
         } catch (DAOException e) {
             LOGGER.error(e.getMessage(), e);

@@ -319,7 +319,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     //helper methods
-    private int addEvent(Event event, Connection conn) {
+    private int addEvent(Event event, Connection conn) throws DAOException {
 
         PreparedStatement stmt = null;
 
@@ -370,7 +370,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         } catch (SQLException e) {
             LOGGER.error("Exception ", e);
-            throw new RuntimeException(e);
+            throw new DAOException(e);
         } finally {
             closeResources(stmt);
         }

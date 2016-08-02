@@ -1,10 +1,24 @@
 package com.workfront.internship.event_management.dao;
 
+import com.workfront.internship.event_management.TestObjectCreator;
+import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
+import com.workfront.internship.event_management.model.*;
+import org.junit.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.workfront.internship.event_management.AssertionHelper.assertEqualEvents;
+import static com.workfront.internship.event_management.TestObjectCreator.*;
+import static junit.framework.TestCase.*;
+
 /**
  * Created by Hermine Turshujyan 7/15/16.
  */
 public class EventDAOIntegrationTest {
- /*   private static UserDAO userDAO;
+    private static UserDAO userDAO;
     private static EventDAO eventDAO;
     private static CategoryDAO categoryDAO;
     private static RecurrenceTypeDAO recurrenceTypeDAO;
@@ -42,11 +56,11 @@ public class EventDAOIntegrationTest {
 
 
     @Before
-    public void setUp() throws DAOException {
+    public void setUp() throws DAOException, DuplicateEntryException {
 
         //create test users, insert into db
-        testUser1 = TestObjectCreator.createTestUser();
-        testUser2 = TestObjectCreator.createTestUser();
+        testUser1 = createTestUser();
+        testUser2 = createTestUser();
         int id1 = userDAO.addUser(testUser1);
         testUser1.setId(id1);
         int id2 = userDAO.addUser(testUser2);
@@ -69,8 +83,8 @@ public class EventDAOIntegrationTest {
         testRecurrenceOption.setId(recurrenceOptionId);
 
         //create test event recurrence
-        testEventRecurrence = TestObjectCreator.createTestEventRecurrence();
-        testEventRecurrence.setRecurrenceOption(recurrenceOptionId)
+        testEventRecurrence = createTestRecurrence();
+        testEventRecurrence.setRecurrenceOption(testRecurrenceOption)
                 .setRecurrenceType(testRecurrenceType);
 
         //create test event, insert into db
@@ -92,22 +106,22 @@ public class EventDAOIntegrationTest {
     }
 
     @Test
-    public void addEvent_Success() throws DAOException {
+    public void addEvent_Success() throws DAOException, ObjectNotFoundException {
         //insert event without recurrences
         testEvent.setEventRecurrences(null);
         int eventId = eventDAO.addEvent(testEvent);
         testEvent.setId(eventId);
 
-        Event event = eventDAO.getEvent(testEvent.getId());
+        Event event = eventDAO.getEventById(testEvent.getId());
 
         assertNotNull(event);
         assertEqualEvents(event, testEvent);
     }
 
     @Test
-    public void addEventWithRecurrences_Success() throws DAOException {
+    public void addEventWithRecurrences_Success() throws DAOException, ObjectNotFoundException {
         //test record already inserted, read inserted data
-        Event event = eventDAO.getEvent(testEvent.getId());
+        Event event = eventDAO.getEventById(testEvent.getId());
 
         assertNotNull(event);
         assertEqualEvents(event, testEvent);
@@ -115,18 +129,18 @@ public class EventDAOIntegrationTest {
 
 
     @Test
-    public void getEventById_Found() throws DAOException {
+    public void getEventById_Found() throws DAOException, ObjectNotFoundException {
         //test method
-        Event event = eventDAO.getEvent(testEvent.getId());
+        Event event = eventDAO.getEventById(testEvent.getId());
 
         assertNotNull(event);
-        assertEqualEventsWithFullInfo(event, testEvent);
+        assertEqualEvents(event, testEvent);
     }
 
-    @Test
-    public void getEventById_Not_Found() throws DAOException {
+    @Test(expected = ObjectNotFoundException.class)
+    public void getEventById_Not_Found() throws DAOException, ObjectNotFoundException {
         //test method
-        Event event = eventDAO.getEvent(TestObjectCreator.NON_EXISTING_ID);
+        Event event = eventDAO.getEventById(NON_EXISTING_ID);
 
         assertNull(event);
     }
@@ -142,7 +156,7 @@ public class EventDAOIntegrationTest {
     }
 
     @Test
-    public void getAllEvents_EmptyList() throws DAOException {
+    public void getAllEvents_EmptyList() throws DAOException, ObjectNotFoundException {
         //delete inserted test record
         eventDAO.deleteEvent(testEvent.getId());
 
@@ -165,53 +179,45 @@ public class EventDAOIntegrationTest {
     @Test
     public void getEventsByCategoryId_Empty_List() throws DAOException {
         //delete inserted test record
-        List<Event> eventList = eventDAO.getEventsByCategory(TestObjectCreator.NON_EXISTING_ID);
+        List<Event> eventList = eventDAO.getEventsByCategory(NON_EXISTING_ID);
 
         assertNotNull(eventList);
         assertTrue(eventList.isEmpty());
     }
 
 
-    @Test
-    public void deleteEvent_Found() throws DAOException {
+    @Test(expected = ObjectNotFoundException.class)
+    public void deleteEvent_Found() throws DAOException, ObjectNotFoundException {
         //testing method
-        boolean deleted = eventDAO.deleteEvent(testEvent.getId());
+        eventDAO.deleteEvent(testEvent.getId());
 
-        Event event = eventDAO.getEvent(testEvent.getId());
-
-        assertTrue(deleted);
-        assertNull(event);
+        Event event = eventDAO.getEventById(testEvent.getId());
     }
 
-    @Test
-    public void deleteEvent_Not_Found() throws DAOException {
+    @Test(expected = ObjectNotFoundException.class)
+    public void deleteEvent_Not_Found() throws DAOException, ObjectNotFoundException {
         //testing method
-        boolean deleted = eventDAO.deleteEvent(TestObjectCreator.NON_EXISTING_ID);
-
-        assertFalse(deleted);
+        eventDAO.deleteEvent(NON_EXISTING_ID);
     }
 
     @Test
     public void deleteAllEvents_Found() throws DAOException {
         //testing method
-        boolean deleted = eventDAO.deleteAllEvents();
+        eventDAO.deleteAllEvents();
 
         List<Event> eventList = eventDAO.getAllEvents();
 
         assertNotNull(eventList);
         assertTrue(eventList.isEmpty());
-        assertTrue(deleted);
     }
 
     @Test
-    public void deleteAllEvent_Not_Found() throws DAOException {
+    public void deleteAllEvent_Not_Found() throws DAOException, ObjectNotFoundException {
         //delete inserted event
         eventDAO.deleteEvent(testEvent.getId());
 
         //testing method
-        boolean deleted = eventDAO.deleteAllEvents();
-
-        assertFalse(deleted);
+        eventDAO.deleteAllEvents();
     }
 
     //helper methods
@@ -230,31 +236,5 @@ public class EventDAOIntegrationTest {
         categoryDAO.deleteAllCategories();
 
     }
-
-    private void assertEqualEvents(Event actualEvent, Event expectedEvent) {
-        assertEquals(actualEvent.getId(), expectedEvent.getId());
-        assertEquals(actualEvent.getTitle(), expectedEvent.getTitle());
-        assertEquals(actualEvent.getCategory().getId(), expectedEvent.getCategory().getId());
-        assertEquals(actualEvent.getShortDescription(), expectedEvent.getShortDescription());
-        assertEquals(actualEvent.getFullDescription(), expectedEvent.getFullDescription());
-        assertEquals(actualEvent.getLocation(), expectedEvent.getLocation());
-        assertEquals(actualEvent.getLat(), expectedEvent.getLat(), 0);
-        assertEquals(actualEvent.getLng(), expectedEvent.getLng(), 0);
-        assertEquals(actualEvent.getFilePath(), expectedEvent.getFilePath());
-        assertEquals(actualEvent.getImagePath(), expectedEvent.getImagePath());
-        assertNotNull(actualEvent.getCreationDate());
-        //assertEquals(actualEvent.getLastModifiedDate(), expectedEvent.getLastModifiedDate());
-        assertEquals(actualEvent.isPublicAccessed(), expectedEvent.isPublicAccessed());
-        assertEquals(actualEvent.isGuestsAllowed(), expectedEvent.isGuestsAllowed());
-    }
-
-    private void assertEqualEventsWithFullInfo(Event actualEvent, Event expectedEvent) {
-        assertEqualEvents(actualEvent, expectedEvent);
-
-        assertNotNull(actualEvent.getInvitations());
-        assertNotNull(actualEvent.getEventRecurrences());
-        assertEquals(actualEvent.getEventRecurrences().size(), expectedEvent.getEventRecurrences().size());
-        assertEquals(actualEvent.getInvitations().size(), expectedEvent.getInvitations().size());
-    }*/
 
 }
