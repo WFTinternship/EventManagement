@@ -45,7 +45,6 @@ public class Validator {
         return (collection == null || collection.isEmpty());
     }
 
-
     public static boolean isValidCategory(Category category) {
         boolean valid = false;
         if (category != null
@@ -98,7 +97,6 @@ public class Validator {
         return valid;
     }
 
-
     public static boolean isValidRecurrenceOption(RecurrenceOption recurrenceOption) {
         boolean valid = false;
         if (recurrenceOption != null
@@ -114,7 +112,7 @@ public class Validator {
         boolean valid = false;
         if (event != null) {
             if (!isEmptyString(event.getTitle())
-                    && event.getCategory() != null && event.getCategory().getId() > 0
+                    && isValidCategory(event.getCategory())
                     && event.getStartDate() != null
                     && event.getEndDate() != null
                     && event.getCreationDate() != null) {

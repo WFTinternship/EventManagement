@@ -90,4 +90,20 @@ public class AssertionHelper {
         TestCase.assertEquals(actualInvitation.isParticipated(), expectedInvitation.isParticipated());
     }
 
+    public static void assertEqualEvents(Event actualEvent, Event expectedEvent) {
+        assertEquals(actualEvent.getId(), expectedEvent.getId());
+        assertEquals(actualEvent.getTitle(), expectedEvent.getTitle());
+        assertEquals(actualEvent.getCategory().getId(), expectedEvent.getCategory().getId());
+        assertEquals(actualEvent.getShortDescription(), expectedEvent.getShortDescription());
+        assertEquals(actualEvent.getFullDescription(), expectedEvent.getFullDescription());
+        assertEquals(actualEvent.getLocation(), expectedEvent.getLocation());
+        assertEquals(actualEvent.getLat(), expectedEvent.getLat(), 0);
+        assertEquals(actualEvent.getLng(), expectedEvent.getLng(), 0);
+        assertEquals(actualEvent.getFilePath(), expectedEvent.getFilePath());
+        assertEquals(actualEvent.getImagePath(), expectedEvent.getImagePath());
+        assertNotNull(actualEvent.getCreationDate());
+        //assertEquals(actualEvent.getLastModifiedDate(), expectedEvent.getLastModifiedDate());
+        assertEquals(actualEvent.isPublicAccessed(), expectedEvent.isPublicAccessed());
+        assertEquals(actualEvent.isGuestsAllowed(), expectedEvent.isGuestsAllowed());
+    }
 }

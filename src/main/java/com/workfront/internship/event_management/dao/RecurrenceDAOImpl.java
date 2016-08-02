@@ -19,7 +19,7 @@ public class RecurrenceDAOImpl extends GenericDAO implements RecurrenceDAO {
     static final Logger LOGGER = Logger.getLogger(RecurrenceDAOImpl.class);
     private DataSourceManager dataSourceManager;
 
-    public RecurrenceDAOImpl(DataSourceManager dataSourceManager) throws Exception {
+    RecurrenceDAOImpl(DataSourceManager dataSourceManager) throws Exception {
         super(dataSourceManager);
         this.dataSourceManager = dataSourceManager;
     }
@@ -69,7 +69,7 @@ public class RecurrenceDAOImpl extends GenericDAO implements RecurrenceDAO {
         }
     }
 
-    public int addEventRecurrences(List<Recurrence> recurrenceList, Connection conn) throws DAOException {
+    int addEventRecurrences(List<Recurrence> recurrenceList, Connection conn) throws DAOException {
         PreparedStatement stmt = null;
 
         int id = 0;
@@ -261,7 +261,7 @@ public class RecurrenceDAOImpl extends GenericDAO implements RecurrenceDAO {
         Connection conn = null;
         PreparedStatement stmt = null;
 
-        int affectedRows = 0;
+        int affectedRows;
         String query = "UPDATE event_recurrence SET event_id = ?, recurrence_type_id = ?, " +
                 "recurrence_option_id = ?, repeat_interval = ?, repeat_end = ? WHERE id = ?";
         try {
@@ -339,7 +339,7 @@ public class RecurrenceDAOImpl extends GenericDAO implements RecurrenceDAO {
             recurrence.setId(rs.getInt("event_recurrence.id"))
                     .setEventId(rs.getInt("event_recurrence.event_id"))
                     .setRepeatInterval(rs.getInt("event_recurrence.repeat_interval"))
-                    // .setRecurrenceOption(rs.getInt("event_recurrence.recurrence_option_id")) // TODO: 7/28/16 correct
+                    //.setRecurrenceOption(rs.getInt("event_recurrence.recurrence_option_id"))
                     .setRepeatEndDate(rs.getTimestamp("event_recurrence.repeat_end"))
                     .setRecurrenceType(recurrenceType);
 

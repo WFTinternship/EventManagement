@@ -45,8 +45,8 @@ public class InvitationServiceImpl implements InvitationService {
             invitation.setId(invitationId);
         } catch (DuplicateEntryException e) {
             LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Invitation for user with id "
-                    + invitation.getUser().getId() + " and event with id " + invitation.getEventId() + " already exists!", e);
+            throw new OperationFailedException(String.format("Invitation for user with id %d and event with id already exists!",
+                    invitation.getUser().getId(), invitation.getEventId()), e);
         } catch (DAOException e) {
             LOGGER.error(e.getMessage(), e);
             throw new OperationFailedException(e.getMessage(), e);
@@ -63,7 +63,6 @@ public class InvitationServiceImpl implements InvitationService {
         try {
             //insert invitation list into db
             invitationDAO.addInvitations(invitationList);
-
         } catch (DuplicateEntryException e) {
             LOGGER.error(e.getMessage(), e);
             throw new OperationFailedException("Invitation already exists!", e);
@@ -83,7 +82,7 @@ public class InvitationServiceImpl implements InvitationService {
             return invitationDAO.getInvitationById(invitationId);
         } catch (ObjectNotFoundException e) {
             LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Recurrence type not found");
+            throw new OperationFailedException("Invitation not found");
         } catch (DAOException e) {
             LOGGER.error(e.getMessage(), e);
             throw new OperationFailedException(e.getMessage(), e);
@@ -141,8 +140,8 @@ public class InvitationServiceImpl implements InvitationService {
             throw new OperationFailedException("Invitation not found", e);
         } catch (DuplicateEntryException e) {
             LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Invitation for user with id "
-                    + invitation.getUser().getId() + " and event with id " + invitation.getEventId() + " already exists!", e);
+            throw new OperationFailedException(String.format("Invitation for user with id %d and event with id already exists!",
+                    invitation.getUser().getId(), invitation.getEventId()), e);
         } catch (DAOException e) {
             LOGGER.error(e.getMessage(), e);
             throw new OperationFailedException(e.getMessage(), e);
@@ -155,6 +154,7 @@ public class InvitationServiceImpl implements InvitationService {
         if (isEmptyCollection(invitationList)) {
             deleteInvitationsByEvent(eventId);
         } else {
+
             List<Invitation> dbInvitationList = getInvitationsByEvent(eventId);
 
             if (isEmptyCollection(dbInvitationList)) {

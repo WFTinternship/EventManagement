@@ -69,7 +69,7 @@ public class EventServiceImpl implements EventService {
         }
 
         try {
-            //get category from db
+            //get event from db
             return eventDAO.getEventById(eventId);
         } catch (ObjectNotFoundException e) {
             LOGGER.error(e.getMessage(), e);
@@ -106,7 +106,6 @@ public class EventServiceImpl implements EventService {
             throw new OperationFailedException(e.getMessage(), e);
         }
     }
-
 
     @Override
     public List<Event> getEventsByCategory(int categoryId) throws OperationFailedException {

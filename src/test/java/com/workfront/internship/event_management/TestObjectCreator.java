@@ -60,7 +60,8 @@ public class TestObjectCreator {
                 .setPublicAccessed(true)
                 .setGuestsAllowed(true)
                 .setStartDate(new Date())
-                .setEndDate(new Date());
+                .setEndDate(new Date())
+                .setCategory(createTestCategory());
 
         return testEvent;
     }

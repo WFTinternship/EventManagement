@@ -129,5 +129,4 @@ public class CategoryServiceImpl implements CategoryService {
             throw new OperationFailedException(e.getMessage(), e);
         }
     }
-
 }

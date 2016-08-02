@@ -228,5 +228,4 @@ public class CategoryServiceUnitTest {
         //method under test
         categoryService.deleteAllCategories();
     }
-
 }

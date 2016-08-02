@@ -188,7 +188,6 @@ public class EventServiceUnitTest {
         assertEqualEvents(actualEventList.get(0), testEvent);
     }
 
-
     //Testing getUserOrganizedEvents method
     @Test(expected = OperationFailedException.class)
     public void getUserOrganizedEvents_Invalid_Id() {
@@ -211,6 +210,36 @@ public class EventServiceUnitTest {
 
         //method under test
         List<Event> actualEventList = eventService.getUserOrganizedEvents(TestObjectCreator.VALID_ID);
+        assertNotNull(actualEventList);
+        assertFalse(actualEventList.isEmpty());
+        assertEquals(actualEventList.size(), 1);
+        assertEqualEvents(actualEventList.get(0), testEvent);
+    }
+
+    //Testing getUserParticipatedEvents method
+    @Test(expected = OperationFailedException.class)
+    public void getUserParticipatedEvents_Invalid_Id() {
+        //method under test
+        eventService.getUserParticipatedEvents(INVALID_ID);
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void getUserParticipatedEvents_DB_Error() throws ObjectNotFoundException, DAOException {
+        doThrow(DAOException.class).when(eventDAO).getUserParticipatedEvents(VALID_ID);
+
+        //method under test
+        eventService.getUserParticipatedEvents(VALID_ID);
+    }
+
+    @Test
+    public void getUserParticipatedEvents_Success() throws ObjectNotFoundException, DAOException {
+        testEvent.setId(TestObjectCreator.VALID_ID);
+
+        when(eventDAO.getUserParticipatedEvents(VALID_ID)).thenReturn(testEventList);
+
+        //method under test
+        List<Event> actualEventList = eventService.getUserParticipatedEvents(TestObjectCreator.VALID_ID);
+
         assertNotNull(actualEventList);
         assertFalse(actualEventList.isEmpty());
         assertEquals(actualEventList.size(), 1);
