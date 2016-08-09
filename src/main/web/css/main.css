@@ -373,26 +373,21 @@ input[type="text"]:focus, input[type="password"]:focus {
 }
 
 /* Event list */
-.event_list {
-    width: 100%;
+.content_block {
+    float: left;
+    width: 75%;
 }
 
 .list_item {
-    width: 100%;
     margin-bottom: 50px;
     border-bottom: 1px dotted #e9e9e9;
 }
 
-.list_image, .list_content {
+.list_content {
     float: left;
 }
 
-.list_image {
-    width: 20%;
-}
-
 .list_content {
-    width: 80%;
     padding: 0 0 30px 30px;
 }
 
@@ -441,10 +436,6 @@ input[type="text"]:focus, input[type="password"]:focus {
     padding-right: 25px;
 }
 
-.content_block {
-    float: left;
-    width: 75%;
-}
 
 .left_sidebar h6 {
     font-size: 15px;

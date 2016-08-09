@@ -9,10 +9,10 @@
 <html>
 <head>
     <title>Event Management</title>
-    <link rel="stylesheet" type="text/css" href="./css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
-    <link rel="stylesheet" type="text/css" href="./css/icon_font.css">
+    <link rel="stylesheet" type="text/css" href="css/icon_font.css">
 
     <link rel="stylesheet" type="text/css" href="./css/jquery-ui.min.css">
     <link rel="stylesheet" type="text/css" href="./css/jquery-ui.structure.min.css">

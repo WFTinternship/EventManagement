@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl() {
         try {
             userDAO = new UserDAOImpl();
-            emailService = new EmailServiceImpl();
+            // emailService = new EmailServiceImpl();
         } catch (DAOException e) {
             LOGGER.error(e.getMessage(), e);
             throw new OperationFailedException(e.getMessage(), e);
@@ -145,7 +145,7 @@ public class UserServiceImpl implements UserService {
             LOGGER.error(e.getMessage(), e);
             throw new OperationFailedException(e.getMessage(), e);
         }
-
+        String str = HashGenerator.generateHashString(password);
         //check if passwords match
         if (user.getPassword().equals(HashGenerator.generateHashString(password))) {
             return user;

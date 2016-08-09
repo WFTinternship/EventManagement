@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by Hermine Turshujyan 7/21/16.
  */
-interface UserService {
+public interface UserService {
 
     User addAccount(User user);
 

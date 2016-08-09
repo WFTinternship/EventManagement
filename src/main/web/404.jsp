@@ -9,9 +9,9 @@
 <html>
 <head>
     <title>Event Management</title>
-    <link rel="stylesheet" type="text/css" href="./css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="./css/reset.css">
-    <link rel="stylesheet" type="text/css" href="./css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/reset.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
 
     <link rel="stylesheet" type="text/css" href="./css/jquery-ui.min.css">
     <link rel="stylesheet" type="text/css" href="./css/jquery-ui.structure.min.css">
@@ -20,8 +20,8 @@
     <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
 
-    <script type="text/javascript" src="./js/jquery-3.1.0.min.js"></script>
-    <script type="text/javascript" src="./js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/event_list.js"></script>
 
 

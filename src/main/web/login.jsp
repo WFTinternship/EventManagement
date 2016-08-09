@@ -9,10 +9,10 @@
 <html>
 <head>
     <title>Event Management</title>
-    <link rel="stylesheet" type="text/css" href="./css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="./css/reset.css">
-    <link rel="stylesheet" type="text/css" href="./css/main.css">
-    <link rel="stylesheet" type="text/css" href="./css/icon_font.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/reset.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/icon_font.css">
 
 
     <link rel="stylesheet" type="text/css" href="./css/jquery-ui.min.css">
@@ -23,8 +23,8 @@
     <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 
-    <script type="text/javascript" src="./js/jquery-3.1.0.min.js"></script>
-    <script type="text/javascript" src="./js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
 
 </head>
 <body>
@@ -34,20 +34,20 @@
     <!-- End Main Header -->
 
     <div class="zoom-anim-dialog small-dialog login_popup mfp-hide" id="login-popup">
-        <form id="login_form">
+        <form id="login_form" action="/LoginController" method="post">
             <div class="lf_user_row">
                 <span class="lf_header">Login to your Account</span>
             </div>
             <div class="lf_user_row">
                 <label for="login_user_name">
                     <i class="lf_icon icon-user"></i>
-                    <input name="login_user_name" id="login_user_name" type="text">
+                    <input name="username" id="login_user_name" type="text">
                 </label>
             </div>
             <div class="lf_user_row">
                 <label for="login_password">
                     <i class="lf_icon icon-lock"></i>
-                    <input name="login_password" id="login_password" type="password">
+                    <input name="password" id="login_password" type="password">
                 </label>
             </div>
             <div class="lf_user_row clearfix">

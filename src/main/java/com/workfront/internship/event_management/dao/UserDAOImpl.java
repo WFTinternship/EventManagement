@@ -25,6 +25,8 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
     }
 
     public UserDAOImpl() throws DAOException {
+        super();
+
         try {
             this.dataSourceManager = DataSourceManager.getInstance();
         } catch (IOException | SQLException e) {

@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.dao;
 
+
 import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
 
 import java.io.IOException;
@@ -19,9 +20,11 @@ public class DataSourceManager {
 
         //loading db property list
         Properties props = new Properties();
-        props.load(ClassLoader.getSystemClassLoader().getResourceAsStream("config.properties"));
+        props.load(DataSourceManager.class.getClassLoader().getResourceAsStream("config.properties"));
 
         ds = new BasicDataSource();
+        ds.setDriverClassName("com.mysql.jdbc.Driver");
+
         ds.setUsername(props.getProperty("jdbc.username"));
         ds.setPassword(props.getProperty("jdbc.password"));
         ds.setUrl(props.getProperty("jdbc.url"));
