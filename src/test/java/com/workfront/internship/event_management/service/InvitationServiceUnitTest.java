@@ -103,13 +103,13 @@ public class InvitationServiceUnitTest {
 
     //Testing getInvitationById method
     @Test(expected = OperationFailedException.class)
-    public void getInvitationById_Invalid_Id() {
+    public void getInvitation_Invalid_Id() {
         //method under test
         invitationService.getInvitation(INVALID_ID);
     }
 
     @Test(expected = OperationFailedException.class)
-    public void getInvitationById_DB_Error() throws ObjectNotFoundException, DAOException {
+    public void getInvitation_DB_Error() throws ObjectNotFoundException, DAOException {
         doThrow(DAOException.class).when(invitationDAO).getInvitationById(TestObjectCreator.VALID_ID);
 
         //method under test
@@ -117,7 +117,7 @@ public class InvitationServiceUnitTest {
     }
 
     @Test(expected = OperationFailedException.class)
-    public void getInvitationById_Not_Found() throws ObjectNotFoundException, DAOException {
+    public void getInvitation_Not_Found() throws ObjectNotFoundException, DAOException {
         doThrow(ObjectNotFoundException.class).when(invitationDAO).getInvitationById(NON_EXISTING_ID);
 
         //method under test
@@ -125,7 +125,7 @@ public class InvitationServiceUnitTest {
     }
 
     @Test
-    public void getInvitationById_Success() throws ObjectNotFoundException, DAOException {
+    public void getInvitation_Success() throws ObjectNotFoundException, DAOException {
         testInvitation.setId(VALID_ID);
         when(invitationDAO.getInvitationById(VALID_ID)).thenReturn(testInvitation);
 
@@ -136,13 +136,13 @@ public class InvitationServiceUnitTest {
 
     //Testing getInvitationsByEventId method
     @Test(expected = OperationFailedException.class)
-    public void getInvitationsByEventId_Invalid_Id() {
+    public void getInvitationsByEvent_Invalid_Id() {
         //method under test
         invitationService.getInvitationsByEvent(INVALID_ID);
     }
 
     @Test(expected = OperationFailedException.class)
-    public void getInvitationsByEventId_DB_Error() throws ObjectNotFoundException, DAOException {
+    public void getInvitationsByEvent_DB_Error() throws ObjectNotFoundException, DAOException {
         doThrow(DAOException.class).when(invitationDAO).getInvitationsByEventId(TestObjectCreator.VALID_ID);
 
         //method under test
@@ -150,7 +150,7 @@ public class InvitationServiceUnitTest {
     }
 
     @Test
-    public void getInvitationsByEventId_Success() throws ObjectNotFoundException, DAOException {
+    public void getInvitationsByEvent_Success() throws ObjectNotFoundException, DAOException {
         when(invitationDAO.getInvitationsByEventId(VALID_ID)).thenReturn(testInvitationList);
 
         //method under test
@@ -163,13 +163,13 @@ public class InvitationServiceUnitTest {
 
     //Testing getInvitationsByUserId method
     @Test(expected = OperationFailedException.class)
-    public void getInvitationsByUserId_Invalid_Id() {
+    public void getInvitationsByUser_Invalid_Id() {
         //method under test
-        invitationService.getInvitationsByEvent(INVALID_ID);
+        invitationService.getInvitationsByUser(INVALID_ID);
     }
 
     @Test(expected = OperationFailedException.class)
-    public void getInvitationsByUserId_DB_Error() throws ObjectNotFoundException, DAOException {
+    public void getInvitationsByUser_DB_Error() throws ObjectNotFoundException, DAOException {
         doThrow(DAOException.class).when(invitationDAO).getInvitationsByUserId(VALID_ID);
 
         //method under test
@@ -177,7 +177,7 @@ public class InvitationServiceUnitTest {
     }
 
     @Test
-    public void getInvitationsByUserId_Success() throws ObjectNotFoundException, DAOException {
+    public void getInvitationsByUser_Success() throws ObjectNotFoundException, DAOException {
         when(invitationDAO.getInvitationsByUserId(VALID_ID)).thenReturn(testInvitationList);
 
         //method under test
@@ -190,7 +190,7 @@ public class InvitationServiceUnitTest {
 
     //Testing editInvitation method
     @Test(expected = OperationFailedException.class)
-    public void editInvitation_Invalid_Invitations() {
+    public void editInvitation_Invalid_Invitation() {
         testInvitation.setUser(null);
 
         //method under test

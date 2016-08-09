@@ -1,0 +1,29 @@
+
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
+    font-family: FontAwesome;
+    font-weight: normal;
+    font-style: normal;
+    display: inline-block;
+    text-decoration: inherit;
+}
+
+.icon-user::before {
+    content: "\f007";
+}
+
+.icon-lock::before {
+    content: "\f023";
+}
+
+.icon-clock::before {
+    content: "\f017";
+}
+
+.icon-folder::before {
+    content: "\f115";
+}
+
+.icon-map-marker::before {
+    content: "\f041";
+}
