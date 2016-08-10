@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by Hermine Turshujyan 7/21/16.
  */
-interface EventService {
+public interface EventService {
 
     //Create
     Event createEvent(Event event) throws DuplicateEntryException;

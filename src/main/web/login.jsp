@@ -26,6 +26,33 @@
     <script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
 
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#login_form').on('submit', function (e) {
+                e.preventDefault();
+                var username = $('#username').val();
+                var password = $('#password').val();
+
+                $.ajax({
+                    type: 'POST',
+                    data: {
+                        username: username,
+                        password: password
+                    },
+                    url: '/login',
+                    success: function (result) {
+                        window.location =
+                    },
+                    error: function () {
+                    }
+                })
+            })
+
+        });
+
+    </script>
+
 </head>
 <body>
 <div id="main_wrapper">
@@ -34,20 +61,20 @@
     <!-- End Main Header -->
 
     <div class="zoom-anim-dialog small-dialog login_popup mfp-hide" id="login-popup">
-        <form id="login_form" action="/LoginController" method="post">
+        <form id="login_form" method="POST" action="/login">
             <div class="lf_user_row">
                 <span class="lf_header">Login to your Account</span>
             </div>
             <div class="lf_user_row">
-                <label for="login_user_name">
+                <label for="username">
                     <i class="lf_icon icon-user"></i>
-                    <input name="username" id="login_user_name" type="text">
+                    <input name="username" id="username" type="text">
                 </label>
             </div>
             <div class="lf_user_row">
-                <label for="login_password">
+                <label for="password">
                     <i class="lf_icon icon-lock"></i>
-                    <input name="password" id="login_password" type="password">
+                    <input name="password" id="password" type="password">
                 </label>
             </div>
             <div class="lf_user_row clearfix">
@@ -60,7 +87,7 @@
                     </label>
                 </div>
                 <div class="form_col_half clearfix">
-                    <button type="submit" name="login" class="btn f_right">
+                    <button name="login" class="btn f_right" id="login">
                         Sign in
                     </button>
                 </div>

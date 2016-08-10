@@ -79,14 +79,16 @@ a, .btn {
     background: #00AFB2;
     color: white;
     position: relative;
-    text-transform: uppercase;
+}
+
+#topbar {
+    font-size: 12px;
 }
 
 #topbar span {
     display: inline-block;
     margin-right: 40px;
     padding: 12px 0;
-    font-size: 11px;
     cursor: pointer;
 }
 
@@ -384,7 +386,6 @@ input[type="text"]:focus, input[type="password"]:focus {
 }
 
 .list_content {
-    float: left;
 }
 
 .list_content {
@@ -434,6 +435,7 @@ input[type="text"]:focus, input[type="password"]:focus {
     width: 25%;
     float: left;
     padding-right: 25px;
+    height: 100%;
 }
 
 
@@ -466,3 +468,70 @@ input[type="text"]:focus, input[type="password"]:focus {
     color: #aaa;
 }
 
+/* Search */
+.top_search {
+    top: 18px;
+    position: absolute;
+    right: 0px;
+    width: 200px;
+}
+
+.top_search .top_search_con {
+    background: #fff !important;
+    border-color: #E4E4E4 !important;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    float: right;
+    height: 38px;
+    position: relative;
+    width: 100%;
+}
+
+.top_search .top_search_con input[type="text"] {
+    background: none !important;
+    border: medium none;
+    height: 100%;
+    width: 100%;
+    padding: 1px 20px 0 40px;
+    color: #818B8D;
+    font-size: 12px;
+}
+
+.top_search .top_search_icon {
+    color: #1ccdca;
+    font-size: 15px;
+    left: 11px;
+    position: absolute;
+    top: 8px;
+}
+
+.top_search .top_search_submit {
+    border: medium none;
+    padding: 0;
+    position: absolute;
+    width: 20px;
+    left: 12px;
+    opacity: 0;
+    top: 9px;
+}
+
+.top_search_con {
+    -moz-border-radius: 200px;
+    -webkit-border-radius: 200px;
+    -ms-border-radius: 200px;
+    -o-border-radius: 200px;
+    border-radius: 200px;
+}
+
+/* Logged in topbar */
+.top_registration {
+
+}
+
+#logout_button, #login_popup {
+    background: none;
+    border: none;
+}
+
+#logout_form {
+    display: inline;
+}

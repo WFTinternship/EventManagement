@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by Hermine Turshujyan 7/22/16.
  */
-interface CategoryService {
+public interface CategoryService {
 
     //CRUD operations with category
     Category addCategory(Category category);

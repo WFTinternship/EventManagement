@@ -27,3 +27,8 @@
 .icon-map-marker::before {
     content: "\f041";
 }
+
+.icon-search::before {
+    content: "\f002";
+}
+
