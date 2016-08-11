@@ -8,6 +8,10 @@
     text-decoration: inherit;
 }
 
+.ev_icon, .top_icon {
+    margin-right: 5px;
+}
+
 .icon-user::before {
     content: "\f007";
 }

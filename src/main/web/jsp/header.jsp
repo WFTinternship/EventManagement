@@ -1,38 +1,60 @@
 <%@ page import="com.workfront.internship.event_management.model.User" %>
-<div class="zoom-anim-dialog small-dialog login_popup mfp-hide" id="login-popup">
-    <form id="login_form" method="POST" action="/login">
-        <div class="lf_user_row">
-            <span class="lf_header">Login to your Account</span>
-        </div>
-        <div class="lf_user_row">
-            <label for="username">
-                <i class="lf_icon icon-user"></i>
-                <input name="username" id="username" type="text">
-            </label>
-        </div>
-        <div class="lf_user_row">
-            <label for="password">
-                <i class="lf_icon icon-lock"></i>
-                <input name="password" id="password" type="password">
-            </label>
-        </div>
-        <div class="lf_user_row clearfix">
-            <div class="form_col_half">
-                <label for="rememberme">
+
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#login_button").click(function () {
+            $("#login_modal").modal();
+        });
+    });
+</script>
+
+<div class="container">
+
+    <!-- Modal -->
+    <div class="modal fade " id="login_modal" role="dialog">
+        <div class="login_dialog">
+            <div class="modal_header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div class="lf_user_row">
+                    <span class="lf_header">Login to your Account</span>
+                </div>
+            </div>
+
+            <form id="login_form" method="POST" action="/login">
+
+                <div class="lf_user_row">
+                    <label for="username">
+                        <i class="lf_icon icon-user"></i>
+                        <input name="username" id="username" type="text">
+                    </label>
+                </div>
+                <div class="lf_user_row">
+                    <label for="password">
+                        <i class="lf_icon icon-lock"></i>
+                        <input name="password" id="password" type="password">
+                    </label>
+                </div>
+                <div class="lf_user_row clearfix">
+                    <div class="form_col_half">
+                        <label for="rememberme">
                     <span class="remember-box">
                         <input id="rememberme" name="rememberme" type="checkbox">
                         <span>Remember me</span>
                     </span>
-                </label>
+                        </label>
+                    </div>
+                    <div class="form_col_half clearfix">
+                        <button name="login" class="btn f_right" id="login">
+                            Sign in
+                        </button>
+                    </div>
+                </div>
+                <a class="lf_forget_pass" href="#">Forgot Your Password?</a>
+            </form>
             </div>
-            <div class="form_col_half clearfix">
-                <button name="login" class="btn f_right" id="login">
-                    Sign in
-                </button>
-            </div>
-        </div>
-        <a class="lf_forget_pass" href="#">Forgot Your Password?</a>
-    </form>
+    </div>
 </div>
 
 <header id="header">
@@ -49,8 +71,8 @@
                 </span>
             <span class="top_login">
                     <i class="top_icon icon-lock"></i>
-                <!-- <button id="login_button" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#login_modal">Login</button> -->
-                    <a class="upper" href="../login.jsp">Login</a>
+                    <button id="login_button" class="login_button upper">Login</button>
+                <!--<a class="upper" href="../login.jsp">Login</a> -->
 
                 </span>
             <% } else { %>

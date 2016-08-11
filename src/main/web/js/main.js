@@ -7,13 +7,13 @@ $(document).ready(function () {
             var eventHTML = '<div class="list_item"><div class="list_content">' +
                 '<h6 class="title"><a href="#">' + event.title + '</a></h6>' +
                 '<span class="meta">' +
-                '<span class="meta_part "><a href="#"><i class="icon-clock"></i><span>' + event.startDate +
+                '<span class="meta_part "><a href="#"><i class="ev_icon icon-clock"></i><span>' + event.startDate +
                 '</span></a></span>' +
-                '<span class="meta_part"><a href="#"><i class="icon-map-marker"></i><span>' + event.location +
+                '<span class="meta_part"><a href="#"><i class="ev_icon icon-map-marker"></i><span>' + event.location +
                 '</span></a></span>' +
-                '<span class="meta_part"><i class="icon-folder"></i><span><a href="#">' + event.category.title +
+                '<span class="meta_part"><i class="ev_icon icon-folder"></i><span><a href="#">' + event.category.title +
                 '</a></span></span>' +
-                '<span class="meta_part"><a href="#"><i class="icon-user"></i><span>Event Organizer' +
+                '<span class="meta_part"><a href="#"><i class="ev_icon icon-user"></i><span>Event Organizer' +
                 '</span></a></span>' +
                 '</span>' +
                 '<p class="desc">' + event.shortDescription + '</p>' +
@@ -47,5 +47,6 @@ $(document).ready(function () {
             }
         })
     })
+
 
 });
