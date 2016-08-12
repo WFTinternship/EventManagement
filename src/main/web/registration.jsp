@@ -29,7 +29,7 @@
 <body>
 <div id="main_wrapper">
     <!-- Main Header -->
-    <jsp:include page="/jsp/header.jsp"/>
+    <jsp:include page="/header.jsp"/>
     <!-- End Main Header -->
 
     <!-- Content Section -->
@@ -124,7 +124,7 @@
 
 
     <!-- Footer -->
-    <jsp:include page="/jsp/footer.jsp"/>
+    <jsp:include page="/footer.jsp"/>
     <!-- End Footer -->
 </div>
 </body>

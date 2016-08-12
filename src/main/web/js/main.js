@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     $.getJSON("/home", function (data) {
         var events = [];
         $.each(data, function (key, event) {
@@ -28,25 +27,22 @@ $(document).ready(function () {
         }).appendTo("#event_list");
     });
 
-    $('#login_form').on('submit', function (e) {
-        e.preventDefault();
-        var username = $('#username').val();
-        var password = $('#password').val();
 
-        $.ajax({
-            type: 'POST',
-            data: {
-                username: username,
-                password: password
+    // Specify the validation error messages
+    /*  messages: {
+     firstname: "Please enter your first name",
+     lastname: "Please enter your last name",
+     password: {
+     required: "Please provide a password",
+     minlength: "Your password must be at least 5 characters long"
             },
-            url: '/login',
-            success: function (result) {
-                window.location = "/index.jsp";
-            },
-            error: function () {
-            }
-        })
-    })
+     email: "Please enter a valid email address",
+     agree: "Please accept our policy"
+     },
+
+     });*/
+
+
 
 
 });

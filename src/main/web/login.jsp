@@ -26,38 +26,11 @@
     <script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
 
-    <script type="text/javascript">
-
-        $(document).ready(function () {
-            $('#login_form').on('submit', function (e) {
-                e.preventDefault();
-                var username = $('#username').val();
-                var password = $('#password').val();
-
-                $.ajax({
-                    type: 'POST',
-                    data: {
-                        username: username,
-                        password: password
-                    },
-                    url: '/login',
-                    success: function (result) {
-                        window.location =
-                    },
-                    error: function () {
-                    }
-                })
-            })
-
-        });
-
-    </script>
-
 </head>
 <body>
 <div id="main_wrapper">
     <!-- Main Header -->
-    <jsp:include page="/jsp/header.jsp"/>
+    <jsp:include page="/header.jsp"/>
     <!-- End Main Header -->
 
     <div class="zoom-anim-dialog small-dialog login_popup mfp-hide" id="login-popup">
@@ -96,7 +69,7 @@
         </form>
     </div>
 
-    <jsp:include page="/jsp/footer.jsp"/>
+    <jsp:include page="/footer.jsp"/>
 </div>
 </body>
 </html>

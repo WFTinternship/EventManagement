@@ -13,6 +13,9 @@ a, a:hover, a:visited, a:active {
     text-decoration: none;
 }
 
+b {
+    font-weight: bold;
+}
 .clear {
     clear: both;
     display: block;
@@ -35,7 +38,7 @@ a, a:hover, a:visited, a:active {
 }
 
 /* Rounded corners */
-.login_dialog, input[type="text"], input[type=button], input[type="password"], .btn {
+.login_dialog, input[type="text"], input[type=button], input[type="password"], .btn, .btn_a, .lf_header, .lf_forget_pass {
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     -ms-border-radius: 3px;
@@ -286,6 +289,11 @@ input[type="text"]:focus, input[type="password"]:focus {
     position: relative;
 }
 
+.login_dialog .close {
+    position: relative;
+    top: -30px;
+}
+
 .lf_user_row input[type="text"], .lf_user_row input[type="password"] {
     color: #888;
     font-weight: 500;
@@ -496,4 +504,97 @@ input[type="text"]:focus, input[type="password"]:focus {
 
 #logout_form {
     display: inline;
+}
+
+/* Error */
+.error {
+    color: #F86923;
+}
+
+/* error page */
+.main_desc {
+    margin: 0 auto;
+    font-family: "lato", sans-serif;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 1.5;
+}
+
+.centered {
+    text-align: center;
+}
+
+.page404 {
+    color: #1ccdca;
+    font-family: "Oswald", "Open Sans", sans-serif;
+    font-size: 275px;
+    text-align: center;
+    position: relative;
+}
+
+.btn_a {
+    border: 1px solid #e4e4e4;
+    display: inline-block;
+    font-size: 13px;
+    vertical-align: top;
+    color: #888;
+    padding: 10px 15px;
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.btn_a > span > span {
+    display: inline-block;
+    padding: 10px, 20px;
+}
+
+.btn_a i {
+    font-size: 16px;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 45px;
+    line-height: 46px;
+}
+
+/* Footer */
+#footer {
+    position: relative;
+    width: 100%;
+    background: #191E21;
+    overflow: hidden;
+    color: #989898;
+    font-size: 12px;
+}
+
+#footer a {
+    color: #989898;
+}
+
+#footer a:hover {
+    color: #00AFB2;
+}
+
+#footer .footer_copyright {
+    padding: 32px 0px;
+    background: rgba(0, 0, 0, 0.25);
+    position: relative;
+}
+
+.footer-col {
+    width: 50%;
+    float: left;
+}
+
+.footer_menu {
+    float: right;
+}
+
+.footer_menu > li:first-child {
+    padding-left: 0px;
+}
+
+.footer_menu > li {
+    display: inline-block;
+    padding: 0 8px;
 }

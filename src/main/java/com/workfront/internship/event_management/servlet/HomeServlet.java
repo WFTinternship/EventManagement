@@ -22,7 +22,6 @@ public class HomeServlet extends HttpServlet {
 
         EventService eventService = new EventServiceImpl();
         List<Event> eventList = eventService.getAllEvents();
-        // String jsonInString = "{'name' : 'mkyong'}";
 
         String json = new Gson().toJson(eventList);
 

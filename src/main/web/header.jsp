@@ -1,13 +1,54 @@
 <%@ page import="com.workfront.internship.event_management.model.User" %>
 
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.validate.js"></script>
 <script>
     $(document).ready(function () {
+
         $("#login_button").click(function () {
             $("#login_modal").modal();
         });
-    });
+
+        $('#login_form').validate({
+            rules: {
+                email: {
+                    required: true,
+                    email: true
+                },
+                password: {
+                    required: true,
+                    minlength: 6
+                },
+            },
+
+            submitHandler: function (form) {
+                // e.preventDefault();
+                var email = $('#email').val();
+                var password = $('#password').val();
+
+
+                $.ajax({
+                    type: 'POST',
+                    data: {
+                        action: 'LOGIN',
+                        email: email,
+                        password: password
+                    },
+                    url: '/account-controller',
+                    success: function (result) {
+                        window.location = "/index.jsp";
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        //if (jqXHR.responseText !== '') {
+                        //     alert(textStatus + ": " + jqXHR.responseText);
+                        //  } else {
+                        alert(textStatus + ": " + errorThrown);
+                        //  }
+                    }
+                })
+            }
+        })
+    })
 </script>
 
 <div class="container">
@@ -16,18 +57,18 @@
     <div class="modal fade " id="login_modal" role="dialog">
         <div class="login_dialog">
             <div class="modal_header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <div class="lf_user_row">
                     <span class="lf_header">Login to your Account</span>
                 </div>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
             <form id="login_form" method="POST" action="/login">
 
                 <div class="lf_user_row">
-                    <label for="username">
+                    <label for="email">
                         <i class="lf_icon icon-user"></i>
-                        <input name="username" id="username" type="text">
+                        <input name="email" id="email" type="text">
                     </label>
                 </div>
                 <div class="lf_user_row">
@@ -67,7 +108,7 @@
             %>
             <span class="top_registration">
                     <i class="top_icon icon-user"></i>
-                    <a class="upper" href="../registration.jsp">Registration</a>
+                    <a class="upper" href="registration.jsp">Registration</a>
                 </span>
             <span class="top_login">
                     <i class="top_icon icon-lock"></i>
@@ -80,7 +121,8 @@
                         <i class="top_icon icon-user"></i>
                         Hi, <%=user.getFirstName()%>
                 </span>
-            <form action="/logout" method="POST" id="logout_form">
+            <form action="/account-controller" method="POST" id="logout_form">
+                <input type="hidden" name="action" value="LOGOUT"/>
                 <input class="upper" type="submit" value="Logout" id="logout_button"/>
             </form>
 

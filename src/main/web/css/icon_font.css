@@ -8,7 +8,7 @@
     text-decoration: inherit;
 }
 
-.ev_icon, .top_icon {
+.ev_icon, .top_icon, .footer_icon {
     margin-right: 5px;
 }
 
@@ -36,3 +36,7 @@
     content: "\f002";
 }
 
+.icon-home::before {
+    content: "\f015";
+
+}
