@@ -37,6 +37,10 @@ b {
     margin-top: 40px;
 }
 
+.home_page .content_section {
+    margin-top: 80px;
+}
+
 /* Rounded corners */
 .login_dialog, input[type="text"], input[type=button], input[type="password"], .btn, .btn_a, .lf_header, .lf_forget_pass {
     -moz-border-radius: 3px;
@@ -127,6 +131,11 @@ img {
 #navigation_bar {
     height: 74px;
     margin-bottom: 30px;
+    border-bottom: 1px solid #E4E4E4;
+}
+
+.home_page #navigation_bar {
+    margin-bottom: 0px;
 }
 
 #main_nav {
@@ -159,6 +168,27 @@ img {
 
 #nav_menu li > a:hover, #nav_menu li > a:active {
     color: #00AFB2;
+}
+
+/* Banner */
+.flex-direction-nav a.flex-next::before {
+    content: '\f105' !important;
+    font-family: FontAwesome;
+    color: white;
+}
+
+.flex-direction-nav a.flex-prev::before {
+    content: '\f104' !important;
+    font-family: FontAwesome;
+    color: white;
+}
+
+.flex-direction-nav a {
+    height: 45px !important;
+}
+
+.flexslider {
+    bordeR: none !important;
 }
 
 /* Registration form */
@@ -285,9 +315,15 @@ input[type="text"]:focus, input[type="password"]:focus {
 .login_dialog {
     background: white;
     text-align: left;
-    max-width: 500px;
-    margin: 40px auto;
+    width: 500px;
+    margin: auto;
     position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
 }
 
 .login_dialog .close {
@@ -416,7 +452,8 @@ input[type="text"]:focus, input[type="password"]:focus {
     top: -5px;
     width: 10px;
 }
-.content_block {
+
+.events_page .content_block {
     float: left;
     width: 75%;
 }
@@ -499,11 +536,12 @@ input[type="text"]:focus, input[type="password"]:focus {
     font-size: 11px;
 }
 
-.left_sidebar li a {
+.left_sidebar li div {
     color: #777;
     display: inline-block;
     margin-right: 10px;
     font-size: 13px;
+    cursor: pointer;
 }
 
 .left_sidebar li a:hover {

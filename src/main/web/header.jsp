@@ -48,11 +48,11 @@
                             <a href=""><span>Home</span></a>
                         </li>
                         <li>
-                            <a href=""><span>All Events</span></a>
+                            <a href="/events.jsp"><span>All Events</span></a>
                         </li>
 
                         <li>
-                            <a href=""><span>Upcomming Events</span></a>
+                            <a href=""><span>Upcoming Events</span></a>
                         </li>
                         <li>
                             <a href=""><span>Past Events</span></a>

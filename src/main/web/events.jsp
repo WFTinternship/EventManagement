@@ -35,10 +35,10 @@
     <script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
     <script type="text/javascript" src="js/jquery.flexslider.js"></script>
 
-    <script type="text/javascript" src="js/homePage.js"></script>
+    <script type="text/javascript" src="js/eventsPage.js"></script>
 
 </head>
-<body class="home_page">
+<body class="events_page">
 <div id="main_wrapper">
     <!-- Main Header -->
     <jsp:include page="/header.jsp"/>
@@ -59,10 +59,33 @@
 
     <section class="content_section">
         <div class="content">
+            <aside class="left_sidebar">
+
+                <div class="cat_menu">
+                    <h6 class="title">Categories</h6>
+                    <ul class="cat_list">
+
+                        <% CategoryService categoryService = new CategoryServiceImpl();
+                            List<Category> categoryList = categoryService.getAllCategories();
+                            if (!categoryList.isEmpty()) {
+                                for (Category category : categoryList) { %>
+                        <li>
+                            <div onclick='return getAllEventsByCategory("<%=category.getId()%>");'><%=category.getTitle() %>
+                            </div>
+                            <span class="num_events">61</span>
+                        </li>
+                        <% }
+                        } %>
+                    </ul>
+                </div>
+            </aside>
+
             <div class="content_block">
                 <div class="event_list clearfix" id="event_list">
                     <div class="main_title centered upper">
-                        <h2><span class="line"><i class="icon-calendar"></i></span>Upcoming Events</h2>
+                        <h2><span class="line"><i class="icon-calendar"></i></span>
+                            <span class="list_header">All Events</span>
+                        </h2>
                     </div>
                 </div>
             </div>
