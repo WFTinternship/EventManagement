@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by Hermine Turshujyan 8/10/16.
  */
-public class HomeServlet extends HttpServlet {
+public class EventController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response) throws ServletException, IOException {
