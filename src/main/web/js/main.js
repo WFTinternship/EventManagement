@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $.getJSON("/home", function (data) {
+    $.getJSON("/event-controller", function (data) {
         var events = [];
         $.each(data, function (key, event) {
 
@@ -41,8 +41,4 @@ $(document).ready(function () {
      },
 
      });*/
-
-
-
-
 });

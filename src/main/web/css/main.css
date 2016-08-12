@@ -47,7 +47,7 @@ b {
 }
 
 /* Common transitions */
-a, .btn {
+a, .btn, .close, .main_title .line::before {
     -webkit-transition: all 0.4s ease;
     -moz-transition: all 0.4s ease;
     -o-transition: all 0.4s ease;
@@ -172,6 +172,7 @@ img {
     font-weight: 400;
     letter-spacing: 1px;
     padding-bottom: 20px;
+    margin-bottom: 30px;
     position: relative;
     font-family: 'Oswald', "Open Sans", sans-serif;
     line-height: 40px;
@@ -292,6 +293,13 @@ input[type="text"]:focus, input[type="password"]:focus {
 .login_dialog .close {
     position: relative;
     top: -30px;
+    color: #F86923;
+    opacity: 0.7;
+}
+
+.login_dialog .close:hover {
+    opacity: 1;
+
 }
 
 .lf_user_row input[type="text"], .lf_user_row input[type="password"] {
@@ -345,10 +353,74 @@ input[type="text"]:focus, input[type="password"]:focus {
 }
 
 /* Event list */
+.main_title h2 .line {
+    background: rgba(0, 0, 0, 0.07);
+    bottom: 0;
+    height: 1px;
+    position: absolute;
+    width: 40%;
+}
+
+.main_title .line::before {
+    background: #1cc6df;
+    content: "";
+    display: block;
+    height: 1px;
+    position: absolute;
+    width: 100px;
+}
+
+.main_title h2:hover .line::before {
+    width: 75%;
+}
+
+.main_title .line i {
+    background: #fff;
+    color: #1ccdca;
+    display: block;
+    font-size: 20px;
+    height: 40px;
+    line-height: 40px;
+    position: absolute;
+    text-align: center;
+    top: -20px;
+    width: 40px;
+}
+
+.main_title .line, .main_title .line::before, .main_title.centered .line i {
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+.main_title .icon-circle {
+    background: #fff;
+    border: 1px solid #1cc6df;
+    height: 10px;
+    position: absolute;
+    top: -5px;
+    width: 10px;
+}
+
+.main_title.centered span {
+}
+
+.main_title .icon-circle {
+    background: #fff;
+    border: 1px solid #1cc6df;
+    height: 10px;
+    position: absolute;
+    top: -5px;
+    width: 10px;
+}
 .content_block {
     float: left;
     width: 75%;
 }
+
 
 .list_item {
     margin-bottom: 50px;
@@ -508,7 +580,7 @@ input[type="text"]:focus, input[type="password"]:focus {
 
 /* Error */
 .error {
-    color: #F86923;
+    color: #F86923 !important;
 }
 
 /* error page */
@@ -540,7 +612,6 @@ input[type="text"]:focus, input[type="password"]:focus {
     color: #888;
     padding: 10px 15px;
     position: relative;
-    margin-bottom: 25px;
 }
 
 .btn_a > span > span {
@@ -565,6 +636,7 @@ input[type="text"]:focus, input[type="password"]:focus {
     overflow: hidden;
     color: #989898;
     font-size: 12px;
+    margin-top: 30px;
 }
 
 #footer a {

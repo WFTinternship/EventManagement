@@ -8,6 +8,10 @@
     text-decoration: inherit;
 }
 
+.btn i {
+    margin-right: 11px;
+}
+
 .ev_icon, .top_icon, .footer_icon {
     margin-right: 5px;
 }
@@ -38,5 +42,14 @@
 
 .icon-home::before {
     content: "\f015";
+
+}
+
+.icon-calendar:before {
+    content: "\f073";
+}
+
+.icon-check {
+    content: "\f00c";
 
 }

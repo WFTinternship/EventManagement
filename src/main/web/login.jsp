@@ -1,75 +1,97 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Inmelet
-  Date: 8/8/2016
-  Time: 10:24 AM
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Event Management</title>
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="css/reset.css">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-    <link rel="stylesheet" type="text/css" href="css/icon_font.css">
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.validate.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $("#login_button").click(function () {
+            $("#login_modal").modal();
+        });
+
+        $('#login_form').validate({
+            rules: {
+                email: "required",
+                password: "required"
+            },
+            messages: {
+                email: "Please enter your email address.",
+                password: {
+                    required: "Please provide a password.",
+                    minlength: "Password must be at least 6 characters."
+                }
+            },
+            submitHandler: function (form) {
+                // e.preventDefault();
+                var email = $('#lf_email').val();
+                var password = $('#lf_password').val();
 
 
-    <link rel="stylesheet" type="text/css" href="./css/jquery-ui.min.css">
-    <link rel="stylesheet" type="text/css" href="./css/jquery-ui.structure.min.css">
-    <link rel="stylesheet" type="text/css" href="./css/jquery-ui.theme.min.css">
+                $.ajax({
+                    type: 'POST',
+                    data: {
+                        action: 'LOGIN',
+                        email: email,
+                        password: password
+                    },
+                    url: '/account-controller',
+                    success: function (result) {
+                        window.location = "/index.jsp";
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        //if (jqXHR.responseText !== '') {
+                        //     alert(textStatus + ": " + jqXHR.responseText);
+                        //  } else {
+                        alert(textStatus + ": " + errorThrown);
+                        //  }
+                    }
+                })
+            }
+        })
+    })
+</script>
 
-    <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+<div class="container">
 
-    <script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
-    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
-
-</head>
-<body>
-<div id="main_wrapper">
-    <!-- Main Header -->
-    <jsp:include page="/header.jsp"/>
-    <!-- End Main Header -->
-
-    <div class="zoom-anim-dialog small-dialog login_popup mfp-hide" id="login-popup">
-        <form id="login_form" method="POST" action="/login">
-            <div class="lf_user_row">
-                <span class="lf_header">Login to your Account</span>
+    <!-- Modal -->
+    <div class="modal fade " id="login_modal" role="dialog">
+        <div class="login_dialog">
+            <div class="modal_header">
+                <div class="lf_user_row">
+                    <span class="lf_header">Login to your Account</span>
+                </div>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-            <div class="lf_user_row">
-                <label for="username">
-                    <i class="lf_icon icon-user"></i>
-                    <input name="username" id="username" type="text">
-                </label>
-            </div>
-            <div class="lf_user_row">
-                <label for="password">
-                    <i class="lf_icon icon-lock"></i>
-                    <input name="password" id="password" type="password">
-                </label>
-            </div>
-            <div class="lf_user_row clearfix">
-                <div class="form_col_half">
-                    <label for="rememberme">
+
+            <form id="login_form">
+
+                <div class="lf_user_row">
+                    <label for="lf_email">
+                        <i class="lf_icon icon-user"></i>
+                        <input name="email" id="lf_email" type="text">
+                    </label>
+                </div>
+                <div class="lf_user_row">
+                    <label for="lf_password">
+                        <i class="lf_icon icon-lock"></i>
+                        <input name="password" id="lf_password" type="password">
+                    </label>
+                </div>
+                <div class="lf_user_row clearfix">
+                    <div class="form_col_half">
+                        <label for="rememberme">
                     <span class="remember-box">
                         <input id="rememberme" name="rememberme" type="checkbox">
                         <span>Remember me</span>
                     </span>
-                    </label>
+                        </label>
+                    </div>
+                    <div class="form_col_half clearfix">
+                        <button name="login" class="btn f_right" id="login">
+                            Sign in
+                        </button>
+                    </div>
                 </div>
-                <div class="form_col_half clearfix">
-                    <button name="login" class="btn f_right" id="login">
-                        Sign in
-                    </button>
-                </div>
-            </div>
-            <a class="lf_forget_pass" href="#">Forgot Your Password?</a>
-        </form>
+                <a class="lf_forget_pass" href="#">Forgot Your Password?</a>
+            </form>
+        </div>
     </div>
-
-    <jsp:include page="/footer.jsp"/>
 </div>
-</body>
-</html>
