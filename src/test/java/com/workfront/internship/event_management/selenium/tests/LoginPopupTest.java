@@ -6,6 +6,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static com.workfront.internship.event_management.selenium.tests.TestHelper.VALID_EMAIL;
+import static com.workfront.internship.event_management.selenium.tests.TestHelper.VALID_PASSWORD;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
@@ -26,13 +28,16 @@ public class LoginPopupTest {
     @AfterClass
     public static void tearDown() {
         loginPopup.getWebDriver().close();
+        loginPopup = null;
+        homePage = null;
     }
 
     @Test
     public void login_success() throws InterruptedException {
+
         homePage.clickLogin();
-        loginPopup.typeUsername("turshujyan@gmail.com");
-        loginPopup.typePassword("turshujyan");
+        loginPopup.typeEmail(VALID_EMAIL);
+        loginPopup.typePassword(VALID_PASSWORD);
         loginPopup.clickSignin();
 
         assertFalse("login popup is not closed", homePage.getLoginPopup().isDisplayed());

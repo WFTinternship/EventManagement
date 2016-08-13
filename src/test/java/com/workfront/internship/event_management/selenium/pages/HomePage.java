@@ -8,14 +8,19 @@ import org.openqa.selenium.WebElement;
  */
 public class HomePage extends AbstractPage {
 
-    public HomePage() {
+    /*public HomePage() {
         //getWebDriver().get("http://localhost:8080");
-    }
+    }*/
 
     public WebElement clickLogin() throws InterruptedException {
         WebElement loginButton = getWebDriver().findElement(By.cssSelector("#login_button"));
         loginButton.click();
         return getLoginPopup();
+    }
+
+    public void clickLogout() throws InterruptedException {
+        WebElement logoutButton = getWebDriver().findElement(By.cssSelector("#logout_button"));
+        logoutButton.click();
     }
 
     public WebElement getLoginPopup() throws InterruptedException {

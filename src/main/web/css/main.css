@@ -236,7 +236,7 @@ img {
 }
 
 .form_row:first-child {
-    margin-top: 0px;
+    margin-top: 0;
 }
 
 .form_col_half {
@@ -286,7 +286,7 @@ input[type="text"]:focus, input[type="password"]:focus {
 
 .modal_header {
     padding: 20px;
-    padding-bottom: 0px;
+    padding-bottom: 0;
 }
 
 .lf_user_row:not(:last-of-type) {
@@ -316,14 +316,12 @@ input[type="text"]:focus, input[type="password"]:focus {
     background: white;
     text-align: left;
     width: 500px;
-    margin: auto;
-    position: relative;
+    position: absolute;
+    left: 50%;
     top: 50%;
-    -webkit-transform: translateY(-50%);
-    -moz-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    -o-transform: translateY(-50%);
-    transform: translateY(-50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }
 
 .login_dialog .close {
@@ -369,6 +367,13 @@ input[type="text"]:focus, input[type="password"]:focus {
     display: inline-block;
     margin: 3px 5px 4px 0;
 }
+
+#login_failed_label {
+    padding: 10px 20px 0px 20px;
+    display: none;
+}
+
+/*** END LOGIN DIALOG BOX ***/
 
 .f_right {
     float: right;
@@ -654,7 +659,7 @@ input[type="text"]:focus, input[type="password"]:focus {
 
 .btn_a > span > span {
     display: inline-block;
-    padding: 10px, 20px;
+    padding: 10px 20px;
 }
 
 .btn_a i {

@@ -8,19 +8,19 @@ import org.openqa.selenium.WebElement;
  */
 public class LoginPopup extends AbstractPage {
 
-    public void typeUsername(String username) throws InterruptedException {
-        WebElement usernameField = getWebDriver().findElement(By.id("username"));
-        Thread.sleep(1000);
-        usernameField.sendKeys(username);
+    public void typeEmail(String username) throws InterruptedException {
+        WebElement emailField = getWebDriver().findElement(By.id("lf_email"));
+        Thread.sleep(2000);
+        emailField.sendKeys(username);
     }
 
     public void typePassword(String password) {
-        WebElement passwordField = getWebDriver().findElement(By.name("password"));
+        WebElement passwordField = getWebDriver().findElement(By.id("lf_password"));
         passwordField.sendKeys(password);
     }
 
     public void clickSignin() {
-        WebElement signinButton = getWebDriver().findElement(By.id("login"));
-        signinButton.click();
+        WebElement signInButton = getWebDriver().findElement(By.id("login"));
+        signInButton.click();
     }
 }
