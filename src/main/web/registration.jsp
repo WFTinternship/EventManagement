@@ -30,13 +30,17 @@
     <script>
         $(document).ready(function () {
 
-            $('#registration_form').validate({
+            //validate and submit registration form
+            /*   $('#registration_form').validate({
                 rules: {
                     firstName: "required",
                     lastName: "required",
-                    email: "required",
-                    confirmEmail: {
+             email: {
                         required: true,
+             email: true
+             },
+             confirmEmail: {
+             required: true,
                         equalTo: "#email"
                     },
                     password: {
@@ -45,10 +49,8 @@
                     },
                     confirmPassword: {
                         required: true,
-                        minlength: 6,
                         equalTo: "#password"
                     },
-
                 },
 
                 messages: {
@@ -59,11 +61,13 @@
                         minlength: "Password must be at least 6 characters."
                     },
                     confirmPassword: {
-                        required: "Please provide a password.",
-                        minlength: "Password must be at least 6 characters.",
+             required: "Please confirm password.",
                         equalTo: "Passwords do not match."
                     },
-                    email: "Please enter a valid email address.",
+             email: {
+             required: "Please provide an email address.",
+             email: "Please enter a valid email address.",
+             },
                     confirmEmail: {
                         required: "Please confirm email address.",
                         equalTo: "Emails do not match."
@@ -77,15 +81,18 @@
                     var firstName = $('#firstName').val();
                     var lastName = $('#lastName').val();
                     var phone = $('#phone').val(); //??????
+             var filename = $("#file").val();
 
                     $.ajax({
                         type: 'POST',
+             contentType: 'multipart/form-data',
                         data: {
                             action: 'REGISTER',
                             firstName: firstName,
                             lastName: lastName,
                             email: email,
-                            password: password
+             password: password,
+             file
                         },
                         url: '/account-controller',
                         success: function (result) {
@@ -100,7 +107,7 @@
                         }
                     })
                 }
-            })
+             })*/
         })
     </script>
 
@@ -122,7 +129,7 @@
                     </h2>
                 </div>
             </div>
-            <form id="registration_form">
+            <form id="registration_form" method="post" action="/account-controller" enctype="multipart/form-data">
                 <div class="form_row clearfix">
                     <div class="form_col_half">
                         <label for="firstName">
@@ -169,7 +176,7 @@
                             <span class="field_name">Confirm Password</span>
                             <span class="required_star">*</span>
                         </label>
-                        <input class="input_text" name="confirm-password" id="confirmPassword" type="password">
+                        <input class="input_text" name="confirmPassword" id="confirmPassword" type="password">
                     </div>
                 </div>
 
