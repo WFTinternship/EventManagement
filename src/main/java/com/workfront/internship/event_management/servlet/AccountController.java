@@ -24,34 +24,36 @@ import java.util.List;
  */
 public class AccountController extends HttpServlet {
 
-    private final String UPLOAD_DIRECTORY = "/";
+    private final String UPLOAD_DIRECTORY = "/Users/hermine/IdeaProjects/EventManagement/user_uploads/avatar";
+    private UserService userService = new UserServiceImpl();
 
     protected void service(HttpServletRequest request,
                            HttpServletResponse response) throws ServletException, IOException {
 
-        String action = request.getParameter("action");
+        //request type is multi-part content only in registration request
+        if (!ServletFileUpload.isMultipartContent(request)) {
 
-      /*  switch (action) {
-            case "LOGIN":
-                login(request, response);
-                break;
-            case "LOGOUT":
-                logout(request, response);
-                break;
-            case "REGISTER":*/
-                register(request);
+            String action = request.getParameter("action");
 
-        /*        break;
-        } */
+            switch (action) {
+                case "LOGIN":
+                    login(request, response);
+                    break;
+                case "LOGOUT":
+                    logout(request, response);
+                    break;
+            }
+        } else {
+            register(request, response);
+        }
     }
+
 
     //helper methods
     private void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-
-        UserService userService = new UserServiceImpl();
 
         try {
             User user = userService.login(email, password);
@@ -83,40 +85,70 @@ public class AccountController extends HttpServlet {
         response.sendRedirect("index.jsp");
     }
 
-    private void register(HttpServletRequest request) {
-
-        String firstName = request.getParameter("firstName");
-        String lastName = request.getParameter("lastName");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-
+    private void register(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         //process only if its multipart content
-        if (ServletFileUpload.isMultipartContent(request)) {
             try {
-                List<FileItem> multiparts = new ServletFileUpload(
+                List<FileItem> parts = new ServletFileUpload(
                         new DiskFileItemFactory()).parseRequest(request);
 
-                for (FileItem item : multiparts) {
+                User user = new User();
+
+                for (FileItem item : parts) {
                     if (!item.isFormField()) {
-                        String name = new File(item.getName()).getName();
-                        item.write(new File(UPLOAD_DIRECTORY + File.separator + name));
+                        // TODO: 8/14/16 rename image file
+                        String fileName = new File(item.getName()).getName();
+                        String avatarPath = UPLOAD_DIRECTORY + File.separator + fileName;
+                        item.write(new File(avatarPath));
+
+                        //set avatar to created user object
+                        user.setAvatarPath(avatarPath);
+                    } else {
+
+                        String fieldName = item.getFieldName();
+                        String fieldValue = item.getString();
+
+                        switch (fieldName) {
+                            case "firstName":
+                                user.setFirstName(fieldValue);
+                                break;
+                            case "lastName":
+                                user.setLastName(fieldValue);
+                                break;
+                            case "email":
+                                user.setEmail(fieldValue);
+                                break;
+                            case "password":
+                                user.setPassword(fieldValue);
+                                break;
+                            case "phone":
+                                user.setPhoneNumber(fieldValue);
+                                break;
+                        }
                     }
                 }
 
-                //File uploaded successfully
-                request.setAttribute("message", "File Uploaded Successfully");
+                try {
+                    userService.addAccount(user);
+
+                    JsonObject result = new JsonObject();
+                    result.addProperty("success", "You are successfully registered!");
+
+                    response.setContentType("application/json");
+                    response.getWriter().print(result);
+
+                } catch (OperationFailedException e) {
+
+                    JsonObject result = new JsonObject();
+                    result.addProperty("error", e.getMessage());
+
+                    response.setContentType("application/json");
+                    response.getWriter().print(result);
+                }
+
+
             } catch (Exception ex) {
-                request.setAttribute("message", "File Upload Failed due to " + ex);
+                response.sendRedirect("error.jsp");
             }
-
-        } else {
-            request.setAttribute("message",
-                    "Sorry this Servlet only handles file upload request");
-        }
-
-        // request.getRequestDispatcher("/result.jsp").forward(request, response);
-
-
     }
 }

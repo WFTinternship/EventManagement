@@ -1,4 +1,6 @@
 <script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap-notify.js"></script>
+
 <script src="js/jquery.validate.js"></script>
 <script>
 
@@ -56,8 +58,21 @@
                     success: function (result) {
 
                         if (result.success != null) {
-                            //  alert(result.success);
-                            window.location = "/index.jsp";
+                            $.notify({
+                                // options
+                                message: result.success
+                            }, {
+                                // settings
+                                type: 'success',
+                                delay: 5000,
+                                placement: {
+                                    align: "center"
+                                }
+                            });
+
+                            setTimeout(function () {
+                                window.location = "/index.jsp"
+                            }, 5000);
                         } else if (result.error != null) {
                             $("#login_failed_label").show();
                             $("#login_failed_label").html(result.error);

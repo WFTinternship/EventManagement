@@ -30,7 +30,8 @@ public class Validator {
                     && !isEmptyString(user.getLastName())
                     && !isEmptyString(user.getPassword()) && user.getPassword().length() >= 6
                     && isValidEmailAddressForm(user.getEmail())
-                    && user.getRegistrationDate() != null) {
+                //&& user.getRegistrationDate() != null
+                    ) {
                 valid = true;
             }
         }

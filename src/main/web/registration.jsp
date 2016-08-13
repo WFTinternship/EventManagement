@@ -31,11 +31,12 @@
         $(document).ready(function () {
 
             //validate and submit registration form
-            /*   $('#registration_form').validate({
+            $('#registration_form').validate({
+
                 rules: {
                     firstName: "required",
-                    lastName: "required",
-             email: {
+                    lastName: "required"
+                    /*  email: {
                         required: true,
              email: true
              },
@@ -50,10 +51,10 @@
                     confirmPassword: {
                         required: true,
                         equalTo: "#password"
-                    },
+                     },*/
                 },
 
-                messages: {
+                /*  messages: {
                     firstName: "Please enter your first name.",
                     lastName: "Please enter your last name.",
                     password: {
@@ -71,32 +72,29 @@
                     confirmEmail: {
                         required: "Please confirm email address.",
                         equalTo: "Emails do not match."
-                    }
-                },
 
+                },
+                 */
                 submitHandler: function (form) {
-                    // e.preventDefault();
-                    var email = $('#email').val();
-                    var password = $('#password').val();
-                    var firstName = $('#firstName').val();
-                    var lastName = $('#lastName').val();
-                    var phone = $('#phone').val(); //??????
-             var filename = $("#file").val();
+
+                    var formData = new FormData($('#registration_form')[0]);
+
+                    //  var uploadedImage = $("#avatar")[0].files[0];
+                    //  formData.append("avatar", uploadedImage);
 
                     $.ajax({
-                        type: 'POST',
-             contentType: 'multipart/form-data',
-                        data: {
-                            action: 'REGISTER',
-                            firstName: firstName,
-                            lastName: lastName,
-                            email: email,
-             password: password,
-             file
-                        },
                         url: '/account-controller',
+                        type: 'POST',
+                        processData: false,
+                        contentType: false,
+                        data: formData,
                         success: function (result) {
-                            window.location = "/index.jsp";
+                            if (result.success != null) {
+                                alert(result.success);
+                                window.location = "/index.jsp";
+                            } else if (result.error != null) {
+                                alert(result.error);
+                            }
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             //if (jqXHR.responseText !== '') {
@@ -107,7 +105,7 @@
                         }
                     })
                 }
-             })*/
+            })
         })
     </script>
 
@@ -129,7 +127,7 @@
                     </h2>
                 </div>
             </div>
-            <form id="registration_form" method="post" action="/account-controller" enctype="multipart/form-data">
+            <form id="registration_form" enctype="multipart/form-data">
                 <div class="form_row clearfix">
                     <div class="form_col_half">
                         <label for="firstName">
@@ -197,7 +195,7 @@
                     </div>
                 </div>
                 <div class="form_row clearfix">
-                    <button type="submit" name="send" class="btn full_button">
+                    <button type="submit" class="btn full_button">
                         <i class="icon-check"></i>
                         <span>Register</span>
                     </button>
