@@ -189,6 +189,39 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     @Override
+    public User getEventOrganizer(int eventId) throws DAOException, ObjectNotFoundException {
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        User user;
+        String query = "SELECT * FROM (event LEFT JOIN user " +
+                "ON event.user_id = user.id) " +
+                "WHERE event.user_role = \'Organizer\' AND event.id = ?";
+        try {
+            //get connection
+            conn = dataSourceManager.getConnection();
+
+            //create and initialize statement
+            stmt = conn.prepareStatement(query);
+            stmt.setInt(1, eventId);
+
+            //execute query
+            rs = stmt.executeQuery();
+
+            //get results
+            user = createUserFromRS(rs);
+        } catch (SQLException e) {
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
+        } finally {
+            closeResources(rs, stmt, conn);
+        }
+        return user;
+    }
+
+    @Override
     public List<Event> getUserOrganizedEvents(int userId) throws DAOException {
         return getUserEventsByField(userId, "user_role", "Organizer");
     }
@@ -444,5 +477,22 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             eventsList.add(event);
         }
         return eventsList;
+    }
+
+    private User createUserFromRS(ResultSet rs) throws SQLException {
+        User user = new User();
+
+        while (rs.next()) {
+            user.setId(rs.getInt("id"))
+                    .setFirstName(rs.getString("first_name"))
+                    .setLastName(rs.getString("last_name"))
+                    .setPassword(rs.getString("password"))
+                    .setEmail(rs.getString("email"))
+                    .setPhoneNumber(rs.getString("phone_number"))
+                    .setAvatarPath(rs.getString("avatar_path"))
+                    .setVerified(rs.getBoolean("verified"))
+                    .setRegistrationDate(rs.getTimestamp("registration_date"));
+        }
+        return user;
     }
 }

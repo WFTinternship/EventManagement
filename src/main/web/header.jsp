@@ -24,7 +24,7 @@
                         <i class="top_icon icon-user"></i>
                         Hi, <%=user.getFirstName()%>
                 </span>
-            <form action="/account-controller" method="POST" id="logout_form">
+            <form action="/logout" method="GET" id="logout_form">
                 <input type="hidden" name="action" value="LOGOUT"/>
                 <input class="upper" type="submit" value="Logout" id="logout_button"/>
             </form>

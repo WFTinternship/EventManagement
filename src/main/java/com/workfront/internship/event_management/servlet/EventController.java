@@ -22,6 +22,7 @@ public class EventController extends HttpServlet {
                          HttpServletResponse response) throws ServletException, IOException {
 
         EventService eventService = new EventServiceImpl();
+
         List<Event> eventList = new ArrayList<>();
 
         String categoryIdStr = request.getParameter("categoryId");
@@ -30,7 +31,6 @@ public class EventController extends HttpServlet {
         } else {
             eventList = eventService.getEventsByCategory(Integer.parseInt(categoryIdStr));
         }
-
 
         String json = new Gson().toJson(eventList);
 

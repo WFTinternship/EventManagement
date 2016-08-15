@@ -51,10 +51,10 @@ public class UserServiceImpl implements UserService {
 
             //set generated it to user
             user.setId(userId);
-            boolean success = emailService.sendVerificationEmail(user);
+           /* boolean success = emailService.sendVerificationEmail(user);
             if (!success) {
                 throw new OperationFailedException("Unable to send verification email");
-            }
+            }*/
         } catch (DuplicateEntryException e) {
             LOGGER.error(e.getMessage(), e);
             throw new OperationFailedException("User with email " + user.getEmail() + " already exists!", e);

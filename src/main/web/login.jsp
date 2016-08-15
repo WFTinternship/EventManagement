@@ -53,7 +53,7 @@
                         email: email,
                         password: password
                     },
-                    url: '/account-controller',
+                    url: '/login',
                     success: function (result) {
 
                         if (result.success != null) {

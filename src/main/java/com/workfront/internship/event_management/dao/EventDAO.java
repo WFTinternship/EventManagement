@@ -3,6 +3,7 @@ package com.workfront.internship.event_management.dao;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.Event;
+import com.workfront.internship.event_management.model.User;
 
 import java.util.List;
 
@@ -20,6 +21,8 @@ public interface EventDAO {
     Event getEventById(int eventId) throws DAOException, ObjectNotFoundException;
 
     List<Event> getEventsByCategory(int categoryId) throws DAOException;
+
+    User getEventOrganizer(int eventId) throws DAOException, ObjectNotFoundException;
 
     List<Event> getUserOrganizedEvents(int userId) throws DAOException;
 

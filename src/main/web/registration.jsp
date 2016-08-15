@@ -84,7 +84,7 @@
                     var formData = new FormData($('#registration_form')[0]);
 
                     $.ajax({
-                        url: '/account-controller',
+                        url: '/register',
                         type: 'POST',
                         processData: false,
                         contentType: false,
