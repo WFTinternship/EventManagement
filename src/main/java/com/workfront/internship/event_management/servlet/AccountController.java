@@ -27,8 +27,8 @@ public class AccountController extends HttpServlet {
     private final String UPLOAD_DIRECTORY = "/Users/hermine/IdeaProjects/EventManagement/user_uploads/avatar";
     private UserService userService = new UserServiceImpl();
 
-    protected void service(HttpServletRequest request,
-                           HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request,
+                          HttpServletResponse response) throws ServletException, IOException {
 
         //request type is multi-part content only in registration request
         if (!ServletFileUpload.isMultipartContent(request)) {
@@ -45,6 +45,30 @@ public class AccountController extends HttpServlet {
             }
         } else {
             register(request, response);
+        }
+    }
+
+    protected void doGet(HttpServletRequest request,
+                         HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+
+        if (action.equals("CHECK_EMAIL")) {
+
+            String email = request.getParameter("email");
+            JsonObject result = new JsonObject();
+
+            try {
+                User user = userService.getUserByEmail(email);
+                if (user == null) {
+                    // result.addProperty("error", "User with this email already exists!");
+                    response.getWriter().print(true);
+                }
+            } catch (OperationFailedException e) {
+                response.getWriter().print(false);
+            } finally {
+                // response.setContentType("application/json");
+                //response.getWriter().print(result);
+            }
         }
     }
 
@@ -151,4 +175,6 @@ public class AccountController extends HttpServlet {
                 response.sendRedirect("error.jsp");
             }
     }
+
+
 }
