@@ -10,6 +10,8 @@ public class AbstractPage {
     static private WebDriver webDriver;
 
     static public void init() {
+        //webDriver = new FirefoxDriver();
+
         webDriver = new ChromeDriver();
         webDriver.get("http://localhost:8080");
     }

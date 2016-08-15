@@ -10,6 +10,8 @@ class TestHelper {
     static final String VALID_PASSWORD = "turshujyan";
     static final String INVALID_PASSWORD = "invalidPassword";
     static final String HOME_PAGE_URL = "http://localhost:8080/index.jsp";
+    static final String EVENTS_PAGE_URL = "http://localhost:8080/events.jsp";
+
 
 
 }

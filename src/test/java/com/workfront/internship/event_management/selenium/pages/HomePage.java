@@ -32,4 +32,9 @@ public class HomePage extends AbstractPage {
     public WebElement getLogoutButton() {
         return getWebDriver().findElement(By.id("logout_button"));
     }
+
+    public void clickAllEventsMenuItem() {
+        WebElement allEventsMenuItem = getWebDriver().findElement(By.cssSelector("#all_events"));
+        allEventsMenuItem.click();
+    }
 }

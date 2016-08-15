@@ -8,9 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
 
-import static com.workfront.internship.event_management.selenium.tests.TestHelper.HOME_PAGE_URL;
-import static com.workfront.internship.event_management.selenium.tests.TestHelper.VALID_EMAIL;
-import static com.workfront.internship.event_management.selenium.tests.TestHelper.VALID_PASSWORD;
+import static com.workfront.internship.event_management.selenium.tests.TestHelper.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -29,7 +27,7 @@ public class HomePageTest {
 
     @AfterClass
     static public void tearDown() {
-        homePage.getWebDriver().close();
+        //  homePage.getWebDriver().close();
         homePage = null;
     }
 
@@ -53,10 +51,18 @@ public class HomePageTest {
         homePage.clickLogout();
 
         String currentUrl = homePage.getWebDriver().getCurrentUrl();
-        assertEquals("", currentUrl, HOME_PAGE_URL);
+        assertEquals("Page isn't redirecting properly", currentUrl, HOME_PAGE_URL);
         assertNotNull("login button is not displayed", homePage.getLoginPopup());
 
     }
 
+    @Test
+    public void allEventsMenuItemClick() throws InterruptedException {
+
+        homePage.clickAllEventsMenuItem();
+
+        String currentUrl = homePage.getWebDriver().getCurrentUrl();
+        assertEquals("Page isn't redirecting properly", currentUrl, EVENTS_PAGE_URL);
+    }
 
 }
