@@ -48,22 +48,26 @@
                             <a href=""><span>Home</span></a>
                         </li>
                         <li>
-                            <a href="/events.jsp"><span>All Events</span></a>
-                        </li>
-
-                        <li>
-                            <a href=""><span>Upcoming Events</span></a>
+                            <a href="/events.jsp"><span id="all_events">All Events</span></a>
                         </li>
                         <li>
-                            <a href=""><span>Past Events</span></a>
+                            <a href="/events.jsp"><span>Upcoming events</span></a>
                         </li>
                         <li>
-                            <a href=""><span>Event Categories</span></a>
+                            <a href="/events.jsp"><span>Past events</span></a>
                         </li>
+                        <% if (session.getAttribute("user") != null) { %>
+                        <li>
+                            <a href=""><span>Create Event</span></a>
+                        </li>
+                        <% }
+                            ; %>
                         <li>
                             <a href=""><span>Gallery</span></a>
                         </li>
-
+                        <li>
+                            <a href=""><span>Contacts</span></a>
+                        </li>
                     </ul>
                 </div>
             </nav>

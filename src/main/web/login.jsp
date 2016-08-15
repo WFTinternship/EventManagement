@@ -1,6 +1,5 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="js/bootstrap-notify.js"></script>
-
 <script src="js/jquery.validate.js"></script>
 <script>
 
@@ -58,21 +57,7 @@
                     success: function (result) {
 
                         if (result.success != null) {
-                            $.notify({
-                                // options
-                                message: result.success
-                            }, {
-                                // settings
-                                type: 'success',
-                                delay: 5000,
-                                placement: {
-                                    align: "center"
-                                }
-                            });
-
-                            setTimeout(function () {
-                                window.location = "/index.jsp"
-                            }, 5000);
+                            window.location = "/index.jsp"
                         } else if (result.error != null) {
                             $("#login_failed_label").show();
                             $("#login_failed_label").html(result.error);
@@ -105,13 +90,13 @@
                 <div class="lf_user_row">
                     <label for="lf_email">
                         <i class="lf_icon icon-user"></i>
-                        <input name="email" id="lf_email" type="text">
+                        <input name="email" id="lf_email" type="text" placeholder="email">
                     </label>
                 </div>
                 <div class="lf_user_row">
                     <label for="lf_password">
                         <i class="lf_icon icon-lock"></i>
-                        <input name="password" id="lf_password" type="password">
+                        <input name="password" id="lf_password" type="password" placeholder="password">
                     </label>
                 </div>
                 <div class="lf_user_row clearfix">

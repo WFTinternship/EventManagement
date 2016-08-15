@@ -32,16 +32,20 @@
 
             //validate and submit registration form
             $('#registration_form').validate({
-
                 rules: {
                     firstName: "required",
-                    lastName: "required"
-                    /*  email: {
+                    lastName: "required",
+                    email: {
                         required: true,
-             email: true
-             },
-             confirmEmail: {
-             required: true,
+                        email: true,
+                        /* remote: {
+                         url: "/account-controller",
+                         type: "GET",
+                         data: "email=" + $('#email').val() + "&action=CHECK_EMAIL"
+                         }*/
+                    },
+                    confirmEmail: {
+                        required: true,
                         equalTo: "#email"
                     },
                     password: {
@@ -51,10 +55,10 @@
                     confirmPassword: {
                         required: true,
                         equalTo: "#password"
-                     },*/
+                    }
                 },
 
-                /*  messages: {
+                messages: {
                     firstName: "Please enter your first name.",
                     lastName: "Please enter your last name.",
                     password: {
@@ -62,25 +66,22 @@
                         minlength: "Password must be at least 6 characters."
                     },
                     confirmPassword: {
-             required: "Please confirm password.",
+                        required: "Please confirm password.",
                         equalTo: "Passwords do not match."
                     },
-             email: {
-             required: "Please provide an email address.",
-             email: "Please enter a valid email address.",
-             },
+                    email: {
+                        required: "Please provide an email address.",
+                        email: "Please enter a valid email address.",
+                        //  remote: "Email already in use!"
+                    },
                     confirmEmail: {
                         required: "Please confirm email address.",
                         equalTo: "Emails do not match."
-
+                    }
                 },
-                 */
+
                 submitHandler: function (form) {
-
                     var formData = new FormData($('#registration_form')[0]);
-
-                    //  var uploadedImage = $("#avatar")[0].files[0];
-                    //  formData.append("avatar", uploadedImage);
 
                     $.ajax({
                         url: '/account-controller',
@@ -89,19 +90,28 @@
                         contentType: false,
                         data: formData,
                         success: function (result) {
+                            alert(result);
                             if (result.success != null) {
-                                alert(result.success);
-                                window.location = "/index.jsp";
+                                $.notify({
+                                    message: result.success
+                                }, {
+                                    type: 'success',
+                                    delay: 10000,
+                                    placement: {
+                                        align: "center"
+                                    }
+                                });
+                                setTimeout(function () {
+                                    window.location = "/index.jsp";
+                                }, 5000);
                             } else if (result.error != null) {
+                                //   $("#email-error").show();
+                                //   $("#email-error").html(result.error);
                                 alert(result.error);
                             }
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
-                            //if (jqXHR.responseText !== '') {
-                            //     alert(textStatus + ": " + jqXHR.responseText);
-                            //  } else {
-                            alert(textStatus + ": " + errorThrown);
-                            //  }
+
                         }
                     })
                 }

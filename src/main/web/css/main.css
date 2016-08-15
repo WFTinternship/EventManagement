@@ -107,7 +107,7 @@ a, .btn, .close, .main_title .line::before {
 /* Logo */
 #logo {
     float: left;
-    margin-right: 45px;
+    /*margin-right: 20px;*/
     position: relative;
 }
 
@@ -141,7 +141,8 @@ img {
 #main_nav {
     float: left;
     vertical-align: middle;
-
+    position: absolute;
+    right: 200px;
 }
 
 #main_nav ul {
