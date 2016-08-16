@@ -1,10 +1,8 @@
-<%@ page import="com.workfront.internship.event_management.model.Category" %>
 <%@ page import="com.workfront.internship.event_management.model.Event" %>
-<%@ page import="com.workfront.internship.event_management.service.CategoryService" %>
-<%@ page import="com.workfront.internship.event_management.service.CategoryServiceImpl" %>
 <%@ page import="com.workfront.internship.event_management.service.EventService" %>
 <%@ page import="com.workfront.internship.event_management.service.EventServiceImpl" %>
-<%@ page import="java.util.List" %><%--
+<%@ page import="java.util.List" %>
+<%--
   Created by IntelliJ IDEA.
   User: Inmelet
   Date: 8/8/2016
@@ -35,7 +33,7 @@
     <script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
     <script type="text/javascript" src="js/jquery.flexslider.js"></script>
 
-    <script type="text/javascript" src="js/homePage.js"></script>
+    <script type="text/javascript" src="js/home.js"></script>
 
 </head>
 <body class="home_page">
@@ -63,6 +61,60 @@
                 <div class="event_list clearfix" id="event_list">
                     <div class="main_title centered upper">
                         <h2><span class="line"><i class="icon-calendar"></i></span>Upcoming Events</h2>
+                    </div>
+                    <div class="list">
+
+                        <%
+                            EventService eventService = new EventServiceImpl();
+                            List<Event> eventList = eventService.getAllEvents();
+
+                            if (!eventList.isEmpty()) {
+                                for (Event event : eventList) {
+                        %>
+                        <div class="list_item">
+                            <div class="list_content">
+                                <h6 class="title">
+                                    <a href="#"><%=event.getTitle() %>
+                                    </a>
+                                </h6>
+                                <span class="meta">
+                                       <span class="meta_part ">
+                                           <a href="#">
+                                               <i class="ev_icon icon-clock"></i>
+                                               <span><%=event.getStartDate() %></span>
+                                           </a>
+                                       </span>
+                                   <span class="meta_part">
+                                       <a href="#">
+                                           <i class="ev_icon icon-map-marker"></i>
+                                           <span>
+                                               <%=event.getLocation()%>
+                                           </span>
+                                       </a>
+                                   </span>
+                                       <span class="meta_part">
+                                           <i class="ev_icon icon-folder"></i>
+                                           <span>
+                                               <a href="#">
+                                                   <%= event.getCategory().getTitle()%>
+                                               </a>
+                                           </span>
+                                       </span>
+                                       <span class="meta_part">
+                                           <a href="#">
+                                               <i class="ev_icon icon-user"></i>
+                                               <span>Event Organizer</span>
+                                           </a>
+                                       </span>
+                                   </span>
+                                <p class="desc"><%=event.getShortDescription()%>
+                                </p>
+
+                                <a class="btn" href="#"><span>Details</span></a>
+                            </div>
+                        </div>
+                        <% }
+                        } %>
                     </div>
                 </div>
             </div>

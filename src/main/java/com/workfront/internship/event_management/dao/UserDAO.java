@@ -20,7 +20,7 @@ public interface UserDAO {
 
     User getUserById(int userId) throws DAOException, ObjectNotFoundException;
 
-    User getUserByEmail(String email) throws DAOException, ObjectNotFoundException;
+    User getUserByEmail(String email) throws DAOException;
 
     //update record in db
     void updateVerifiedStatus(int userId) throws ObjectNotFoundException, DAOException;

@@ -138,19 +138,17 @@ public class UserServiceImpl implements UserService {
         try {
             //read user data from db
             user = userDAO.getUserByEmail(email);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Invalid email/password combination!");
+            String str = HashGenerator.generateHashString(password);
+
+            //check if passwords match
+            if (user != null && user.getPassword().equals(HashGenerator.generateHashString(password))) {
+                return user;
+            } else {
+                throw new OperationFailedException("Invalid email/password combination!");
+            }
         } catch (DAOException e) {
             LOGGER.error(e.getMessage(), e);
             throw new OperationFailedException(e.getMessage(), e);
-        }
-        String str = HashGenerator.generateHashString(password);
-        //check if passwords match
-        if (user.getPassword().equals(HashGenerator.generateHashString(password))) {
-            return user;
-        } else {
-            throw new OperationFailedException("Invalid email/password combination!");
         }
     }
 
@@ -181,9 +179,6 @@ public class UserServiceImpl implements UserService {
         try {
             //get user data from db
             return userDAO.getUserByEmail(email);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("User not found");
         } catch (DAOException e) {
             LOGGER.error(e.getMessage(), e);
             throw new OperationFailedException(e.getMessage(), e);

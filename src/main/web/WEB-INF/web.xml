@@ -30,6 +30,15 @@
         <servlet-class>com.workfront.internship.event_management.servlet.RegistrationServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>CheckEmailServlet</servlet-name>
+        <servlet-class>com.workfront.internship.event_management.servlet.CheckEmailServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CheckEmailServlet</servlet-name>
+        <url-pattern>/checkEmail</url-pattern>
+    </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>RegistrationServlet</servlet-name>
         <url-pattern>/register</url-pattern>

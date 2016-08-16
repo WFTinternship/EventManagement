@@ -118,7 +118,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
     }
 
     @Override
-    public User getUserByEmail(String email) throws DAOException, ObjectNotFoundException {
+    public User getUserByEmail(String email) throws DAOException {
         return getUserByField("email", email);
     }
 
@@ -201,7 +201,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
     }
 
     //helper methods
-    private User getUserByField(String columnName, Object columnValue) throws ObjectNotFoundException, DAOException {
+    private User getUserByField(String columnName, Object columnValue) throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -225,7 +225,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             List<User> userList = createUsersListFromRS(rs);
 
             if (userList.isEmpty()) {
-                throw new ObjectNotFoundException("User with " + columnName + " " + columnValue + " not found!");
+                // throw new ObjectNotFoundException("User with " + columnName + " " + columnValue + " not found!");
             } else {
                 user = userList.get(0);
             }

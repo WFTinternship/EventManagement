@@ -35,7 +35,7 @@
     <script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
     <script type="text/javascript" src="js/jquery.flexslider.js"></script>
 
-    <script type="text/javascript" src="js/eventsPage.js"></script>
+    <script type="text/javascript" src="js/events.js"></script>
 
 </head>
 <body class="events_page">
@@ -72,7 +72,7 @@
                         <li>
                             <div onclick='return getAllEventsByCategory("<%=category.getId()%>");'><%=category.getTitle() %>
                             </div>
-                            <span class="num_events">61</span>
+                            <span class="num_events">1</span>
                         </li>
                         <% }
                         } %>

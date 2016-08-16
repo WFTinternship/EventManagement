@@ -27,7 +27,6 @@ public class RegistrationServlet extends HttpServlet {
     // location to store file uploaded
     private static final String UPLOAD_DIRECTORY = "upload";
 
-
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
 
@@ -54,14 +53,11 @@ public class RegistrationServlet extends HttpServlet {
                 List<FileItem> formItems = upload.parseRequest(request);
 
                 User user = new User();
-                // String avatarPath;
-
 
                 if (formItems != null && formItems.size() > 0) {
 
                     // iterates over form's fields
                     for (FileItem item : formItems) {
-
                         if (!item.isFormField()) {
 
                             String fileName = new File(item.getName()).getName();
@@ -116,7 +112,6 @@ public class RegistrationServlet extends HttpServlet {
                         userService.addAccount(user);
 
                         result.addProperty("success", "You are successfully registered!");
-
                     } catch (OperationFailedException e) {
                         result.addProperty("error", e.getMessage());
                     } finally {
@@ -130,4 +125,5 @@ public class RegistrationServlet extends HttpServlet {
             }
         }
     }
+
 }

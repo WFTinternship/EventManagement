@@ -38,11 +38,15 @@
                     email: {
                         required: true,
                         email: true,
-                        /* remote: {
-                         url: "/account-controller",
-                         type: "GET",
-                         data: "email=" + $('#email').val() + "&action=CHECK_EMAIL"
-                         }*/
+                        remote: {
+                            url: "/checkEmail",
+                            type: "POST",
+                            data: {
+                                email: function () {
+                                    return $("#email").val();
+                                }
+                            }
+                        }
                     },
                     confirmEmail: {
                         required: true,
@@ -72,7 +76,7 @@
                     email: {
                         required: "Please provide an email address.",
                         email: "Please enter a valid email address.",
-                        //  remote: "Email already in use!"
+                        remote: "Email already in use."
                     },
                     confirmEmail: {
                         required: "Please confirm email address.",

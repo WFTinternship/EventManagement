@@ -35,7 +35,6 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("user", user);
 
             result.addProperty("success", "Login success!");
-
         } catch (OperationFailedException e) {
             result.addProperty("error", e.getMessage());
         } finally {

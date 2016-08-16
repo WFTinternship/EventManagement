@@ -6,9 +6,9 @@ $(document).ready(function () {
 
     $('.flexslider').flexslider();
 
-    loadAllEvents();
+    //  loadAllEvents();
 });
-
+/*
 function loadAllEvents() {
     $.getJSON("/event-controller", function (data) {
         var events = [];
@@ -43,4 +43,4 @@ function createEventItem(event) {
         '</div></div>';
 
     return eventHTML;
-}
+ } */

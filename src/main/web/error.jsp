@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 
     <script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
-    <script type="text/javascript" src="js/homePage.js"></script>
+    <script type="text/javascript" src="js/home.js"></script>
 
 </head>
 <body>
