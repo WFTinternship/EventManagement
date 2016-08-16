@@ -16,85 +16,113 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
+import java.util.regex.Pattern;
 
 /**
  * Created by Hermine Turshujyan 8/15/16.
  */
 public class RegistrationServlet extends HttpServlet {
 
-    private final String UPLOAD_DIRECTORY = "/Users/hermine/IdeaProjects/EventManagement/user_uploads/avatar";
+    // location to store file uploaded
+    private static final String UPLOAD_DIRECTORY = "upload";
+
 
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
 
         if (ServletFileUpload.isMultipartContent(request)) {
 
+            DiskFileItemFactory factory = new DiskFileItemFactory();
+
+            // sets temporary location to store files
+            factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
+
+            ServletFileUpload upload = new ServletFileUpload(factory);
+
+            // constructs the directory path to store upload file
+            // this path is relative to application's directory
+            String uploadPath = getServletContext().getRealPath("") + UPLOAD_DIRECTORY;
+
+            // creates the directory if it does not exist
+            File uploadDir = new File(uploadPath);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir();
+            }
+
             try {
-                List<FileItem> parts = new ServletFileUpload(
-                        new DiskFileItemFactory()).parseRequest(request);
+                List<FileItem> formItems = upload.parseRequest(request);
 
                 User user = new User();
-                String avatarPath;
+                // String avatarPath;
 
-                for (FileItem item : parts) {
-                    if (!item.isFormField()) {
 
-                        // TODO: 8/14/16 rename image file
-                        if (!item.getName().isEmpty()) {
+                if (formItems != null && formItems.size() > 0) {
+
+                    // iterates over form's fields
+                    for (FileItem item : formItems) {
+
+                        if (!item.isFormField()) {
 
                             String fileName = new File(item.getName()).getName();
 
-                            avatarPath = UPLOAD_DIRECTORY + File.separator + fileName;
+                            //get uploaded file extension
+                            String[] parts = fileName.split(Pattern.quote("."));
+                            String ext = parts[parts.length - 1];
 
-                            item.write(new File(avatarPath));
-                        }
-                    } else {
+                            //generate random image name
+                            String uuid = UUID.randomUUID().toString();
+                            String uniqueFileName = String.format("%s.%s", uuid, ext);
 
-                        String fieldName = item.getFieldName();
-                        String fieldValue = item.getString();
+                            //create file path
+                            String filePath = uploadPath + File.separator + uniqueFileName;
+                            File storeFile = new File(filePath);
 
-                        switch (fieldName) {
-                            case "firstName":
-                                user.setFirstName(fieldValue);
-                                break;
-                            case "lastName":
-                                user.setLastName(fieldValue);
-                                break;
-                            case "email":
-                                user.setEmail(fieldValue);
-                                break;
-                            case "password":
-                                user.setPassword(fieldValue);
-                                break;
-                            case "phone":
-                                user.setPhoneNumber(fieldValue);
-                                break;
+                            // saves the file on disk
+                            item.write(storeFile);
+
+                            //save avatar path to user obj
+                            user.setAvatarPath(filePath);
+
+                        } else {
+
+                            String fieldName = item.getFieldName();
+                            String fieldValue = item.getString();
+
+                            switch (fieldName) {
+                                case "firstName":
+                                    user.setFirstName(fieldValue);
+                                    break;
+                                case "lastName":
+                                    user.setLastName(fieldValue);
+                                    break;
+                                case "email":
+                                    user.setEmail(fieldValue);
+                                    break;
+                                case "password":
+                                    user.setPassword(fieldValue);
+                                    break;
+                                case "phone":
+                                    user.setPhoneNumber(fieldValue);
+                                    break;
+                            }
                         }
                     }
-                }
 
-                //rename uploaded file
-                //  String uploadedFileName
-                //String ext = File
-                //String fileName = String.format("%s.%s", RandomStringUtils.randomAlphanumeric(8), ext);
+                    JsonObject result = new JsonObject();
 
-                //    new File(fileName);
-                //set avatar to created user object
-                //     user.setAvatarPath(avatarPath);
+                    try {
+                        UserService userService = new UserServiceImpl();
+                        userService.addAccount(user);
 
+                        result.addProperty("success", "You are successfully registered!");
 
-                JsonObject result = new JsonObject();
-
-                try {
-                    UserService userService = new UserServiceImpl();
-                    userService.addAccount(user);
-
-                    result.addProperty("success", "You are successfully registered!");
-                } catch (OperationFailedException e) {
-                    result.addProperty("error", e.getMessage());
-                } finally {
-                    response.setContentType("application/json");
-                    response.getWriter().print(result);
+                    } catch (OperationFailedException e) {
+                        result.addProperty("error", e.getMessage());
+                    } finally {
+                        response.setContentType("application/json");
+                        response.getWriter().print(result);
+                    }
                 }
 
             } catch (Exception ex) {
