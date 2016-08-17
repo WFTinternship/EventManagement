@@ -3,17 +3,27 @@ package com.workfront.internship.event_management.selenium.pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import static com.workfront.internship.event_management.selenium.TestHelper.HOME_PAGE_URL;
+
 /**
  * Created by Hermine Turshujyan 8/11/16.
  */
 public class HomePage extends AbstractPage {
 
-    /*public HomePage() {
-        //getWebDriver().get("http://localhost:8080");
-    }*/
+    public HomePage() {
+        redirectToHomePage();
+    }
+
+    public void redirectToHomePage() {
+        init(HOME_PAGE_URL);
+    }
+
+    public void redirect() {
+        redirectToPage(HOME_PAGE_URL);
+    }
 
     public WebElement clickLogin() throws InterruptedException {
-        WebElement loginButton = getWebDriver().findElement(By.cssSelector("#login_button"));
+        WebElement loginButton = getWebDriver().findElement(By.id("login_button"));
         loginButton.click();
         return getLoginPopup();
     }

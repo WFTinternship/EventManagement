@@ -24,7 +24,6 @@ public class LoginPopup extends AbstractPage {
         signInButton.click();
     }
 
-
     public WebElement getLoginFailedLabel() {
         return getWebDriver().findElement(By.id("login_failed_label"));
     }

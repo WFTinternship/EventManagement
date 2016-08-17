@@ -7,13 +7,18 @@ import org.openqa.selenium.chrome.ChromeDriver;
  * Created by Hermine Turshujyan 8/11/16.
  */
 public class AbstractPage {
+
     static private WebDriver webDriver;
 
-    static public void init() {
-        //webDriver = new FirefoxDriver();
+    static public void init(String url) {
+        // webDriver = new FirefoxDriver();
 
         webDriver = new ChromeDriver();
-        webDriver.get("http://localhost:8080");
+        webDriver.get(url);
+    }
+
+    static public void redirectToPage(String url) {
+        webDriver.get(url);
     }
 
     public WebDriver getWebDriver() {
