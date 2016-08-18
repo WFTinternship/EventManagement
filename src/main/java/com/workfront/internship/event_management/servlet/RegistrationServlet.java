@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 /**
  * Created by Hermine Turshujyan 8/15/16.
@@ -62,23 +61,28 @@ public class RegistrationServlet extends HttpServlet {
 
                             String fileName = new File(item.getName()).getName();
 
-                            //get uploaded file extension
-                            String[] parts = fileName.split(Pattern.quote("."));
-                            String ext = parts[parts.length - 1];
+                            if (!fileName.isEmpty()) {
+                                //get uploaded file extension
+                                String ext = fileName.substring(fileName.lastIndexOf("."));
+                                //  String ext1 = FilenameUtils.getExtension("/path/to/file/foo.txt");
 
-                            //generate random image name
-                            String uuid = UUID.randomUUID().toString();
-                            String uniqueFileName = String.format("%s.%s", uuid, ext);
+                                // String[] parts = fileName.split(Pattern.quote("."));
+                                //String ext = parts[parts.length - 1];
 
-                            //create file path
-                            String filePath = uploadPath + File.separator + uniqueFileName;
-                            File storeFile = new File(filePath);
+                                //generate random image name
+                                String uuid = UUID.randomUUID().toString();
+                                String uniqueFileName = String.format("%s.%s", uuid, ext);
 
-                            // saves the file on disk
-                            item.write(storeFile);
+                                //create file path
+                                String filePath = uploadPath + File.separator + uniqueFileName;
+                                File storeFile = new File(filePath);
 
-                            //save avatar path to user obj
-                            user.setAvatarPath(filePath);
+                                // saves the file on disk
+                                item.write(storeFile);
+
+                                //save avatar path to user obj
+                                user.setAvatarPath(filePath);
+                            }
 
                         } else {
 

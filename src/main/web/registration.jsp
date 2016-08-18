@@ -94,24 +94,10 @@
                         contentType: false,
                         data: formData,
                         success: function (result) {
-                            alert(result);
                             if (result.success != null) {
-                                $.notify({
-                                    message: result.success
-                                }, {
-                                    type: 'success',
-                                    delay: 10000,
-                                    placement: {
-                                        align: "center"
-                                    }
-                                });
-                                setTimeout(function () {
-                                    window.location = "/index.jsp";
-                                }, 5000);
+                                window.location = "/index.jsp";
                             } else if (result.error != null) {
-                                //   $("#email-error").show();
-                                //   $("#email-error").html(result.error);
-                                alert(result.error);
+                                window.location = "/error.jsp";
                             }
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
@@ -209,7 +195,7 @@
                     </div>
                 </div>
                 <div class="form_row clearfix">
-                    <button type="submit" class="btn full_button">
+                    <button type="submit" class="btn full_button" id="reg_submit">
                         <i class="icon-check"></i>
                         <span>Register</span>
                     </button>

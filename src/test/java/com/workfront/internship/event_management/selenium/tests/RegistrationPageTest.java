@@ -5,8 +5,12 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static com.workfront.internship.event_management.selenium.TestHelper.*;
+import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
 /**
@@ -82,5 +86,11 @@ public class RegistrationPageTest {
         registrationPage.typePasswordConfirm(VALID_PASSWORD);
 
         registrationPage.clickRegister();
+
+        WebDriverWait wait = new WebDriverWait(registrationPage.getWebDriver(), 10);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("flexslider"))); //slider
+
+        String currentUrl = registrationPage.getWebDriver().getCurrentUrl();
+        assertEquals("Page isn't redirecting properly", currentUrl, HOME_PAGE_URL);
     }
 }

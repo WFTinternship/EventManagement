@@ -28,23 +28,31 @@ public class HomePage extends AbstractPage {
         return getLoginPopup();
     }
 
+    //actions
     public void clickLogout() throws InterruptedException {
         WebElement logoutButton = getWebDriver().findElement(By.cssSelector("#logout_button"));
         logoutButton.click();
-    }
-
-    public WebElement getLoginPopup() throws InterruptedException {
-        Thread.sleep(2000);
-        WebElement loginPopup = getWebDriver().findElement(By.cssSelector(".login_dialog"));
-        return loginPopup;
-    }
-
-    public WebElement getLogoutButton() {
-        return getWebDriver().findElement(By.id("logout_button"));
     }
 
     public void clickAllEventsMenuItem() {
         WebElement allEventsMenuItem = getWebDriver().findElement(By.cssSelector("#all_events"));
         allEventsMenuItem.click();
     }
+
+    //get elements
+    public WebElement getLoginPopup() throws InterruptedException {
+        Thread.sleep(2000);
+        WebElement loginPopup = getWebDriver().findElement(By.cssSelector(".login_dialog"));
+        return loginPopup;
+    }
+
+    public WebElement getSlider() throws InterruptedException {
+        return getWebDriver().findElement(By.className(".flexslider"));
+    }
+
+    public WebElement getLogoutButton() {
+        return getWebDriver().findElement(By.id("logout_button"));
+    }
+
+
 }

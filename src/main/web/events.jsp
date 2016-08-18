@@ -65,14 +65,19 @@
                     <h6 class="title">Categories</h6>
                     <ul class="cat_list">
 
-                        <% CategoryService categoryService = new CategoryServiceImpl();
+                        <%
+                            EventService eventService = new EventServiceImpl();
+                            CategoryService categoryService = new CategoryServiceImpl();
                             List<Category> categoryList = categoryService.getAllCategories();
                             if (!categoryList.isEmpty()) {
                                 for (Category category : categoryList) { %>
                         <li>
-                            <div onclick='return getAllEventsByCategory("<%=category.getId()%>");'><%=category.getTitle() %>
+                            <div class="cat_item"
+                                 onclick='getAllEventsByCategory("<%=category.getId()%>");'><%=category.getTitle() %>
                             </div>
-                            <span class="num_events">1</span>
+                            <span class="num_events">
+                                <%= eventService.getEventsByCategory(category.getId()).size()%>
+                            </span>
                         </li>
                         <% }
                         } %>
