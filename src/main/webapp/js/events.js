@@ -3,11 +3,11 @@
  */
 
 $(document).ready(function () {
-    loadAllEvents();
+    // loadAllEvents();
 });
 
-function getAllEventsByCategory(categoryId) {
-    $.getJSON("/event-controller?categoryId=" + categoryId, function (data) {
+function getEventsByCategory(categoryId) {
+    $.getJSON("/events?categoryId=" + categoryId, function (data) {
         var events = [];
         $.each(data, function (key, event) {
             var eventHTML = createEventItem(event)

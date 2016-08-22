@@ -48,13 +48,13 @@
                             <a href=""><span>Home</span></a>
                         </li>
                         <li>
-                            <a href="/events.jsp"><span id="all_events">All Events</span></a>
+                            <a href="/events"><span id="all_events">All Events</span></a>
                         </li>
                         <li>
-                            <a href="/events.jsp"><span>Upcoming events</span></a>
+                            <a href="/WEB-INF/view/events.jsp"><span>Upcoming events</span></a>
                         </li>
                         <li>
-                            <a href="/events.jsp"><span>Past events</span></a>
+                            <a href="/WEB-INF/view/events.jsp"><span>Past events</span></a>
                         </li>
                         <% if (session.getAttribute("user") != null) { %>
                         <li>

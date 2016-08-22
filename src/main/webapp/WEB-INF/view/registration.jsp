@@ -9,10 +9,10 @@
 <html>
 <head>
     <title>Registration | Event Management</title>
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="css/reset.css">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-    <link rel="stylesheet" type="text/css" href="css/icon_font.css">
+    <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../../css/main.css">
+    <link rel="stylesheet" type="text/css" href="../../css/icon_font.css">
 
     <link rel="stylesheet" type="text/css" href="./css/jquery-ui.min.css">
     <link rel="stylesheet" type="text/css" href="./css/jquery-ui.structure.min.css">
@@ -22,10 +22,10 @@
     <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 
-    <script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
-    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.validate.js"></script>
+    <script type="text/javascript" src="../../js/jquery-3.1.0.min.js"></script>
+    <script type="text/javascript" src="../../js/jquery-ui.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+    <script src="../../js/jquery.validate.js"></script>
 
     <script>
         $(document).ready(function () {
@@ -95,9 +95,9 @@
                         data: formData,
                         success: function (result) {
                             if (result.success != null) {
-                                window.location = "/index.jsp";
+                                window.location = "/WEB-INF/view/index.jsp";
                             } else if (result.error != null) {
-                                window.location = "/error.jsp";
+                                window.location = "/WEB-INF/view/error.jsp";
                             }
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
@@ -113,7 +113,7 @@
 <body>
 <div id="main_wrapper">
     <!-- Main Header -->
-    <jsp:include page="/header.jsp"/>
+    <jsp:include page="/WEB-INF/view/header.jsp"/>
     <!-- End Main Header -->
 
     <!-- Content Section -->
@@ -208,7 +208,7 @@
 
 
     <!-- Footer -->
-    <jsp:include page="/footer.jsp"/>
+    <jsp:include page="/WEB-INF/view/footer.jsp"/>
     <!-- End Footer -->
 </div>
 </body>

@@ -1,6 +1,6 @@
-<script src="js/bootstrap.min.js"></script>
-<script src="js/bootstrap-notify.js"></script>
-<script src="js/jquery.validate.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/bootstrap-notify.js"></script>
+<script src="../../js/jquery.validate.js"></script>
 <script>
 
     $(document).ready(function () {
@@ -57,7 +57,7 @@
                     success: function (result) {
 
                         if (result.success != null) {
-                            window.location = "/index.jsp"
+                            window.location = "/WEB-INF/view/index.jsp"
                         } else if (result.error != null) {
                             $("#login_failed_label").show();
                             $("#login_failed_label").html(result.error);

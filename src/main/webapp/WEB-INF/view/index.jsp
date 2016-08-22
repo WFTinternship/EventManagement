@@ -13,11 +13,11 @@
 <html>
 <head>
     <title>Home | Event Management</title>
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="css/reset.css">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-    <link rel="stylesheet" type="text/css" href="css/icon_font.css">
-    <link rel="stylesheet" type="text/css" href="css/flexslider.css">
+    <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../../css/main.css">
+    <link rel="stylesheet" type="text/css" href="../../css/icon_font.css">
+    <link rel="stylesheet" type="text/css" href="../../css/flexslider.css">
 
     <link rel="stylesheet" type="text/css" href="./css/jquery-ui.min.css">
     <link rel="stylesheet" type="text/css" href="./css/jquery-ui.structure.min.css">
@@ -27,19 +27,19 @@
     <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 
-    <script type="text/javascript" src="js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="js/jquery.validate.js"></script>
-    <script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
-    <script type="text/javascript" src="js/jquery.flexslider.js"></script>
+    <script type="text/javascript" src="../../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../../js/jquery.validate.js"></script>
+    <script type="text/javascript" src="../../js/jquery-3.1.0.min.js"></script>
+    <script type="text/javascript" src="../../js/jquery.flexslider.js"></script>
 
-    <script type="text/javascript" src="js/home.js"></script>
+    <script type="text/javascript" src="../../js/home.js"></script>
 
 </head>
 <body class="home_page">
 <div id="main_wrapper">
     <!-- Main Header -->
-    <jsp:include page="/header.jsp"/>
+    <jsp:include page="header.jsp"/>
     <!-- End Main Header -->
 
     <div class="flexslider">
@@ -63,11 +63,8 @@
                         <h2><span class="line"><i class="icon-calendar"></i></span>Upcoming Events</h2>
                     </div>
                     <div class="list">
-
                         <%
-                            EventService eventService = new EventServiceImpl();
-                            List<Event> eventList = eventService.getAllEvents();
-
+                            List<Event> eventList = (List<Event>) request.getAttribute("events");
                             if (!eventList.isEmpty()) {
                                 for (Event event : eventList) {
                         %>
@@ -123,7 +120,7 @@
     <!-- End Content Section -->
 
     <!-- Footer -->
-    <jsp:include page="/footer.jsp"/>
+    <jsp:include page="footer.jsp"/>
     <!-- End Footer -->
 </div>
 </body>
