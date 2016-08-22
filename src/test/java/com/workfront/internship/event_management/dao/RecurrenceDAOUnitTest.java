@@ -6,7 +6,9 @@ import com.workfront.internship.event_management.model.Recurrence;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.internal.util.reflection.Whitebox;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -18,21 +20,22 @@ import static org.mockito.Mockito.*;
  */
 public class RecurrenceDAOUnitTest {
 
-    private DataSourceManager dataSourceManager;
+    private DataSource dataSource;
     private RecurrenceDAO eventRecurrenceDAO;
 
     @SuppressWarnings("unchecked")
     @Before
     public void setUp() throws Exception {
 
-        dataSourceManager = Mockito.mock(DataSourceManager.class);
+        dataSource = Mockito.mock(DataSource.class);
         Connection connection = Mockito.mock(Connection.class);
 
-        when(dataSourceManager.getConnection()).thenReturn(connection);
+        when(dataSource.getConnection()).thenReturn(connection);
         when(connection.prepareStatement(any(String.class), eq(PreparedStatement.RETURN_GENERATED_KEYS))).thenThrow(SQLException.class);
         when(connection.prepareStatement(any(String.class))).thenThrow(SQLException.class);
 
-        eventRecurrenceDAO = new RecurrenceDAOImpl(dataSourceManager);
+        eventRecurrenceDAO = new RecurrenceDAOImpl();
+        Whitebox.setInternalState(eventRecurrenceDAO, "dataSource", dataSource);
     }
 
     @Test(expected = DAOException.class)

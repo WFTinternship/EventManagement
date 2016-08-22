@@ -10,15 +10,7 @@ import static com.workfront.internship.event_management.selenium.TestHelper.HOME
  */
 public class HomePage extends AbstractPage {
 
-    public HomePage() {
-        redirectToHomePage();
-    }
-
     public void redirectToHomePage() {
-        init(HOME_PAGE_URL);
-    }
-
-    public void redirect() {
         redirectToPage(HOME_PAGE_URL);
     }
 
@@ -47,7 +39,7 @@ public class HomePage extends AbstractPage {
     }
 
     public WebElement getSlider() throws InterruptedException {
-        return getWebDriver().findElement(By.className(".flexslider"));
+        return getWebDriver().findElement(By.className("flexslider"));
     }
 
     public WebElement getLogoutButton() {

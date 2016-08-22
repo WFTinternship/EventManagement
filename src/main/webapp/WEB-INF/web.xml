@@ -52,7 +52,8 @@
         <servlet-name>EventController</servlet-name>
         <url-pattern>/event-controller</url-pattern>
     </servlet-mapping>
-
-
+    <listener>
+        <listener-class>com.workfront.internship.event_management.spring.SpringContextListener</listener-class>
+    </listener>
 </web-app>
 

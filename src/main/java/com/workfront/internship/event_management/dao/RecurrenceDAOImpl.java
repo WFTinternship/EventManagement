@@ -5,8 +5,8 @@ import com.workfront.internship.event_management.exception.dao.ObjectNotFoundExc
 import com.workfront.internship.event_management.model.Recurrence;
 import com.workfront.internship.event_management.model.RecurrenceType;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,24 +14,10 @@ import java.util.List;
 /**
  * Created by Hermine Turshujyan 7/11/16.
  */
+@Component
 public class RecurrenceDAOImpl extends GenericDAO implements RecurrenceDAO {
 
     static final Logger LOGGER = Logger.getLogger(RecurrenceDAOImpl.class);
-    private DataSourceManager dataSourceManager;
-
-    RecurrenceDAOImpl(DataSourceManager dataSourceManager) throws Exception {
-        super(dataSourceManager);
-        this.dataSourceManager = dataSourceManager;
-    }
-
-    public RecurrenceDAOImpl() throws DAOException {
-        try {
-            this.dataSourceManager = DataSourceManager.getInstance();
-        } catch (IOException | SQLException e) {
-            LOGGER.error("Could not instantiate data source manager for RecurrenceDAOImpl .", e);
-            throw new DAOException("Could not instantiate data source manager", e);
-        }
-    }
 
     @Override
     public int addRecurrence(Recurrence recurrence) throws DAOException {
@@ -41,7 +27,7 @@ public class RecurrenceDAOImpl extends GenericDAO implements RecurrenceDAO {
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             id = addEventRecurrence(recurrence, conn);
         } catch (SQLException e) {
@@ -58,7 +44,7 @@ public class RecurrenceDAOImpl extends GenericDAO implements RecurrenceDAO {
         Connection conn = null;
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             addEventRecurrences(recurrenceList, conn);
         } catch (SQLException e) {
@@ -123,7 +109,7 @@ public class RecurrenceDAOImpl extends GenericDAO implements RecurrenceDAO {
                 "WHERE event_recurrence.id = ?";
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query);
@@ -200,7 +186,7 @@ public class RecurrenceDAOImpl extends GenericDAO implements RecurrenceDAO {
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);
@@ -235,7 +221,7 @@ public class RecurrenceDAOImpl extends GenericDAO implements RecurrenceDAO {
                 "LEFT JOIN recurrence_option ON event_recurrence.recurrence_option_id = recurrence_option.id";
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create statement
             stmt = conn.prepareStatement(sqlStr);
@@ -266,7 +252,7 @@ public class RecurrenceDAOImpl extends GenericDAO implements RecurrenceDAO {
                 "recurrence_option_id = ?, repeat_interval = ?, repeat_end = ? WHERE id = ?";
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query);

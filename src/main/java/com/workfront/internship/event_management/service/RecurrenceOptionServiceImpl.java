@@ -1,13 +1,14 @@
 package com.workfront.internship.event_management.service;
 
 import com.workfront.internship.event_management.dao.RecurrenceOptionDAO;
-import com.workfront.internship.event_management.dao.RecurrenceOptionDAOImpl;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.RecurrenceOption;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -17,19 +18,13 @@ import static com.workfront.internship.event_management.service.util.Validator.i
 /**
  * Created by Hermine Turshujyan 7/28/16.
  */
+@Component
 public class RecurrenceOptionServiceImpl implements RecurrenceOptionService {
 
     private static final Logger LOGGER = Logger.getLogger(RecurrenceTypeServiceImpl.class);
-    private RecurrenceOptionDAO recurrenceOptionDAO;
 
-    public RecurrenceOptionServiceImpl() {
-        try {
-            recurrenceOptionDAO = new RecurrenceOptionDAOImpl();
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
-    }
+    @Autowired
+    private RecurrenceOptionDAO recurrenceOptionDAO;
 
     @Override
     public RecurrenceOption addRecurrenceOption(RecurrenceOption option) {

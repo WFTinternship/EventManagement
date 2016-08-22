@@ -25,6 +25,7 @@ public class LoginPopupTest {
     public static void setUp() {
         loginPopup = new LoginPopup();
         homePage = new HomePage();
+        homePage.init(HOME_PAGE_URL);
     }
 
     @AfterClass

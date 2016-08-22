@@ -5,8 +5,8 @@ import com.workfront.internship.event_management.exception.dao.DuplicateEntryExc
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.Category;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,24 +14,10 @@ import java.util.List;
 /**
  * Created by Hermine Turshujyan 7/1/16.
  */
+@Component
 public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
 
     static final Logger LOGGER = Logger.getLogger(CategoryDAOImpl.class);
-    private DataSourceManager dataSourceManager;
-
-    public CategoryDAOImpl(DataSourceManager dataSourceManager) throws Exception {
-        super(dataSourceManager);
-        this.dataSourceManager = dataSourceManager;
-    }
-
-    public CategoryDAOImpl() throws DAOException {
-        try {
-            this.dataSourceManager = DataSourceManager.getInstance();
-        } catch (IOException | SQLException e) {
-            LOGGER.error("Could not instantiate data source manager", e);
-            throw new DAOException("Could not instantiate data source manager", e);
-        }
-    }
 
     @Override
     public int addCategory(Category category) throws DuplicateEntryException, DAOException {
@@ -43,7 +29,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
                 "(title, description, creation_date) VALUES (?, ?, ?)";
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -84,7 +70,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create statement
             stmt = conn.prepareStatement(query);
@@ -113,7 +99,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
 
         try {
             //acquire connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             String query = "SELECT * FROM event_category where id = ?";
@@ -146,7 +132,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             String sqlStr = "UPDATE event_category SET title = ?, description = ? WHERE id = ?";

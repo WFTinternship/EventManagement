@@ -10,11 +10,8 @@ import static com.workfront.internship.event_management.selenium.TestHelper.EVEN
  */
 public class EventsPage extends AbstractPage {
 
-    public EventsPage() {
-        init(EVENTS_PAGE_URL);
-    }
 
-    public void redirect() {
+    public void redirectToEventsPage() {
         redirectToPage(EVENTS_PAGE_URL);
     }
 

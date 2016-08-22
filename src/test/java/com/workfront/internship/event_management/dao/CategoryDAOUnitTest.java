@@ -8,7 +8,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.internal.util.reflection.Whitebox;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -22,7 +24,7 @@ import static org.mockito.Mockito.when;
  */
 public class CategoryDAOUnitTest {
 
-    private static DataSourceManager dataSourceManager;
+    private static DataSource dataSource;
     private static Connection connection;
     private static CategoryDAO categoryDAO;
 
@@ -30,20 +32,22 @@ public class CategoryDAOUnitTest {
     @BeforeClass
     public static void setUpClass() throws Exception {
 
-        dataSourceManager = Mockito.mock(DataSourceManager.class);
+        dataSource = Mockito.mock(DataSource.class);
         connection = Mockito.mock(Connection.class);
 
-        when(dataSourceManager.getConnection()).thenReturn(connection);
+        when(dataSource.getConnection()).thenReturn(connection);
         when(connection.prepareStatement(any(String.class), eq(PreparedStatement.RETURN_GENERATED_KEYS))).thenThrow(SQLException.class);
         when(connection.prepareStatement(any(String.class))).thenThrow(SQLException.class);
 
-        categoryDAO = new CategoryDAOImpl(dataSourceManager);
+        categoryDAO = new CategoryDAOImpl();
+        Whitebox.setInternalState(categoryDAO, "dataSource", dataSource);
+
     }
 
     @AfterClass
     public static void tearDownClass() throws Exception {
         categoryDAO = null;
-        dataSourceManager = null;
+        dataSource = null;
         connection = null;
     }
 

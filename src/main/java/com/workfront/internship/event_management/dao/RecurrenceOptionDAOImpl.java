@@ -5,8 +5,8 @@ import com.workfront.internship.event_management.exception.dao.DuplicateEntryExc
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.RecurrenceOption;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,24 +14,10 @@ import java.util.List;
 /**
  * Created by Hermine Turshujyan 7/14/16.
  */
+@Component
 public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOptionDAO {
 
     static final Logger LOGGER = Logger.getLogger(RecurrenceOptionDAOImpl.class);
-    private DataSourceManager dataSourceManager;
-
-    public RecurrenceOptionDAOImpl(DataSourceManager dataSourceManager) throws Exception {
-        super(dataSourceManager);
-        this.dataSourceManager = dataSourceManager;
-    }
-
-    public RecurrenceOptionDAOImpl() throws DAOException {
-        try {
-            this.dataSourceManager = DataSourceManager.getInstance();
-        } catch (IOException | SQLException e) {
-            LOGGER.error("Could not instantiate data source manager", e);
-            throw new DAOException("Could not instantiate data source manager", e);
-        }
-    }
 
     @Override
     public int addRecurrenceOption(RecurrenceOption recurrenceOption) throws DAOException, DuplicateEntryException {
@@ -40,7 +26,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //insert recurrenceOption and get generated id
             id = addRecurrenceOption(recurrenceOption, conn);
@@ -58,7 +44,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
         Connection conn = null;
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //insert recurrenceOption and get generated id
             addRecurrenceOptions(options, conn);
@@ -137,7 +123,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             String query = "SELECT * FROM recurrence_option ";
@@ -168,7 +154,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query);
@@ -204,7 +190,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query);
@@ -233,7 +219,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
                 "recurrence_type_id = ?,  title = ?,  abbreviation = ? WHERE id = ?";
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query);

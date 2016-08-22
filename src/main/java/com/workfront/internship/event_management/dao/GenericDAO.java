@@ -3,31 +3,31 @@ package com.workfront.internship.event_management.dao;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.io.IOException;
+import javax.sql.DataSource;
 import java.sql.*;
 
 /**
  * Created by Hermine Turshujyan 7/1/16.
  */
-
+@Component
 public class GenericDAO {
 
     static final Logger LOGGER = Logger.getLogger(GenericDAO.class);
-    private DataSourceManager dataSourceManager;
+    // private DataSourceManager dataSourceManager;
 
-    GenericDAO(DataSourceManager dataSourceManager) throws Exception {
+    @Autowired
+    DataSource dataSource;
+
+    /*public GenericDAO(DataSourceManager dataSourceManager) throws Exception {
         this.dataSourceManager = dataSourceManager;
     }
 
-    GenericDAO() throws DAOException {
-        try {
-            this.dataSourceManager = DataSourceManager.getInstance();
-        } catch (IOException | SQLException e) {
-            LOGGER.error("Could not instantiate data source manager", e);
-            throw new DAOException("Could not instantiate data source manager", e);
-        }
-    }
+    public GenericDAO() {
+
+    }*/
 
     void closeResources(ResultSet rs, Statement stmt, Connection conn) {
         try {
@@ -88,7 +88,7 @@ public class GenericDAO {
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create statement
             String sqlStr = "DELETE FROM " + tableName;
@@ -113,7 +113,7 @@ public class GenericDAO {
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query);

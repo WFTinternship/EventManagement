@@ -23,11 +23,12 @@ public class RegistrationPageTest {
     @BeforeClass
     public static void setUpClass() {
         registrationPage = new RegistrationPage();
+        registrationPage.init(REGISTRATION_PAGE_URL);
     }
 
     @AfterClass
     public static void tearDownClass() {
-        // registrationPage.getWebDriver().close();
+        registrationPage.getWebDriver().close();
         registrationPage = null;
     }
 

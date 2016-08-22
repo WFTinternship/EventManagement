@@ -1,13 +1,14 @@
 package com.workfront.internship.event_management.service;
 
 import com.workfront.internship.event_management.dao.CategoryDAO;
-import com.workfront.internship.event_management.dao.CategoryDAOImpl;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Category;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -16,19 +17,13 @@ import static com.workfront.internship.event_management.service.util.Validator.i
 /**
  * Created by Hermine Turshujyan 7/22/16.
  */
+@Component
 public class CategoryServiceImpl implements CategoryService {
 
     private static final Logger LOGGER = Logger.getLogger(CategoryServiceImpl.class);
-    private CategoryDAO categoryDAO;
 
-    public CategoryServiceImpl() {
-        try {
-            categoryDAO = new CategoryDAOImpl();
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
-    }
+    @Autowired
+    private CategoryDAO categoryDAO;
 
     @Override
     public Category addCategory(Category category) {

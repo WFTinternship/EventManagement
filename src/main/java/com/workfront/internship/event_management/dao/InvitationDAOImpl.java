@@ -6,8 +6,8 @@ import com.workfront.internship.event_management.exception.dao.ObjectNotFoundExc
 import com.workfront.internship.event_management.model.Invitation;
 import com.workfront.internship.event_management.model.User;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,24 +15,10 @@ import java.util.List;
 /**
  * Created by Hermine Turshujyan 7/8/16.
  */
+@Component
 public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
     static final Logger LOGGER = Logger.getLogger(InvitationDAOImpl.class);
-    private DataSourceManager dataSourceManager;
-
-    public InvitationDAOImpl(DataSourceManager dataSourceManager) throws Exception {
-        super(dataSourceManager);
-        this.dataSourceManager = dataSourceManager;
-    }
-
-    public InvitationDAOImpl() throws DAOException {
-        try {
-            this.dataSourceManager = DataSourceManager.getInstance();
-        } catch (IOException | SQLException e) {
-            LOGGER.error("Could not instantiate data source manager.", e);
-            throw new DAOException("Could not instantiate data source manager.", e);
-        }
-    }
 
     @Override
     public int addInvitation(Invitation invitation) throws DAOException, DuplicateEntryException {
@@ -46,7 +32,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
                 + "(?, ?, ?, ?, ?, ? )";
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -90,7 +76,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
                 + "(?, ?, ?, ?, ?, ? )";
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //start transaction
             conn.setAutoCommit(false);
@@ -158,7 +144,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
                 "ON event_invitation.user_id = user.id ";
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);
@@ -198,7 +184,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);
@@ -266,7 +252,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
                 "WHERE " + columnName + " = ?";
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);

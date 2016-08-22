@@ -5,6 +5,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static com.workfront.internship.event_management.selenium.TestHelper.EVENTS_PAGE_URL;
 import static org.junit.Assert.assertFalse;
 
 /**
@@ -16,7 +17,9 @@ public class EventsPageTest {
 
     @BeforeClass
     static public void setUp() {
+
         eventsPage = new EventsPage();
+        eventsPage.init(EVENTS_PAGE_URL);
     }
 
     @AfterClass

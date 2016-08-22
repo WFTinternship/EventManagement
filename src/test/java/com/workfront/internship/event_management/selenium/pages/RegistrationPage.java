@@ -10,11 +10,6 @@ import static com.workfront.internship.event_management.selenium.TestHelper.REGI
  */
 public class RegistrationPage extends AbstractPage {
 
-
-    public RegistrationPage() {
-        init(REGISTRATION_PAGE_URL);
-    }
-
     public void redirectToRegistrationPage() {
         redirectToPage(REGISTRATION_PAGE_URL);
     }

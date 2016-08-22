@@ -6,8 +6,8 @@ import com.workfront.internship.event_management.exception.dao.ObjectNotFoundExc
 import com.workfront.internship.event_management.model.Media;
 import com.workfront.internship.event_management.model.MediaType;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,24 +15,10 @@ import java.util.List;
 /**
  * Created by Hermine Turshujyan 7/2/16.
  */
+@Component
 public class MediaDAOImpl extends GenericDAO implements MediaDAO {
 
     static final Logger LOGGER = Logger.getLogger(MediaTypeDAOImpl.class);
-    private DataSourceManager dataSourceManager;
-
-    public MediaDAOImpl(DataSourceManager dataSourceManager) throws Exception {
-        super(dataSourceManager);
-        this.dataSourceManager = dataSourceManager;
-    }
-
-    public MediaDAOImpl() throws DAOException {
-        try {
-            this.dataSourceManager = DataSourceManager.getInstance();
-        } catch (IOException | SQLException e) {
-            LOGGER.error("Could not instantiate data source manager.", e);
-            throw new DAOException("Could not instantiate data source manager.", e);
-        }
-    }
 
     @Override
     public int addMedia(Media media) throws DuplicateEntryException, DAOException {
@@ -45,7 +31,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
                 + "VALUES (?, ?, ?, ?, ?, ?)";
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -87,7 +73,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
                 + "VALUES (?, ?, ?, ?, ?, ?)";
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
             conn.setAutoCommit(false);
 
             //create and initialize statement
@@ -147,7 +133,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query);
@@ -181,7 +167,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
 
         try {
             //acquire connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create statement
             stmt = conn.prepareStatement(query);
@@ -211,7 +197,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query);
@@ -254,7 +240,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
                 "WHERE event_media." + columnName + " = ?";
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query);

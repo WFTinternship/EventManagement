@@ -1,13 +1,14 @@
 package com.workfront.internship.event_management.service;
 
 import com.workfront.internship.event_management.dao.InvitationDAO;
-import com.workfront.internship.event_management.dao.InvitationDAOImpl;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Invitation;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -17,19 +18,14 @@ import static com.workfront.internship.event_management.service.util.Validator.i
 /**
  * Created by Hermine Turshujyan 7/26/16.
  */
+
+@Component
 public class InvitationServiceImpl implements InvitationService {
 
     private static final Logger LOGGER = Logger.getLogger(InvitationServiceImpl.class);
-    private InvitationDAO invitationDAO;
 
-    public InvitationServiceImpl() {
-        try {
-            invitationDAO = new InvitationDAOImpl();
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
-    }
+    @Autowired
+    private InvitationDAO invitationDAO;
 
     @Override
     public Invitation addInvitation(Invitation invitation) {

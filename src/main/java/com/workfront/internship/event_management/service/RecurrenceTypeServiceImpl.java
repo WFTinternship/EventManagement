@@ -1,13 +1,14 @@
 package com.workfront.internship.event_management.service;
 
 import com.workfront.internship.event_management.dao.RecurrenceTypeDAO;
-import com.workfront.internship.event_management.dao.RecurrenceTypeDAOImpl;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.RecurrenceType;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -17,19 +18,14 @@ import static com.workfront.internship.event_management.service.util.Validator.i
 /**
  * Created by Hermine Turshujyan 7/27/16.
  */
+
+@Component
 class RecurrenceTypeServiceImpl implements RecurrenceTypeService {
 
     private static final Logger LOGGER = Logger.getLogger(RecurrenceTypeServiceImpl.class);
-    private RecurrenceTypeDAO recurrenceTypeDAO;
 
-    RecurrenceTypeServiceImpl() {
-        try {
-            recurrenceTypeDAO = new RecurrenceTypeDAOImpl();
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
-    }
+    @Autowired
+    private RecurrenceTypeDAO recurrenceTypeDAO;
 
     @Override
     public RecurrenceType addRecurrenceType(RecurrenceType recurrenceType) {

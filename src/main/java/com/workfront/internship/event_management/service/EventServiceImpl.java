@@ -1,13 +1,14 @@
 package com.workfront.internship.event_management.service;
 
 import com.workfront.internship.event_management.dao.EventDAO;
-import com.workfront.internship.event_management.dao.EventDAOImpl;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Event;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -16,21 +17,18 @@ import static com.workfront.internship.event_management.service.util.Validator.*
 /**
  * Created by Hermine Turshujyan 7/20/16.
  */
+
+@Component
 public class EventServiceImpl implements EventService {
 
     private static final Logger LOGGER = Logger.getLogger(EventServiceImpl.class);
+
+    @Autowired
     private EventDAO eventDAO;
+
+    @Autowired
     private InvitationService invitationService;
 
-    public EventServiceImpl() throws OperationFailedException {
-        try {
-            eventDAO = new EventDAOImpl();
-            invitationService = new InvitationServiceImpl();
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
-    }
 
     @Override
     public Event createEvent(Event event) throws DuplicateEntryException {

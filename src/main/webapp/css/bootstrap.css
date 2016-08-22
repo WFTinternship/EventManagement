@@ -21,7 +21,6 @@ figcaption,
 figure,
 footer,
 header,
-hgroup,
 main,
 menu,
 nav,
@@ -7936,10 +7935,6 @@ button.close {
 
 .affix {
     position: fixed;
-}
-
-@-ms-viewport {
-    width: device-width;
 }
 
 .visible-xs,

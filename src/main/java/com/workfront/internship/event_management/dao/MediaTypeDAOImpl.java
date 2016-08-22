@@ -5,8 +5,8 @@ import com.workfront.internship.event_management.exception.dao.DuplicateEntryExc
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.MediaType;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,25 +14,10 @@ import java.util.List;
 /**
  * Created by Hermine Turshujyan 7/21/16.
  */
-
+@Component
 public class MediaTypeDAOImpl extends GenericDAO implements MediaTypeDAO {
 
     static final Logger LOGGER = Logger.getLogger(MediaTypeDAOImpl.class);
-    private DataSourceManager dataSourceManager;
-
-    public MediaTypeDAOImpl(DataSourceManager dataSourceManager) throws Exception {
-        super(dataSourceManager);
-        this.dataSourceManager = dataSourceManager;
-    }
-
-    public MediaTypeDAOImpl() throws DAOException {
-        try {
-            this.dataSourceManager = DataSourceManager.getInstance();
-        } catch (IOException | SQLException e) {
-            LOGGER.error("Could not instantiate data source manager", e);
-            throw new DAOException("Could not instantiate data source manager", e);
-        }
-    }
 
     @Override
     public int addMediaType(MediaType mediaType) throws DAOException, DuplicateEntryException {
@@ -44,7 +29,7 @@ public class MediaTypeDAOImpl extends GenericDAO implements MediaTypeDAO {
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -79,7 +64,7 @@ public class MediaTypeDAOImpl extends GenericDAO implements MediaTypeDAO {
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create statement
             stmt = conn.prepareStatement(query);
@@ -111,7 +96,7 @@ public class MediaTypeDAOImpl extends GenericDAO implements MediaTypeDAO {
 
         try {
             //acquire connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query);
@@ -147,7 +132,7 @@ public class MediaTypeDAOImpl extends GenericDAO implements MediaTypeDAO {
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);

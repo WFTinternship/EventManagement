@@ -4,8 +4,9 @@ import com.google.gson.JsonObject;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.UserService;
-import com.workfront.internship.event_management.service.UserServiceImpl;
+import com.workfront.internship.event_management.spring.EventManagementApplication;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,15 @@ import java.io.IOException;
  */
 public class LoginServlet extends HttpServlet {
 
+    private UserService userService;
+
+    @Override
+    public void init(ServletConfig servletConfig) throws ServletException {
+        super.init();
+        userService = EventManagementApplication.getApplicationContext(servletConfig.getServletContext()).getBean(UserService.class);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
 
@@ -27,7 +37,6 @@ public class LoginServlet extends HttpServlet {
         JsonObject result = new JsonObject();
         try {
 
-            UserService userService = new UserServiceImpl();
             User user = userService.login(email, password);
 
             //Save user object in session

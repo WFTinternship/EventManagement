@@ -5,8 +5,8 @@ import com.workfront.internship.event_management.exception.dao.DuplicateEntryExc
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.User;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,26 +14,10 @@ import java.util.List;
 /**
  * Created by Hermine Turshujyan 7/1/16.
  */
+@Component
 public class UserDAOImpl extends GenericDAO implements UserDAO {
 
     static final Logger LOGGER = Logger.getLogger(UserDAOImpl.class);
-    private DataSourceManager dataSourceManager;
-
-    public UserDAOImpl(DataSourceManager dataSourceManager) throws Exception {
-        super(dataSourceManager);
-        this.dataSourceManager = dataSourceManager;
-    }
-
-    public UserDAOImpl() throws DAOException {
-        super();
-
-        try {
-            this.dataSourceManager = DataSourceManager.getInstance();
-        } catch (IOException | SQLException e) {
-            LOGGER.error("Could not instantiate data source manager", e);
-            throw new DAOException("Could not instantiate data source manager", e);
-        }
-    }
 
     @Override
     public int addUser(User user) throws DAOException, DuplicateEntryException {
@@ -47,7 +31,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
                 "(?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -93,7 +77,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create statement
             stmt = conn.prepareStatement(query);
@@ -132,7 +116,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query);
@@ -159,7 +143,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             String sqlStr = "UPDATE user SET first_name = ?, last_name = ?, email = ?, password = ?, " +
@@ -212,7 +196,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query);

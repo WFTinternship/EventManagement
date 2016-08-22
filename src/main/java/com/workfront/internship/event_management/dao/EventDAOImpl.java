@@ -4,8 +4,8 @@ import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.*;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,24 +13,10 @@ import java.util.List;
 /**
  * Created by Hermine Turshujyan 7/1/16.
  */
+@Component
 public class EventDAOImpl extends GenericDAO implements EventDAO {
 
     static final Logger LOGGER = Logger.getLogger(EventDAOImpl.class);
-    private DataSourceManager dataSourceManager;
-
-    public EventDAOImpl(DataSourceManager dataSourceManager) throws Exception {
-        super(dataSourceManager);
-        this.dataSourceManager = dataSourceManager;
-    }
-
-    public EventDAOImpl() throws DAOException {
-        try {
-            this.dataSourceManager = DataSourceManager.getInstance();
-        } catch (IOException | SQLException e) {
-            LOGGER.error("Could not instantiate data source manager.", e);
-            throw new DAOException("Could not instantiate data source manager.", e);
-        }
-    }
 
     @Override
     public int addEvent(Event event) throws DAOException {
@@ -40,7 +26,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //insert event info and get generated event id
             eventId = addEvent(event, conn);
@@ -61,7 +47,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //start transaction
             conn.setAutoCommit(false);
@@ -109,7 +95,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                 "ON event.category_id = event_category.id) WHERE event.id = ?";
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query);
@@ -168,7 +154,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                 "WHERE event.category_id = ?";
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query);
@@ -201,7 +187,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                 "WHERE event.user_role = \'Organizer\' AND event.id = ?";
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query);
@@ -249,7 +235,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                 "LEFT JOIN event_category ON event.category_id = event_category.id ";
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create statement
             stmt = conn.prepareStatement(query);
@@ -281,7 +267,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                 "WHERE id = ?";
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query);
@@ -424,7 +410,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                 "WHERE event_invitation.user_id = ? AND " + columnName + " = ?";
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);

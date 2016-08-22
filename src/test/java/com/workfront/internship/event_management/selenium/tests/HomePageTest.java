@@ -6,10 +6,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static com.workfront.internship.event_management.selenium.TestHelper.*;
 import static org.junit.Assert.assertEquals;
@@ -25,11 +22,12 @@ public class HomePageTest {
     @Before
     public void setUp() {
         homePage = new HomePage();
+        homePage.init(HOME_PAGE_URL);
     }
 
     @After
     public void tearDown() {
-        //homePage.getWebDriver().close();
+        homePage.getWebDriver().close();
         homePage = null;
     }
 
@@ -43,11 +41,7 @@ public class HomePageTest {
         loginPopup.typePassword(VALID_PASSWORD);
         loginPopup.clickSignin();
 
-
-        WebDriverWait wait = new WebDriverWait(homePage.getWebDriver(), 10);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("logout-button")));
         homePage.clickLogout();
-
 
         String currentUrl = homePage.getWebDriver().getCurrentUrl();
         assertEquals("Page isn't redirecting properly", currentUrl, HOME_PAGE_URL);

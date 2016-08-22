@@ -6,8 +6,8 @@ import com.workfront.internship.event_management.exception.dao.ObjectNotFoundExc
 import com.workfront.internship.event_management.model.RecurrenceOption;
 import com.workfront.internship.event_management.model.RecurrenceType;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,24 +15,10 @@ import java.util.List;
 /**
  * Created by Hermine Turshujyan 7/11/16.
  */
+@Component
 public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeDAO {
 
     static final Logger LOGGER = Logger.getLogger(RecurrenceTypeDAOImpl.class);
-    private DataSourceManager dataSourceManager;
-
-    public RecurrenceTypeDAOImpl(DataSourceManager dataSourceManager) throws Exception {
-        super(dataSourceManager);
-        this.dataSourceManager = dataSourceManager;
-    }
-
-    public RecurrenceTypeDAOImpl() throws DAOException {
-        try {
-            this.dataSourceManager = DataSourceManager.getInstance();
-        } catch (IOException | SQLException e) {
-            LOGGER.error("Could not instantiate data source manager", e);
-            throw new DAOException("Could not instantiate data source manager", e);
-        }
-    }
 
     @Override
     public int addRecurrenceType(RecurrenceType recurrenceType) throws DAOException, DuplicateEntryException {
@@ -41,7 +27,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //execute query and get generated id
             id = addRecurrenceType(recurrenceType, conn);
@@ -64,7 +50,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //start transaction
             conn.setAutoCommit(false);
@@ -116,7 +102,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
         List<RecurrenceType> recurrenceTypeList = new ArrayList<>();
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create statement
             stmt = conn.prepareStatement(query);
@@ -147,7 +133,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
                 "WHERE recurrence_type.id = ?";
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query);
@@ -180,7 +166,7 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
 
         try {
             //get connection
-            conn = dataSourceManager.getConnection();
+            conn = dataSource.getConnection();
 
             //create and initialize statement
             stmt = conn.prepareStatement(query);

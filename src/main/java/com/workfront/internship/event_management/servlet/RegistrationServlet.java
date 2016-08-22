@@ -4,11 +4,13 @@ import com.google.gson.JsonObject;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.UserService;
-import com.workfront.internship.event_management.service.UserServiceImpl;
+import com.workfront.internship.event_management.spring.EventManagementApplication;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,9 +25,22 @@ import java.util.UUID;
  */
 public class RegistrationServlet extends HttpServlet {
 
+    @Autowired
+    ServletContext servletContext;
+
+    private UserService userService;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        userService = EventManagementApplication.getApplicationContext(getServletContext()).getBean(UserService.class);
+        // userService = servletContext.getBean(UserService.class);
+    }
+
     // location to store file uploaded
     private static final String UPLOAD_DIRECTORY = "upload";
 
+    @Override
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
 
@@ -112,7 +127,6 @@ public class RegistrationServlet extends HttpServlet {
                     JsonObject result = new JsonObject();
 
                     try {
-                        UserService userService = new UserServiceImpl();
                         userService.addAccount(user);
 
                         result.addProperty("success", "You are successfully registered!");

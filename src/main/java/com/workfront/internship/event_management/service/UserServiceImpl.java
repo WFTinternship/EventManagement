@@ -1,7 +1,6 @@
 package com.workfront.internship.event_management.service;
 
 import com.workfront.internship.event_management.dao.UserDAO;
-import com.workfront.internship.event_management.dao.UserDAOImpl;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
@@ -9,6 +8,8 @@ import com.workfront.internship.event_management.exception.service.OperationFail
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.util.HashGenerator;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -17,22 +18,15 @@ import static com.workfront.internship.event_management.service.util.Validator.*
 /**
  * Created by Hermine Turshujyan 7/20/16.
  */
+@Component
 public class UserServiceImpl implements UserService {
 
     private static final Logger LOGGER = Logger.getLogger(UserServiceImpl.class);
 
+    @Autowired
     private UserDAO userDAO;
-    private EmailService emailService;
 
-    public UserServiceImpl() {
-        try {
-            userDAO = new UserDAOImpl();
-            // emailService = new EmailServiceImpl();
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
-    }
+    // private EmailService emailService;
 
     @Override
     public User addAccount(User user) {
