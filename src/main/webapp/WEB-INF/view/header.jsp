@@ -49,14 +49,14 @@
                             <a href="/events"><span id="all_events">All Events</span></a>
                         </li>
                         <li>
-                            <a href="/events.jsp"><span>Upcoming events</span></a>
+                            <a href="/events"><span>Upcoming events</span></a>
                         </li>
                         <li>
-                            <a href="/events.jsp"><span>Past events</span></a>
+                            <a href="/events"><span>Past events</span></a>
                         </li>
                         <% if (session.getAttribute("user") != null) { %>
                         <li>
-                            <a href=""><span>Create Event</span></a>
+                            <a href="/create-event"><span>Create Event</span></a>
                         </li>
                         <% }
                             ; %>

@@ -68,4 +68,10 @@ public class EventController {
 
         //return new JsonObject();
     }
+
+
+    @RequestMapping(value = "/create-event")
+    public String createEvent() {
+        return "create-event";
+    }
 }

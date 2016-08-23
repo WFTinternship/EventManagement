@@ -1,21 +1,19 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
-  User: Inmelet
-  Date: 8/8/2016
-  Time: 10:24 AM
+  User: hermine
+  Date: 8/23/16
+  Time: 11:51 PM
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Registration | Event Management</title>
+    <title>Create Event | Event Management</title>
 
     <script src="<c:url value="/resources/js/jquery-3.1.0.min.js" />"></script>
     <script src="<c:url value="/resources/js/jquery.validate.js" />"></script>
     <script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
-    <script src="<c:url value="/resources/js/registration.js" />"></script>
-
 
     <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
@@ -26,7 +24,6 @@
     <link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/main.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/icon_font.css" />" rel="stylesheet">
-
 </head>
 <body>
 <div id="main_wrapper">
@@ -40,35 +37,32 @@
             <div class="form_header">
                 <div class="main_title upper">
                     <h2>
-                        New user?
-                        <span class="highlighted"> Register Now.</span>
+                        New Event
                     </h2>
                 </div>
             </div>
-            <form id="registration_form" enctype="multipart/form-data">
+            <form id="event_form" enctype="multipart/form-data">
                 <div class="form_row clearfix">
                     <div class="form_col_half">
-                        <label for="firstName">
-                            <span class="field_name">First Name</span>
+                        <label for="event_title">
+                            <span class="field_name">Title</span>
                             <span class="required_star">*</span>
                         </label>
-                        <input class="input_text" name="firstName" id="firstName" type="text">
+                        <input class="input_text" name="event_title" id="event_title" type="text">
                     </div>
                     <div class="form_col_half ">
-                        <label for="lastName">
-                            <span class="field_name">Last Name</span>
-                            <span class="required_star">*</span>
+                        <label for="short_desc">
+                            <span class="field_name">Short description</span>
                         </label>
-                        <input class="input_text" name="lastName" id="lastName" type="text">
+                        <input class="input_text" name="short_desc" id="short_desc" type="text">
                     </div>
                 </div>
                 <div class="form_row clearfix">
                     <div class="form_col_half">
-                        <label for="email">
-                            <span class="field_name">Email</span>
-                            <span class="required_star">*</span>
+                        <label for="location">
+                            <span class="field_name">Location</span>
                         </label>
-                        <input class="input_text" name="email" id="email" type="text">
+                        <input class="input_text" name="location" id="location" type="text">
                     </div>
                     <div class="form_col_half">
                         <label for="confirmEmail">
@@ -115,7 +109,7 @@
                 <div class="form_row clearfix">
                     <button type="submit" class="btn full_button" id="reg_submit">
                         <i class="icon-check"></i>
-                        <span>Register</span>
+                        <span>Save</span>
                     </button>
                 </div>
 
