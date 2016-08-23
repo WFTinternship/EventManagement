@@ -37,7 +37,7 @@
     <div id="navigation_bar">
         <div class="content">
             <div id="logo">
-                <a href="/"><img src="/img/logo.jpg" height='45'>
+                <a href="/"><img src="/resources/img/logo.jpg" height='45'>
                 </a>
             </div>
 
@@ -51,10 +51,10 @@
                             <a href="/events"><span id="all_events">All Events</span></a>
                         </li>
                         <li>
-                            <a href="/WEB-INF/view/events.jsp"><span>Upcoming events</span></a>
+                            <a href="/events.jsp"><span>Upcoming events</span></a>
                         </li>
                         <li>
-                            <a href="/WEB-INF/view/events.jsp"><span>Past events</span></a>
+                            <a href="/events.jsp"><span>Past events</span></a>
                         </li>
                         <% if (session.getAttribute("user") != null) { %>
                         <li>

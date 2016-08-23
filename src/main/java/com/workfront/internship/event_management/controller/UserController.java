@@ -24,7 +24,7 @@ public class UserController {
     private UserService userService;
 
 
-    @RequestMapping(value = "/login", produces = "application/json")
+    @RequestMapping(value = "/login", produces = "application/json", method = RequestMethod.POST)
     @ResponseBody
     public JsonObject login(Model model, HttpServletRequest request) {
 

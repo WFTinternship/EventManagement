@@ -1,6 +1,6 @@
-<script src="../../js/bootstrap.min.js"></script>
+<!-- <script src="/resources/js/bootstrap.min.js"></script>
 <script src="../../js/bootstrap-notify.js"></script>
-<script src="../../js/jquery.validate.js"></script>
+<script src="../../js/jquery.validate.js"></script>-->
 <script>
 
     $(document).ready(function () {
