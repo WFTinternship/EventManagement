@@ -18,7 +18,7 @@ public class MainController {
     @Autowired
     private EventService eventService;
 
-    @RequestMapping("/")
+    @RequestMapping(value = {"/", "home"})
     public String loadUpcomingEvents(Model model) {
         List<Event> eventList = eventService.getAllEvents();
         model.addAttribute("events", eventList);

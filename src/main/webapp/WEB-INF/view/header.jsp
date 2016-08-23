@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="com.workfront.internship.event_management.model.User" %>
 
 <jsp:include page="login.jsp"/>
@@ -11,13 +12,11 @@
             %>
             <span class="top_registration">
                     <i class="top_icon icon-user"></i>
-                    <a class="upper" href="registration.jsp">Registration</a>
+                    <a class="upper" href="/registration">Registration</a>
                 </span>
             <span class="top_login">
                     <i class="top_icon icon-lock"></i>
                     <button id="login_button" class="login_button upper">Login</button>
-                <!--<a class="upper" href="../login.jsp">Login</a> -->
-
                 </span>
             <% } else { %>
             <span class="top_registration">
@@ -25,7 +24,6 @@
                         Hi, <%=user.getFirstName()%>
                 </span>
             <form action="/logout" method="GET" id="logout_form">
-                <input type="hidden" name="action" value="LOGOUT"/>
                 <input class="upper" type="submit" value="Logout" id="logout_button"/>
             </form>
             <% }
@@ -37,7 +35,7 @@
     <div id="navigation_bar">
         <div class="content">
             <div id="logo">
-                <a href="/"><img src="/resources/img/logo.jpg" height='45'>
+                <a href="/"><img src="<c:url value="/resources/img/logo.jpg" />" height='45'>
                 </a>
             </div>
 

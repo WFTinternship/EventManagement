@@ -13,10 +13,7 @@
 <head>
     <title>Home | Event Management</title>
 
-
-    <%--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>--%>
     <script src="<c:url value="/resources/js/jquery-3.1.0.min.js" />"></script>
-    <%--<script src="<c:url value="/resources/js/jquery-ui.min.js" />"></script> -->--%>
     <script src="<c:url value="/resources/js/jquery.validate.js" />"></script>
     <script src="<c:url value="/resources/js/jquery.flexslider.js" />"></script>
     <script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
@@ -43,10 +40,10 @@
     <div class="flexslider">
         <ul class="slides">
             <li>
-                <img src="/resources/img/slide2.jpg"/>
+                <img src="<c:url value="/resources/img/slide2.jpg" />"/>
             </li>
             <li>
-                <img src="/resources/img/slide2.jpg"/>
+                <img src="<c:url value="/resources/img/slide2.jpg" />"/>
             </li>
         </ul>
     </div>

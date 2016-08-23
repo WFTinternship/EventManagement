@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: Inmelet
@@ -9,23 +10,25 @@
 <html>
 <head>
     <title>Registration | Event Management</title>
-    <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../../css/reset.css">
-    <link rel="stylesheet" type="text/css" href="../../css/main.css">
-    <link rel="stylesheet" type="text/css" href="../../css/icon_font.css">
 
-    <link rel="stylesheet" type="text/css" href="./css/jquery-ui.min.css">
-    <link rel="stylesheet" type="text/css" href="./css/jquery-ui.structure.min.css">
-    <link rel="stylesheet" type="text/css" href="./css/jquery-ui.theme.min.css">
+    <script src="<c:url value="/resources/js/jquery-3.1.0.min.js" />"></script>
+    <script src="<c:url value="/resources/js/jquery.validate.js" />"></script>
+    <script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
 
     <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
-    <script type="text/javascript" src="../../js/jquery-3.1.0.min.js"></script>
-    <script type="text/javascript" src="../../js/jquery-ui.min.js"></script>
-    <script src="../../js/bootstrap.min.js"></script>
-    <script src="../../js/jquery.validate.js"></script>
+    <link href="<c:url value="/resources/css/reset.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/main.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/icon_font.css" />" rel="stylesheet">
+
+
+    <%--<link rel="stylesheet" type="text/css" href="./css/jquery-ui.min.css">--%>
+    <%--<link rel="stylesheet" type="text/css" href="./css/jquery-ui.structure.min.css">--%>
+    <%--<link rel="stylesheet" type="text/css" href="./css/jquery-ui.theme.min.css">--%>
 
     <script>
         $(document).ready(function () {
@@ -39,7 +42,7 @@
                         required: true,
                         email: true,
                         remote: {
-                            url: "/checkEmail",
+                            url: "/check-email",
                             type: "POST",
                             data: {
                                 email: function () {
@@ -94,10 +97,8 @@
                         contentType: false,
                         data: formData,
                         success: function (result) {
-                            if (result.success != null) {
-                                window.location = "/WEB-INF/view/index.jsp";
-                            } else if (result.error != null) {
-                                window.location = "/WEB-INF/view/error.jsp";
+                            if (result.status == "SUCCESS") {
+                                window.location = "/";
                             }
                         },
                         error: function (jqXHR, textStatus, errorThrown) {

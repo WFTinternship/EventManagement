@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="com.workfront.internship.event_management.model.Category" %>
 <%@ page import="com.workfront.internship.event_management.model.Event" %>
 <%@ page import="com.workfront.internship.event_management.service.CategoryService" %>
@@ -15,45 +16,28 @@
 <html>
 <head>
     <title>Home | Event Management</title>
-    <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../../css/reset.css">
-    <link rel="stylesheet" type="text/css" href="../../css/main.css">
-    <link rel="stylesheet" type="text/css" href="../../css/icon_font.css">
-    <link rel="stylesheet" type="text/css" href="../../css/flexslider.css">
 
-    <link rel="stylesheet" type="text/css" href="./css/jquery-ui.min.css">
-    <link rel="stylesheet" type="text/css" href="./css/jquery-ui.structure.min.css">
-    <link rel="stylesheet" type="text/css" href="./css/jquery-ui.theme.min.css">
+    <script src="<c:url value="/resources/js/jquery-3.1.0.min.js" />"></script>
+    <script src="<c:url value="/resources/js/jquery.validate.js" />"></script>
+    <script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
+    <script src="<c:url value="/resources/js/events.js" />"></script>
 
     <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
-    <script type="text/javascript" src="../../js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../../js/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="../../js/jquery.validate.js"></script>
-    <script type="text/javascript" src="../../js/jquery-3.1.0.min.js"></script>
-    <script type="text/javascript" src="../../js/jquery.flexslider.js"></script>
-
-    <script type="text/javascript" src="../../js/events.js"></script>
+    <link href="<c:url value="/resources/css/reset.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/main.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/icon_font.css" />" rel="stylesheet">
 
 </head>
 <body class="events_page">
 <div id="main_wrapper">
     <!-- Main Header -->
-    <jsp:include page="/WEB-INF/view/header.jspew/header.jsp"/>
+    <jsp:include page="header.jsp"/>
     <!-- End Main Header -->
-
-    <div class="flexslider">
-        <ul class="slides">
-            <li>
-                <img src="/img/slide2.jpg"/>
-            </li>
-            <li>
-                <img src="/img/slide2.jpg"/>
-            </li>
-        </ul>
-    </div>
 
     <!-- Content Section -->
 
@@ -89,6 +73,57 @@
                             <span class="list_header">All Events</span>
                         </h2>
                     </div>
+                    <div class="list">
+                        <%
+                            List<Event> eventList = (List<Event>) request.getAttribute("events");
+                            if (!eventList.isEmpty()) {
+                                for (Event event : eventList) {
+                        %>
+                        <div class="list_item">
+                            <div class="list_content">
+                                <h6 class="title">
+                                    <a href="#"><%=event.getTitle() %>
+                                    </a>
+                                </h6>
+                                <span class="meta">
+                                       <span class="meta_part ">
+                                           <a href="#">
+                                               <i class="ev_icon icon-clock"></i>
+                                               <span><%=event.getStartDate() %></span>
+                                           </a>
+                                       </span>
+                                   <span class="meta_part">
+                                       <a href="#">
+                                           <i class="ev_icon icon-map-marker"></i>
+                                           <span>
+                                               <%=event.getLocation()%>
+                                           </span>
+                                       </a>
+                                   </span>
+                                       <span class="meta_part">
+                                           <i class="ev_icon icon-folder"></i>
+                                           <span>
+                                               <a href="#">
+                                                   <%= event.getCategory().getTitle()%>
+                                               </a>
+                                           </span>
+                                       </span>
+                                       <span class="meta_part">
+                                           <a href="#">
+                                               <i class="ev_icon icon-user"></i>
+                                               <span>Event Organizer</span>
+                                           </a>
+                                       </span>
+                                   </span>
+                                <p class="desc"><%=event.getShortDescription()%>
+                                </p>
+
+                                <a class="btn" href="#"><span>Details</span></a>
+                            </div>
+                        </div>
+                        <% }
+                        } %>
+                    </div>
                 </div>
             </div>
         </div>
@@ -96,7 +131,7 @@
     <!-- End Content Section -->
 
     <!-- Footer -->
-    <jsp:include page="/WEB-INF/view/footer.jspew/footer.jsp"/>
+    <jsp:include page="footer.jsp"/>
     <!-- End Footer -->
 </div>
 </body>

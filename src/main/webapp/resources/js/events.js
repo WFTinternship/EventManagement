@@ -1,23 +1,27 @@
 /**
  * Created by hermine on 8/12/16.
  */
-
 $(document).ready(function () {
-    // loadAllEvents();
+    //alert('aaa');
+    //  loadAllEvents();
 });
 
 function getEventsByCategory(categoryId) {
-    $.getJSON("/events?categoryId=" + categoryId, function (data) {
-        var events = [];
-        $.each(data, function (key, event) {
-            var eventHTML = createEventItem(event)
-            events.push(eventHTML);
-        });
 
-        if (events != "") {
-            $("#event_list").html(events.join(""));
-        } else {
-            $("#event_list").html("There are no events in this category.");
+    $.getJSON("/events-ajax?categoryId=" + categoryId, function (data) {
+        if (data.status == "SUCCESS") {
+            var events = [];
+            $.each(data.result, function (key, event) {
+                alert(key + "   " + event)
+                var eventHTML = createEventItem(event)
+                events.push(eventHTML);
+            });
+
+            if (events != "") {
+                $("#event_list").html(events.join(""));
+            } else {
+                $("#event_list").html("There are no events in this category.");
+            }
         }
     });
 

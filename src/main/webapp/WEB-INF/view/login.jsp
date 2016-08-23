@@ -1,6 +1,3 @@
-<!-- <script src="/resources/js/bootstrap.min.js"></script>
-<script src="../../js/bootstrap-notify.js"></script>
-<script src="../../js/jquery.validate.js"></script>-->
 <script>
 
     $(document).ready(function () {
@@ -42,29 +39,32 @@
             },
 
             submitHandler: function (form) {
-                // e.preventDefault();
+
                 var email = $('#lf_email').val();
                 var password = $('#lf_password').val();
 
                 $.ajax({
                     type: 'POST',
                     data: {
-                        action: 'LOGIN',
                         email: email,
                         password: password
                     },
                     url: '/login',
                     success: function (result) {
-
-                        if (result.success != null) {
-                            window.location = "/WEB-INF/view/index.jsp"
+                        /* if (result.success != null) {
+                         window.location = "/"
                         } else if (result.error != null) {
                             $("#login_failed_label").show();
                             $("#login_failed_label").html(result.error);
+                         }*/
+                        if (result.status == "SUCCESS") {
+                            window.location = "/"
+                        } else if (result.status == "FAIL") {
+                            $("#login_failed_label").show();
+                            $("#login_failed_label").html(result.message);
                         }
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-
                     }
                 })
             }

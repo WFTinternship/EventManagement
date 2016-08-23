@@ -1,6 +1,5 @@
 package com.workfront.internship.event_management.controller;
 
-import com.google.gson.JsonObject;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.UserService;
@@ -26,12 +25,13 @@ public class UserController {
 
     @RequestMapping(value = "/login", produces = "application/json", method = RequestMethod.POST)
     @ResponseBody
-    public JsonObject login(Model model, HttpServletRequest request) {
+    public JsonResponse login(Model model, HttpServletRequest request) {
 
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        JsonObject result = new JsonObject();
+        //JsonObject result = new JsonObject();
+        JsonResponse result = new JsonResponse();
 
         try {
             User user = userService.login(email, password);
@@ -39,11 +39,11 @@ public class UserController {
             //Save user object in session
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
-            result.addProperty("success", "Login success!");
+            result.setStatus("SUCCESS");
         } catch (OperationFailedException e) {
-            result.addProperty("error", e.getMessage());
+            result.setStatus("FAIL");
+            result.setMessage(e.getMessage());
         }
-
         return result;
     }
 
@@ -53,10 +53,36 @@ public class UserController {
         HttpSession session = request.getSession();
         session.setAttribute("user", null);
         session.invalidate();
-        // response.sendRedirect("index.jsp");
 
-        return "redirect:index.jsp";
+        return "forward:/home";
+    }
 
-        //return "simpleRequest";
+    @RequestMapping(value = "/registration")
+    public String registration() {
+        return "registration";
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public String register(Model model, HttpServletRequest request) {
+
+
+        return "index";
+    }
+
+    @RequestMapping(value = "/check-email", method = RequestMethod.POST)
+    @ResponseBody
+    public String checkEmail(Model model, HttpServletRequest request) {
+
+        JsonResponse result = new JsonResponse();
+
+        String email = request.getParameter("email");
+        User user = userService.getUserByEmail(email);
+
+        if (user != null) {
+            //already registered
+            return "false";
+        } else {
+            return "true";
+        }
     }
 }
