@@ -10,27 +10,25 @@
 <head>
     <title>Error | Event Management</title>
 
-    <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../../css/reset.css">
-    <link rel="stylesheet" type="text/css" href="../../css/main.css">
-    <link rel="stylesheet" type="text/css" href="../../css/icon_font.css">
-
-    <link rel="stylesheet" type="text/css" href="./css/jquery-ui.min.css">
-    <link rel="stylesheet" type="text/css" href="./css/jquery-ui.structure.min.css">
-    <link rel="stylesheet" type="text/css" href="./css/jquery-ui.theme.min.css">
+    <script src="<c:url value="/resources/js/jquery-3.1.0.min.js" />"></script>
+    <script src="<c:url value="/resources/js/jquery.validate.js" />"></script>
+    <script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
 
     <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
-    <script type="text/javascript" src="../../js/jquery-3.1.0.min.js"></script>
-    <script type="text/javascript" src="../../js/home.js"></script>
+    <link href="<c:url value="/resources/css/reset.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/main.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/icon_font.css" />" rel="stylesheet">
 
 </head>
 <body>
 <div id="main_wrapper">
     <!-- Main Header -->
-    <jsp:include page="/WEB-INF/view/header.jspew/header.jsp"/>
+    <jsp:include page="header.jsp"/>
     <!-- End Main Header -->
     <!-- Content Section -->
 
@@ -56,7 +54,7 @@
 </div>
 
 <!-- Footer -->
-<jsp:include page="/WEB-INF/view/footer.jspew/footer.jsp"/>
+<jsp:include page="footer.jsp"/>
 <!-- End Footer -->
 </body>
 </html>

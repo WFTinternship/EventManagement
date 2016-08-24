@@ -9,7 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Create Event | Event Management</title>
+    <title>Event Details| Event Management</title>
 
     <script src="<c:url value="/resources/js/jquery-3.1.0.min.js" />"></script>
     <script src="<c:url value="/resources/js/jquery.validate.js" />"></script>

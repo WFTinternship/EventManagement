@@ -1,4 +1,4 @@
-package com.workfront.internship.event_management.controller;
+package com.workfront.internship.event_management.controller.util;
 
 /**
  * Created by Hermine Turshujyan 8/23/16.

@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.controller;
 
+import com.workfront.internship.event_management.controller.util.JsonResponse;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.UserService;

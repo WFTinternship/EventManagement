@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.controller;
 
+import com.workfront.internship.event_management.controller.util.JsonResponse;
 import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.service.CategoryService;
@@ -71,7 +72,11 @@ public class EventController {
 
 
     @RequestMapping(value = "/create-event")
-    public String createEvent() {
-        return "create-event";
+    public String createEvent(HttpServletRequest request) {
+        if (request.getSession().getAttribute("user") != null) {
+            return "event-details";
+        } else {
+            return "error";
+        }
     }
 }
