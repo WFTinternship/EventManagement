@@ -1,7 +1,6 @@
 package com.workfront.internship.event_management.controller;
 
 import com.workfront.internship.event_management.controller.util.JsonResponse;
-import com.workfront.internship.event_management.exception.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.service.CategoryService;
@@ -22,6 +21,8 @@ import java.util.List;
  */
 @Controller
 public class EventController {
+
+    public static final String DEFAULT_ERROR_VIEW = "error";
 
     @Autowired
     private EventService eventService;
@@ -53,8 +54,6 @@ public class EventController {
         } else {
             eventList = eventService.getEventsByCategory(Integer.parseInt(categoryIdStr));
         }
-        // String eventsJson = new Gson().toJson(eventList);
-        // return eventsJson;
 
         JsonResponse result = new JsonResponse();
         result.setStatus("SUCCESS");
@@ -66,11 +65,8 @@ public class EventController {
     @GetMapping(value = "/events/{eventId}")
     public String getEvent(@PathVariable("eventId") int id, Model model) {
         Event event = eventService.getEventById(id);
-        if (event == null) {
-            throw new ObjectNotFoundException("Event not found!");
-        }
-
         model.addAttribute("event", event);
+
         return "event";
     }
 
@@ -79,7 +75,7 @@ public class EventController {
         if (request.getSession().getAttribute("user") != null) {
             return "event-details";
         } else {
-            return "error404";
+            return DEFAULT_ERROR_VIEW;
         }
     }
 }

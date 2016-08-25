@@ -1,7 +1,7 @@
 package com.workfront.internship.event_management.controller;
 
 import com.workfront.internship.event_management.controller.util.JsonResponse;
-import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.UserService;
@@ -40,7 +40,6 @@ public class UserController {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        //JsonObject result = new JsonObject();
         JsonResponse result = new JsonResponse();
 
         try {
@@ -50,10 +49,11 @@ public class UserController {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
             result.setStatus("SUCCESS");
-        } catch (OperationFailedException e) {
+        } catch (InvalidObjectException | OperationFailedException e) {
             result.setStatus("FAIL");
             result.setMessage(e.getMessage());
         }
+
         return result;
     }
 
@@ -68,13 +68,13 @@ public class UserController {
     }
 
     @RequestMapping(value = "/registration")
-    public String registration() {
+    public String showRegistrationPage() {
         return "registration";
     }
 
     @RequestMapping(value = "/register", produces = "application/json", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResponse register(Model model, HttpServletRequest request) throws Exception {
+    public JsonResponse register(HttpServletRequest request) throws Exception {
 
         JsonResponse result = new JsonResponse();
 
@@ -114,10 +114,6 @@ public class UserController {
                         if (!fileName.isEmpty()) {
                             //get uploaded file extension
                             String ext = fileName.substring(fileName.lastIndexOf("."));
-                            //  String ext1 = FilenameUtils.getExtension("/path/to/file/foo.txt");
-
-                            // String[] parts = fileName.split(Pattern.quote("."));
-                            //String ext = parts[parts.length - 1];
 
                             //generate random image name
                             String uuid = UUID.randomUUID().toString();
@@ -164,7 +160,7 @@ public class UserController {
 
                     result.setStatus("SUCCESS");
                     result.setMessage("You are successfully registered!");
-                } catch (DuplicateEntryException e) {
+                } catch (OperationFailedException e) {
                     result.setStatus("FAIL");
                     result.setMessage(e.getMessage());
                 }
@@ -173,7 +169,7 @@ public class UserController {
         return result;
     }
 
-    @RequestMapping(value = "/checkEmail", method = RequestMethod.POST)
+    @RequestMapping(value = "/check-email", method = RequestMethod.POST)
     @ResponseBody
     public String checkEmail(Model model, HttpServletRequest request) {
 
