@@ -2,8 +2,8 @@ package com.workfront.internship.event_management.service;
 
 import com.workfront.internship.event_management.dao.UserDAO;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
-import com.workfront.internship.event_management.exception.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.InvalidObjectException;
+import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.util.HashGenerator;
@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 import static com.workfront.internship.event_management.service.util.Validator.*;
@@ -25,11 +26,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDAO userDAO;
-    // private EmailService emailService;
 
     @Override
     public User addAccount(User user) {
-
         //check if user object is valid
         if (!isValidUser(user)) {
             throw new InvalidObjectException("Invalid user object");
@@ -39,64 +38,66 @@ public class UserServiceImpl implements UserService {
         String encryptedPassword = HashGenerator.generateHashString(user.getPassword());
         user.setPassword(encryptedPassword);
 
-        //insert user into db
-        int userId = userDAO.addUser(user);
-
-        //set generated it to user
-        user.setId(userId);
-
-        //send verification email
-       /* boolean success = emailService.sendVerificationEmail(user);
-        if (!success) {
-            throw new OperationFailedException("Unable to send verification email");
-        }*/
-
-        return user;
-    }
-
-    @Override
-    public void editAccount(User user) {
-        if (!isValidUser(user)) {
-            throw new InvalidObjectException("Invalid user object");
-        }
+        //set user default fields
+        setDefaultFields(user);
 
         try {
-            userDAO.updateUser(user);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("User not found", e);
+            //insert user into db
+            int userId = userDAO.addUser(user);
+
+            //set generated it to user
+            user.setId(userId);
         } catch (DuplicateEntryException e) {
             LOGGER.error(e.getMessage(), e);
             throw new OperationFailedException("User with email " + user.getEmail() + " already exists!", e);
         }
+        return user;
     }
 
     @Override
-    public void verifyAccount(int userId) {
+    public boolean editAccount(User user) {
+        if (!isValidUser(user)) {
+            throw new InvalidObjectException("Invalid user object");
+        }
+
+        boolean success;
+        try {
+            success = userDAO.updateUser(user);
+        } catch (DuplicateEntryException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new OperationFailedException("User with email " + user.getEmail() + " already exists!", e);
+        }
+
+        if (!success) {
+            throw new ObjectNotFoundException("User with id " + user.getId() + " not found.");
+        }
+        return success;
+    }
+
+    @Override
+    public boolean verifyAccount(int userId) {
         if (userId < 1) {
             throw new InvalidObjectException("Invalid user id");
         }
 
-        try {
-            userDAO.updateVerifiedStatus(userId);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("User not found", e);
+        boolean success = userDAO.updateVerifiedStatus(userId);
+        if (!success) {
+            throw new ObjectNotFoundException("User with id " + userId + " not found");
         }
+        return success;
     }
 
     @Override
-    public void deleteAccount(int userId) {
+    public boolean deleteAccount(int userId) {
         if (userId < 1) {
             throw new InvalidObjectException("Invalid user id");
         }
 
-        try {
-            userDAO.deleteUser(userId);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("User not found", e);
+        boolean success = userDAO.deleteUser(userId);
+        if (!success) {
+            throw new ObjectNotFoundException("User with id " + userId + " not found");
         }
+        return success;
     }
 
     @Override
@@ -114,17 +115,16 @@ public class UserServiceImpl implements UserService {
             throw new InvalidObjectException("Invalid email address form");
         }
 
-        User user;
-            //read user data from db
-            user = userDAO.getUserByEmail(email);
-            String str = HashGenerator.generateHashString(password);
+        //read user data from db
+        User user = userDAO.getUserByEmail(email);
+        String str = HashGenerator.generateHashString(password);
 
-            //check if passwords match
-            if (user != null && user.getPassword().equals(HashGenerator.generateHashString(password))) {
-                return user;
-            } else {
-                throw new OperationFailedException("Invalid email/password combination!");
-            }
+        //check if passwords match
+        if (user != null && user.getPassword().equals(HashGenerator.generateHashString(password))) {
+            return user;
+        } else {
+            throw new OperationFailedException("Invalid email/password combination!");
+        }
     }
 
     @Override
@@ -134,7 +134,11 @@ public class UserServiceImpl implements UserService {
         }
 
         //get user data from db
-        return userDAO.getUserById(userId);
+        User user = userDAO.getUserById(userId);
+        if (user == null) {
+            throw new ObjectNotFoundException("User with id " + userId + " not found.");
+        }
+        return user;
     }
 
     @Override
@@ -155,5 +159,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteAllUsers() {
         userDAO.deleteAllUsers();
+    }
+
+    //helper methods
+    private void setDefaultFields(User user) {
+        user.setVerified(false);
+        user.setRegistrationDate(new Date());
     }
 }

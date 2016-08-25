@@ -27,10 +27,10 @@ public interface EventService {
     List<Event> getAllEvents();
 
     //Update
-    void editEvent(Event event);
+    boolean editEvent(Event event);
 
     //Delete
-    void deleteEvent(int eventId);
+    boolean deleteEvent(int eventId);
 
     void deleteAllEvents();
 

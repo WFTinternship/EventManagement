@@ -11,9 +11,9 @@ public interface UserService {
 
     User addAccount(User user);
 
-    void editAccount(User user);
+    boolean editAccount(User user);
 
-    void verifyAccount(int userId);
+    boolean verifyAccount(int userId);
 
     User login(String email, String password);
 
@@ -23,7 +23,7 @@ public interface UserService {
 
     List<User> getAllUsers();
 
-    void deleteAccount(int userId);
+    boolean deleteAccount(int userId);
 
     void deleteAllUsers();
 }
