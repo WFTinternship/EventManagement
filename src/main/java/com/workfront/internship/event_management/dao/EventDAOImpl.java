@@ -1,7 +1,7 @@
 package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.exception.dao.DAOException;
-import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
+import com.workfront.internship.event_management.exception.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.*;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -106,14 +106,13 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
             //get results from event table
             List<Event> eventList = createEventListFromRS(rs);
-            if (eventList.isEmpty()) {
-                throw new ObjectNotFoundException("Event with id " + eventId + " not found!");
+            if (!eventList.isEmpty()) {
+                event = eventList.get(0);
             }
 
-            event = eventList.get(0);
 
             //get invitations list
-            InvitationDAO invitationDAO = new InvitationDAOImpl();
+          /*  InvitationDAO invitationDAO = new InvitationDAOImpl();
             List<Invitation> invitations = invitationDAO.getInvitationsByEventId(eventId);
             if (!invitations.isEmpty()) {
                 event.setInvitations(invitations);
@@ -131,7 +130,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             List<Media> media = mediaDAO.getMediaByEventId(eventId);
             if (!media.isEmpty()) {
                 event.setMedia(media);
-            }
+            }*/
         } catch (SQLException e) {
             LOGGER.error("SQL Exception ", e);
             throw new DAOException(e);

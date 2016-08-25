@@ -38,9 +38,17 @@
         <div class="container clearfix">
             <div class="content centered">
                 <div class="main_desc ">
-                    <p><b>An error occurred while processing your request.</b></p>
-                    <p><b>Please, try again later.</b></p>
+                    <p><b>Ooopps.!</b> The Page you were looking for doesn't exist</p>
                 </div>
+                <div class="page404">
+                    <span>404</span></span>
+                </div>
+                <div class="centered">
+                    <a href="/home" target="_self" class="btn_a">
+                        <span><i class="footer_icon icon-home"></i> <span>Back To Home Page</span></span>
+                    </a>
+                </div>
+
             </div>
         </div>
     </section>

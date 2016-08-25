@@ -14,7 +14,7 @@ public interface EventService {
     Event createEvent(Event event) throws DuplicateEntryException;
 
     //Read
-    Event getEvent(int eventId);
+    Event getEventById(int eventId);
 
     List<Event> getEventsByCategory(int categoryId);
 

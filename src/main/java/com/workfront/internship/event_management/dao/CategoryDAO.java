@@ -2,7 +2,7 @@ package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
-import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
+import com.workfront.internship.event_management.exception.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.Category;
 
 import java.util.List;

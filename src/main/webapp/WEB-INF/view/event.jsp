@@ -15,7 +15,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Home | Event Management</title>
+    <title>Event | Event Management</title>
 
     <script src="<c:url value="/resources/js/jquery-3.1.0.min.js" />"></script>
     <script src="<c:url value="/resources/js/jquery.validate.js" />"></script>
@@ -43,42 +43,15 @@
 
     <section class="content_section">
         <div class="content">
-            <aside class="left_sidebar">
 
-                <div class="cat_menu">
-                    <h6 class="title">Categories</h6>
-                    <ul class="cat_list">
-                        <%
-                            List<Category> categoryList = (List<Category>) request.getAttribute("categories");
-                            if (!categoryList.isEmpty()) {
-                                for (Category category : categoryList) { %>
-                        <li>
-                            <div class="cat_item"
-                                 onclick='getEventsByCategory("<%=category.getId()%>");'><%=category.getTitle() %>
-                            </div>
-                            <span class="num_events">
-                                <% /*= eventService.getEventsByCategory(category.getId()).size()*/%>
-                            </span>
-                        </li>
-                        <% }
-                        } %>
-                    </ul>
-                </div>
-            </aside>
-
+            <%
+                Event event = (Event) request.getAttribute("event");
+            %>
             <div class="content_block">
                 <div class="event_list clearfix" id="event_list">
-                    <div class="main_title centered upper">
-                        <h2><span class="line"><i class="icon-calendar"></i></span>
-                            <span class="list_header">All Events</span>
-                        </h2>
-                    </div>
+
                     <div class="list">
-                        <%
-                            List<Event> eventList = (List<Event>) request.getAttribute("events");
-                            if (!eventList.isEmpty()) {
-                                for (Event event : eventList) {
-                        %>
+
                         <div class="list_item">
                             <div class="list_content">
                                 <h6 class="title">
@@ -117,12 +90,8 @@
                                    </span>
                                 <p class="desc"><%=event.getShortDescription()%>
                                 </p>
-
-                                <a class="btn" href="/events/<%=event.getId()%>"><span>Details</span></a>
                             </div>
                         </div>
-                        <% }
-                        } %>
                     </div>
                 </div>
             </div>

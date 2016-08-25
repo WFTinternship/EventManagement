@@ -4,7 +4,7 @@ import com.workfront.internship.event_management.dao.MediaDAO;
 import com.workfront.internship.event_management.dao.MediaDAOImpl;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
-import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
+import com.workfront.internship.event_management.exception.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Media;
 import org.junit.*;

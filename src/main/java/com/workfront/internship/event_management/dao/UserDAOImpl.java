@@ -2,7 +2,7 @@ package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
-import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
+import com.workfront.internship.event_management.exception.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.User;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -208,9 +208,7 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
             //get results
             List<User> userList = createUsersListFromRS(rs);
 
-            if (userList.isEmpty()) {
-                // throw new ObjectNotFoundException("User with " + columnName + " " + columnValue + " not found!");
-            } else {
+            if (!userList.isEmpty()) {
                 user = userList.get(0);
             }
         } catch (SQLException e) {

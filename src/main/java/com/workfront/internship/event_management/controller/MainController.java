@@ -24,6 +24,5 @@ public class MainController {
         model.addAttribute("events", eventList);
 
         return "index";
-        //request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 }

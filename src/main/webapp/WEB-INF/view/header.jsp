@@ -56,7 +56,7 @@
                         </li>
                         <% if (session.getAttribute("user") != null) { %>
                         <li>
-                            <a href="/create-event"><span>Create Event</span></a>
+                            <a href="/new-event"><span>Create Event</span></a>
                         </li>
                         <% }
                             ; %>

@@ -5,7 +5,7 @@ import com.workfront.internship.event_management.dao.EventDAO;
 import com.workfront.internship.event_management.dao.EventDAOImpl;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
-import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
+import com.workfront.internship.event_management.exception.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.Invitation;
@@ -131,7 +131,7 @@ public class EventServiceUnitTest {
     @Test(expected = OperationFailedException.class)
     public void getEventById_Invalid_Id() {
         //method under test
-        eventService.getEvent(TestObjectCreator.INVALID_ID);
+        eventService.getEventById(TestObjectCreator.INVALID_ID);
     }
 
     @Test(expected = OperationFailedException.class)
@@ -139,7 +139,7 @@ public class EventServiceUnitTest {
         doThrow(DAOException.class).when(eventDAO).getEventById(TestObjectCreator.VALID_ID);
 
         //method under test
-        eventService.getEvent(TestObjectCreator.VALID_ID);
+        eventService.getEventById(TestObjectCreator.VALID_ID);
     }
 
     @Test(expected = OperationFailedException.class)
@@ -147,7 +147,7 @@ public class EventServiceUnitTest {
         doThrow(ObjectNotFoundException.class).when(eventDAO).getEventById(TestObjectCreator.NON_EXISTING_ID);
 
         //method under test
-        eventService.getEvent(TestObjectCreator.NON_EXISTING_ID);
+        eventService.getEventById(TestObjectCreator.NON_EXISTING_ID);
     }
 
     @Test
@@ -156,7 +156,7 @@ public class EventServiceUnitTest {
         when(eventDAO.getEventById(TestObjectCreator.VALID_ID)).thenReturn(testEvent);
 
         //method under test
-        Event actualEvent = eventService.getEvent(TestObjectCreator.VALID_ID);
+        Event actualEvent = eventService.getEventById(TestObjectCreator.VALID_ID);
         assertEqualEvents(actualEvent, testEvent);
     }
 

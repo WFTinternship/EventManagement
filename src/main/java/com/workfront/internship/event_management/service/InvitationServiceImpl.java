@@ -3,7 +3,7 @@ package com.workfront.internship.event_management.service;
 import com.workfront.internship.event_management.dao.InvitationDAO;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
-import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
+import com.workfront.internship.event_management.exception.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Invitation;
 import org.apache.log4j.Logger;

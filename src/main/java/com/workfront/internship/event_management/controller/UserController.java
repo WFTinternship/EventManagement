@@ -1,6 +1,7 @@
 package com.workfront.internship.event_management.controller;
 
 import com.workfront.internship.event_management.controller.util.JsonResponse;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.UserService;
@@ -34,7 +35,7 @@ public class UserController {
 
     @RequestMapping(value = "/login", produces = "application/json", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResponse login(Model model, HttpServletRequest request) {
+    public JsonResponse login(HttpServletRequest request) {
 
         String email = request.getParameter("email");
         String password = request.getParameter("password");
@@ -57,7 +58,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public String logout(Model model, HttpServletRequest request) {
+    public String logout(HttpServletRequest request) {
 
         HttpSession session = request.getSession();
         session.setAttribute("user", null);
@@ -163,23 +164,16 @@ public class UserController {
 
                     result.setStatus("SUCCESS");
                     result.setMessage("You are successfully registered!");
-                } catch (OperationFailedException e) {
+                } catch (DuplicateEntryException e) {
                     result.setStatus("FAIL");
                     result.setMessage(e.getMessage());
-                } finally {
-                    //  response.setContentType("application/json");
-                    //  response.getWriter().print(result);
                 }
             }
-
-//            } catch (Exception ex) {
-//                response.sendRedirect("error.jsp");
-//            }
         }
         return result;
     }
 
-    @RequestMapping(value = "/check-email", method = RequestMethod.POST)
+    @RequestMapping(value = "/checkEmail", method = RequestMethod.POST)
     @ResponseBody
     public String checkEmail(Model model, HttpServletRequest request) {
 

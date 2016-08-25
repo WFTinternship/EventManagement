@@ -3,7 +3,7 @@ package com.workfront.internship.event_management.exception.dao;
 /**
  * Created by Hermine Turshujyan 7/22/16.
  */
-public class DAOException extends Exception {
+public class DAOException extends RuntimeException {
 
     public DAOException(Exception e) {
         super("Database error!", e);

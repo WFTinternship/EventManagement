@@ -3,7 +3,8 @@ package com.workfront.internship.event_management.service;
 import com.workfront.internship.event_management.dao.EventDAO;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
-import com.workfront.internship.event_management.exception.dao.ObjectNotFoundException;
+import com.workfront.internship.event_management.exception.ObjectNotFoundException;
+import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Event;
 import org.apache.log4j.Logger;
@@ -37,51 +38,39 @@ public class EventServiceImpl implements EventService {
             throw new OperationFailedException("Invalid event");
         }
 
-        try {
-            int eventId;
+        int eventId;
 
-            if (isEmptyCollection(event.getEventRecurrences())) {
-                eventId = eventDAO.addEvent(event);
-            } else {
-                eventId = eventDAO.addEventWithRecurrences(event);
-            }
-
-            //set generated id to event
-            event.setId(eventId);
-
-            //if event info is successfully inserted into db, insert also invitations
-            if (eventId != 0 && !isEmptyCollection(event.getInvitations())) {
-                invitationService.addInvitations(event.getInvitations());
-            }
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
+        if (isEmptyCollection(event.getEventRecurrences())) {
+            eventId = eventDAO.addEvent(event);
+        } else {
+            eventId = eventDAO.addEventWithRecurrences(event);
         }
+
+        //set generated id to event
+        event.setId(eventId);
+
+        //if event info is successfully inserted into db, insert also invitations
+        if (eventId != 0 && !isEmptyCollection(event.getInvitations())) {
+            invitationService.addInvitations(event.getInvitations());
+        }
+
         return event;
     }
 
     @Override
-    public Event getEvent(int eventId) {
+    public Event getEventById(int eventId) {
         if (eventId < 1) {
-            throw new OperationFailedException("Invalid event id");
+            throw new InvalidObjectException("Invalid event id");
         }
 
-        try {
-            //get event from db
-            return eventDAO.getEventById(eventId);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Event not found", e);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
+        //get event from db
+        return eventDAO.getEventById(eventId);
     }
 
     @Override
     public void editEvent(Event event) throws OperationFailedException {
         if (!isValidEvent(event)) {
-            throw new OperationFailedException("Invalid event");
+            throw new InvalidObjectException("Invalid event");
         }
 
         try {
@@ -108,7 +97,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<Event> getEventsByCategory(int categoryId) throws OperationFailedException {
         if (categoryId < 1) {
-            throw new OperationFailedException("Invalid category id");
+            throw new InvalidObjectException("Invalid category id");
         }
 
         try {
@@ -122,7 +111,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<Event> getUserOrganizedEvents(int userId) throws OperationFailedException {
         if (userId < 1) {
-            throw new OperationFailedException("Invalid user id");
+            throw new InvalidObjectException("Invalid user id");
         }
 
         try {
@@ -136,7 +125,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<Event> getUserParticipatedEvents(int userId) throws OperationFailedException {
         if (userId < 1) {
-            throw new OperationFailedException("Invalid user id");
+            throw new InvalidObjectException("Invalid user id");
         }
 
         try {
