@@ -4,7 +4,7 @@ import com.workfront.internship.event_management.TestObjectCreator;
 import com.workfront.internship.event_management.dao.RecurrenceOptionDAO;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
-import com.workfront.internship.event_management.exception.ObjectNotFoundException;
+import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.RecurrenceOption;
 import org.junit.*;

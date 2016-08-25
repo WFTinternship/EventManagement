@@ -5,7 +5,7 @@ import com.workfront.internship.event_management.dao.CategoryDAO;
 import com.workfront.internship.event_management.dao.CategoryDAOImpl;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
-import com.workfront.internship.event_management.exception.ObjectNotFoundException;
+import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Category;
 import org.junit.*;

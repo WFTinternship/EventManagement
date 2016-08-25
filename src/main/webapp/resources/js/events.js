@@ -12,7 +12,6 @@ function getEventsByCategory(categoryId) {
         if (data.status == "SUCCESS") {
             var events = [];
             $.each(data.result, function (key, event) {
-                alert(key + "   " + event)
                 var eventHTML = createEventItem(event)
                 events.push(eventHTML);
             });

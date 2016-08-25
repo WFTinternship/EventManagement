@@ -10,8 +10,7 @@
     <div class="footer_copyright">
         <div class="container clearfix">
             <div class="footer-col">
-                <span class="footer_copy_text">Copyright © 2016 Powered By <a href="#"
-                                                                              class="author">Hermine Turshujyan</a> - All Rights Reserved</span>
+                <span class="footer_copy_text">Copyright © 2016 </span>
             </div>
             <div class="footer-col clearfix">
                 <ul class="footer_menu clearfix">

@@ -38,8 +38,10 @@
         <div class="container clearfix">
             <div class="content centered">
                 <div class="main_desc ">
-                    <p><b>An error occurred while processing your request.</b></p>
-                    <p><b>Please, try again later.</b></p>
+                    <div class="error-message"><%=request.getAttribute("message")%>
+                    </div>
+                    <p>An error occurred while processing your request.</p>
+                    <p>Please, try again later.</p>
                 </div>
             </div>
         </div>
