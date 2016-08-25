@@ -2,7 +2,7 @@ package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
-import com.workfront.internship.event_management.exception.ObjectNotFoundException;
+import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.User;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -107,10 +107,11 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
     }
 
     @Override
-    public void updateVerifiedStatus(int userId) throws ObjectNotFoundException, DAOException {
+    public boolean updateVerifiedStatus(int userId) throws ObjectNotFoundException, DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
+        boolean success = false;
 
         String query = "UPDATE user SET verified = 1 WHERE id = ?";
 
@@ -124,8 +125,8 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
             //execute query
             int affectedRows = stmt.executeUpdate();
-            if (affectedRows == 0) {
-                throw new ObjectNotFoundException("User with id " + userId + " not found!");
+            if (affectedRows != 0) {
+                success = true;
             }
         } catch (SQLException e) {
             LOGGER.error("SQL exception", e);
@@ -133,13 +134,15 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
         } finally {
             closeResources(stmt, conn);
         }
+        return success;
     }
 
     @Override
-    public void updateUser(User user) throws ObjectNotFoundException, DAOException, DuplicateEntryException {
+    public boolean updateUser(User user) throws ObjectNotFoundException, DAOException, DuplicateEntryException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
+        boolean success = false;
 
         try {
             //get connection
@@ -159,9 +162,8 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
 
             //execute query
             int affectedRows = stmt.executeUpdate();
-
-            if (affectedRows == 0) {
-                throw new ObjectNotFoundException("User with id " + user.getId() + " not found!");
+            if (affectedRows != 0) {
+                success = true;
             }
         } catch (SQLIntegrityConstraintViolationException e) {
             LOGGER.error("Duplicate user entry", e);
@@ -172,11 +174,12 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
         } finally {
             closeResources(stmt, conn);
         }
+        return success;
     }
 
     @Override
-    public void deleteUser(int userId) throws DAOException, ObjectNotFoundException {
-        deleteRecordById("user", userId);
+    public boolean deleteUser(int userId) throws DAOException, ObjectNotFoundException {
+        return deleteRecordById("user", userId);
     }
 
     @Override

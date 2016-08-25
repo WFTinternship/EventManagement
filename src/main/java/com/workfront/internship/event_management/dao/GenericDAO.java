@@ -1,7 +1,7 @@
 package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.exception.dao.DAOException;
-import com.workfront.internship.event_management.exception.ObjectNotFoundException;
+import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -76,8 +76,8 @@ public class GenericDAO {
         return id;
     }
 
-    void deleteRecordById(String tableName, int id) throws DAOException, ObjectNotFoundException {
-        deleteRecord(tableName, "id", id);
+    boolean deleteRecordById(String tableName, int id) throws DAOException, ObjectNotFoundException {
+        return deleteRecord(tableName, "id", id);
     }
 
     void deleteAllRecords(String tableName) throws DAOException {
@@ -104,10 +104,11 @@ public class GenericDAO {
         }
     }
 
-    void deleteRecord(String tableName, String columnName, Object columnValue) throws DAOException, ObjectNotFoundException {
+    boolean deleteRecord(String tableName, String columnName, Object columnValue) throws DAOException, ObjectNotFoundException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
+        boolean success = false;
 
         String query = "DELETE FROM " + tableName + " WHERE " + columnName + " = ?";
 
@@ -121,16 +122,20 @@ public class GenericDAO {
 
             //execute query
             int affectedRows = stmt.executeUpdate();
-
-            if (affectedRows == 0 && columnName == "id") {
-                throw new ObjectNotFoundException("Object with id" + columnValue + " not found!");
+            if (affectedRows > 0) {
+                success = true;
+                if (columnName == "id") {
+                    throw new ObjectNotFoundException("Object with id" + columnValue + " not found!");
+                }
             }
+
         } catch (SQLException e) {
             LOGGER.error("SQL exception", e);
             throw new DAOException(e);
         } finally {
             closeResources(stmt, conn);
         }
+        return success;
     }
 
 }

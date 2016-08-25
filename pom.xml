@@ -113,6 +113,13 @@
             <version>2.8.1</version>
         </dependency>
 
+        <!-- SPRING Test -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>4.3.2.RELEASE</version>
+        </dependency>
+
         <!-- ******** -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>

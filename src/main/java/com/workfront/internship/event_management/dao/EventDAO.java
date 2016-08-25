@@ -1,7 +1,7 @@
 package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.exception.dao.DAOException;
-import com.workfront.internship.event_management.exception.ObjectNotFoundException;
+import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.User;
 
@@ -33,10 +33,10 @@ public interface EventDAO {
     List<Event> getAllEvents() throws DAOException;
 
     //update record in db
-    void updateEvent(Event event) throws DAOException, ObjectNotFoundException;
+    boolean updateEvent(Event event) throws DAOException, ObjectNotFoundException;
 
     //delete record from db
-    void deleteEvent(int eventId) throws DAOException, ObjectNotFoundException;
+    boolean deleteEvent(int eventId) throws DAOException, ObjectNotFoundException;
 
     void deleteAllEvents() throws DAOException;
 

@@ -1,7 +1,7 @@
 package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.exception.dao.DAOException;
-import com.workfront.internship.event_management.exception.ObjectNotFoundException;
+import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.*;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -254,10 +254,11 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     @Override
-    public void updateEvent(Event event) throws DAOException, ObjectNotFoundException {
+    public boolean updateEvent(Event event) throws DAOException, ObjectNotFoundException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
+        boolean success = false;
 
         String query = "UPDATE event SET " +
                 "title = ?, short_desc = ?, full_desc = ?, location = ?, lat = ?, lng = ?, " +
@@ -315,8 +316,8 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
             //execute query
             int affectedRows = stmt.executeUpdate();
-            if (affectedRows == 0) {
-                throw new ObjectNotFoundException("Event with id " + event.getId() + " not found!");
+            if (affectedRows != 0) {
+                success = true;
             }
         } catch (SQLException e) {
             LOGGER.error("SQL Exception ", e);
@@ -324,11 +325,13 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         } finally {
             closeResources(null, stmt, conn);
         }
+
+        return success;
     }
 
     @Override
-    public void deleteEvent(int eventId) throws DAOException, ObjectNotFoundException {
-        deleteRecordById("event", eventId);
+    public boolean deleteEvent(int eventId) throws DAOException, ObjectNotFoundException {
+        return deleteRecordById("event", eventId);
     }
 
     @Override
