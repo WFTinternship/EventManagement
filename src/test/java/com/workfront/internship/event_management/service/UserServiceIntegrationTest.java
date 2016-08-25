@@ -41,7 +41,7 @@ public class UserServiceIntegrationTest {
     }
 
     @Test
-    public void addAccount_() {
+    public void addAccount_Success() {
         // EmailService emailService = Mockito.mock(EmailServiceImpl.class);
         // Whitebox.setInternalState(userService, "emailService", emailService);
         //  when(emailService.sendVerificationEmail(testUser)).thenReturn(true);
