@@ -5,35 +5,30 @@ import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.model.User;
 import org.junit.*;
-import org.mockito.Mockito;
-import org.mockito.internal.util.reflection.Whitebox;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static junit.framework.TestCase.assertNotNull;
-import static org.mockito.Mockito.when;
 
 /**
  * Created by Hermine Turshujyan 7/29/16.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestServiceConfiguration.class)
 public class UserServiceIntegrationTest {
 
-    private static UserService userService;
+    @Autowired
+    private UserService userService;
+
     private User testUser;
 
-    @BeforeClass
-    public static void setUpClass() throws DAOException {
-        userService = new UserServiceImpl();
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-        userService = null;
-    }
 
     @Before
     public void setUp() throws DAOException, DuplicateEntryException {
         //create test user
         testUser = TestObjectCreator.createTestUser();
-
     }
 
     @After
@@ -47,9 +42,9 @@ public class UserServiceIntegrationTest {
 
     @Test
     public void addAccount_() {
-        EmailService emailService = Mockito.mock(EmailServiceImpl.class);
-        Whitebox.setInternalState(userService, "emailService", emailService);
-        when(emailService.sendVerificationEmail(testUser)).thenReturn(true);
+        // EmailService emailService = Mockito.mock(EmailServiceImpl.class);
+        // Whitebox.setInternalState(userService, "emailService", emailService);
+        //  when(emailService.sendVerificationEmail(testUser)).thenReturn(true);
 
         userService.addAccount(testUser);
 
