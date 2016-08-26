@@ -12,17 +12,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+
+import static com.workfront.internship.event_management.controller.util.PageParameters.*;
 
 /**
  * Created by Hermine Turshujyan 8/22/16.
  */
 @Controller
 public class EventController {
-
-    public static final String DEFAULT_ERROR_VIEW = "error";
 
     @Autowired
     private EventService eventService;
@@ -39,7 +40,7 @@ public class EventController {
         model.addAttribute("events", eventList);
         model.addAttribute("categories", categoryList);
 
-        return "events";
+        return EVENT_DETAILS_VIEW;
     }
 
     @RequestMapping(value = "/events-ajax", produces = "application/json")
@@ -56,7 +57,7 @@ public class EventController {
         }
 
         JsonResponse result = new JsonResponse();
-        result.setStatus("SUCCESS");
+        result.setStatus(ACTION_SUCCESS);
         result.setResult(eventList);
 
         return result;
@@ -67,15 +68,34 @@ public class EventController {
         Event event = eventService.getEventById(id);
         model.addAttribute("event", event);
 
-        return "event";
+        return EVENT_DETAILS_VIEW;
     }
 
     @RequestMapping(value = "/new-event")
-    public String createEvent(HttpServletRequest request) {
-        if (request.getSession().getAttribute("user") != null) {
-            return "event-details";
-        } else {
-            return DEFAULT_ERROR_VIEW;
-        }
+    public ModelAndView createEvent(HttpServletRequest request, Model model) {
+        //check if user is logged in
+        // if (request.getSession().getAttribute("user") != null) {
+
+        ModelAndView mov = new ModelAndView(EVENT_EDIT_VIEW);
+        List<Category> categoryList = categoryService.getAllCategories();
+
+        model.addAttribute("categories", categoryList);
+        model.addAttribute("event", createEmptyEvent());
+
+        return mov;
+       /* } else {
+            ModelAndView mov = new ModelAndView(DEFAULT_ERROR_VIEW);
+            return mov;
+        }*/
+    }
+
+    private Event createEmptyEvent() {
+        Event event = new Event();
+        event.setTitle("")
+                .setShortDescription("")
+                .setFullDescription("")
+                .setLocation("");
+
+        return event;
     }
 }

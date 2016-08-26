@@ -1,19 +1,26 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--
+<%@ page import="com.workfront.internship.event_management.model.Category" %>
+<%@ page import="com.workfront.internship.event_management.model.Event" %>
+<%@ page import="com.workfront.internship.event_management.service.CategoryService" %>
+<%@ page import="com.workfront.internship.event_management.service.CategoryServiceImpl" %>
+<%@ page import="com.workfront.internship.event_management.service.EventService" %>
+<%@ page import="com.workfront.internship.event_management.service.EventServiceImpl" %>
+<%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
-  User: hermine
-  Date: 8/23/16
-  Time: 11:51 PM
+  User: Inmelet
+  Date: 8/8/2016
+  Time: 10:24 AM
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Event Details| Event Management</title>
+    <title>Event | Event Management</title>
 
     <script src="<c:url value="/resources/js/jquery-3.1.0.min.js" />"></script>
     <script src="<c:url value="/resources/js/jquery.validate.js" />"></script>
     <script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
+    <script src="<c:url value="/resources/js/events.js" />"></script>
 
     <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
@@ -24,100 +31,73 @@
     <link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/main.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/icon_font.css" />" rel="stylesheet">
+
 </head>
-<body>
+<body class="events_page">
 <div id="main_wrapper">
     <!-- Main Header -->
     <jsp:include page="header.jsp"/>
     <!-- End Main Header -->
 
     <!-- Content Section -->
+
     <section class="content_section">
         <div class="content">
-            <div class="form_header">
-                <div class="main_title upper">
-                    <h2>
-                        New Event
-                    </h2>
-                </div>
-            </div>
-            <form id="event_form" enctype="multipart/form-data">
-                <div class="form_row clearfix">
-                    <div class="form_col_half">
-                        <label for="event_title">
-                            <span class="field_name">Title</span>
-                            <span class="required_star">*</span>
-                        </label>
-                        <input class="input_text" name="event_title" id="event_title" type="text">
-                    </div>
-                    <div class="form_col_half ">
-                        <label for="short_desc">
-                            <span class="field_name">Short description</span>
-                        </label>
-                        <input class="input_text" name="short_desc" id="short_desc" type="text">
-                    </div>
-                </div>
-                <div class="form_row clearfix">
-                    <div class="form_col_half">
-                        <label for="location">
-                            <span class="field_name">Location</span>
-                        </label>
-                        <input class="input_text" name="location" id="location" type="text">
-                    </div>
-                    <div class="form_col_half">
-                        <label for="confirmEmail">
-                            <span class="field_name">Confirm Email</span>
-                            <span class="required_star">*</span>
-                        </label>
-                        <input class="input_text" name="confirmEmail" id="confirmEmail" type="text">
-                    </div>
-                </div>
 
-                <div class="form_row clearfix">
-                    <div class="form_col_half">
-                        <label for="password">
-                            <span class="field_name">Password</span>
-                            <span class="required_star">*</span>
-                        </label>
-                        <input class="input_text" name="password" id="password" type="password">
-                    </div>
-                    <div class="form_col_half">
-                        <label for="confirmPassword">
-                            <span class="field_name">Confirm Password</span>
-                            <span class="required_star">*</span>
-                        </label>
-                        <input class="input_text" name="confirmPassword" id="confirmPassword" type="password">
-                    </div>
-                </div>
+            <%
+                Event event = (Event) request.getAttribute("event");
+            %>
+            <div class="content_block">
+                <div class="event_list clearfix" id="event_list">
 
-                <div class="form_row clearfix">
-                    <div class="form_col_half">
-                        <label for="phone">
-                            <span class="field_name">Phone Number</span>
-                        </label>
-                        <input class="input_text" name="phone" id="phone" type="text">
-                    </div>
-                    <div class="form_col_half">
-                        <label for="avatar">
-                            <span class="field_name">Avatar</span>
-                        </label>
-                        <div class="file_button_wrapper">
-                            <input class="input_file" name="avatar" id="avatar" type="file">
+                    <div class="list">
+
+                        <div class="list_item">
+                            <div class="list_content">
+                                <h6 class="title">
+                                    <a href="#"><%=event.getTitle() %>
+                                    </a>
+                                </h6>
+                                <span class="meta">
+                                       <span class="meta_part ">
+                                           <a href="#">
+                                               <i class="ev_icon icon-clock"></i>
+                                               <span><%=event.getStartDate() %></span>
+                                           </a>
+                                       </span>
+                                   <span class="meta_part">
+                                       <a href="#">
+                                           <i class="ev_icon icon-map-marker"></i>
+                                           <span>
+                                               <%=event.getLocation()%>
+                                           </span>
+                                       </a>
+                                   </span>
+                                       <span class="meta_part">
+                                           <i class="ev_icon icon-folder"></i>
+                                           <span>
+                                               <a href="#">
+                                                   <%= event.getCategory().getTitle()%>
+                                               </a>
+                                           </span>
+                                       </span>
+                                       <span class="meta_part">
+                                           <a href="#">
+                                               <i class="ev_icon icon-user"></i>
+                                               <span>Event Organizer</span>
+                                           </a>
+                                       </span>
+                                   </span>
+                                <p class="desc"><%=event.getShortDescription()%>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="form_row clearfix">
-                    <button type="submit" class="btn full_button" id="reg_submit">
-                        <i class="icon-check"></i>
-                        <span>Save</span>
-                    </button>
-                </div>
-
-            </form>
+            </div>
         </div>
     </section>
     <!-- End Content Section -->
-
 
     <!-- Footer -->
     <jsp:include page="footer.jsp"/>
