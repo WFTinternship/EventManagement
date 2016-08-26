@@ -2,7 +2,6 @@ package com.workfront.internship.event_management.service;
 
 import com.workfront.internship.event_management.TestObjectCreator;
 import com.workfront.internship.event_management.dao.UserDAO;
-import com.workfront.internship.event_management.dao.UserDAOImpl;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.service.InvalidObjectException;
@@ -10,13 +9,23 @@ import com.workfront.internship.event_management.exception.service.ObjectNotFoun
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.util.HashGenerator;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.internal.util.reflection.Whitebox;
+import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static com.workfront.internship.event_management.AssertionHelper.assertEqualUsers;
+import static com.workfront.internship.event_management.TestObjectCreator.NON_EXISTING_ID;
 import static com.workfront.internship.event_management.TestObjectCreator.VALID_ID;
 import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -24,33 +33,28 @@ import static org.mockito.Mockito.*;
 /**
  * Created by Hermine Turshujyan 7/27/16.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestServiceConfiguration.class)
 public class UserServiceUnitTest {
 
-    private static UserService userService;
+    @Autowired
+    @InjectMocks
+    private UserService userService;
+
+    @Mock
     private UserDAO userDAO;
-    private EmailService emailService;
+
+//    @Mock
+//    private EmailService emailService;
+
     private User testUser;
-
-    @BeforeClass
-    public static void setUpClass() throws OperationFailedException {
-        userService = new UserServiceImpl();
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-        userService = null;
-    }
 
     @Before
     public void setUp() {
+        MockitoAnnotations.initMocks(this);
+
         //create test user object
         testUser = TestObjectCreator.createTestUser();
-
-        userDAO = Mockito.mock(UserDAOImpl.class);
-        emailService = Mockito.mock(EmailServiceImpl.class);
-
-        Whitebox.setInternalState(userService, "userDAO", userDAO);
-//        Whitebox.setInternalState(userService, "emailService", emailService);
     }
 
     @After
@@ -59,7 +63,7 @@ public class UserServiceUnitTest {
         testUser = null;
 
         userDAO = null;
-        emailService = null;
+        //  emailService = null;
     }
 
     //Testing addAccount method
@@ -74,7 +78,7 @@ public class UserServiceUnitTest {
     @Test
     public void addAccount_EncryptPassword() {
         when(userDAO.addUser(testUser)).thenReturn(1);
-        when(emailService.sendVerificationEmail(testUser)).thenReturn(true);
+        // when(emailService.sendVerificationEmail(testUser)).thenReturn(true);
 
         String expectedPassword = HashGenerator.generateHashString(testUser.getPassword());
 
@@ -115,7 +119,7 @@ public class UserServiceUnitTest {
 
     @Test(expected = ObjectNotFoundException.class)
     public void editAccount_UserNotFound() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
-        doThrow(ObjectNotFoundException.class).when(userDAO).updateUser(testUser);
+        when(userDAO.updateUser(testUser)).thenReturn(false);
 
         //method under test
         userService.editAccount(testUser);
@@ -149,7 +153,7 @@ public class UserServiceUnitTest {
 
     @Test(expected = ObjectNotFoundException.class)
     public void verifyAccount_UserNotFound() throws DAOException, ObjectNotFoundException {
-        doThrow(ObjectNotFoundException.class).when(userDAO).updateVerifiedStatus(anyInt());
+        when(userDAO.updateVerifiedStatus(anyInt())).thenReturn(false);
 
         //method under test
         userService.verifyAccount(VALID_ID);
@@ -220,12 +224,13 @@ public class UserServiceUnitTest {
         userService.deleteAccount(TestObjectCreator.INVALID_ID);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
-    public void deleteAccount_UserNotFound() throws ObjectNotFoundException, DAOException {
-        doThrow(ObjectNotFoundException.class).when(userDAO).deleteUser(TestObjectCreator.NON_EXISTING_ID);
+    @Test
+    public void deleteAccount_UserNotFound() {
+        when(userDAO.deleteUser(NON_EXISTING_ID)).thenReturn(false);
 
         //method under test
-        userService.deleteAccount(TestObjectCreator.NON_EXISTING_ID);
+        boolean success = userService.deleteAccount(NON_EXISTING_ID);
+        assertFalse(success);
     }
 
     @Test
@@ -246,15 +251,15 @@ public class UserServiceUnitTest {
     }
 
     @Test(expected = ObjectNotFoundException.class)
-    public void getUserById_UserNotFound() throws ObjectNotFoundException, DAOException {
-        doThrow(ObjectNotFoundException.class).when(userDAO).getUserById(TestObjectCreator.NON_EXISTING_ID);
+    public void getUserById_UserNotFound() {
+        when(userDAO.getUserById(NON_EXISTING_ID)).thenReturn(null);
 
         //method under test
-        userService.getUserById(TestObjectCreator.NON_EXISTING_ID);
+        userService.getUserById(NON_EXISTING_ID);
     }
 
     @Test
-    public void getUserById_Success() throws ObjectNotFoundException, DAOException {
+    public void getUserById_Success() {
         testUser.setId(VALID_ID);
         when(userDAO.getUserById(VALID_ID)).thenReturn(testUser);
 
@@ -271,7 +276,7 @@ public class UserServiceUnitTest {
     }
 
     @Test
-    public void getUserByEmail_Success() throws ObjectNotFoundException, DAOException {
+    public void getUserByEmail_Success() {
         when(userDAO.getUserByEmail(testUser.getEmail())).thenReturn(testUser);
 
         //method under test
@@ -282,7 +287,7 @@ public class UserServiceUnitTest {
 
     //Testing getAllUsers method
     @Test
-    public void getAllUsers_Success() throws ObjectNotFoundException, DAOException {
+    public void getAllUsers_Success() {
         //method under test
         userService.getAllUsers();
 

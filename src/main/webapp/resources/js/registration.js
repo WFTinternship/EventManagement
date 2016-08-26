@@ -9,7 +9,7 @@ $(document).ready(function () {
                 required: true,
                 email: true,
                 remote: {
-                    url: "/checkEmail",
+                    url: "/check-email",
                     type: "POST",
                     data: {
                         email: function () {
