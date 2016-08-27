@@ -22,6 +22,9 @@ import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
+import static com.workfront.internship.event_management.controller.util.PageParameters.ACTION_FAIL;
+import static com.workfront.internship.event_management.controller.util.PageParameters.ACTION_SUCCESS;
+
 /**
  * Created by Hermine Turshujyan 8/22/16.
  */
@@ -48,9 +51,9 @@ public class UserController {
             //Save user object in session
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
-            result.setStatus("SUCCESS");
+            result.setStatus(ACTION_SUCCESS);
         } catch (InvalidObjectException | OperationFailedException e) {
-            result.setStatus("FAIL");
+            result.setStatus(ACTION_FAIL);
             result.setMessage(e.getMessage());
         }
 
@@ -68,7 +71,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/registration")
-    public String showRegistrationPage() {
+    public String goToRegistrationPage() {
         return "registration";
     }
 
@@ -158,10 +161,10 @@ public class UserController {
                 try {
                     userService.addAccount(user);
 
-                    result.setStatus("SUCCESS");
+                    result.setStatus(ACTION_SUCCESS);
                     result.setMessage("You are successfully registered!");
                 } catch (OperationFailedException e) {
-                    result.setStatus("FAIL");
+                    result.setStatus(ACTION_FAIL);
                     result.setMessage(e.getMessage());
                 }
             }

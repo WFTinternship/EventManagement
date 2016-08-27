@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
+import static com.workfront.internship.event_management.controller.util.PageParameters.HOME_VIEW;
+
 /**
  * Created by Hermine Turshujyan 8/22/16.
  */
@@ -23,6 +25,6 @@ public class MainController {
         List<Event> eventList = eventService.getAllEvents();
         model.addAttribute("events", eventList);
 
-        return "index";
+        return HOME_VIEW;
     }
 }
