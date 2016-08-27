@@ -93,11 +93,7 @@ public class UserServiceImpl implements UserService {
             throw new InvalidObjectException("Invalid user id");
         }
 
-        boolean success = userDAO.deleteUser(userId);
-        if (!success) {
-            throw new ObjectNotFoundException("User with id " + userId + " not found");
-        }
-        return success;
+        return userDAO.deleteUser(userId);
     }
 
     @Override

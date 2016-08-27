@@ -122,11 +122,9 @@ public class GenericDAO {
 
             //execute query
             int affectedRows = stmt.executeUpdate();
+
             if (affectedRows > 0) {
                 success = true;
-                if (columnName == "id") {
-                    throw new ObjectNotFoundException("Object with id" + columnValue + " not found!");
-                }
             }
 
         } catch (SQLException e) {
