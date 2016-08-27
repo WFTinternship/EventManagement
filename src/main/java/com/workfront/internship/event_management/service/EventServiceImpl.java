@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 import static com.workfront.internship.event_management.service.util.Validator.*;
@@ -73,6 +74,8 @@ public class EventServiceImpl implements EventService {
         if (!isValidEvent(event)) {
             throw new InvalidObjectException("Invalid event");
         }
+        //add modification date
+        event.setLastModifiedDate(new Date());
 
         //update event main info
         boolean success = eventDAO.updateEvent(event);
@@ -137,18 +140,19 @@ public class EventServiceImpl implements EventService {
     @Override
     public boolean deleteEvent(int eventId) {
         if (eventId < 1) {
-            throw new OperationFailedException("Invalid event id");
+            throw new InvalidObjectException("Invalid event id");
         }
 
-        boolean success = eventDAO.deleteEvent(eventId);
-        if (!success) {
-            throw new ObjectNotFoundException("Event not found");
-        }
-        return success;
+        return eventDAO.deleteEvent(eventId);
     }
 
     @Override
     public void deleteAllEvents() {
         eventDAO.deleteAllEvents();
+    }
+
+    //helper methods
+    private void setDefaultFields(Event event) {
+        event.setCreationDate(new Date());
     }
 }
