@@ -203,6 +203,4 @@ public class UserDAOIntegrationTest {
             assertEqualUsers(actualList.get(i), expectedList.get(i));
         }
     }
-
-
 }

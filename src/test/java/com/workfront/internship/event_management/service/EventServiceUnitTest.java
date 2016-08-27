@@ -4,15 +4,20 @@ import com.workfront.internship.event_management.TestObjectCreator;
 import com.workfront.internship.event_management.dao.EventDAO;
 import com.workfront.internship.event_management.dao.EventDAOImpl;
 import com.workfront.internship.event_management.exception.dao.DAOException;
-import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
-import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.Invitation;
 import com.workfront.internship.event_management.model.Recurrence;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.Whitebox;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,22 +30,16 @@ import static org.mockito.Mockito.*;
 /**
  * Created by Hermine Turshujyan 7/29/16.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestServiceConfiguration.class)
 public class EventServiceUnitTest {
 
-    private static EventService eventService;
+    @Autowired
+    private EventService eventService;
+
     private EventDAO eventDAO;
     private Event testEvent;
     private List<Event> testEventList;
-
-    @BeforeClass
-    public static void setUpClass() throws OperationFailedException {
-        eventService = new EventServiceImpl();
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-        eventService = null;
-    }
 
     @Before
     public void setUp() {
@@ -60,25 +59,16 @@ public class EventServiceUnitTest {
     }
 
     //Testing addEvent method
-    @Test(expected = OperationFailedException.class)
-    public void addEvent_InvalidEvent() throws DuplicateEntryException {
+    @Test(expected = InvalidObjectException.class)
+    public void addEvent_InvalidEvent() {
         testEvent.setTitle("");
 
         //method under test
         eventService.createEvent(testEvent);
     }
 
-
-    @Test(expected = OperationFailedException.class)
-    public void addEvent_DB_Error() throws DuplicateEntryException, DAOException {
-        when(eventDAO.addEvent(testEvent)).thenThrow(DAOException.class);
-
-        //method under test
-        eventService.createEvent(testEvent);
-    }
-
     @Test
-    public void addEvent_Success() throws DuplicateEntryException, DAOException {
+    public void addEvent_Success() {
         testEvent.setId(VALID_ID);
         when(eventDAO.addEvent(testEvent)).thenReturn(VALID_ID);
 
@@ -89,7 +79,7 @@ public class EventServiceUnitTest {
     }
 
     @Test
-    public void addEvent_WithRecurrences_Success() throws DuplicateEntryException, DAOException {
+    public void addEvent_WithRecurrences_Success() {
         Recurrence recurrence = createTestRecurrence();
         List<Recurrence> recurrenceList = new ArrayList<>();
         recurrenceList.add(recurrence);
@@ -108,7 +98,7 @@ public class EventServiceUnitTest {
     }
 
     @Test
-    public void addEvent_WithInvitations_Success() throws DuplicateEntryException, DAOException {
+    public void addEvent_WithInvitations_Success() {
         Invitation invitation = createTestInvitation();
         List<Invitation> invitationList = new ArrayList<>();
         invitationList.add(invitation);
@@ -128,30 +118,22 @@ public class EventServiceUnitTest {
     }
 
     //Testing getEventById method
-    @Test(expected = OperationFailedException.class)
-    public void getEventById_Invalid_Id() {
+    @Test(expected = InvalidObjectException.class)
+    public void getEventById_InvalidId() {
         //method under test
         eventService.getEventById(TestObjectCreator.INVALID_ID);
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void getEventById_DB_Error() throws ObjectNotFoundException, DAOException {
-        doThrow(DAOException.class).when(eventDAO).getEventById(TestObjectCreator.VALID_ID);
+    @Test(expected = ObjectNotFoundException.class)
+    public void getEventById_NotFound() {
+        when(eventDAO.getEventById(NON_EXISTING_ID)).thenReturn(null);
 
         //method under test
-        eventService.getEventById(TestObjectCreator.VALID_ID);
-    }
-
-    @Test(expected = OperationFailedException.class)
-    public void getEventById_Not_Found() throws ObjectNotFoundException, DAOException {
-        doThrow(ObjectNotFoundException.class).when(eventDAO).getEventById(TestObjectCreator.NON_EXISTING_ID);
-
-        //method under test
-        eventService.getEventById(TestObjectCreator.NON_EXISTING_ID);
+        eventService.getEventById(NON_EXISTING_ID);
     }
 
     @Test
-    public void getEventById_Success() throws ObjectNotFoundException, DAOException {
+    public void getEventById_Success() {
         testEvent.setId(TestObjectCreator.VALID_ID);
         when(eventDAO.getEventById(TestObjectCreator.VALID_ID)).thenReturn(testEvent);
 
@@ -161,22 +143,14 @@ public class EventServiceUnitTest {
     }
 
     //Testing getEventByCategory method
-    @Test(expected = OperationFailedException.class)
-    public void getEventByCategory_Invalid_Id() {
+    @Test(expected = InvalidObjectException.class)
+    public void getEventByCategory_InvalidId() {
         //method under test
         eventService.getEventsByCategory(TestObjectCreator.INVALID_ID);
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void getEventByCategory_DB_Error() throws ObjectNotFoundException, DAOException {
-        doThrow(DAOException.class).when(eventDAO).getEventsByCategory(VALID_ID);
-
-        //method under test
-        eventService.getEventsByCategory(TestObjectCreator.VALID_ID);
-    }
-
     @Test
-    public void getEventByCategory_Success() throws ObjectNotFoundException, DAOException {
+    public void getEventByCategory_Success() {
         testEvent.setId(TestObjectCreator.VALID_ID);
         when(eventDAO.getEventsByCategory(VALID_ID)).thenReturn(testEventList);
 
@@ -189,18 +163,10 @@ public class EventServiceUnitTest {
     }
 
     //Testing getUserOrganizedEvents method
-    @Test(expected = OperationFailedException.class)
-    public void getUserOrganizedEvents_Invalid_Id() {
+    @Test(expected = InvalidObjectException.class)
+    public void getUserOrganizedEvents_InvalidId() {
         //method under test
-        eventService.getUserOrganizedEvents(TestObjectCreator.INVALID_ID);
-    }
-
-    @Test(expected = OperationFailedException.class)
-    public void getUserOrganizedEvents_DB_Error() throws ObjectNotFoundException, DAOException {
-        doThrow(DAOException.class).when(eventDAO).getUserOrganizedEvents(VALID_ID);
-
-        //method under test
-        eventService.getUserOrganizedEvents(TestObjectCreator.VALID_ID);
+        eventService.getUserOrganizedEvents(INVALID_ID);
     }
 
     @Test
@@ -217,22 +183,14 @@ public class EventServiceUnitTest {
     }
 
     //Testing getUserParticipatedEvents method
-    @Test(expected = OperationFailedException.class)
-    public void getUserParticipatedEvents_Invalid_Id() {
+    @Test(expected = InvalidObjectException.class)
+    public void getUserParticipatedEvents_InvalidId() {
         //method under test
         eventService.getUserParticipatedEvents(INVALID_ID);
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void getUserParticipatedEvents_DB_Error() throws ObjectNotFoundException, DAOException {
-        doThrow(DAOException.class).when(eventDAO).getUserParticipatedEvents(VALID_ID);
-
-        //method under test
-        eventService.getUserParticipatedEvents(VALID_ID);
-    }
-
     @Test
-    public void getUserParticipatedEvents_Success() throws ObjectNotFoundException, DAOException {
+    public void getUserParticipatedEvents_Success() {
         testEvent.setId(TestObjectCreator.VALID_ID);
 
         when(eventDAO.getUserParticipatedEvents(VALID_ID)).thenReturn(testEventList);
@@ -247,32 +205,24 @@ public class EventServiceUnitTest {
     }
 
     //Testing editEvent method
-    @Test(expected = OperationFailedException.class)
-    public void editEvent_Invalid_Event() {
+    @Test(expected = InvalidObjectException.class)
+    public void editEvent_InvalidEvent() {
         testEvent.setCreationDate(null);
 
         //method under test
         eventService.editEvent(testEvent);
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void editEvent_Not_Found() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
+    @Test(expected = ObjectNotFoundException.class)
+    public void editEvent_NotFound() {
         doThrow(ObjectNotFoundException.class).when(eventDAO).updateEvent(testEvent);
 
         //method under test
         eventService.editEvent(testEvent);
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void editEvent_DB_Error() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
-        doThrow(DAOException.class).when(eventDAO).updateEvent(testEvent);
-
-        //method under test
-        eventService.editEvent(testEvent);
-    }
-
     @Test
-    public void editEvent_Success() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
+    public void editEvent_Success() {
         //method under test
         testEvent.setId(VALID_ID);
         eventService.editEvent(testEvent);
@@ -281,26 +231,19 @@ public class EventServiceUnitTest {
     }
 
     //Testing deleteEvent method
-    @Test(expected = OperationFailedException.class)
-    public void deleteEvent_Invalid_Id() {
+    @Test(expected = InvalidObjectException.class)
+    public void deleteEvent_InvalidId() {
         //method under test
         eventService.deleteEvent(INVALID_ID);
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void deleteEvent_DB_Error() throws ObjectNotFoundException, DAOException {
-        doThrow(DAOException.class).when(eventDAO).deleteEvent(VALID_ID);
+    @Test
+    public void deleteEvent_NotFound() {
+        when(eventDAO.deleteEvent(NON_EXISTING_ID)).thenReturn(false);
 
         //method under test
-        eventService.deleteEvent(VALID_ID);
-    }
-
-    @Test(expected = OperationFailedException.class)
-    public void deleteEvent_Not_Found() throws ObjectNotFoundException, DAOException {
-        doThrow(ObjectNotFoundException.class).when(eventDAO).deleteEvent(NON_EXISTING_ID);
-
-        //method under test
-        eventService.deleteEvent(NON_EXISTING_ID);
+        boolean success = eventService.deleteEvent(NON_EXISTING_ID);
+        assertFalse(success);
     }
 
     @Test
@@ -320,28 +263,12 @@ public class EventServiceUnitTest {
         verify(eventDAO).getAllEvents();
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void getAllEvents_DB_Error() throws ObjectNotFoundException, DAOException {
-        doThrow(DAOException.class).when(eventDAO).getAllEvents();
-
-        //method under test
-        eventService.getAllEvents();
-    }
-
     //Testing deleteAllEvents method
     @Test
-    public void deleteAllEvents_Success() throws ObjectNotFoundException, DAOException {
+    public void deleteAllEvents_Success() {
         //method under test
         eventService.deleteAllEvents();
 
         verify(eventDAO).deleteAllEvents();
-    }
-
-    @Test(expected = OperationFailedException.class)
-    public void deleteAllEvents_DB_Error() throws ObjectNotFoundException, DAOException {
-        doThrow(DAOException.class).when(eventDAO).deleteAllEvents();
-
-        //method under test
-        eventService.deleteAllEvents();
     }
 }
