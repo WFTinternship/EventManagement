@@ -11,9 +11,9 @@
 <head>
     <title>Registration | Event Management</title>
 
-    <script src="<c:url value="/resources/js/jquery-3.1.0.min.js" />"></script>
-    <script src="<c:url value="/resources/js/jquery.validate.js" />"></script>
-    <script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
+    <script src="<c:url value="/resources/js/lib/jquery-3.1.0.min.js" />"></script>
+    <script src="<c:url value="/resources/js/lib/jquery.validate.js" />"></script>
+    <script src="<c:url value="/resources/js/lib/bootstrap.min.js" />"></script>
     <script src="<c:url value="/resources/js/registration.js" />"></script>
 
 

@@ -14,9 +14,13 @@
 <head>
     <title>Event Details| Event Management</title>
 
-    <script src="<c:url value="/resources/js/jquery-3.1.0.min.js" />"></script>
-    <script src="<c:url value="/resources/js/jquery.validate.js" />"></script>
-    <script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
+    <script src="<c:url value="/resources/js/lib/jquery-3.1.0.min.js" />"></script>
+    <script src="<c:url value="/resources/js/lib/jquery.validate.js" />"></script>
+    <script src="<c:url value="/resources/js/lib/jquery-ui.js" />"></script>
+    <script src="<c:url value="/resources/js/lib/jquery.timepicker.js" />"></script>
+    <script src="<c:url value="/resources/js/lib/bootstrap.min.js" />"></script>
+    <script src="<c:url value="/resources/js/event-edit.js" />"></script>
+
 
     <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
@@ -25,8 +29,11 @@
     <link href="<c:url value="/resources/css/reset.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/jquery-ui.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/jquery.timepicker.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/main.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/icon_font.css" />" rel="stylesheet">
+
 </head>
 <body>
 <div id="main_wrapper">
@@ -34,22 +41,27 @@
     <jsp:include page="header.jsp"/>
     <!-- End Main Header -->
     <% Event event = (Event) request.getAttribute("event");
+        boolean emptyEvent = true;
         int categoryId = 0;
-        if (event.getCategory() != null) {
+
+
+        if (event.getId() != 0) {
+            emptyEvent = false;
             categoryId = event.getCategory().getId();
         }
     %>
+
     <!-- Content Section -->
     <section class="content_section">
         <div class="content">
             <div class="form_header">
                 <div class="main_title upper">
                     <h2>
-                        New Event
+                        <%=emptyEvent ? "New Event" : event.getTitle()%>
                     </h2>
                 </div>
             </div>
-            <form id="event_form" enctype="multipart/form-data">
+            <form id="event_form" action="/add-event" method="POST">
                 <div class="form_row clearfix">
                     <div class="form_col_half">
                         <label for="event_title">
@@ -58,6 +70,25 @@
                         </label>
                         <input class="input_text" name="event_title" id="event_title" type="text"
                                value="<%=event.getTitle()%>">
+                    </div>
+                </div>
+                <div class="form_row clearfix">
+                    <div class="form_col_half ">
+                        <label for="start_date">
+                            <span class="field_name">Start date</span>
+                        </label>
+                        <input type="text" name="start_date" id="start_date"
+                               value="<%=(event.getStartDate() != null) ? event.getStartDate() : ""%>">
+                        <input type="text" name="start_time" id="start_time">
+                    </div>
+                    <div class="form_col_half ">
+                        <label for="end_date">
+                            <span class="field_name">End date</span>
+                        </label>
+                        <input type="text" name="end_date" id="end_date"
+                               value="<%=(event.getEndDate() != null) ? event.getEndDate() : ""%>">
+                        <input type="text" name="end_time" id="end_time">
+
                     </div>
                 </div>
 
@@ -98,7 +129,7 @@
                         <label for="location">
                             <span class="field_name">Select Category</span>
                         </label>
-                        <select name="category_select" id="category_select">
+                        <select name="category_id" id="category_select">
                             <% for (Category category : categoryList) { %>
                             <option class="cat_option" value="<%=category.getId()%>"
                                     <%= (categoryId == category.getId()) ? "selected" : ""%>>
@@ -113,19 +144,14 @@
                 <div class="form_row clearfix">
                     <div class="form_col_half">
                         <label for="event_image">
-                            <span class="field_name">Upload image</span>
+                            <span class="field_name">Attachment</span>
                         </label>
                         <div class="file_button_wrapper">
+                            Event image
                             <input class="input_file" name="event_image" id="event_image" type="file">
                         </div>
-                    </div>
-                </div>
-                <div class="form_row clearfix">
-                    <div class="form_col_half">
-                        <label for="event_file">
-                            <span class="field_name">Upload file</span>
-                        </label>
                         <div class="file_button_wrapper">
+                            Attach a file
                             <input type="file" class="input_file" name="event_file" id="event_file">
                         </div>
                     </div>
@@ -138,9 +164,9 @@
                         <div class="file_button_wrapper">
                             <div class="file_button_wrapper">
                                 <input type="radio" class="event_radio" name="public_accessed"
-                                       value="1"  <%= (event.isPublicAccessed())? "selected": ""%>>Public
+                                       value="1"  <%= (event.isPublicAccessed())? "checked": ""%>>Public
                                 <input type="radio" class="event_radio" name="public_accessed"
-                                       value="0" <%= (!event.isPublicAccessed())? "selected": ""%>>Private
+                                       value="0" <%= (!event.isPublicAccessed())? "checked": ""%>>Private
                             </div>
                         </div>
                     </div>
@@ -150,9 +176,9 @@
                         </label>
                         <div class="file_button_wrapper">
                             <input type="radio" class="event_radio" name="guests_allowed"
-                                   value="1"  <%= (event.isGuestsAllowed())? "selected": ""%>>Yes
+                                   value="1"  <%= (event.isGuestsAllowed())? "checked": ""%>>Yes
                             <input type="radio" class="event_radio" name="guests_allowed"
-                                   value="0" <%= (!event.isGuestsAllowed())? "selected": ""%>>No
+                                   value="0" <%= (!event.isGuestsAllowed())? "checked": ""%>>No
                         </div>
                     </div>
                 </div>
