@@ -9,15 +9,9 @@ import com.workfront.internship.event_management.exception.service.ObjectNotFoun
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.Invitation;
 import com.workfront.internship.event_management.model.Recurrence;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.*;
 import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.Whitebox;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,21 +19,28 @@ import java.util.List;
 import static com.workfront.internship.event_management.AssertionHelper.assertEqualEvents;
 import static com.workfront.internship.event_management.TestObjectCreator.*;
 import static junit.framework.TestCase.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by Hermine Turshujyan 7/29/16.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestServiceConfiguration.class)
 public class EventServiceUnitTest {
 
-    @Autowired
-    private EventService eventService;
-
+    private static EventService eventService;
     private EventDAO eventDAO;
     private Event testEvent;
     private List<Event> testEventList;
+
+    @BeforeClass
+    public static void setUpClass() {
+        eventService = new EventServiceImpl();
+    }
+
+    @AfterClass
+    public static void tearDownClass() {
+        eventService = null;
+    }
 
     @Before
     public void setUp() {
@@ -48,8 +49,16 @@ public class EventServiceUnitTest {
         testEventList = new ArrayList<>();
         testEventList.add(testEvent);
 
+        //creating mocks
         eventDAO = Mockito.mock(EventDAOImpl.class);
+        RecurrenceService recurrenceService = Mockito.mock(RecurrenceServiceImpl.class);
+        InvitationService invitationService = Mockito.mock(InvitationServiceImpl.class);
+
+        //injecting mocks
         Whitebox.setInternalState(eventService, "eventDAO", eventDAO);
+        Whitebox.setInternalState(eventService, "recurrenceService", recurrenceService);
+        Whitebox.setInternalState(eventService, "invitationService", invitationService);
+
     }
 
     @After
@@ -207,7 +216,7 @@ public class EventServiceUnitTest {
     //Testing editEvent method
     @Test(expected = InvalidObjectException.class)
     public void editEvent_InvalidEvent() {
-        testEvent.setCreationDate(null);
+        testEvent.setCategory(null);
 
         //method under test
         eventService.editEvent(testEvent);
@@ -215,7 +224,7 @@ public class EventServiceUnitTest {
 
     @Test(expected = ObjectNotFoundException.class)
     public void editEvent_NotFound() {
-        doThrow(ObjectNotFoundException.class).when(eventDAO).updateEvent(testEvent);
+        when(eventDAO.updateEvent(testEvent)).thenReturn(false);
 
         //method under test
         eventService.editEvent(testEvent);
@@ -223,6 +232,8 @@ public class EventServiceUnitTest {
 
     @Test
     public void editEvent_Success() {
+        when(eventDAO.updateEvent(testEvent)).thenReturn(true);
+
         //method under test
         testEvent.setId(VALID_ID);
         eventService.editEvent(testEvent);

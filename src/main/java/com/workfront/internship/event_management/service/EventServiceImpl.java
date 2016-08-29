@@ -27,6 +27,8 @@ public class EventServiceImpl implements EventService {
     @Autowired
     private EventDAO eventDAO;
     @Autowired
+    private RecurrenceService recurrenceService;
+    @Autowired
     private InvitationService invitationService;
 
     @Override
@@ -81,12 +83,12 @@ public class EventServiceImpl implements EventService {
         boolean success = eventDAO.updateEvent(event);
         if (success) {
             //update event recurrences
-            RecurrenceService recurrenceService = new RecurrenceServiceImpl();
             recurrenceService.editRecurrenceList(event.getId(), event.getEventRecurrences());
 
             //update event invitations
-            InvitationService invitationService = new InvitationServiceImpl();
             invitationService.editInvitationList(event.getId(), event.getInvitations());
+        } else {
+            throw new ObjectNotFoundException("Event not found");
         }
 
         return success;
