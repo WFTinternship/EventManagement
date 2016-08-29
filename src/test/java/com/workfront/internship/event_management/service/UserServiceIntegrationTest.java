@@ -5,11 +5,13 @@ import com.workfront.internship.event_management.exception.dao.DuplicateEntryExc
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
+import com.workfront.internship.event_management.spring.TestApplicationConfig;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -24,14 +26,14 @@ import static org.junit.Assert.*;
  * Created by Hermine Turshujyan 7/29/16.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestServiceConfiguration.class)
+@ContextConfiguration(classes = TestApplicationConfig.class)
+@ActiveProfiles("Test")
 public class UserServiceIntegrationTest {
 
     @Autowired
     private UserService userService;
 
     private User testUser;
-
 
     @Before
     public void setUp() throws DAOException, DuplicateEntryException {
@@ -43,13 +45,11 @@ public class UserServiceIntegrationTest {
 
     @After
     public void tearDown() throws DAOException {
-        if (testUser != null) {
             //delete inserted test users from db
-            userService.deleteAccount(testUser.getId());
+        userService.deleteAllUsers();
 
             //delete test user object
             testUser = null;
-        }
     }
 
     @Test

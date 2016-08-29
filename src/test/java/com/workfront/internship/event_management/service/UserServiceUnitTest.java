@@ -9,6 +9,7 @@ import com.workfront.internship.event_management.exception.service.ObjectNotFoun
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.util.HashGenerator;
+import com.workfront.internship.event_management.spring.TestApplicationConfig;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,8 +36,8 @@ import static org.mockito.Mockito.*;
  * Created by Hermine Turshujyan 7/27/16.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestServiceConfiguration.class)
-@ActiveProfiles("test")
+@ContextConfiguration(classes = TestApplicationConfig.class)
+@ActiveProfiles("Test")
 public class UserServiceUnitTest {
 
     @Autowired
