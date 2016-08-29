@@ -1,12 +1,22 @@
 package com.workfront.internship.event_management.dao;
 
+import com.workfront.internship.event_management.TestObjectCreator;
 import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.Invitation;
 import com.workfront.internship.event_management.model.User;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.*;
+
+import java.util.List;
+
+import static com.workfront.internship.event_management.AssertionHelper.assertEqualInvitations;
+import static junit.framework.TestCase.assertNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Hermine Turshujyan 7/9/16.
@@ -40,22 +50,22 @@ public class InvitationDAOIntegrationTest {
         eventDAO = null;
         invitationDAO = null;
     }
-/*
+
     @Before
-    public void setUp() throws DAOException, DuplicateEntryException {
+    public void setUp() {
         createTestObjects();
         insertTestObjectsIntoDB();
     }
 
     @After
-    public void tearDown() throws DAOException {
+    public void tearDown() {
         deleteTestRecordsFromDB();
         deleteTestObjects();
     }
 
 
     @Test
-    public void addInvitation_Success() throws DAOException, ObjectNotFoundException {
+    public void addInvitation_Success() {
         //test invitation already inserted in setup, read record from db
         Invitation invitation = invitationDAO.getInvitationById(testInvitation.getId());
 
@@ -253,5 +263,5 @@ public class InvitationDAOIntegrationTest {
         testEvent = null;
         testCategory = null;
         testUser = null;
-    }*/
+    }
 }

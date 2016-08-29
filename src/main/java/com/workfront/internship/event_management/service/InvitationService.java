@@ -14,7 +14,7 @@ public interface InvitationService {
     void addInvitations(List<Invitation> invitationList);
 
     //get records from db
-    Invitation getInvitation(int invitationId);
+    Invitation getInvitationById(int invitationId);
 
     List<Invitation> getAllInvitations();
 
@@ -24,17 +24,16 @@ public interface InvitationService {
 
 
     //update record in db
-    void editInvitation(Invitation invitation);
+    boolean editInvitation(Invitation invitation);
 
     void editInvitationList(int eventId, List<Invitation> invitationList);
 
     //delete records from db
-    void deleteInvitation(int invitationId);
+    boolean deleteInvitation(int invitationId);
 
     void deleteInvitationsByEvent(int eventId);
 
     void deleteInvitationsByUser(int userId);
 
     void deleteAllInvitations();
-
 }

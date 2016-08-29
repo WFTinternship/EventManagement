@@ -21,7 +21,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
     static final Logger LOGGER = Logger.getLogger(InvitationDAOImpl.class);
 
     @Override
-    public int addInvitation(Invitation invitation) throws DAOException, DuplicateEntryException {
+    public int addInvitation(Invitation invitation) {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -50,6 +50,8 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
             //execute query
             stmt.executeUpdate();
+
+            id = getInsertedId(stmt);
 
         } catch (SQLIntegrityConstraintViolationException e) {
             LOGGER.error("Duplicate invitation entry", e);
@@ -174,10 +176,11 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
     }
 
     @Override
-    public void updateInvitation(Invitation invitation) throws ObjectNotFoundException, DuplicateEntryException, DAOException {
+    public boolean updateInvitation(Invitation invitation) throws ObjectNotFoundException, DuplicateEntryException, DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
+        boolean success = false;
 
         String sqlStr = "UPDATE event_invitation SET user_role = ? , user_response = ?, attendees_count = ?, " +
                 "participated = ? WHERE id = ?";
@@ -196,8 +199,8 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
             //execute query
             int affectedRows = stmt.executeUpdate();
-            if (affectedRows == 0) {
-                throw new ObjectNotFoundException("Invitation with id " + invitation.getId() + " not found!");
+            if (affectedRows != 0) {
+                success = true;
             }
         } catch (SQLIntegrityConstraintViolationException e) {
             LOGGER.error("Duplicate invitation entry", e);
@@ -209,11 +212,12 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
         } finally {
             closeResources(stmt, conn);
         }
+        return success;
     }
 
     @Override
-    public void deleteInvitation(int invitationId) throws DAOException, ObjectNotFoundException {
-        deleteRecordById("event_invitation", invitationId);
+    public boolean deleteInvitation(int invitationId) throws DAOException, ObjectNotFoundException {
+        return deleteRecordById("event_invitation", invitationId);
     }
 
     @Override

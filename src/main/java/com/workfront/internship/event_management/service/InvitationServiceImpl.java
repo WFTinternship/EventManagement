@@ -1,8 +1,8 @@
 package com.workfront.internship.event_management.service;
 
 import com.workfront.internship.event_management.dao.InvitationDAO;
-import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Invitation;
@@ -22,7 +22,7 @@ import static com.workfront.internship.event_management.service.util.Validator.i
 @Component
 public class InvitationServiceImpl implements InvitationService {
 
-    private static final Logger LOGGER = Logger.getLogger(InvitationServiceImpl.class);
+    private static final Logger logger = Logger.getLogger(InvitationServiceImpl.class);
 
     @Autowired
     private InvitationDAO invitationDAO;
@@ -30,7 +30,7 @@ public class InvitationServiceImpl implements InvitationService {
     @Override
     public Invitation addInvitation(Invitation invitation) {
         if (!isValidInvitation(invitation)) {
-            throw new OperationFailedException("Invalid invitation");
+            throw new InvalidObjectException("Invalid invitation");
         }
 
         try {
@@ -40,12 +40,9 @@ public class InvitationServiceImpl implements InvitationService {
             //set generated it to invitation
             invitation.setId(invitationId);
         } catch (DuplicateEntryException e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             throw new OperationFailedException(String.format("Invitation for user with id %d and event with id already exists!",
                     invitation.getUser().getId(), invitation.getEventId()), e);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
         }
         return invitation;
     }
@@ -53,95 +50,77 @@ public class InvitationServiceImpl implements InvitationService {
     @Override
     public void addInvitations(List<Invitation> invitationList) {
         if (isEmptyCollection(invitationList)) {
-            throw new OperationFailedException("Empty invitation list");
+            throw new InvalidObjectException("Empty invitation list");
         }
 
         try {
             //insert invitation list into db
             invitationDAO.addInvitations(invitationList);
         } catch (DuplicateEntryException e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             throw new OperationFailedException("Invitation already exists!", e);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
         }
     }
 
     @Override
-    public Invitation getInvitation(int invitationId) {
+    public Invitation getInvitationById(int invitationId) {
         if (invitationId < 1) {
-            throw new OperationFailedException("Invalid invitation id");
+            throw new InvalidObjectException("Invalid invitation id");
         }
 
-        try {
-            return invitationDAO.getInvitationById(invitationId);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Invitation not found");
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
+        Invitation invitation = invitationDAO.getInvitationById(invitationId);
+        ;
+        if (invitation == null) {
+            throw new ObjectNotFoundException("Invitation not found");
         }
+
+        return invitation;
     }
 
     @Override
     public List<Invitation> getAllInvitations() {
-        try {
-            return invitationDAO.getAllInvitations();
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
+        return invitationDAO.getAllInvitations();
     }
 
     @Override
     public List<Invitation> getInvitationsByEvent(int eventId) {
         if (eventId < 1) {
-            throw new OperationFailedException("Invalid event id");
+            throw new InvalidObjectException("Invalid event id");
         }
 
-        try {
-            return invitationDAO.getInvitationsByEventId(eventId);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
+        return invitationDAO.getInvitationsByEventId(eventId);
     }
 
     @Override
     public List<Invitation> getInvitationsByUser(int userId) {
         if (userId < 1) {
-            throw new OperationFailedException("Invalid user id");
+            throw new InvalidObjectException("Invalid user id");
         }
-        try {
-            return invitationDAO.getInvitationsByUserId(userId);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
+        return invitationDAO.getInvitationsByUserId(userId);
     }
 
     @Override
-    public void editInvitation(Invitation invitation) {
+    public boolean editInvitation(Invitation invitation) {
         if (!isValidInvitation(invitation)) {
-            throw new OperationFailedException("Invalid invitation");
+            throw new InvalidObjectException("Invalid invitation");
         }
 
+        boolean success;
         try {
             //insert invitation into db
-            invitationDAO.updateInvitation(invitation);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Invitation not found", e);
+            success = invitationDAO.updateInvitation(invitation);
+
         } catch (DuplicateEntryException e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             throw new OperationFailedException(String.format("Invitation for user with id %d and event with id already exists!",
                     invitation.getUser().getId(), invitation.getEventId()), e);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
         }
+
+        if (!success) {
+            throw new ObjectNotFoundException("Invitation not found!");
+        }
+
+        return success;
     }
 
     @Override
@@ -179,58 +158,35 @@ public class InvitationServiceImpl implements InvitationService {
     }
 
     @Override
-    public void deleteInvitation(int invitationId) {
+    public boolean deleteInvitation(int invitationId) {
         if (invitationId < 1) {
-            throw new OperationFailedException("Invalid invitation id");
+            throw new InvalidObjectException("Invalid invitation id");
         }
 
-        try {
-            invitationDAO.deleteInvitation(invitationId);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Invitation not found", e);
-        }
+        return invitationDAO.deleteInvitation(invitationId);
     }
 
     @Override
     public void deleteInvitationsByEvent(int eventId) {
         if (eventId < 1) {
-            throw new OperationFailedException("Invalid event id");
+            throw new InvalidObjectException("Invalid event id");
         }
 
-        try {
-            invitationDAO.deleteInvitationsByEventId(eventId);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
+        invitationDAO.deleteInvitationsByEventId(eventId);
     }
 
     @Override
     public void deleteInvitationsByUser(int userId) {
         if (userId < 1) {
-            throw new OperationFailedException("Invalid user id");
+            throw new InvalidObjectException("Invalid user id");
         }
 
-        try {
-            invitationDAO.deleteInvitationsByUserId(userId);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
+        invitationDAO.deleteInvitationsByUserId(userId);
     }
 
     @Override
     public void deleteAllInvitations() {
-        try {
-            invitationDAO.deleteAllInvitations();
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
+        invitationDAO.deleteAllInvitations();
     }
 
     //helper methods

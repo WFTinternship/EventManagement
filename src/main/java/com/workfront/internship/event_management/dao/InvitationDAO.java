@@ -1,8 +1,6 @@
 package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.exception.dao.DAOException;
-import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
-import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.Invitation;
 
 import java.util.List;
@@ -13,28 +11,28 @@ import java.util.List;
 public interface InvitationDAO {
 
     //insert invitation into db
-    int addInvitation(Invitation invitation) throws DAOException, DuplicateEntryException;
+    int addInvitation(Invitation invitation);
 
-    void addInvitations(List<Invitation> invitation) throws DAOException, DuplicateEntryException;
+    void addInvitations(List<Invitation> invitation);
 
     //get records from db
-    Invitation getInvitationById(int invitationId) throws ObjectNotFoundException, DAOException;
+    Invitation getInvitationById(int invitationId);
 
     List<Invitation> getAllInvitations() throws DAOException;
 
-    List<Invitation> getInvitationsByEventId(int eventId) throws DAOException;
+    List<Invitation> getInvitationsByEventId(int eventId);
 
-    List<Invitation> getInvitationsByUserId(int userId) throws DAOException;
+    List<Invitation> getInvitationsByUserId(int userId);
 
     //update record in db
-    void updateInvitation(Invitation invitation) throws ObjectNotFoundException, DuplicateEntryException, DAOException;
+    boolean updateInvitation(Invitation invitation);
 
     //delete records from db
-    void deleteInvitation(int invitationId) throws DAOException, ObjectNotFoundException;
+    boolean deleteInvitation(int invitationId);
 
-    void deleteInvitationsByEventId(int eventId) throws DAOException;
+    void deleteInvitationsByEventId(int eventId);
 
-    void deleteInvitationsByUserId(int userId) throws DAOException;
+    void deleteInvitationsByUserId(int userId);
 
     void deleteAllInvitations() throws DAOException;
 

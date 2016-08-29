@@ -3,10 +3,8 @@ package com.workfront.internship.event_management.service;
 import com.workfront.internship.event_management.TestObjectCreator;
 import com.workfront.internship.event_management.dao.InvitationDAO;
 import com.workfront.internship.event_management.dao.InvitationDAOImpl;
-import com.workfront.internship.event_management.exception.dao.DAOException;
-import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
-import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Invitation;
 import org.junit.After;
 import org.junit.Before;
@@ -51,24 +49,16 @@ public class InvitationServiceUnitTest {
         invitationService = null;
     }
 
-    @Test(expected = OperationFailedException.class)
+    @Test(expected = InvalidObjectException.class)
     public void addInvitation_Invalid_Invitation() {
-        testInvitation.setEventId(0);
-
-        //method under test
-        invitationService.addInvitation(testInvitation);
-    }
-
-    @Test(expected = OperationFailedException.class)
-    public void addInvitation_DB_Error() throws DuplicateEntryException, DAOException {
-        when(invitationDAO.addInvitation(testInvitation)).thenThrow(DAOException.class);
+        testInvitation.setEventId(INVALID_ID);
 
         //method under test
         invitationService.addInvitation(testInvitation);
     }
 
     @Test
-    public void addInvitation_Success() throws DuplicateEntryException, DAOException {
+    public void addInvitation_Success() {
 
         when(invitationDAO.addInvitation(testInvitation)).thenReturn(VALID_ID);
 
@@ -79,22 +69,14 @@ public class InvitationServiceUnitTest {
     }
 
     //Testing addInvitations method
-    @Test(expected = OperationFailedException.class)
+    @Test(expected = InvalidObjectException.class)
     public void addInvitations_Empty_List() {
         //method under test
         invitationService.addInvitations(new ArrayList<Invitation>());
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void addInvitations_DB_Error() throws DuplicateEntryException, DAOException {
-        doThrow(DAOException.class).when(invitationDAO).addInvitations(testInvitationList);
-
-        //method under test
-        invitationService.addInvitations(testInvitationList);
-    }
-
     @Test
-    public void addInvitations_Success() throws DuplicateEntryException, DAOException {
+    public void addInvitations_Success() {
         //method under test
         invitationService.addInvitations(testInvitationList);
 
@@ -102,55 +84,39 @@ public class InvitationServiceUnitTest {
     }
 
     //Testing getInvitationById method
-    @Test(expected = OperationFailedException.class)
+    @Test(expected = InvalidObjectException.class)
     public void getInvitation_Invalid_Id() {
         //method under test
-        invitationService.getInvitation(INVALID_ID);
+        invitationService.getInvitationById(INVALID_ID);
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void getInvitation_DB_Error() throws ObjectNotFoundException, DAOException {
-        doThrow(DAOException.class).when(invitationDAO).getInvitationById(TestObjectCreator.VALID_ID);
+    @Test(expected = ObjectNotFoundException.class)
+    public void getInvitation_Not_Found() {
+        when(invitationDAO.getInvitationById(NON_EXISTING_ID)).thenReturn(null);
 
         //method under test
-        invitationService.getInvitation(TestObjectCreator.VALID_ID);
-    }
-
-    @Test(expected = OperationFailedException.class)
-    public void getInvitation_Not_Found() throws ObjectNotFoundException, DAOException {
-        doThrow(ObjectNotFoundException.class).when(invitationDAO).getInvitationById(NON_EXISTING_ID);
-
-        //method under test
-        invitationService.getInvitation(NON_EXISTING_ID);
+        invitationService.getInvitationById(NON_EXISTING_ID);
     }
 
     @Test
-    public void getInvitation_Success() throws ObjectNotFoundException, DAOException {
+    public void getInvitation_Success() {
         testInvitation.setId(VALID_ID);
         when(invitationDAO.getInvitationById(VALID_ID)).thenReturn(testInvitation);
 
         //method under test
-        Invitation actualInvitation = invitationService.getInvitation(VALID_ID);
+        Invitation actualInvitation = invitationService.getInvitationById(VALID_ID);
         assertEqualInvitations(actualInvitation, testInvitation);
     }
 
     //Testing getInvitationsByEventId method
-    @Test(expected = OperationFailedException.class)
+    @Test(expected = InvalidObjectException.class)
     public void getInvitationsByEvent_Invalid_Id() {
         //method under test
         invitationService.getInvitationsByEvent(INVALID_ID);
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void getInvitationsByEvent_DB_Error() throws ObjectNotFoundException, DAOException {
-        doThrow(DAOException.class).when(invitationDAO).getInvitationsByEventId(TestObjectCreator.VALID_ID);
-
-        //method under test
-        invitationService.getInvitationsByEvent(VALID_ID);
-    }
-
     @Test
-    public void getInvitationsByEvent_Success() throws ObjectNotFoundException, DAOException {
+    public void getInvitationsByEvent_Success() {
         when(invitationDAO.getInvitationsByEventId(VALID_ID)).thenReturn(testInvitationList);
 
         //method under test
@@ -162,22 +128,14 @@ public class InvitationServiceUnitTest {
     }
 
     //Testing getInvitationsByUserId method
-    @Test(expected = OperationFailedException.class)
+    @Test(expected = InvalidObjectException.class)
     public void getInvitationsByUser_Invalid_Id() {
         //method under test
         invitationService.getInvitationsByUser(INVALID_ID);
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void getInvitationsByUser_DB_Error() throws ObjectNotFoundException, DAOException {
-        doThrow(DAOException.class).when(invitationDAO).getInvitationsByUserId(VALID_ID);
-
-        //method under test
-        invitationService.getInvitationsByUser(VALID_ID);
-    }
-
     @Test
-    public void getInvitationsByUser_Success() throws ObjectNotFoundException, DAOException {
+    public void getInvitationsByUser_Success() {
         when(invitationDAO.getInvitationsByUserId(VALID_ID)).thenReturn(testInvitationList);
 
         //method under test
@@ -189,7 +147,7 @@ public class InvitationServiceUnitTest {
     }
 
     //Testing editInvitation method
-    @Test(expected = OperationFailedException.class)
+    @Test(expected = InvalidObjectException.class)
     public void editInvitation_Invalid_Invitation() {
         testInvitation.setUser(null);
 
@@ -197,33 +155,27 @@ public class InvitationServiceUnitTest {
         invitationService.editInvitation(testInvitation);
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void editInvitation_Not_Found() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
-        doThrow(ObjectNotFoundException.class).when(invitationDAO).updateInvitation(testInvitation);
-
-        //method under test
-        invitationService.editInvitation(testInvitation);
-    }
-
-    @Test(expected = OperationFailedException.class)
-    public void editInvitation_DB_Error() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
-        doThrow(DAOException.class).when(invitationDAO).updateInvitation(testInvitation);
+    @Test(expected = ObjectNotFoundException.class)
+    public void editInvitation_Not_Found() {
+        when(invitationDAO.updateInvitation(testInvitation)).thenReturn(false);
 
         //method under test
         invitationService.editInvitation(testInvitation);
     }
 
     @Test
-    public void editInvitation_Success() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
+    public void editInvitation_Success() {
         //method under test
-        invitationService.editInvitation(testInvitation);
+        when(invitationDAO.updateInvitation(testInvitation)).thenReturn(true);
 
-        verify(invitationDAO).updateInvitation(testInvitation);
+        boolean success = invitationService.editInvitation(testInvitation);
+
+        assertTrue(success);
     }
 
     //testing editInvitationList method
     @Test
-    public void editInvitations_Empty_List() throws DAOException, ObjectNotFoundException {
+    public void editInvitations_Empty_List() {
         //method under test
         invitationService.editInvitationList(VALID_ID, new ArrayList<Invitation>());
 
@@ -231,7 +183,7 @@ public class InvitationServiceUnitTest {
     }
 
     @Test
-    public void editInvitations_InsertList_EmptyDBList() throws DAOException, ObjectNotFoundException {
+    public void editInvitations_InsertList_EmptyDBList() {
         when(invitationService.getInvitationsByEvent(VALID_ID)).thenReturn(null);
 
         //method under test
@@ -241,7 +193,7 @@ public class InvitationServiceUnitTest {
     }
 
     @Test
-    public void editInvitations_Insert_NonEmptyDBList() throws DAOException, ObjectNotFoundException {
+    public void editInvitations_Insert_NonEmptyDBList() {
         //db list does not contains testInvitation object, test method should add it to db
         List<Invitation> dbList = new ArrayList<>();
         Invitation dbInvitation = createTestInvitation().setId(100);
@@ -258,7 +210,7 @@ public class InvitationServiceUnitTest {
     }
 
     @Test
-    public void editInvitationList_Update_NonEmptyDBList() throws DAOException, ObjectNotFoundException {
+    public void editInvitationList_Update_NonEmptyDBList() {
         testInvitation.setId(VALID_ID);
 
         Invitation dbInvitation = new Invitation(testInvitation);
@@ -268,6 +220,7 @@ public class InvitationServiceUnitTest {
         dbList.add(dbInvitation);
 
         when(invitationService.getInvitationsByEvent(TestObjectCreator.VALID_ID)).thenReturn(dbList);
+        doReturn(true).when(invitationService).editInvitation((Invitation) anyObject());
 
         //method under test
         invitationService.editInvitationList(VALID_ID, testInvitationList);
@@ -276,7 +229,7 @@ public class InvitationServiceUnitTest {
     }
 
     @Test
-    public void editInvitationList_DeleteInvitation_FromDB() throws DAOException, ObjectNotFoundException {
+    public void editInvitationList_DeleteInvitation_FromDB() {
         //create db list, that contains invitation with the same id as testInvitation
         List<Invitation> dbList = new ArrayList<>();
         Invitation dbInvitation = createTestInvitation().setId(VALID_ID);
@@ -291,22 +244,14 @@ public class InvitationServiceUnitTest {
     }
 
     //Testing deleteInvitationsByEvent method
-    @Test(expected = OperationFailedException.class)
+    @Test(expected = InvalidObjectException.class)
     public void deleteInvitationsByEvent_Invalid_Id() {
         //method under test
         invitationService.deleteInvitationsByEvent(INVALID_ID);
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void deleteInvitationsByEventId_DB_Error() throws ObjectNotFoundException, DAOException {
-        doThrow(DAOException.class).when(invitationDAO).deleteInvitationsByEventId(VALID_ID);
-
-        //method under test
-        invitationService.deleteInvitationsByEvent(VALID_ID);
-    }
-
     @Test
-    public void deleteInvitationsByEvent_Success() throws ObjectNotFoundException, DAOException {
+    public void deleteInvitationsByEvent_Success() {
         //method under test
         invitationService.deleteInvitationsByEvent(VALID_ID);
 
@@ -314,22 +259,14 @@ public class InvitationServiceUnitTest {
     }
 
     //Testing deleteInvitationsByEvent method
-    @Test(expected = OperationFailedException.class)
+    @Test(expected = InvalidObjectException.class)
     public void deleteInvitationsByUser_Invalid_Id() {
         //method under test
         invitationService.deleteInvitationsByUser(INVALID_ID);
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void deleteInvitationsByUserId_DB_Error() throws ObjectNotFoundException, DAOException {
-        doThrow(DAOException.class).when(invitationDAO).deleteInvitationsByUserId(VALID_ID);
-
-        //method under test
-        invitationService.deleteInvitationsByUser(VALID_ID);
-    }
-
     @Test
-    public void deleteInvitationsByUserId_Success() throws ObjectNotFoundException, DAOException {
+    public void deleteInvitationsByUserId_Success() {
         //method under test
         invitationService.deleteInvitationsByUser(VALID_ID);
 
@@ -338,30 +275,23 @@ public class InvitationServiceUnitTest {
 
 
     //Testing deleteInvitation method
-    @Test(expected = OperationFailedException.class)
+    @Test(expected = InvalidObjectException.class)
     public void deleteInvitation_Invalid_Id() {
         //method under test
         invitationService.deleteInvitation(INVALID_ID);
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void deleteInvitation_DB_Error() throws ObjectNotFoundException, DAOException {
-        doThrow(DAOException.class).when(invitationDAO).deleteInvitation(VALID_ID);
+    @Test
+    public void deleteInvitation_Not_Found() {
+        when(invitationDAO.deleteInvitation(NON_EXISTING_ID)).thenReturn(false);
 
         //method under test
-        invitationService.deleteInvitation(VALID_ID);
-    }
-
-    @Test(expected = OperationFailedException.class)
-    public void deleteInvitation_Not_Found() throws ObjectNotFoundException, DAOException {
-        doThrow(ObjectNotFoundException.class).when(invitationDAO).deleteInvitation(NON_EXISTING_ID);
-
-        //method under test
-        invitationService.deleteInvitation(NON_EXISTING_ID);
+        boolean success = invitationService.deleteInvitation(NON_EXISTING_ID);
+        assertFalse(success);
     }
 
     @Test
-    public void deleteInvitation_Success() throws ObjectNotFoundException, DAOException {
+    public void deleteInvitation_Success() {
         //method under test
         invitationService.deleteInvitation(VALID_ID);
 
@@ -370,35 +300,19 @@ public class InvitationServiceUnitTest {
 
     //Testing getAllInvitations method
     @Test
-    public void getAllInvitations_Success() throws ObjectNotFoundException, DAOException {
+    public void getAllInvitations_Success() {
         //method under test
         invitationService.getAllInvitations();
 
         verify(invitationDAO).getAllInvitations();
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void getAllInvitations_DB_Error() throws ObjectNotFoundException, DAOException {
-        doThrow(DAOException.class).when(invitationDAO).getAllInvitations();
-
-        //method under test
-        invitationService.getAllInvitations();
-    }
-
     //Testing deleteAllInvitations method
     @Test
-    public void deleteAllInvitations_Success() throws ObjectNotFoundException, DAOException {
+    public void deleteAllInvitations_Success() {
         //method under test
         invitationService.deleteAllInvitations();
 
         verify(invitationDAO).deleteAllInvitations();
-    }
-
-    @Test(expected = OperationFailedException.class)
-    public void deleteAllInvitations_DB_Error() throws ObjectNotFoundException, DAOException {
-        doThrow(DAOException.class).when(invitationDAO).deleteAllInvitations();
-
-        //method under test
-        invitationService.deleteAllInvitations();
     }
 }
