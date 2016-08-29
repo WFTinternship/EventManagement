@@ -21,10 +21,10 @@ public interface CategoryDAO {
     Category getCategoryById(int categoryId) throws ObjectNotFoundException, DAOException;
 
     //update data in db
-    void updateCategory(Category category) throws DuplicateEntryException, DAOException, ObjectNotFoundException;
+    boolean updateCategory(Category category) throws DuplicateEntryException, DAOException, ObjectNotFoundException;
 
     //delete data from db
-    void deleteCategory(int categoryId) throws ObjectNotFoundException, DAOException;
+    boolean deleteCategory(int categoryId) throws ObjectNotFoundException, DAOException;
 
     void deleteAllCategories() throws DAOException;
 }

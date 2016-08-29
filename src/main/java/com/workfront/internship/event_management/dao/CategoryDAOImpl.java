@@ -111,9 +111,7 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
 
             //get results
             List<Category> categoryList = createEventCategoryListFromRS(rs);
-            if (categoryList.isEmpty()) {
-                throw new ObjectNotFoundException("Category with id " + categoryId + " not found!");
-            } else {
+            if (!categoryList.isEmpty()) {
                 category = categoryList.get(0);
             }
         } catch (SQLException e) {
@@ -126,9 +124,11 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
     }
 
     @Override
-    public void updateCategory(Category category) throws DuplicateEntryException, DAOException, ObjectNotFoundException {
+    public boolean updateCategory(Category category) throws DuplicateEntryException, DAOException, ObjectNotFoundException {
+
         Connection conn = null;
         PreparedStatement stmt = null;
+        boolean success = false;
 
         try {
             //get connection
@@ -144,8 +144,8 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
             //execute query
             int affectedRows = stmt.executeUpdate();
 
-            if (affectedRows == 0) {
-                throw new ObjectNotFoundException("Category with id " + category.getId() + " not found!");
+            if (affectedRows != 0) {
+                success = true;
             }
         } catch (SQLIntegrityConstraintViolationException e) {
             LOGGER.error("Duplicate category entry", e);
@@ -156,11 +156,12 @@ public class CategoryDAOImpl extends GenericDAO implements CategoryDAO {
         } finally {
             closeResources(stmt, conn);
         }
+        return success;
     }
 
     @Override
-    public void deleteCategory(int categoryId) throws ObjectNotFoundException, DAOException {
-        deleteRecordById("event_category", categoryId);
+    public boolean deleteCategory(int categoryId) throws ObjectNotFoundException, DAOException {
+        return deleteRecordById("event_category", categoryId);
     }
 
     @Override

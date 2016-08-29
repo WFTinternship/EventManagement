@@ -16,9 +16,9 @@ public interface CategoryService {
 
     List<Category> getAllCategories();
 
-    void editCategory(Category category);
+    boolean editCategory(Category category);
 
-    void deleteCategory(int categoryId);
+    boolean deleteCategory(int categoryId);
 
     void deleteAllCategories();
 }
