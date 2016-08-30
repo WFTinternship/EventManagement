@@ -1,8 +1,8 @@
 package com.workfront.internship.event_management.service;
 
 import com.workfront.internship.event_management.dao.RecurrenceTypeDAO;
-import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.RecurrenceType;
@@ -22,15 +22,17 @@ import static com.workfront.internship.event_management.service.util.Validator.i
 @Component
 class RecurrenceTypeServiceImpl implements RecurrenceTypeService {
 
-    private static final Logger LOGGER = Logger.getLogger(RecurrenceTypeServiceImpl.class);
+    private static final Logger logger = Logger.getLogger(RecurrenceTypeServiceImpl.class);
 
     @Autowired
     private RecurrenceTypeDAO recurrenceTypeDAO;
+    @Autowired
+    private RecurrenceOptionService recurrenceOptionService;
 
     @Override
     public RecurrenceType addRecurrenceType(RecurrenceType recurrenceType) {
         if (!isValidRecurrenceType(recurrenceType)) {
-            throw new OperationFailedException("Invalid recurrence type");
+            throw new InvalidObjectException("Invalid recurrence type");
         }
 
         try {
@@ -46,11 +48,8 @@ class RecurrenceTypeServiceImpl implements RecurrenceTypeService {
             //set generated it to recurrence type
             recurrenceType.setId(recurrenceTypeId);
         } catch (DuplicateEntryException e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             throw new OperationFailedException("Recurrence type with title " + recurrenceType.getTitle() + " already exists!", e);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
         }
         return recurrenceType;
     }
@@ -58,79 +57,59 @@ class RecurrenceTypeServiceImpl implements RecurrenceTypeService {
     @Override
     public RecurrenceType getRecurrenceTypeById(int id) {
         if (id < 0) {
-            throw new OperationFailedException("Invalid recurrence type id");
+            throw new InvalidObjectException("Invalid recurrence type id");
         }
 
-        try {
-            return recurrenceTypeDAO.getRecurrenceTypeById(id);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Recurrence type not found");
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
+        RecurrenceType recurrenceType = recurrenceTypeDAO.getRecurrenceTypeById(id);
+        if (recurrenceType == null) {
+            throw new ObjectNotFoundException("Recurrence type not found!");
         }
+
+        return recurrenceType;
     }
 
     @Override
     public List<RecurrenceType> getAllRecurrenceTypes() {
-        try {
             return recurrenceTypeDAO.getAllRecurrenceTypes();
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
     }
 
     @Override
-    public void editRecurrenceType(RecurrenceType recurrenceType) {
+    public boolean editRecurrenceType(RecurrenceType recurrenceType) {
         if (!isValidRecurrenceType(recurrenceType)) {
-            throw new OperationFailedException("Invalid recurrence type");
+            throw new InvalidObjectException("Invalid recurrence type");
         }
 
+        boolean success;
         try {
             //update recurrence type in db
-            recurrenceTypeDAO.updateRecurrenceType(recurrenceType);
-
-            //update recurrence type options
-            RecurrenceOptionService recurrenceOptionService = new RecurrenceOptionServiceImpl();
-            recurrenceOptionService.editRecurrenceOptionList(recurrenceType.getId(), recurrenceType.getRecurrenceOptions());
+            success = recurrenceTypeDAO.updateRecurrenceType(recurrenceType);
+            if (success) {
+                //update recurrence type options
+                recurrenceOptionService.editRecurrenceOptionList(recurrenceType.getId(), recurrenceType.getRecurrenceOptions());
+            }
         } catch (DuplicateEntryException e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             throw new OperationFailedException("Recurrence type with title " + recurrenceType.getTitle() + " already exists!", e);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Recurrence type not found", e);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
         }
+
+        if (!success) {
+            throw new ObjectNotFoundException("Recurrence type not found!");
+        }
+
+        return success;
     }
 
     @Override
-    public void deleteRecurrenceType(int recurrenceTypeId) {
+    public boolean deleteRecurrenceType(int recurrenceTypeId) {
         if (recurrenceTypeId < 1) {
-            throw new OperationFailedException("Invalid recurrence type id");
+            throw new InvalidObjectException("Invalid recurrence type id");
         }
 
-        try {
-            recurrenceTypeDAO.deleteRecurrenceType(recurrenceTypeId);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Recurrence type not found", e);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
+        return recurrenceTypeDAO.deleteRecurrenceType(recurrenceTypeId);
     }
 
     @Override
     public void deleteAllRecurrenceTypes() {
-        try {
-            recurrenceTypeDAO.deleteAllRecurrenceTypes();
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
+        recurrenceTypeDAO.deleteAllRecurrenceTypes();
     }
 }

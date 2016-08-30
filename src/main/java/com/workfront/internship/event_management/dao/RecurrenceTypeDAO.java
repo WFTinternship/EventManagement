@@ -23,10 +23,10 @@ public interface RecurrenceTypeDAO {
     RecurrenceType getRecurrenceTypeById(int id) throws DAOException, ObjectNotFoundException;
 
     //update record in db
-    void updateRecurrenceType(RecurrenceType recurrenceType) throws DAOException, DuplicateEntryException, ObjectNotFoundException;
+    boolean updateRecurrenceType(RecurrenceType recurrenceType) throws DAOException, DuplicateEntryException, ObjectNotFoundException;
 
     //delete data from db
-    void deleteRecurrenceType(int id) throws DAOException, ObjectNotFoundException;
+    boolean deleteRecurrenceType(int id) throws DAOException, ObjectNotFoundException;
 
     void deleteAllRecurrenceTypes() throws DAOException;
 

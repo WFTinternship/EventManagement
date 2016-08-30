@@ -157,11 +157,11 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
     }
 
     @Override
-    public void updateRecurrenceType(RecurrenceType recurrenceType) throws DAOException, DuplicateEntryException, ObjectNotFoundException {
+    public boolean updateRecurrenceType(RecurrenceType recurrenceType) throws DAOException, DuplicateEntryException, ObjectNotFoundException {
         Connection conn = null;
         PreparedStatement stmt = null;
 
-        int affectedRows;
+        boolean success = false;
         String query = "UPDATE recurrence_type SET title = ?, interval_unit = ? WHERE id = ?";
 
         try {
@@ -175,9 +175,9 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
             stmt.setInt(3, recurrenceType.getId());
 
             //execute query
-            affectedRows = stmt.executeUpdate();
-            if (affectedRows == 0) {
-                throw new ObjectNotFoundException("Recurrence type with id " + recurrenceType.getId() + " not found!");
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows != 0) {
+                success = true;
             }
         } catch (SQLIntegrityConstraintViolationException e) {
             LOGGER.error("Duplicate recurrence type entry", e);
@@ -188,11 +188,12 @@ public class RecurrenceTypeDAOImpl extends GenericDAO implements RecurrenceTypeD
         } finally {
             closeResources(stmt, conn);
         }
+        return success;
     }
 
     @Override
-    public void deleteRecurrenceType(int id) throws ObjectNotFoundException, DAOException {
-        deleteRecordById("recurrence_type", id);
+    public boolean deleteRecurrenceType(int id) throws ObjectNotFoundException, DAOException {
+        return deleteRecordById("recurrence_type", id);
     }
 
     @Override

@@ -16,9 +16,9 @@ interface RecurrenceTypeService {
 
     RecurrenceType getRecurrenceTypeById(int recurrenceTypeId);
 
-    void editRecurrenceType(RecurrenceType recurrenceType);
+    boolean editRecurrenceType(RecurrenceType recurrenceType);
 
-    void deleteRecurrenceType(int id);
+    boolean deleteRecurrenceType(int id);
 
     void deleteAllRecurrenceTypes();
 
