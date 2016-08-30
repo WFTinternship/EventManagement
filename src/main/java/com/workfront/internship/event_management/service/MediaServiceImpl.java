@@ -1,8 +1,8 @@
 package com.workfront.internship.event_management.service;
 
 import com.workfront.internship.event_management.dao.MediaDAO;
-import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Media;
@@ -22,7 +22,7 @@ import static com.workfront.internship.event_management.service.util.Validator.i
 @Component
 public class MediaServiceImpl implements MediaService {
 
-    private static final Logger LOGGER = Logger.getLogger(MediaServiceImpl.class);
+    private static final Logger logger = Logger.getLogger(MediaServiceImpl.class);
 
     @Autowired
     private MediaDAO mediaDAO;
@@ -30,7 +30,7 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public Media addMedia(Media media) {
         if (!isValidMedia(media)) {
-            throw new OperationFailedException("Invalid media type");
+            throw new InvalidObjectException("Invalid media type");
         }
 
         try {
@@ -40,11 +40,8 @@ public class MediaServiceImpl implements MediaService {
             //set generated it to media type
             media.setId(mediaId);
         } catch (DuplicateEntryException e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             throw new OperationFailedException("Media with path " + media.getPath() + " already exists!", e);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
         }
         return media;
     }
@@ -52,104 +49,67 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public Media getMediaById(int mediaId) {
         if (mediaId < 1) {
-            throw new OperationFailedException("Invalid media id");
+            throw new InvalidObjectException("Invalid media id");
         }
-
-        try {
-            return mediaDAO.getMediaById(mediaId);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Media not found");
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
+        Media media = mediaDAO.getMediaById(mediaId);
+        if (media == null) {
+            throw new ObjectNotFoundException("Media not found");
         }
+        return media;
     }
 
     @Override
-    public void editMediaDescription(int mediaId, String description) {
+    public boolean editMediaDescription(int mediaId, String description) {
         if (mediaId < 1) {
-            throw new OperationFailedException("Invalid media id");
+            throw new InvalidObjectException("Invalid media id");
         }
 
         if (isEmptyString(description)) {
-            throw new OperationFailedException("Invalid media description");
+            throw new InvalidObjectException("Invalid media description");
         }
+        boolean success = mediaDAO.updateMediaDescription(mediaId, description);
 
-        try {
-            mediaDAO.updateMediaDescription(mediaId, description);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Media not found");
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
+        if (!success) {
+            throw new ObjectNotFoundException("Media not found!");
         }
+        return success;
     }
 
     @Override
-    public void deleteMedia(int mediaId) {
+    public boolean deleteMedia(int mediaId) {
         if (mediaId < 1) {
-            throw new OperationFailedException("Invalid media id");
+            throw new InvalidObjectException("Invalid media id");
         }
 
-        try {
-            mediaDAO.deleteMedia(mediaId);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Media not found");
-        }
+        return mediaDAO.deleteMedia(mediaId);
     }
 
     @Override
     public void deleteAllMedia() {
-        try {
-            mediaDAO.deleteAllMedia();
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
+        mediaDAO.deleteAllMedia();
     }
 
     @Override
     public List<Media> getAllMedia() {
-        try {
-            return mediaDAO.getAllMedia();
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
+        return mediaDAO.getAllMedia();
     }
 
     @Override
     public List<Media> getMediaByEvent(int eventId) {
         if (eventId < 1) {
-            throw new OperationFailedException("Invalid event id");
+            throw new InvalidObjectException("Invalid event id");
         }
 
-        try {
-            return mediaDAO.getMediaByEventId(eventId);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
+        return mediaDAO.getMediaByEventId(eventId);
     }
 
     @Override
     public List<Media> getMediaByUploader(int uploaderId) {
         if (uploaderId < 1) {
-            throw new OperationFailedException("Invalid uploader id");
+            throw new InvalidObjectException("Invalid uploader id");
         }
 
-        try {
-            return mediaDAO.getMediaByUploaderId(uploaderId);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
+        return mediaDAO.getMediaByUploaderId(uploaderId);
     }
 
 

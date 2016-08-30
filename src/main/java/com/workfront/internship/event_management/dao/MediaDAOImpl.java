@@ -107,11 +107,13 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
     public Media getMediaById(int mediaId) throws ObjectNotFoundException, DAOException {
 
         List<Media> mediaList = getMediaByField("id", mediaId);
-        if (mediaList.isEmpty()) {
-            throw new ObjectNotFoundException("Media with id " + mediaId + " not found!");
-        } else {
-            return mediaList.get(0);
+        Media media = null;
+
+        if (!mediaList.isEmpty()) {
+            media = mediaList.get(0);
         }
+
+        return media;
     }
 
     @Override
@@ -188,10 +190,11 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
     }
 
     @Override
-    public void updateMediaDescription(int mediaId, String desc) throws DAOException, ObjectNotFoundException {
+    public boolean updateMediaDescription(int mediaId, String desc) throws DAOException, ObjectNotFoundException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
+        boolean success = false;
 
         String query = "UPDATE event_media SET description = ? WHERE id = ?";
 
@@ -206,8 +209,8 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
 
             //execute query
             int affectedRows = stmt.executeUpdate();
-            if (affectedRows == 0) {
-                throw new ObjectNotFoundException("Media with id " + mediaId + " not found!");
+            if (affectedRows != 0) {
+                success = true;
             }
         } catch (SQLException e) {
             LOGGER.error("SQL Exception", e);
@@ -215,11 +218,12 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
         } finally {
             closeResources(null, stmt, conn);
         }
+        return success;
     }
 
     @Override
-    public void deleteMedia(int mediaId) throws DAOException, ObjectNotFoundException {
-        deleteRecordById("event_media", mediaId);
+    public boolean deleteMedia(int mediaId) throws DAOException, ObjectNotFoundException {
+        return deleteRecordById("event_media", mediaId);
     }
 
     @Override

@@ -22,10 +22,10 @@ public interface MediaService {
     List<Media> getAllMedia();
 
     //Update
-    void editMediaDescription(int mediaId, String description);
+    boolean editMediaDescription(int mediaId, String description);
 
     //Delete
-    void deleteMedia(int mediaId);
+    boolean deleteMedia(int mediaId);
 
     void deleteAllMedia();
 }

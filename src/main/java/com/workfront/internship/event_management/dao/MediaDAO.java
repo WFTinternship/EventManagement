@@ -28,10 +28,10 @@ public interface MediaDAO {
     List<Media> getAllMedia() throws DAOException;
 
     //update data in db
-    void updateMediaDescription(int mediaId, String description) throws DAOException, ObjectNotFoundException;
+    boolean updateMediaDescription(int mediaId, String description) throws DAOException, ObjectNotFoundException;
 
     //delete data from db
-    void deleteMedia(int mediaId) throws ObjectNotFoundException, DAOException;
+    boolean deleteMedia(int mediaId) throws ObjectNotFoundException, DAOException;
 
     void deleteAllMedia() throws DAOException;
 }
