@@ -20,11 +20,11 @@ public interface RecurrenceService {
 
     List<Recurrence> getAllRecurrences();
 
-    void editRecurrence(Recurrence recurrence);
+    boolean editRecurrence(Recurrence recurrence);
 
     void editRecurrenceList(int eventId, List<Recurrence> recurrences);
 
-    void deleteRecurrence(int id);
+    boolean deleteRecurrence(int id);
 
     void deleteRecurrencesByEventId(int eventId);
 

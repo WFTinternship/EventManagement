@@ -242,12 +242,12 @@ public class RecurrenceDAOImpl extends GenericDAO implements RecurrenceDAO {
     }
 
     @Override
-    public void updateRecurrence(Recurrence recurrence) throws ObjectNotFoundException, DAOException {
+    public boolean updateRecurrence(Recurrence recurrence) {
 
         Connection conn = null;
         PreparedStatement stmt = null;
+        boolean success = false;
 
-        int affectedRows;
         String query = "UPDATE event_recurrence SET event_id = ?, recurrence_type_id = ?, " +
                 "recurrence_option_id = ?, repeat_interval = ?, repeat_end = ? WHERE id = ?";
         try {
@@ -280,9 +280,9 @@ public class RecurrenceDAOImpl extends GenericDAO implements RecurrenceDAO {
             stmt.setInt(6, recurrence.getId());
 
             //execute query
-            affectedRows = stmt.executeUpdate();
-            if (affectedRows == 0) {
-                throw new ObjectNotFoundException("Event recurrence not found!");
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows != 0) {
+                success = true;
             }
         } catch (SQLException e) {
             LOGGER.error("SQL Exception ", e);
@@ -290,11 +290,12 @@ public class RecurrenceDAOImpl extends GenericDAO implements RecurrenceDAO {
         } finally {
             closeResources(stmt, conn);
         }
+        return success;
     }
 
     @Override
-    public void deleteRecurrence(int id) throws DAOException, ObjectNotFoundException {
-        deleteRecordById("event_recurrence", id);
+    public boolean deleteRecurrence(int id) throws DAOException, ObjectNotFoundException {
+        return deleteRecordById("event_recurrence", id);
     }
 
     @Override

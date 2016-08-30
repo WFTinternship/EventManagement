@@ -1,9 +1,8 @@
 package com.workfront.internship.event_management.service;
 
 import com.workfront.internship.event_management.dao.RecurrenceDAO;
-import com.workfront.internship.event_management.exception.dao.DAOException;
+import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
-import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Recurrence;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ import static com.workfront.internship.event_management.service.util.Validator.i
 @Component
 public class RecurrenceServiceImpl implements RecurrenceService {
 
-    private static final Logger LOGGER = Logger.getLogger(RecurrenceServiceImpl.class);
+    private static final Logger logger = Logger.getLogger(RecurrenceServiceImpl.class);
 
     @Autowired
     private RecurrenceDAO recurrenceDAO;
@@ -28,91 +27,63 @@ public class RecurrenceServiceImpl implements RecurrenceService {
     @Override
     public Recurrence addRecurrence(Recurrence recurrence) {
         if (!isValidRecurrence(recurrence)) {
-            throw new OperationFailedException("Invalid event recurrence");
+            throw new InvalidObjectException("Invalid event recurrence");
         }
 
-        try {
-            int recurrenceId = recurrenceDAO.addRecurrence(recurrence);
+        int recurrenceId = recurrenceDAO.addRecurrence(recurrence);
+        recurrence.setId(recurrenceId);
 
-            recurrence.setId(recurrenceId);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
         return recurrence;
     }
 
     @Override
     public void addRecurrences(List<Recurrence> recurrenceList) {
         if (isEmptyCollection(recurrenceList)) {
-            throw new OperationFailedException("Empty recurrence list");
+            throw new InvalidObjectException("Empty recurrence list");
         }
 
-        try {
-            recurrenceDAO.addRecurrences(recurrenceList);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
+        recurrenceDAO.addRecurrences(recurrenceList);
     }
 
     @Override
     public Recurrence getRecurrenceById(int recurrenceId) {
         if (recurrenceId < 0) {
-            throw new OperationFailedException("Invalid recurrence id");
+            throw new InvalidObjectException("Invalid recurrence id");
         }
 
-        try {
-            return recurrenceDAO.getRecurrenceById(recurrenceId);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Recurrence not found");
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
+        Recurrence recurrence = recurrenceDAO.getRecurrenceById(recurrenceId);
+        if (recurrence == null) {
+            throw new ObjectNotFoundException("Recurrence not found");
         }
+        return recurrence;
     }
 
     @Override
     public List<Recurrence> getRecurrencesByEventId(int eventId) {
         if (eventId < 0) {
-            throw new OperationFailedException("Invalid event id");
+            throw new InvalidObjectException("Invalid event id");
         }
 
-        try {
-            return recurrenceDAO.getRecurrencesByEventId(eventId);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
+        return recurrenceDAO.getRecurrencesByEventId(eventId);
     }
 
     @Override
     public List<Recurrence> getAllRecurrences() {
-        try {
-            return recurrenceDAO.getAllRecurrences();
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
+        return recurrenceDAO.getAllRecurrences();
     }
 
     @Override
-    public void editRecurrence(Recurrence recurrence) {
+    public boolean editRecurrence(Recurrence recurrence) {
         if (!isValidRecurrence(recurrence)) {
-            throw new OperationFailedException("Invalid event recurrence");
+            throw new InvalidObjectException("Invalid event recurrence");
         }
 
-        try {
-            //insert invitation into db
-            recurrenceDAO.updateRecurrence(recurrence);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Event recurrence not found", e);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
+        boolean success = recurrenceDAO.updateRecurrence(recurrence);
+
+        if (!success) {
+            throw new ObjectNotFoundException("Recurrence not found!");
         }
+        return success;
     }
 
     @Override
@@ -151,47 +122,26 @@ public class RecurrenceServiceImpl implements RecurrenceService {
     }
 
     @Override
-    public void deleteRecurrence(int recurrenceId) {
+    public boolean deleteRecurrence(int recurrenceId) {
         if (recurrenceId < 1) {
-            throw new OperationFailedException("Invalid recurrence id");
+            throw new InvalidObjectException("Invalid recurrence id");
         }
 
-        try {
-            recurrenceDAO.deleteRecurrence(recurrenceId);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Event not found", e);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
+        return recurrenceDAO.deleteRecurrence(recurrenceId);
     }
 
     @Override
     public void deleteRecurrencesByEventId(int eventId) {
         if (eventId < 1) {
-            throw new OperationFailedException("Invalid event id");
+            throw new InvalidObjectException("Invalid event id");
         }
 
-        try {
-            recurrenceDAO.deleteRecurrencesByEventId(eventId);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Recurrences not found", e);
-        }
+        recurrenceDAO.deleteRecurrencesByEventId(eventId);
     }
 
     @Override
     public void deleteAllRecurrences() {
-        try {
-            recurrenceDAO.deleteAllRecurrences();
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
+        recurrenceDAO.deleteAllRecurrences();
     }
 
     //helper methods

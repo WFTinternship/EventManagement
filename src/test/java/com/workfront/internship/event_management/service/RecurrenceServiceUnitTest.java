@@ -5,8 +5,8 @@ import com.workfront.internship.event_management.dao.RecurrenceDAO;
 import com.workfront.internship.event_management.dao.RecurrenceDAOImpl;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
-import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Recurrence;
 import org.junit.After;
 import org.junit.Before;
@@ -52,7 +52,7 @@ public class RecurrenceServiceUnitTest {
     }
 
     //Testing addRecurrence method
-    @Test(expected = OperationFailedException.class)
+    @Test(expected = InvalidObjectException.class)
     public void addRecurrence_Invalid_Recurrence() {
         testRecurrence.setRecurrenceType(null);
 
@@ -60,16 +60,8 @@ public class RecurrenceServiceUnitTest {
         recurrenceService.addRecurrence(testRecurrence);
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void addRecurrence_DB_Error() throws DuplicateEntryException, DAOException {
-        when(recurrenceDAO.addRecurrence(testRecurrence)).thenThrow(DAOException.class);
-
-        //method under test
-        recurrenceService.addRecurrence(testRecurrence);
-    }
-
     @Test
-    public void addRecurrence_Success() throws DuplicateEntryException, DAOException {
+    public void addRecurrence_Success() {
         testRecurrence.setId(VALID_ID);
         when(recurrenceDAO.addRecurrence(testRecurrence)).thenReturn(VALID_ID);
 
@@ -80,22 +72,14 @@ public class RecurrenceServiceUnitTest {
     }
 
     //Testing addRecurrences method
-    @Test(expected = OperationFailedException.class)
+    @Test(expected = InvalidObjectException.class)
     public void addRecurrences_Empty_List() {
         //method under test
         recurrenceService.addRecurrences(new ArrayList<Recurrence>());
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void addRecurrences_Failed_DB_Error() throws DuplicateEntryException, DAOException {
-        doThrow(DAOException.class).when(recurrenceDAO).addRecurrences(testRecurrenceList);
-
-        //method under test
-        recurrenceService.addRecurrences(testRecurrenceList);
-    }
-
     @Test
-    public void addRecurrences_Success() throws DuplicateEntryException, DAOException {
+    public void addRecurrences_Success() {
         //method under test
         recurrenceService.addRecurrences(testRecurrenceList);
 
@@ -103,30 +87,22 @@ public class RecurrenceServiceUnitTest {
     }
 
     //Testing getRecurrenceById method
-    @Test(expected = OperationFailedException.class)
+    @Test(expected = InvalidObjectException.class)
     public void getRecurrenceById_Invalid_Id() {
         //method under test
         recurrenceService.getRecurrenceById(INVALID_ID);
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void getRecurrenceById_DB_Error() throws ObjectNotFoundException, DAOException {
-        doThrow(DAOException.class).when(recurrenceDAO).getRecurrenceById(TestObjectCreator.VALID_ID);
-
-        //method under test
-        recurrenceService.getRecurrenceById(TestObjectCreator.VALID_ID);
-    }
-
-    @Test(expected = OperationFailedException.class)
-    public void getRecurrenceById_Not_Found() throws ObjectNotFoundException, DAOException {
-        doThrow(ObjectNotFoundException.class).when(recurrenceDAO).getRecurrenceById(NON_EXISTING_ID);
+    @Test(expected = ObjectNotFoundException.class)
+    public void getRecurrenceById_Not_Found() {
+        when(recurrenceDAO.getRecurrenceById(NON_EXISTING_ID)).thenReturn(null);
 
         //method under test
         recurrenceService.getRecurrenceById(NON_EXISTING_ID);
     }
 
     @Test
-    public void getRecurrenceById_Success() throws ObjectNotFoundException, DAOException {
+    public void getRecurrenceById_Success() {
         testRecurrence.setId(TestObjectCreator.VALID_ID);
         when(recurrenceDAO.getRecurrenceById(TestObjectCreator.VALID_ID)).thenReturn(testRecurrence);
 
@@ -136,22 +112,14 @@ public class RecurrenceServiceUnitTest {
     }
 
     //Testing getRecurrenceByEventId method
-    @Test(expected = OperationFailedException.class)
+    @Test(expected = InvalidObjectException.class)
     public void getRecurrencesByEventId_Invalid_Id() {
         //method under test
         recurrenceService.getRecurrencesByEventId(INVALID_ID);
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void getRecurrencesByEventId_DB_Error() throws ObjectNotFoundException, DAOException {
-        doThrow(DAOException.class).when(recurrenceDAO).getRecurrencesByEventId(TestObjectCreator.VALID_ID);
-
-        //method under test
-        recurrenceService.getRecurrencesByEventId(TestObjectCreator.VALID_ID);
-    }
-
     @Test
-    public void getRecurrencesByEventId_Success() throws ObjectNotFoundException, DAOException {
+    public void getRecurrencesByEventId_Success() {
         when(recurrenceDAO.getRecurrencesByEventId(TestObjectCreator.VALID_ID)).thenReturn(testRecurrenceList);
 
         //method under test
@@ -163,7 +131,7 @@ public class RecurrenceServiceUnitTest {
     }
 
     //Testing editRecurrence method
-    @Test(expected = OperationFailedException.class)
+    @Test(expected = InvalidObjectException.class)
     public void editRecurrence_Invalid_Option() {
         testRecurrence.setRecurrenceType(null);
 
@@ -171,32 +139,26 @@ public class RecurrenceServiceUnitTest {
         recurrenceService.editRecurrence(testRecurrence);
     }
 
-    @Test(expected = OperationFailedException.class)
+    @Test(expected = ObjectNotFoundException.class)
     public void editRecurrence_Not_Found() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
-        doThrow(ObjectNotFoundException.class).when(recurrenceDAO).updateRecurrence(testRecurrence);
-
-        //method under test
-        recurrenceService.editRecurrence(testRecurrence);
-    }
-
-    @Test(expected = OperationFailedException.class)
-    public void editRecurrence_DB_Error() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
-        doThrow(DAOException.class).when(recurrenceDAO).updateRecurrence(testRecurrence);
+        when(recurrenceDAO.updateRecurrence(testRecurrence)).thenReturn(false);
 
         //method under test
         recurrenceService.editRecurrence(testRecurrence);
     }
 
     @Test
-    public void editRecurrence_Success() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
-        //method under test
-        recurrenceService.editRecurrence(testRecurrence);
+    public void editRecurrence_Success() {
+        when(recurrenceDAO.updateRecurrence(testRecurrence)).thenReturn(true);
 
+        //method under test
+        boolean success = recurrenceService.editRecurrence(testRecurrence);
+        assertTrue(success);
         verify(recurrenceDAO).updateRecurrence(testRecurrence);
     }
 
     @Test
-    public void editRecurrenceList_Empty_List() throws DAOException, ObjectNotFoundException {
+    public void editRecurrenceList_Empty_List() {
         //method under test
         recurrenceService.editRecurrenceList(VALID_ID, new ArrayList<Recurrence>());
 
@@ -204,7 +166,7 @@ public class RecurrenceServiceUnitTest {
     }
 
     @Test
-    public void editRecurrenceList_InsertRecurrences_EmptyDBList() throws DAOException, ObjectNotFoundException {
+    public void editRecurrenceList_InsertRecurrences_EmptyDBList() {
         when(recurrenceService.getRecurrencesByEventId(VALID_ID)).thenReturn(null);
 
         //method under test
@@ -214,7 +176,7 @@ public class RecurrenceServiceUnitTest {
     }
 
     @Test
-    public void editRecurrenceList_InsertRecurrence_NonEmptyDBList() throws DAOException, ObjectNotFoundException {
+    public void editRecurrenceList_InsertRecurrence_NonEmptyDBList() {
         //db list does not contains testRecurrenceOption object, method should add it to db
         List<Recurrence> dbList = new ArrayList<>();
         Recurrence dbRecurrence = createTestRecurrence().setId(100);
@@ -232,7 +194,7 @@ public class RecurrenceServiceUnitTest {
     }
 
     @Test
-    public void editRecurrenceList_UpdateRecurrence_NonEmptyDBList() throws DAOException, ObjectNotFoundException {
+    public void editRecurrenceList_UpdateRecurrence_NonEmptyDBList() {
         //create db list, that contains recurrence option with the same id as testRecurrenceOption
         testRecurrence.setId(VALID_ID);
         Recurrence dbRecurrence = new Recurrence(testRecurrence);
@@ -242,6 +204,7 @@ public class RecurrenceServiceUnitTest {
         dbList.add(dbRecurrence);
 
         when(recurrenceService.getRecurrencesByEventId(TestObjectCreator.VALID_ID)).thenReturn(dbList);
+        doReturn(true).when(recurrenceService).editRecurrence((Recurrence) anyObject());
 
         //method under test
         recurrenceService.editRecurrenceList(VALID_ID, testRecurrenceList);
@@ -251,7 +214,7 @@ public class RecurrenceServiceUnitTest {
     }
 
     @Test
-    public void editRecurrenceList_DeleteRecurrence_FromDB() throws DAOException, ObjectNotFoundException {
+    public void editRecurrenceList_DeleteRecurrence_FromDB() {
         //create db list, that contains recurrence option with the same id as testRecurrenceOption
         List<Recurrence> dbList = new ArrayList<>();
         Recurrence dbRecurrence = createTestRecurrence().setId(VALID_ID);
@@ -267,22 +230,14 @@ public class RecurrenceServiceUnitTest {
 
 
     //Testing deleteRecurrencesByEventId method
-    @Test(expected = OperationFailedException.class)
+    @Test(expected = InvalidObjectException.class)
     public void deleteRecurrencesByEventId_Invalid_Id() {
         //method under test
         recurrenceService.deleteRecurrencesByEventId(INVALID_ID);
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void deleteRecurrencesByEventId_DB_Error() throws ObjectNotFoundException, DAOException {
-        doThrow(DAOException.class).when(recurrenceDAO).deleteRecurrencesByEventId(VALID_ID);
-
-        //method under test
-        recurrenceService.deleteRecurrencesByEventId(VALID_ID);
-    }
-
     @Test
-    public void deleteRecurrencesByEventId_Success() throws ObjectNotFoundException, DAOException {
+    public void deleteRecurrencesByEventId_Success() {
         //method under test
         recurrenceService.deleteRecurrencesByEventId(VALID_ID);
 
@@ -290,30 +245,23 @@ public class RecurrenceServiceUnitTest {
     }
 
     //Testing deleteRecurrence method
-    @Test(expected = OperationFailedException.class)
+    @Test(expected = InvalidObjectException.class)
     public void deleteRecurrenceOption_Invalid_Id() {
         //method under test
         recurrenceService.deleteRecurrence(INVALID_ID);
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void deleteRecurrenceOption_DB_Error() throws ObjectNotFoundException, DAOException {
-        doThrow(DAOException.class).when(recurrenceDAO).deleteRecurrence(VALID_ID);
+    @Test
+    public void deleteRecurrenceOption_Not_Found() {
+        when(recurrenceDAO.deleteRecurrence(NON_EXISTING_ID)).thenReturn(false);
 
         //method under test
-        recurrenceService.deleteRecurrence(VALID_ID);
-    }
-
-    @Test(expected = OperationFailedException.class)
-    public void deleteRecurrenceOption_Not_Found() throws ObjectNotFoundException, DAOException {
-        doThrow(ObjectNotFoundException.class).when(recurrenceDAO).deleteRecurrence(NON_EXISTING_ID);
-
-        //method under test
-        recurrenceService.deleteRecurrence(NON_EXISTING_ID);
+        boolean success = recurrenceService.deleteRecurrence(NON_EXISTING_ID);
+        assertFalse(success);
     }
 
     @Test
-    public void deleteRecurrenceOption_Success() throws ObjectNotFoundException, DAOException {
+    public void deleteRecurrenceOption_Success() {
         //method under test
         recurrenceService.deleteRecurrence(VALID_ID);
 
@@ -322,35 +270,20 @@ public class RecurrenceServiceUnitTest {
 
     //Testing getAllRecurrences method
     @Test
-    public void getAllRecurrences_Success() throws ObjectNotFoundException, DAOException {
+    public void getAllRecurrences_Success() {
         //method under test
         recurrenceService.getAllRecurrences();
 
         verify(recurrenceDAO).getAllRecurrences();
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void getAllRecurrences_DB_Error() throws ObjectNotFoundException, DAOException {
-        doThrow(DAOException.class).when(recurrenceDAO).getAllRecurrences();
-
-        //method under test
-        recurrenceService.getAllRecurrences();
-    }
-
     //Testing deleteAllRecurrences method
     @Test
-    public void deleteAllEventRecurrences_Success() throws ObjectNotFoundException, DAOException {
+    public void deleteAllEventRecurrences_Success() {
         //method under test
         recurrenceService.deleteAllRecurrences();
 
         verify(recurrenceDAO).deleteAllRecurrences();
     }
 
-    @Test(expected = OperationFailedException.class)
-    public void deleteAllRecurrences_DB_Error() throws ObjectNotFoundException, DAOException {
-        doThrow(DAOException.class).when(recurrenceDAO).deleteAllRecurrences();
-
-        //method under test
-        recurrenceService.deleteAllRecurrences();
-    }
 }

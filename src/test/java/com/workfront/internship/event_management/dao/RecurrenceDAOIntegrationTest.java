@@ -47,13 +47,13 @@ public class RecurrenceDAOIntegrationTest {
     }
 
     @Before
-    public void setUp() throws DAOException, DuplicateEntryException {
+    public void setUp() {
         createTestObjects();
         insertTestObjectsIntoDB();
     }
 
     @After
-    public void tearDown() throws DAOException {
+    public void tearDown() {
         deleteTestRecordsFromDB();
         deleteTestObjects();
     }

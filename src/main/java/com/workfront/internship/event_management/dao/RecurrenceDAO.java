@@ -1,7 +1,6 @@
 package com.workfront.internship.event_management.dao;
 
 import com.workfront.internship.event_management.exception.dao.DAOException;
-import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.Recurrence;
 
 import java.util.List;
@@ -12,24 +11,24 @@ import java.util.List;
 public interface RecurrenceDAO {
 
     //insert data into db
-    int addRecurrence(Recurrence recurrence) throws DAOException;
+    int addRecurrence(Recurrence recurrence);
 
-    void addRecurrences(List<Recurrence> recurrenceList) throws DAOException;
+    void addRecurrences(List<Recurrence> recurrenceList);
 
     //read data from db
-    Recurrence getRecurrenceById(int id) throws ObjectNotFoundException, DAOException;
+    Recurrence getRecurrenceById(int id);
 
-    List<Recurrence> getRecurrencesByEventId(int eventId) throws DAOException;
+    List<Recurrence> getRecurrencesByEventId(int eventId);
 
-    List<Recurrence> getAllRecurrences() throws DAOException;
+    List<Recurrence> getAllRecurrences();
 
     //update db record
-    void updateRecurrence(Recurrence recurrence) throws ObjectNotFoundException, DAOException;
+    boolean updateRecurrence(Recurrence recurrence);
 
     //delete data from db
-    void deleteRecurrence(int id) throws ObjectNotFoundException, DAOException;
+    boolean deleteRecurrence(int id);
 
-    void deleteRecurrencesByEventId(int eventId) throws ObjectNotFoundException, DAOException;
+    void deleteRecurrencesByEventId(int eventId);
 
     void deleteAllRecurrences() throws DAOException;
 }
