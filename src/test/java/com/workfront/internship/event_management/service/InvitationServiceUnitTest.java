@@ -3,8 +3,10 @@ package com.workfront.internship.event_management.service;
 import com.workfront.internship.event_management.TestObjectCreator;
 import com.workfront.internship.event_management.dao.InvitationDAO;
 import com.workfront.internship.event_management.dao.InvitationDAOImpl;
+import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
+import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Invitation;
 import org.junit.After;
 import org.junit.Before;
@@ -68,6 +70,16 @@ public class InvitationServiceUnitTest {
         assertEqualInvitations(actualInvitation, testInvitation);
     }
 
+    @Test(expected = OperationFailedException.class)
+    public void addInvitation_Duplicate() {
+
+        doThrow(DuplicateEntryException.class).when(invitationDAO).addInvitation(testInvitation);
+
+        //method under test
+        invitationService.addInvitation(testInvitation);
+    }
+
+
     //Testing addInvitations method
     @Test(expected = InvalidObjectException.class)
     public void addInvitations_Empty_List() {
@@ -81,6 +93,15 @@ public class InvitationServiceUnitTest {
         invitationService.addInvitations(testInvitationList);
 
         verify(invitationDAO).addInvitations(testInvitationList);
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void addInvitations_Duplicate() {
+
+        doThrow(DuplicateEntryException.class).when(invitationDAO).addInvitations(testInvitationList);
+
+        //method under test
+        invitationService.addInvitations(testInvitationList);
     }
 
     //Testing getInvitationById method
@@ -158,6 +179,15 @@ public class InvitationServiceUnitTest {
     @Test(expected = ObjectNotFoundException.class)
     public void editInvitation_Not_Found() {
         when(invitationDAO.updateInvitation(testInvitation)).thenReturn(false);
+
+        //method under test
+        invitationService.editInvitation(testInvitation);
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void editInvitation_Duplicate() {
+
+        doThrow(DuplicateEntryException.class).when(invitationDAO).updateInvitation(testInvitation);
 
         //method under test
         invitationService.editInvitation(testInvitation);
