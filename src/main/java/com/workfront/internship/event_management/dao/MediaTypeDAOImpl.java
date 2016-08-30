@@ -122,12 +122,12 @@ public class MediaTypeDAOImpl extends GenericDAO implements MediaTypeDAO {
     }
 
     @Override
-    public void updateMediaType(MediaType mediaType) throws DuplicateEntryException, DAOException, ObjectNotFoundException {
+    public boolean updateMediaType(MediaType mediaType) throws DuplicateEntryException, DAOException, ObjectNotFoundException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
 
-        int affectedRows = 0;
+        boolean success = false;
         String sqlStr = "UPDATE media_type SET title = ? WHERE id = ?";
 
         try {
@@ -140,9 +140,9 @@ public class MediaTypeDAOImpl extends GenericDAO implements MediaTypeDAO {
             stmt.setInt(2, mediaType.getId());
 
             //execute query
-            affectedRows = stmt.executeUpdate();
-            if (affectedRows == 0) {
-                throw new ObjectNotFoundException("Media type with id " + mediaType.getId() + " not found!");
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows != 0) {
+                success = true;
             }
         } catch (SQLIntegrityConstraintViolationException e) {
             LOGGER.error("Duplicate media type entry", e);
@@ -153,11 +153,12 @@ public class MediaTypeDAOImpl extends GenericDAO implements MediaTypeDAO {
         } finally {
             closeResources(stmt, conn);
         }
+        return success;
     }
 
     @Override
-    public void deleteMediaType(int mediaTypeId) throws ObjectNotFoundException, DAOException {
-        deleteRecordById("media_type", mediaTypeId);
+    public boolean deleteMediaType(int mediaTypeId) throws ObjectNotFoundException, DAOException {
+        return deleteRecordById("media_type", mediaTypeId);
     }
 
     @Override

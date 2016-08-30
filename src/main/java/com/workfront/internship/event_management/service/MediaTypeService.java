@@ -18,10 +18,10 @@ public interface MediaTypeService {
     List<MediaType> getAllMediaTypes();
 
     //Update
-    void editMediaType(MediaType mediaType);
+    boolean editMediaType(MediaType mediaType);
 
     //Delete
-    void deleteMediaType(int mediaTypeId);
+    boolean deleteMediaType(int mediaTypeId);
 
     void deleteAllMediaTypes();
 }
