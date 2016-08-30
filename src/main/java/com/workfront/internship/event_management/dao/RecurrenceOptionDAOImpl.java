@@ -211,9 +211,10 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
     }
 
     @Override
-    public void updateRecurrenceOption(RecurrenceOption option) throws DAOException, ObjectNotFoundException, DuplicateEntryException {
+    public boolean updateRecurrenceOption(RecurrenceOption option) throws DAOException, ObjectNotFoundException, DuplicateEntryException {
         Connection conn = null;
         PreparedStatement stmt = null;
+        boolean success = false;
 
         String query = "UPDATE  recurrence_option SET " +
                 "recurrence_type_id = ?,  title = ?,  abbreviation = ? WHERE id = ?";
@@ -230,8 +231,8 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
 
             //execute query
             int affectedRows = stmt.executeUpdate();
-            if (affectedRows == 0) {
-                throw new ObjectNotFoundException("Recurrence option with id " + option.getId() + " not found!");
+            if (affectedRows != 0) {
+                success = true;
             }
         } catch (SQLIntegrityConstraintViolationException e) {
             LOGGER.error("Duplicate recurrence option entry", e);
@@ -242,11 +243,12 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
         } finally {
             closeResources(stmt, conn);
         }
+        return success;
     }
 
     @Override
-    public void deleteRecurrenceOption(int optionId) throws ObjectNotFoundException, DAOException {
-        deleteRecordById("recurrence_option", optionId);
+    public boolean deleteRecurrenceOption(int optionId) throws ObjectNotFoundException, DAOException {
+        return deleteRecordById("recurrence_option", optionId);
     }
 
     @Override

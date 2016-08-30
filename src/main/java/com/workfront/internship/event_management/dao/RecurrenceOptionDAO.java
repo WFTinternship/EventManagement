@@ -25,10 +25,10 @@ public interface RecurrenceOptionDAO {
     List<RecurrenceOption> getRecurrenceOptionsByRecurrenceType(int recurrenceTypeId) throws DAOException;
 
     //update data in db
-    void updateRecurrenceOption(RecurrenceOption option) throws DAOException, ObjectNotFoundException, DuplicateEntryException;
+    boolean updateRecurrenceOption(RecurrenceOption option) throws DAOException, ObjectNotFoundException, DuplicateEntryException;
 
     //delete data from db
-    void deleteRecurrenceOption(int optionId) throws ObjectNotFoundException, DAOException;
+    boolean deleteRecurrenceOption(int optionId) throws ObjectNotFoundException, DAOException;
 
     void deleteRecurrenceOptionsByRecurrenceType(int recurrenceTypeId) throws ObjectNotFoundException, DAOException;
 

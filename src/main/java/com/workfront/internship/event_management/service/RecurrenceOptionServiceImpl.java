@@ -1,8 +1,8 @@
 package com.workfront.internship.event_management.service;
 
 import com.workfront.internship.event_management.dao.RecurrenceOptionDAO;
-import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
+import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.RecurrenceOption;
@@ -21,7 +21,7 @@ import static com.workfront.internship.event_management.service.util.Validator.i
 @Component
 public class RecurrenceOptionServiceImpl implements RecurrenceOptionService {
 
-    private static final Logger LOGGER = Logger.getLogger(RecurrenceTypeServiceImpl.class);
+    private static final Logger logger = Logger.getLogger(RecurrenceTypeServiceImpl.class);
 
     @Autowired
     private RecurrenceOptionDAO recurrenceOptionDAO;
@@ -29,7 +29,7 @@ public class RecurrenceOptionServiceImpl implements RecurrenceOptionService {
     @Override
     public RecurrenceOption addRecurrenceOption(RecurrenceOption option) {
         if (!isValidRecurrenceOption(option)) {
-            throw new OperationFailedException("Invalid recurrence option");
+            throw new InvalidObjectException("Invalid recurrence option");
         }
 
         try {
@@ -39,11 +39,8 @@ public class RecurrenceOptionServiceImpl implements RecurrenceOptionService {
             //set generated it to recurrence type
             option.setId(recurrenceOptionId);
         } catch (DuplicateEntryException e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             throw new OperationFailedException("Recurrence option with title " + option.getTitle() + " already exists!", e);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
         }
         return option;
     }
@@ -51,12 +48,12 @@ public class RecurrenceOptionServiceImpl implements RecurrenceOptionService {
     @Override
     public void addRecurrenceOptions(List<RecurrenceOption> options) {
         if (isEmptyCollection(options)) {
-            throw new OperationFailedException("Empty recurrence option list");
+            throw new InvalidObjectException("Empty recurrence option list");
         }
 
         for (RecurrenceOption option : options) {
             if (!isValidRecurrenceOption(option)) {
-                throw new OperationFailedException("Invalid recurrence option");
+                throw new InvalidObjectException("Invalid recurrence option");
             }
         }
 
@@ -64,74 +61,57 @@ public class RecurrenceOptionServiceImpl implements RecurrenceOptionService {
             //insert recurrence options into db
             recurrenceOptionDAO.addRecurrenceOptions(options);
         } catch (DuplicateEntryException e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             throw new OperationFailedException("Recurrence option already exists!", e);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
         }
     }
 
     @Override
     public List<RecurrenceOption> getAllRecurrenceOptions() {
-        try {
-            return recurrenceOptionDAO.getAllRecurrenceOptions();
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
+        return recurrenceOptionDAO.getAllRecurrenceOptions();
     }
 
     @Override
     public RecurrenceOption getRecurrenceOption(int optionId) {
         if (optionId < 0) {
-            throw new OperationFailedException("Invalid recurrence option id");
+            throw new InvalidObjectException("Invalid recurrence option id");
         }
 
-        try {
-            return recurrenceOptionDAO.getRecurrenceOptionById(optionId);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Recurrence type not found");
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
+        RecurrenceOption recurrenceOption = recurrenceOptionDAO.getRecurrenceOptionById(optionId);
+        if (recurrenceOption == null) {
+            throw new ObjectNotFoundException("Recurrence type not found");
         }
+
+        return recurrenceOption;
     }
 
     @Override
     public List<RecurrenceOption> getRecurrenceOptionsByRecurrenceType(int recurrenceTypeId) {
         if (recurrenceTypeId < 0) {
-            throw new OperationFailedException("Invalid recurrence type id");
+            throw new InvalidObjectException("Invalid recurrence type id");
         }
 
-        try {
-            return recurrenceOptionDAO.getRecurrenceOptionsByRecurrenceType(recurrenceTypeId);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
+        return recurrenceOptionDAO.getRecurrenceOptionsByRecurrenceType(recurrenceTypeId);
     }
 
     @Override
-    public void editRecurrenceOption(RecurrenceOption option) {
+    public boolean editRecurrenceOption(RecurrenceOption option) {
         if (!isValidRecurrenceOption(option)) {
-            throw new OperationFailedException("Invalid recurrence option");
+            throw new InvalidObjectException("Invalid recurrence option");
         }
 
+        boolean success;
         try {
-            //update recurrence type in db
-            recurrenceOptionDAO.updateRecurrenceOption(option);
+            success = recurrenceOptionDAO.updateRecurrenceOption(option);
         } catch (DuplicateEntryException e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             throw new OperationFailedException("Recurrence option with title " + option.getTitle() + " already exists!", e);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Recurrence option not found", e);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
         }
+
+        if (!success) {
+            throw new ObjectNotFoundException("Recurrence option not found");
+        }
+        return success;
     }
 
     @Override
@@ -170,46 +150,24 @@ public class RecurrenceOptionServiceImpl implements RecurrenceOptionService {
     }
 
     @Override
-    public void deleteRecurrenceOption(int optionId) {
+    public boolean deleteRecurrenceOption(int optionId) {
         if (optionId < 1) {
-            throw new OperationFailedException("Invalid recurrence option id");
+            throw new InvalidObjectException("Invalid recurrence option id");
         }
-        try {
-            recurrenceOptionDAO.deleteRecurrenceOption(optionId);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Recurrence option not found", e);
-        }
+        return recurrenceOptionDAO.deleteRecurrenceOption(optionId);
     }
 
     @Override
     public void deleteRecurrenceOptionsByRecurrenceType(int recurrenceTypeId) {
         if (recurrenceTypeId < 1) {
-            throw new OperationFailedException("Invalid recurrence type id");
+            throw new InvalidObjectException("Invalid recurrence type id");
         }
-
-        try {
-            recurrenceOptionDAO.deleteRecurrenceOptionsByRecurrenceType(recurrenceTypeId);
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException("Recurrence options not found", e);
-        }
+        recurrenceOptionDAO.deleteRecurrenceOptionsByRecurrenceType(recurrenceTypeId);
     }
 
     @Override
     public void deleteAllRecurrenceOptions() {
-        try {
-            recurrenceOptionDAO.deleteAllRecurrenceOptions();
-        } catch (DAOException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new OperationFailedException(e.getMessage(), e);
-        }
+        recurrenceOptionDAO.deleteAllRecurrenceOptions();
     }
 
 

@@ -22,12 +22,12 @@ public interface RecurrenceOptionService {
     List<RecurrenceOption> getRecurrenceOptionsByRecurrenceType(int recurrenceTypeId);
 
     //Update
-    void editRecurrenceOption(RecurrenceOption option);
+    boolean editRecurrenceOption(RecurrenceOption option);
 
     void editRecurrenceOptionList(int recurrenceTypeId, List<RecurrenceOption> options);
 
     //Delete
-    void deleteRecurrenceOption(int optionId);
+    boolean deleteRecurrenceOption(int optionId);
 
     void deleteRecurrenceOptionsByRecurrenceType(int recurrenceTypeId);
 
