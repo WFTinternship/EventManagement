@@ -57,9 +57,6 @@ public class MainControllerUnitTest {
 
         //inject mocks
         Whitebox.setInternalState(mainController, "eventService", eventService);
-
-
-//        when(testRequest.getParameter("password")).thenReturn(VALID_PASSWORD);
     }
 
     @After
@@ -71,7 +68,7 @@ public class MainControllerUnitTest {
     }
 
     @Test
-    public void loadUpcomingEvents() {
+    public void loadUpcomingEvents_Success() {
         List<Event> testEventList = new ArrayList<>();
         testEventList.add(testEvent);
 
