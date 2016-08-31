@@ -15,6 +15,8 @@ public class PageParameters {
 
     //response messages
     public static final String ACTION_SUCCESS = "SUCCESS";
-    public static final String ACTION_FAIL = "SUCCESS";
+    public static final String ACTION_FAIL = "FAIL";
+    public static final String RESPONSE_TRUE = "TRUE";
+    public static final String RESPONSE_FALSE = "FALSE";
 
 }

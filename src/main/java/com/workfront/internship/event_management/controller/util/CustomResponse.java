@@ -3,7 +3,12 @@ package com.workfront.internship.event_management.controller.util;
 /**
  * Created by Hermine Turshujyan 8/23/16.
  */
-public class JsonResponse {
+public class CustomResponse {
+
+    private String message = null;
+    private Object result = null;
+    private String status = null;
+
     public String getStatus() {
         return status;
     }
@@ -20,8 +25,6 @@ public class JsonResponse {
         this.result = result;
     }
 
-    private String status = null;
-
     public String getMessage() {
         return message;
     }
@@ -30,7 +33,5 @@ public class JsonResponse {
         this.message = message;
     }
 
-    private String message = null;
-    private Object result = null;
 
 }

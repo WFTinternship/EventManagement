@@ -1,6 +1,6 @@
 package com.workfront.internship.event_management.controller;
 
-import com.workfront.internship.event_management.controller.util.JsonResponse;
+import com.workfront.internship.event_management.controller.util.CustomResponse;
 import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
@@ -10,7 +10,6 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,8 +21,7 @@ import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
-import static com.workfront.internship.event_management.controller.util.PageParameters.ACTION_FAIL;
-import static com.workfront.internship.event_management.controller.util.PageParameters.ACTION_SUCCESS;
+import static com.workfront.internship.event_management.controller.util.PageParameters.*;
 
 /**
  * Created by Hermine Turshujyan 8/22/16.
@@ -36,14 +34,14 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/login", produces = "application/json", method = RequestMethod.POST)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResponse login(HttpServletRequest request) {
+    public CustomResponse login(HttpServletRequest request) {
 
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        JsonResponse result = new JsonResponse();
+        CustomResponse result = new CustomResponse();
 
         try {
             User user = userService.login(email, password);
@@ -75,11 +73,11 @@ public class UserController {
         return "registration";
     }
 
-    @RequestMapping(value = "/register", produces = "application/json", method = RequestMethod.POST)
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResponse register(HttpServletRequest request) throws Exception {
+    public CustomResponse register(HttpServletRequest request) throws Exception {
 
-        JsonResponse result = new JsonResponse();
+        CustomResponse result = new CustomResponse();
 
         if (ServletFileUpload.isMultipartContent(request)) {
 
@@ -174,18 +172,16 @@ public class UserController {
 
     @RequestMapping(value = "/check-email", method = RequestMethod.POST)
     @ResponseBody
-    public String checkEmail(Model model, HttpServletRequest request) {
-
-        JsonResponse result = new JsonResponse();
+    public String isEmailFree(HttpServletRequest request) {
 
         String email = request.getParameter("email");
         User user = userService.getUserByEmail(email);
 
         if (user != null) {
             //already registered
-            return "false";
+            return RESPONSE_FALSE;
         } else {
-            return "true";
+            return RESPONSE_TRUE;
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.workfront.internship.event_management.controller;
 
 import com.workfront.internship.event_management.controller.util.DateParser;
-import com.workfront.internship.event_management.controller.util.JsonResponse;
+import com.workfront.internship.event_management.controller.util.CustomResponse;
 import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.service.CategoryService;
@@ -39,12 +39,12 @@ public class EventController {
         model.addAttribute("events", eventList);
         model.addAttribute("categories", categoryList);
 
-        return EVENT_DETAILS_VIEW;
+        return ALL_EVENTS_VIEW;
     }
 
-    @RequestMapping(value = "/events-ajax", produces = "application/json")
+    @RequestMapping(value = "/events-ajax")
     @ResponseBody
-    public JsonResponse loadEventsByCategory(Model model, HttpServletRequest request) {
+    public CustomResponse loadEventsByCategory(Model model, HttpServletRequest request) {
 
         List<Event> eventList;
         String categoryIdStr = request.getParameter("categoryId");
@@ -55,7 +55,7 @@ public class EventController {
             eventList = eventService.getEventsByCategory(Integer.parseInt(categoryIdStr));
         }
 
-        JsonResponse result = new JsonResponse();
+        CustomResponse result = new CustomResponse();
         result.setStatus(ACTION_SUCCESS);
         result.setResult(eventList);
 
@@ -73,7 +73,7 @@ public class EventController {
     @RequestMapping(value = "/new-event")
     public ModelAndView goToCreateEventPage(HttpServletRequest request, Model model) {
         //check if user is logged in
-        // if (request.getSession().getAttribute("user") != null) {
+        if (request.getSession().getAttribute("user") != null) {
 
         ModelAndView mov = new ModelAndView(EVENT_EDIT_VIEW);
         List<Category> categoryList = categoryService.getAllCategories();
@@ -82,10 +82,10 @@ public class EventController {
         model.addAttribute("event", createEmptyEvent());
 
         return mov;
-       /* } else {
+        } else {
             ModelAndView mov = new ModelAndView(DEFAULT_ERROR_VIEW);
             return mov;
-        }*/
+        }
     }
 
     @RequestMapping(value = "/add-event", method = RequestMethod.POST)
@@ -128,7 +128,7 @@ public class EventController {
     @RequestMapping(value = "/edit-event/{eventId}")
     public ModelAndView goToEditEventPage(@PathVariable("eventId") int id, HttpServletRequest request, Model model) {
         //check if user is logged in
-        // if (request.getSession().getAttribute("user") != null) {
+        if (request.getSession().getAttribute("user") != null) {
 
         Event event = eventService.getEventById(id);
         ModelAndView mov = new ModelAndView(EVENT_EDIT_VIEW);
@@ -137,10 +137,10 @@ public class EventController {
         model.addAttribute("event", event);
 
         return mov;
-       /* } else {
+        } else {
             ModelAndView mov = new ModelAndView(DEFAULT_ERROR_VIEW);
             return mov;
-        }*/
+        }
     }
 
 

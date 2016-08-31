@@ -13,7 +13,7 @@ public class DateParser {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy hh:mm");
         Date parsedDate = null;
         try {
-            parsedDate = formatter.parse(dateString + " " + timeString);
+            parsedDate = formatter.parse(dateString);
         } catch (ParseException e) {
             throw new RuntimeException();
         }
