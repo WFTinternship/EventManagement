@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.ui.ExtendedModelMap;
+import org.springframework.ui.Model;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -17,6 +19,7 @@ import java.util.Properties;
 @ComponentScan(basePackages = "com.workfront.internship.event_management")
 @Profile("Test")
 public class TestApplicationConfig {
+
     @Bean
     public DataSource getTestDataSource() throws IOException {
 
@@ -33,6 +36,11 @@ public class TestApplicationConfig {
         dataSource.setUrl(props.getProperty("jdbc.url.test"));
 
         return dataSource;
+    }
+
+    @Bean
+    public Model getModel() {
+        return new ExtendedModelMap();
     }
 
 }

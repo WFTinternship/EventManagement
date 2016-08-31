@@ -1,7 +1,7 @@
 package com.workfront.internship.event_management.controller;
 
-import com.workfront.internship.event_management.controller.util.DateParser;
 import com.workfront.internship.event_management.controller.util.CustomResponse;
+import com.workfront.internship.event_management.controller.util.DateParser;
 import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.service.CategoryService;
@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
 
@@ -26,12 +26,11 @@ public class EventController {
 
     @Autowired
     private EventService eventService;
-
     @Autowired
     private CategoryService categoryService;
 
     @RequestMapping(value = "/events")
-    public String loadAllEvents(Model model, HttpServletRequest request) {
+    public String loadAllEventsAndCategories(Model model) {
 
         List<Category> categoryList = categoryService.getAllCategories();
         List<Event> eventList = eventService.getAllEvents();
@@ -44,7 +43,7 @@ public class EventController {
 
     @RequestMapping(value = "/events-ajax")
     @ResponseBody
-    public CustomResponse loadEventsByCategory(Model model, HttpServletRequest request) {
+    public CustomResponse loadEvents(HttpServletRequest request) {
 
         List<Event> eventList;
         String categoryIdStr = request.getParameter("categoryId");
@@ -71,20 +70,21 @@ public class EventController {
     }
 
     @RequestMapping(value = "/new-event")
-    public ModelAndView goToCreateEventPage(HttpServletRequest request, Model model) {
+    public String goToCreateEventPage(HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession();
+
         //check if user is logged in
-        if (request.getSession().getAttribute("user") != null) {
+        if (session.getAttribute("user") != null) {
 
-        ModelAndView mov = new ModelAndView(EVENT_EDIT_VIEW);
-        List<Category> categoryList = categoryService.getAllCategories();
+            List<Category> categoryList = categoryService.getAllCategories();
 
-        model.addAttribute("categories", categoryList);
-        model.addAttribute("event", createEmptyEvent());
+            model.addAttribute("categories", categoryList);
+            model.addAttribute("event", createEmptyEvent());
 
-        return mov;
+            return EVENT_EDIT_VIEW;
         } else {
-            ModelAndView mov = new ModelAndView(DEFAULT_ERROR_VIEW);
-            return mov;
+            model.addAttribute("message", "Access is denied!");
+            return DEFAULT_ERROR_VIEW;
         }
     }
 
@@ -125,21 +125,25 @@ public class EventController {
     }
 
 
+
     @RequestMapping(value = "/edit-event/{eventId}")
-    public ModelAndView goToEditEventPage(@PathVariable("eventId") int id, HttpServletRequest request, Model model) {
+    public String goToEditEventPage(@PathVariable("eventId") int id, HttpServletRequest request, Model model) {
+
+        HttpSession session = request.getSession();
+
         //check if user is logged in
-        if (request.getSession().getAttribute("user") != null) {
+        if (session.getAttribute("user") != null) {
 
-        Event event = eventService.getEventById(id);
-        ModelAndView mov = new ModelAndView(EVENT_EDIT_VIEW);
-        List<Category> categoryList = categoryService.getAllCategories();
+            Event event = eventService.getEventById(id);
+            List<Category> categoryList = categoryService.getAllCategories();
 
-        model.addAttribute("event", event);
+            model.addAttribute("event", event);
+            model.addAttribute("categories", categoryList);
 
-        return mov;
+            return EVENT_EDIT_VIEW;
         } else {
-            ModelAndView mov = new ModelAndView(DEFAULT_ERROR_VIEW);
-            return mov;
+            model.addAttribute("message", "Access is denied!");
+            return DEFAULT_ERROR_VIEW;
         }
     }
 

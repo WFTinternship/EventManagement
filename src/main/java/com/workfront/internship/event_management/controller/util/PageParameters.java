@@ -10,7 +10,6 @@ public class PageParameters {
     public static final String EVENT_EDIT_VIEW = "event-edit";
     public static final String EVENT_DETAILS_VIEW = "event-details";
     public static final String ALL_EVENTS_VIEW = "events";
-
     public static final String HOME_VIEW = "index";
 
     //response messages
