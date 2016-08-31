@@ -21,11 +21,9 @@ import java.util.List;
 import static com.workfront.internship.event_management.TestObjectCreator.createTestCategory;
 import static com.workfront.internship.event_management.TestObjectCreator.createTestEvent;
 import static com.workfront.internship.event_management.controller.util.PageParameters.HOME_VIEW;
+import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyList;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Created by Hermine Turshujyan 8/31/16.
@@ -41,14 +39,14 @@ public class MainControllerIntegrationTest {
     private EventService eventService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private Model testModel;
 
     private Event testEvent;
 
-    private Model testModel;
-
     @Before
     public void setUp() {
-        testModel = mock(Model.class);
+        // testModel = mock(Model.class);
 
         //create test objects, insert into db
         Category testCategory = createTestCategory();
@@ -67,13 +65,19 @@ public class MainControllerIntegrationTest {
 
     @Test
     public void loadUpcomingEvents() {
+
         List<Event> testEventList = new ArrayList<>();
         testEventList.add(testEvent);
 
         //method under test
         String pageView = mainController.loadUpcomingEvents(testModel);
 
-        verify(testModel).addAttribute(eq("events"), anyList());
+        List eventList = (ArrayList) testModel.asMap().get("events");
+        assertNotNull(eventList);
+        assertFalse(eventList.isEmpty());
+        assertEquals(eventList.size(), 1);
         assertEquals(pageView, HOME_VIEW);
     }
+
+
 }
