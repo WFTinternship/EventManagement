@@ -3,10 +3,10 @@
  */
 $(document).ready(function () {
     $("#start_date").datepicker({
-        dateFormat: 'dd-mm-yy'
+        dateFormat: 'dd:mm:yyyy'
     });
     $("#end_date").datepicker({
-        dateFormat: 'dd-mm-yy'
+        dateFormat: 'dd:mm:yyyy'
     });
     $('#start_time').timepicker();
     $('#end_time').timepicker();
