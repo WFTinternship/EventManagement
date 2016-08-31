@@ -50,8 +50,8 @@ public class UserControllerUnitTest {
         testRequest = mock(HttpServletRequest.class);
         testSession = mock(HttpSession.class);
 
-        // when(testRequest.getParameter("email")).thenReturn(VALID_EMAIL);
-        //when(testRequest.getParameter("password")).thenReturn(VALID_PASSWORD);
+//        when(testRequest.getParameter("email")).thenReturn(VALID_EMAIL);
+//        when(testRequest.getParameter("password")).thenReturn(VALID_PASSWORD);
         when(testRequest.getSession()).thenReturn(testSession);
     }
 
@@ -69,7 +69,7 @@ public class UserControllerUnitTest {
 
         CustomResponse response = userController.login(testRequest);
 
-        assertEquals("status is incorrect", response.getStatus(), ACTION_SUCCESS);
+        assertEquals("Status is incorrect", response.getStatus(), ACTION_SUCCESS);
         verify(testSession).setAttribute("user", testUser);
     }
 
@@ -77,11 +77,10 @@ public class UserControllerUnitTest {
     public void login_Fail() {
         doThrow(InvalidObjectException.class).when(userService).login(anyString(), anyString());
 
-        userController.login(testRequest);
-
+        //method under test
         CustomResponse result = userController.login(testRequest);
-        assertEquals("status is incorrect", result.getStatus(), ACTION_FAIL);
 
+        assertEquals("Status is incorrect", result.getStatus(), ACTION_FAIL);
         verify(testSession, never()).setAttribute(anyString(), anyString());
     }
 
@@ -90,7 +89,7 @@ public class UserControllerUnitTest {
         when(userService.getUserByEmail(anyString())).thenReturn(testUser);
 
         String response = userController.isEmailFree(testRequest);
-        assertEquals(response, RESPONSE_FALSE);
+        assertEquals("Incorrect response", response, RESPONSE_FALSE);
     }
 
     @Test
@@ -98,14 +97,14 @@ public class UserControllerUnitTest {
         when(userService.getUserByEmail(anyString())).thenReturn(null);
 
         String response = userController.isEmailFree(testRequest);
-        assertEquals(response, RESPONSE_TRUE);
+        assertEquals("Incorrect response", response, RESPONSE_TRUE);
     }
 
     @Test
     public void logout() {
 
         String redirectPage = userController.logout(testRequest);
-        assertEquals(redirectPage, "forward:/home");
+        assertEquals("Incorrect redirect page", redirectPage, "forward:/home");
 
         verify(testSession).setAttribute("user", null);
         verify(testSession).invalidate();

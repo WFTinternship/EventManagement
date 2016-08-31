@@ -8,6 +8,7 @@ import com.workfront.internship.event_management.service.UserService;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,8 @@ import static com.workfront.internship.event_management.controller.util.PagePara
  */
 @Controller
 public class UserController {
+    private static final Logger logger = Logger.getLogger(UserController.class);
+
     // location to store file uploaded
     private static final String UPLOAD_DIRECTORY = "upload";
 
@@ -75,39 +78,41 @@ public class UserController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
-    public CustomResponse register(HttpServletRequest request) throws Exception {
+    public CustomResponse register(HttpServletRequest request) {
+
+        boolean isMultipartContent = ServletFileUpload.isMultipartContent(request);
 
         CustomResponse result = new CustomResponse();
+        User user = new User();
 
-        if (ServletFileUpload.isMultipartContent(request)) {
+        if (!isMultipartContent) {
+            String message = "Invalid request";
+            logger.error(message);
+            result.setStatus(ACTION_FAIL);
+            result.setMessage(message);
+        }
 
-            DiskFileItemFactory factory = new DiskFileItemFactory();
+        DiskFileItemFactory factory = new DiskFileItemFactory();
+        ServletFileUpload upload = new ServletFileUpload(factory);
 
-            // sets temporary location to store files
-            factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
+        // constructs the directory path to store upload file
+        ServletContext servletContext = request.getSession().getServletContext();
+        String uploadPath = servletContext.getRealPath("") + UPLOAD_DIRECTORY;
 
-            ServletFileUpload upload = new ServletFileUpload(factory);
+        // creates the directory if it does not exist
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdir();
+        }
 
-            // constructs the directory path to store upload file
-            // this path is relative to application's directory
-            ServletContext servletContext = request.getSession().getServletContext();
-            String uploadPath = servletContext.getRealPath("") + UPLOAD_DIRECTORY;
-
-            // creates the directory if it does not exist
-            File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
-
-            // try {
+        try {
             List<FileItem> formItems = upload.parseRequest(request);
-
-            User user = new User();
 
             if (formItems != null && formItems.size() > 0) {
 
                 // iterates over form's fields
                 for (FileItem item : formItems) {
+
                     if (!item.isFormField()) {
 
                         String fileName = new File(item.getName()).getName();
@@ -132,41 +137,29 @@ public class UserController {
                         }
 
                     } else {
-
-                        String fieldName = item.getFieldName();
-                        String fieldValue = item.getString();
-
-                        switch (fieldName) {
-                            case "firstName":
-                                user.setFirstName(fieldValue);
-                                break;
-                            case "lastName":
-                                user.setLastName(fieldValue);
-                                break;
-                            case "email":
-                                user.setEmail(fieldValue);
-                                break;
-                            case "password":
-                                user.setPassword(fieldValue);
-                                break;
-                            case "phone":
-                                user.setPhoneNumber(fieldValue);
-                                break;
-                        }
+                        setRequestItemParametersToUser(user, item);
                     }
                 }
 
-                try {
-                    userService.addAccount(user);
 
-                    result.setStatus(ACTION_SUCCESS);
-                    result.setMessage("You are successfully registered!");
-                } catch (OperationFailedException e) {
-                    result.setStatus(ACTION_FAIL);
-                    result.setMessage(e.getMessage());
-                }
+
             }
+        } catch (Exception e) {
+            result.setStatus(ACTION_FAIL);
+            result.setMessage("Unable to upload a file!");
         }
+
+        try {
+            //insert user into db
+            userService.addAccount(user);
+
+            result.setStatus(ACTION_SUCCESS);
+            result.setMessage("You are successfully registered!");
+        } catch (OperationFailedException e) {
+            result.setStatus(ACTION_FAIL);
+            result.setMessage(e.getMessage());
+        }
+
         return result;
     }
 
@@ -182,6 +175,30 @@ public class UserController {
             return RESPONSE_FALSE;
         } else {
             return RESPONSE_TRUE;
+        }
+    }
+
+    //helper methods
+    private void setRequestItemParametersToUser(User user, FileItem item) {
+        String fieldName = item.getFieldName();
+        String fieldValue = item.getString();
+
+        switch (fieldName) {
+            case "firstName":
+                user.setFirstName(fieldValue);
+                break;
+            case "lastName":
+                user.setLastName(fieldValue);
+                break;
+            case "email":
+                user.setEmail(fieldValue);
+                break;
+            case "password":
+                user.setPassword(fieldValue);
+                break;
+            case "phone":
+                user.setPhoneNumber(fieldValue);
+                break;
         }
     }
 }
