@@ -5,21 +5,22 @@ import com.workfront.internship.event_management.exception.service.InvalidObject
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.UserService;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
-import java.util.List;
+import java.io.IOException;
 import java.util.UUID;
 
 import static com.workfront.internship.event_management.controller.util.PageParameters.*;
@@ -78,76 +79,43 @@ public class UserController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
-    public CustomResponse register(HttpServletRequest request) {
+    public CustomResponse register(HttpServletRequest request,
+                                   @RequestParam(value = "avatar", required = false) MultipartFile image) {
 
         boolean isMultipartContent = ServletFileUpload.isMultipartContent(request);
 
         CustomResponse result = new CustomResponse();
-        User user = new User();
 
         if (!isMultipartContent) {
             String message = "Invalid request";
             logger.error(message);
+
             result.setStatus(ACTION_FAIL);
             result.setMessage(message);
+            return result;
         }
 
-        DiskFileItemFactory factory = new DiskFileItemFactory();
-        ServletFileUpload upload = new ServletFileUpload(factory);
+        User user = new User();
 
-        // constructs the directory path to store upload file
-        ServletContext servletContext = request.getSession().getServletContext();
-        String uploadPath = servletContext.getRealPath("") + UPLOAD_DIRECTORY;
+        //save uploaded file if avatar is uploaded
+        if (!image.isEmpty()) {
+            try {
+                ServletContext servletContext = request.getSession().getServletContext();
+                String uploadPath = servletContext.getRealPath("") + UPLOAD_DIRECTORY;
 
-        // creates the directory if it does not exist
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdir();
-        }
+                String avatarPath = saveFile(uploadPath, image);
 
-        try {
-            List<FileItem> formItems = upload.parseRequest(request);
-
-            if (formItems != null && formItems.size() > 0) {
-
-                // iterates over form's fields
-                for (FileItem item : formItems) {
-
-                    if (!item.isFormField()) {
-
-                        String fileName = new File(item.getName()).getName();
-
-                        if (!fileName.isEmpty()) {
-                            //get uploaded file extension
-                            String ext = fileName.substring(fileName.lastIndexOf("."));
-
-                            //generate random image name
-                            String uuid = UUID.randomUUID().toString();
-                            String uniqueFileName = String.format("%s.%s", uuid, ext);
-
-                            //create file path
-                            String filePath = uploadPath + File.separator + uniqueFileName;
-                            File storeFile = new File(filePath);
-
-                            // saves the file on disk
-                            item.write(storeFile);
-
-                            //save avatar path to user obj
-                            user.setAvatarPath(filePath);
-                        }
-
-                    } else {
-                        setRequestItemParametersToUser(user, item);
-                    }
-                }
-
-
-
+                //save avatar path to user obj
+                user.setAvatarPath(avatarPath);
+            } catch (IOException e) {
+                result.setStatus(ACTION_FAIL);
+                result.setMessage("Unable to upload a file!");
+                return result;
             }
-        } catch (Exception e) {
-            result.setStatus(ACTION_FAIL);
-            result.setMessage("Unable to upload a file!");
         }
+
+        //set request parameters to user
+        setRequestParametersToUser(user, request);
 
         try {
             //insert user into db
@@ -159,7 +127,6 @@ public class UserController {
             result.setStatus(ACTION_FAIL);
             result.setMessage(e.getMessage());
         }
-
         return result;
     }
 
@@ -179,26 +146,68 @@ public class UserController {
     }
 
     //helper methods
-    private void setRequestItemParametersToUser(User user, FileItem item) {
-        String fieldName = item.getFieldName();
-        String fieldValue = item.getString();
+    private void setRequestParametersToUser(User user, HttpServletRequest request) {
 
-        switch (fieldName) {
-            case "firstName":
-                user.setFirstName(fieldValue);
-                break;
-            case "lastName":
-                user.setLastName(fieldValue);
-                break;
-            case "email":
-                user.setEmail(fieldValue);
-                break;
-            case "password":
-                user.setPassword(fieldValue);
-                break;
-            case "phone":
-                user.setPhoneNumber(fieldValue);
-                break;
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String phone = request.getParameter("phone");
+
+        user.setFirstName(firstName)
+                .setLastName(lastName)
+                .setPassword(password)
+                .setPhoneNumber(phone);
+    }
+
+
+    private void validateImage(MultipartFile image) {
+        if (!image.getContentType().equals("image/jpeg")) {
+            throw new RuntimeException("Only JPG images are accepted");
         }
     }
+
+    private String saveFile(String uploadPath, MultipartFile image) throws IOException {
+
+        // creates the directory if it does not exist
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdir();
+        }
+
+        String fileName = image.getOriginalFilename();
+        String filePath = null;
+
+        if (!fileName.isEmpty()) {
+
+            //get uploaded file extension
+            String ext = fileName.substring(fileName.lastIndexOf("."));
+
+            //generate random image name
+            String uuid = UUID.randomUUID().toString();
+            String uniqueFileName = String.format("%s.%s", uuid, ext);
+
+            //create file path
+            filePath = uploadPath + File.separator + uniqueFileName;
+            File storeFile = new File(filePath);
+
+            // saves the file on disk
+            FileUtils.writeByteArrayToFile(storeFile, image.getBytes());
+        }
+
+        return filePath;
+    }
+
+//    private void saveImage(String filename, ) {
+//        try {
+//            File file = new File(servletContext.getRealPath("/") + "/"
+//                    + filename);
+//
+//            System.out.println("Go to the location:  " + file.toString()
+//                    + " on your computer and verify that the image has been stored.");
+//        } catch (IOException e) {
+//            throw e;
+//        }
+//    }
+
 }

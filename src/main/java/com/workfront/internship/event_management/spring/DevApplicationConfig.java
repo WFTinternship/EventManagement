@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -17,6 +18,13 @@ import java.util.Properties;
 @ComponentScan(basePackages = "com.workfront.internship.event_management")
 @Profile("Development")
 public class DevApplicationConfig {
+
+    @Bean(name = "multipartResolver")
+    public CommonsMultipartResolver multipartResolver() {
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+        multipartResolver.setMaxUploadSize(100000);
+        return new CommonsMultipartResolver();
+    }
 
     @Bean
     public DataSource getDevelopmentDataSource() throws IOException {
