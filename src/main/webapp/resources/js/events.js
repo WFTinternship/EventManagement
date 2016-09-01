@@ -58,7 +58,7 @@ function createEventItem(event) {
         '</span></a></span>' +
         '</span>' +
         '<p class="desc">' + event.shortDescription + '</p>' +
-        '<a class="btn" href="#"><span>Details</span></a>' +
+        '<a class="btn" href="/events/' + event.id + '"><span>Details</span></a>' +
         '</div></div>';
 
     return eventHTML;

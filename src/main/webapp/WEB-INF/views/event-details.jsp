@@ -50,7 +50,6 @@
             <div class="content_block">
                 <div class="event_list clearfix" id="event_list">
 
-                    <div class="list">
 
                         <div class="list_item">
                             <div class="list_content">
@@ -89,10 +88,11 @@
                                        </span>
                                    </span>
                                 <p class="desc"><%=event.getShortDescription()%>
+
+                                <p class="desc"><%=event.getFullDescription()%>
                                 </p>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
