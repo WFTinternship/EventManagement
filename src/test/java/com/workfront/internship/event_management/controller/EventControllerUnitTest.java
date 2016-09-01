@@ -86,7 +86,7 @@ public class EventControllerUnitTest {
         String pageName = eventController.loadAllEventsAndCategories(testModel);
 
         verify(testModel).addAttribute("events", testEventList);
-        assertEquals("Incorrect page name", pageName, ALL_EVENTS_VIEW);
+        assertEquals("Incorrect redirect page", pageName, ALL_EVENTS_VIEW);
     }
 
     @Test
@@ -99,7 +99,7 @@ public class EventControllerUnitTest {
         verify(eventService).getEventById(VALID_ID);
 
         verify(testModel).addAttribute("event", testEvent);
-        assertEquals("Incorrect page name", pageName, EVENT_DETAILS_VIEW);
+        assertEquals("Incorrect redirect page", pageName, EVENT_DETAILS_VIEW);
     }
 
     @Test
@@ -113,7 +113,7 @@ public class EventControllerUnitTest {
         verify(categoryService).getAllCategories();
         verify(testModel).addAttribute("categories", testCategoryList);
         verify(testModel).addAttribute(eq("event"), any(Event.class));
-        assertEquals("Incorrect page name", pageName, EVENT_EDIT_VIEW);
+        assertEquals("Incorrect redirect page", pageName, EVENT_EDIT_VIEW);
     }
 
     @Test
@@ -123,7 +123,7 @@ public class EventControllerUnitTest {
         //method under test
         String pageName = eventController.goToEditEventPage(VALID_ID, testRequest, testModel);
 
-        assertEquals("Incorrect page name", pageName, DEFAULT_ERROR_VIEW);
+        assertEquals("Incorrect redirect page", pageName, DEFAULT_ERROR_VIEW);
     }
 
     @Test
@@ -139,7 +139,7 @@ public class EventControllerUnitTest {
         verify(categoryService).getAllCategories();
         verify(testModel).addAttribute("categories", testCategoryList);
         verify(testModel).addAttribute("event", testEvent);
-        assertEquals("Incorrect page name", pageName, EVENT_EDIT_VIEW);
+        assertEquals("Incorrect redirect page", pageName, EVENT_EDIT_VIEW);
     }
 
     @Test
@@ -149,7 +149,7 @@ public class EventControllerUnitTest {
         //method under test
         String pageName = eventController.goToCreateEventPage(testRequest, testModel);
 
-        assertEquals("Incorrect page name", pageName, DEFAULT_ERROR_VIEW);
+        assertEquals("Incorrect redirect page", pageName, DEFAULT_ERROR_VIEW);
     }
 
 
