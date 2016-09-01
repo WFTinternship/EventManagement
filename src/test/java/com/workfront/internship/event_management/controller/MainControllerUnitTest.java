@@ -69,6 +69,6 @@ public class MainControllerUnitTest {
         String pageView = mainController.loadUpcomingEvents(testModel);
 
         verify(testModel).addAttribute("events", testEventList);
-        assertEquals("Incorrect page name", pageView, HOME_VIEW);
+        assertEquals("Incorrect redirect page", pageView, HOME_VIEW);
     }
 }

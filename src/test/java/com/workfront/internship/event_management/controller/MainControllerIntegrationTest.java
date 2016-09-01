@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 
 import java.util.ArrayList;
@@ -39,14 +40,13 @@ public class MainControllerIntegrationTest {
     private EventService eventService;
     @Autowired
     private CategoryService categoryService;
-    @Autowired
-    private Model testModel;
 
+    private Model testModel;
     private Event testEvent;
 
     @Before
     public void setUp() {
-        // testModel = mock(Model.class);
+        testModel = new ExtendedModelMap();
 
         //create test objects, insert into db
         Category testCategory = createTestCategory();
@@ -59,6 +59,9 @@ public class MainControllerIntegrationTest {
 
     @After
     public void tearDown() {
+        testModel = null;
+        testEvent = null;
+
         categoryService.deleteAllCategories();
         eventService.deleteAllEvents();
     }
@@ -78,6 +81,4 @@ public class MainControllerIntegrationTest {
         assertEquals(eventList.size(), 1);
         assertEquals(pageView, HOME_VIEW);
     }
-
-
 }
