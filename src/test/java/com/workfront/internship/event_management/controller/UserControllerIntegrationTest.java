@@ -1,6 +1,8 @@
 package com.workfront.internship.event_management.controller;
 
 import com.workfront.internship.event_management.controller.util.CustomResponse;
+import com.workfront.internship.event_management.controller.util.TestHttpServletRequest;
+import com.workfront.internship.event_management.controller.util.TestHttpSession;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.UserService;
 import com.workfront.internship.event_management.spring.TestApplicationConfig;
@@ -13,15 +15,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import static com.workfront.internship.event_management.TestObjectCreator.createTestUser;
 import static com.workfront.internship.event_management.controller.util.PageParameters.ACTION_SUCCESS;
 import static com.workfront.internship.event_management.controller.util.PageParameters.RESPONSE_FALSE;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Created by Hermine Turshujyan 8/30/16.
@@ -37,8 +34,8 @@ public class UserControllerIntegrationTest {
     @Autowired
     private UserService userService;
 
-    private HttpServletRequest testRequest;
-    private HttpSession testSession;
+    private TestHttpServletRequest testRequest;
+    private TestHttpSession testSession;
 
     private String testEmail;
     private String testPassword;
@@ -54,12 +51,8 @@ public class UserControllerIntegrationTest {
         userService.addAccount(testUser);
 
         //create mocks
-        testRequest = mock(HttpServletRequest.class);
-        testSession = mock(HttpSession.class);
-
-        when(testRequest.getParameter("email")).thenReturn(testEmail);
-        when(testRequest.getParameter("password")).thenReturn(testPassword);
-        when(testRequest.getSession()).thenReturn(testSession);
+        testRequest = new TestHttpServletRequest(); //mock(HttpServletRequest.class);
+        testSession = new TestHttpSession(); //mock(HttpSession.class);
     }
 
     @After
@@ -69,6 +62,9 @@ public class UserControllerIntegrationTest {
 
     @Test
     public void login() {
+        testRequest.setParameter("email", testEmail);
+        testRequest.setParameter("password", testPassword);
+
         CustomResponse result = userController.login(testRequest);
 
         assertEquals("Status is incorrect", result.getStatus(), ACTION_SUCCESS);
@@ -76,6 +72,7 @@ public class UserControllerIntegrationTest {
 
     @Test
     public void logout() {
+        testSession.setAttribute("user", new User());
         String redirectPage = userController.logout(testRequest);
 
         assertEquals("Incorrect redirect page", redirectPage, "forward:/home");
@@ -83,13 +80,15 @@ public class UserControllerIntegrationTest {
 
     @Test
     public void isEmailFree() {
+        testRequest.setParameter("email", testEmail);
         String result = userController.isEmailFree(testRequest);
 
         assertEquals("Incorrect response", result, RESPONSE_FALSE);
     }
 
     @Test
-    public void register() throws Exception {
+    public void register() {
+        // userController.register(tes)
         // CustomResponse result = userController.register(testRequest);
 
         //assertEquals("Status is incorrect", result.getStatus(), ACTION_SUCCESS);

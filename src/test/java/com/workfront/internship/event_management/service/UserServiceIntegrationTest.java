@@ -1,7 +1,5 @@
 package com.workfront.internship.event_management.service;
 
-import com.workfront.internship.event_management.exception.dao.DAOException;
-import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
@@ -36,7 +34,7 @@ public class UserServiceIntegrationTest {
     private User testUser;
 
     @Before
-    public void setUp() throws DAOException, DuplicateEntryException {
+    public void setUp() {
         //create test user
         testUser = createTestUser();
 
@@ -44,7 +42,7 @@ public class UserServiceIntegrationTest {
     }
 
     @After
-    public void tearDown() throws DAOException {
+    public void tearDown() {
             //delete inserted test users from db
         userService.deleteAllUsers();
 
@@ -154,20 +152,19 @@ public class UserServiceIntegrationTest {
     }
 
     @Test
-    public void deleteAccount_NotFound() throws ObjectNotFoundException {
+    public void deleteAccount_NotFound() {
 
         boolean success = userService.deleteAccount(NON_EXISTING_ID);
         assertFalse(success);
     }
 
     @Test
-    public void getAllUsers_Found() throws DAOException {
+    public void getAllUsers_Found() {
         //method under test
         List<User> userList = userService.getAllUsers();
 
         assertNotNull(userList);
         assertFalse(userList.isEmpty());
-        assertEquals(userList.size(), 1);
         assertEqualUsers(userList.get(0), testUser);
     }
 
@@ -184,7 +181,7 @@ public class UserServiceIntegrationTest {
     }
 
     @Test
-    public void deleteAllUsers_Success() throws DAOException {
+    public void deleteAllUsers_Success() {
         //method under test
         userService.deleteAllUsers();
 
@@ -193,7 +190,7 @@ public class UserServiceIntegrationTest {
     }
 
     @Test
-    public void deleteAllUsers_NotFound() throws DAOException, ObjectNotFoundException {
+    public void deleteAllUsers_NotFound() {
         //delete inserted user
         userService.deleteAccount(testUser.getId());
 

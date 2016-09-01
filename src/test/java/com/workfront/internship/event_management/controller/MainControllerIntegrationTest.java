@@ -76,9 +76,9 @@ public class MainControllerIntegrationTest {
         String pageView = mainController.loadUpcomingEvents(testModel);
 
         List eventList = (ArrayList) testModel.asMap().get("events");
-        assertNotNull(eventList);
-        assertFalse(eventList.isEmpty());
-        assertEquals(eventList.size(), 1);
+        assertNotNull("Event list is null", eventList);
+        assertFalse("Event list is empty", eventList.isEmpty());
+        assertEquals("Fail to load all upcomming events", eventList.size(), 1);
         assertEquals(pageView, HOME_VIEW);
     }
 }
