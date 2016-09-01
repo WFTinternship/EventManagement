@@ -5,7 +5,6 @@ import com.workfront.internship.event_management.exception.service.InvalidObject
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.UserService;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,27 +81,24 @@ public class UserController {
     public CustomResponse register(HttpServletRequest request,
                                    @RequestParam(value = "avatar", required = false) MultipartFile image) {
 
-        boolean isMultipartContent = ServletFileUpload.isMultipartContent(request);
-
         CustomResponse result = new CustomResponse();
-
-        if (!isMultipartContent) {
-            String message = "Invalid request";
-            logger.error(message);
-
-            result.setStatus(ACTION_FAIL);
-            result.setMessage(message);
-            return result;
-        }
-
         User user = new User();
 
         //save uploaded file if avatar is uploaded
         if (!image.isEmpty()) {
+
+            if (!isValidImage(image)) {
+                String message = "Invalid image type!";
+                logger.info(message);
+
+                result.setStatus(ACTION_FAIL);
+                result.setMessage(message);
+                return result;
+            }
+
             try {
                 ServletContext servletContext = request.getSession().getServletContext();
                 String uploadPath = servletContext.getRealPath("") + UPLOAD_DIRECTORY;
-
                 String avatarPath = saveFile(uploadPath, image);
 
                 //save avatar path to user obj
@@ -154,17 +150,16 @@ public class UserController {
         String password = request.getParameter("password");
         String phone = request.getParameter("phone");
 
-        user.setFirstName(firstName)
-                .setLastName(lastName)
-                .setPassword(password)
-                .setPhoneNumber(phone);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setPhoneNumber(phone);
     }
 
 
-    private void validateImage(MultipartFile image) {
-        if (!image.getContentType().equals("image/jpeg")) {
-            throw new RuntimeException("Only JPG images are accepted");
-        }
+    private boolean isValidImage(MultipartFile image) {
+        return (image.getContentType().equals("image/jpeg") || image.getContentType().equals("image/png"));
     }
 
     private String saveFile(String uploadPath, MultipartFile image) throws IOException {
@@ -197,17 +192,5 @@ public class UserController {
 
         return filePath;
     }
-
-//    private void saveImage(String filename, ) {
-//        try {
-//            File file = new File(servletContext.getRealPath("/") + "/"
-//                    + filename);
-//
-//            System.out.println("Go to the location:  " + file.toString()
-//                    + " on your computer and verify that the image has been stored.");
-//        } catch (IOException e) {
-//            throw e;
-//        }
-//    }
 
 }

@@ -2,15 +2,19 @@ package com.workfront.internship.event_management.controller;
 
 import com.workfront.internship.event_management.controller.util.CustomResponse;
 import com.workfront.internship.event_management.exception.service.InvalidObjectException;
+import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.UserService;
 import org.junit.*;
 import org.mockito.internal.util.reflection.Whitebox;
+import org.springframework.mock.web.MockMultipartFile;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import static com.workfront.internship.event_management.TestObjectCreator.*;
+import static com.workfront.internship.event_management.TestObjectCreator.SERVLET_CONTEXT_PATH;
+import static com.workfront.internship.event_management.TestObjectCreator.createTestUser;
 import static com.workfront.internship.event_management.controller.util.PageParameters.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;
@@ -27,6 +31,10 @@ public class UserControllerUnitTest {
     private User testUser;
     private HttpServletRequest testRequest;
     private HttpSession testSession;
+    // private MultipartFile testImage;
+    private MockMultipartFile testImage;
+
+    private ServletContext servletContext;
 
     @BeforeClass
     public static void setUpClass() {
@@ -45,14 +53,16 @@ public class UserControllerUnitTest {
         testUser = createTestUser();
 
         userService = mock(UserService.class);
-        Whitebox.setInternalState(userController, "userService", userService);
 
         testRequest = mock(HttpServletRequest.class);
         testSession = mock(HttpSession.class);
+        testImage = mock(MockMultipartFile.class);
+        servletContext = mock(ServletContext.class);
 
-//        when(testRequest.getParameter("email")).thenReturn(VALID_EMAIL);
-//        when(testRequest.getParameter("password")).thenReturn(VALID_PASSWORD);
+        Whitebox.setInternalState(userController, "userService", userService);
+
         when(testRequest.getSession()).thenReturn(testSession);
+        when(testSession.getServletContext()).thenReturn(servletContext);
     }
 
     @After
@@ -109,4 +119,64 @@ public class UserControllerUnitTest {
         verify(testSession).setAttribute("user", null);
         verify(testSession).invalidate();
     }
+
+    @Test
+    public void register_NonEmptyImage_InvalidType() {
+        when(testImage.isEmpty()).thenReturn(false);
+        when(testImage.getContentType()).thenReturn("");
+
+        CustomResponse response = userController.register(testRequest, testImage);
+        assertEquals("Incorrect response status", response.getStatus(), ACTION_FAIL);
+        assertEquals("Incorrect response message", response.getMessage(), "Invalid image type!");
+    }
+
+    @Ignore
+    @Test
+    public void register_NonEmptyImage_ImageSaved() {
+        when(testImage.isEmpty()).thenReturn(false);
+        when(testImage.getContentType()).thenReturn("image/jpeg");
+
+        //create ServletContext mock
+        when(servletContext.getRealPath("")).thenReturn(SERVLET_CONTEXT_PATH);
+
+
+        CustomResponse response = userController.register(testRequest, testImage);
+        assertEquals("Incorrect response status", response.getStatus(), ACTION_SUCCESS);
+        assertEquals("Incorrect response message", response.getMessage(), "Invalid image type!");
+    }
+
+    @Ignore
+    @Test
+    public void register_NonEmptyImage_ValidType_ImageSaveFailed() {
+        when(testImage.isEmpty()).thenReturn(false);
+        when(testImage.getContentType()).thenReturn("image/jpeg");
+
+        CustomResponse response = userController.register(testRequest, testImage);
+        assertEquals("Incorrect response status", response.getStatus(), ACTION_FAIL);
+        assertEquals("Incorrect response message", response.getMessage(), "Invalid image type!");
+    }
+
+    @Test
+    public void register_Success() {
+        when(testImage.isEmpty()).thenReturn(true);
+
+        CustomResponse response = userController.register(testRequest, testImage);
+        assertEquals("Incorrect response", response.getStatus(), ACTION_SUCCESS);
+    }
+
+    @Test
+    public void register_Fail() {
+        when(testImage.isEmpty()).thenReturn(true);
+        when(userService.addAccount(any(User.class))).thenThrow(OperationFailedException.class);
+
+        //method under test
+        CustomResponse response = userController.register(testRequest, testImage);
+
+        assertEquals("Incorrect response", response.getStatus(), ACTION_FAIL);
+    }
+
+
+
+
+
 }

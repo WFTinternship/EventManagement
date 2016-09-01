@@ -50,8 +50,10 @@ public class UserControllerIntegrationTest {
         testEmail = testUser.getEmail();
         testPassword = testUser.getPassword();
 
+        //insert user into db
         userService.addAccount(testUser);
 
+        //create mocks
         testRequest = mock(HttpServletRequest.class);
         testSession = mock(HttpSession.class);
 
@@ -63,7 +65,6 @@ public class UserControllerIntegrationTest {
     @After
     public void tearDown() {
         userService.deleteAllUsers();
-
     }
 
     @Test
@@ -89,7 +90,7 @@ public class UserControllerIntegrationTest {
 
     @Test
     public void register() throws Exception {
-        CustomResponse result = userController.register(testRequest);
+        // CustomResponse result = userController.register(testRequest);
 
         //assertEquals("Status is incorrect", result.getStatus(), ACTION_SUCCESS);
     }
