@@ -28,11 +28,11 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(DAOException.class)
-    public ModelAndView handleDAOException(HttpServletRequest request, DAOException e) {
+    public ModelAndView handleDAOException(HttpServletRequest request) {
         logger.info("DAOException Occurred:: URL=" + request.getRequestURL());
 
         ModelAndView mov = new ModelAndView(DEFAULT_ERROR_VIEW);
-        mov.addObject("message", "Database error");
+        mov.addObject("message", "Database error!");
 
         return mov;
     }
