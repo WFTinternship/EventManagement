@@ -102,7 +102,7 @@
                                 <p class="desc"><%=event.getShortDescription()%>
                                 </p>
 
-                                <a class="btn" href="#"><span>Details</span></a>
+                                <a class="btn" href="/events/<%=event.getId()%>"><span>Details</span></a>
                             </div>
                         </div>
                         <% }

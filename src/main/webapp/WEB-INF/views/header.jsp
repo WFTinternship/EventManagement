@@ -43,7 +43,7 @@
                 <div id="nav_menu">
                     <ul>
                         <li>
-                            <a href=""><span>Home</span></a>
+                            <a href="/"><span>Home</span></a>
                         </li>
                         <li>
                             <a href="/events"><span id="all_events">All Events</span></a>

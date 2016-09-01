@@ -53,7 +53,7 @@
 
     <!-- Content Section -->
     <section class="content_section">
-        <div class="content">
+        <div class="content content clearfix">
             <div class="form_header">
                 <div class="main_title upper">
                     <h2>

@@ -36,7 +36,7 @@
     <!-- Main Header -->
     <section class="content_section">
         <div class="container clearfix">
-            <div class="content centered">
+            <div class="content centered clearfix">
                 <div class="main_desc ">
                     <div class="error-message"><%=request.getAttribute("message")%>
                     </div>
@@ -46,10 +46,11 @@
             </div>
         </div>
     </section>
-</div>
 
 <!-- Footer -->
 <jsp:include page="footer.jsp"/>
 <!-- End Footer -->
+
+</div>
 </body>
 </html>

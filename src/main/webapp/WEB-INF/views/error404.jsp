@@ -36,7 +36,7 @@
     <!-- Main Header -->
     <section class="content_section">
         <div class="container clearfix">
-            <div class="content centered">
+            <div class="content centered clearfix">
                 <div class="main_desc ">
                     <p><b>Ooopps.!</b> The Page you were looking for doesn't exist</p>
                 </div>

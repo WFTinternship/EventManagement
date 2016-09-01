@@ -42,7 +42,7 @@
     <!-- Content Section -->
 
     <section class="content_section">
-        <div class="content">
+        <div class="content clearfix">
 
             <%
                 Event event = (Event) request.getAttribute("event");
