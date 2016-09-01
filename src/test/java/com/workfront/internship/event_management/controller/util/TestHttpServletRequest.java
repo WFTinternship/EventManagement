@@ -21,7 +21,7 @@ public class TestHttpServletRequest implements HttpServletRequest {
 
     private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
     private final Map<String, String> parameters = new LinkedHashMap<String, String>(16);
-    private HttpSession httpSessionMock = new TestHttpSession();
+    private HttpSession httpSession = new TestHttpSession();
 
     @Override
     public String getAuthType() {
@@ -120,12 +120,12 @@ public class TestHttpServletRequest implements HttpServletRequest {
 
     @Override
     public HttpSession getSession(boolean create) {
-        return null;
+        return httpSession;
     }
 
     @Override
     public HttpSession getSession() {
-        return null;
+        return httpSession;
     }
 
     @Override

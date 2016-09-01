@@ -19,6 +19,8 @@ public class TestObjectCreator {
     public static final String WRONG_PASSWORD = "wrongPassword";
     public static final String VALID_EMAIL = "turshujyan@gmail.com";
     public static final String VALID_PASSWORD = "turshujyan";
+    public static final String SERVLET_CONTEXT_PATH = "/Users/hermine/IdeaProjects/EventManagement/target/event-management-1.0-SNAPSHOT/";
+    public static final String EXCEPTION_MESSAGE = "error message";
 
     public static int NON_EXISTING_ID = 1;
     public static int INVALID_ID = -1;

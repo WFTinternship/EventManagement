@@ -5,8 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.ui.ExtendedModelMap;
-import org.springframework.ui.Model;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -37,10 +35,4 @@ public class TestApplicationConfig {
 
         return dataSource;
     }
-
-    @Bean
-    public Model getModel() {
-        return new ExtendedModelMap();
-    }
-
 }
