@@ -1,9 +1,8 @@
 package com.workfront.internship.event_management.controller;
 
+import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
-import com.workfront.internship.event_management.exception.dao.DAOException;
-import com.workfront.internship.event_management.service.CategoryServiceImpl;
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,16 +19,16 @@ import static com.workfront.internship.event_management.controller.util.PagePara
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    private static final Logger logger = Logger.getLogger(CategoryServiceImpl.class);
+    private static final Logger logger = Logger.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(Throwable.class)
-    public String handleOtherException(HttpServletRequest request, DAOException e) {
+    public String handleOtherException(HttpServletRequest request) {
         logger.info("Exception Occurred:: URL=" + request.getRequestURL());
         return DEFAULT_ERROR_VIEW;
     }
 
     @ExceptionHandler(DAOException.class)
-    public ModelAndView handleSQLException(HttpServletRequest request, DAOException e) {
+    public ModelAndView handleDAOException(HttpServletRequest request, DAOException e) {
         logger.info("DAOException Occurred:: URL=" + request.getRequestURL());
 
         ModelAndView mov = new ModelAndView(DEFAULT_ERROR_VIEW);
