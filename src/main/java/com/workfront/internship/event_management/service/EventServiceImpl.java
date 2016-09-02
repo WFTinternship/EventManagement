@@ -1,7 +1,6 @@
 package com.workfront.internship.event_management.service;
 
 import com.workfront.internship.event_management.dao.EventDAO;
-import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
@@ -22,7 +21,7 @@ import static com.workfront.internship.event_management.service.util.Validator.*
 @Component
 public class EventServiceImpl implements EventService {
 
-    private static final Logger LOGGER = Logger.getLogger(EventServiceImpl.class);
+    private static final Logger logger = Logger.getLogger(EventServiceImpl.class);
 
     @Autowired
     private EventDAO eventDAO;
@@ -32,7 +31,10 @@ public class EventServiceImpl implements EventService {
     private InvitationService invitationService;
 
     @Override
-    public Event createEvent(Event event) throws DuplicateEntryException {
+    public Event createEvent(Event event) {
+        //set creation date
+        setDefaultFields(event);
+
         //check if event object is valid
         if (!isValidEvent(event)) {
             throw new InvalidObjectException("Invalid event");

@@ -74,7 +74,7 @@ public class EventController {
         HttpSession session = request.getSession();
 
         //check if user is logged in
-        if (session.getAttribute("user") != null) {
+        // if (session.getAttribute("user") != null) {
 
             List<Category> categoryList = categoryService.getAllCategories();
 
@@ -82,10 +82,10 @@ public class EventController {
             model.addAttribute("event", createEmptyEvent());
 
             return EVENT_EDIT_VIEW;
-        } else {
+       /* } else {
             model.addAttribute("message", "Access is denied!");
             return DEFAULT_ERROR_VIEW;
-        }
+        }*/
     }
 
     @RequestMapping(value = "/add-event", method = RequestMethod.POST)
@@ -109,15 +109,17 @@ public class EventController {
         String endTimeString = request.getParameter("end_time");
 
         Date startDate = DateParser.parseStringToDate(startDateString, startTimeString);
+        Date endDate = DateParser.parseStringToDate(endDateString, endTimeString);
 
-        // TODO: 8/27/16 parse to date()
         event.setTitle(title)
                 .setShortDescription(shortDescription)
                 .setFullDescription(fullDescription)
                 .setLocation(location)
                 .setPublicAccessed(publicAccessed)
                 .setGuestsAllowed(guestsAllowed)
-                .setCategory(category);
+                .setCategory(category)
+                .setStartDate(startDate)
+                .setEndDate(endDate);
 
         eventService.createEvent(event);
 
