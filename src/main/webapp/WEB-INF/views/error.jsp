@@ -20,8 +20,8 @@
     <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
     <link href="<c:url value="/resources/css/reset.css" />" rel="stylesheet">
-    <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet">
-    <link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/lib/bootstrap.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/lib/bootstrap.min.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/main.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/icon_font.css" />" rel="stylesheet">
 

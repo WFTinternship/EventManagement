@@ -19,21 +19,20 @@
     <script src="<c:url value="/resources/js/lib/jquery-ui.js" />"></script>
     <script src="<c:url value="/resources/js/lib/jquery.timepicker.js" />"></script>
     <script src="<c:url value="/resources/js/lib/bootstrap.min.js" />"></script>
-    <script src="<c:url value="/resources/js/event-edit.js" />"></script>
 
 
     <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
-    <%--<link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">--%>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 
     <link href="<c:url value="/resources/css/reset.css" />" rel="stylesheet">
-    <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet">
-    <link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
-    <link href="<c:url value="/resources/css/jquery-ui.css" />" rel="stylesheet">
-    <link href="<c:url value="/resources/css/jquery.timepicker.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/lib/bootstrap.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/lib/bootstrap.min.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/lib/jquery-ui.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/lib/jquery.timepicker.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/main.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/icon_font.css" />" rel="stylesheet">
 
@@ -66,7 +65,7 @@
             </div>
             <form id="event_form" action="/add-event" method="POST">
                 <div class="form_row clearfix">
-                    <div class="form_col_half">
+                    <div class="form_col_full">
                         <label for="event_title">
                             <span class="field_name">Title</span>
                             <span class="required_star">*</span>
@@ -76,47 +75,46 @@
                     </div>
                 </div>
                 <div class="form_row clearfix">
-                    <div class="form_col_half ">
+                    <div class="form_col_half">
                         <label for="start_date">
                             <span class="field_name">Start date</span>
                         </label>
-                        <input type="text" name="start_date" id="start_date"
+                        <input type="text" name="start_date" id="start_date" class="date_picker_input"
                                value="<%=(event.getStartDate() != null) ? event.getStartDate() : ""%>">
-                        <input type="text" name="start_time" id="start_time">
+                        <input type="text" name="start_time" id="start_time" class="time_picker_input">
                     </div>
-                    <div class="form_col_half ">
+                    <div class="form_col_half">
                         <label for="end_date">
                             <span class="field_name">End date</span>
                         </label>
-                        <input type="text" name="end_date" id="end_date"
+                        <input type="text" name="end_date" id="end_date" class="date_picker_input"
                                value="<%=(event.getEndDate() != null) ? event.getEndDate() : ""%>">
-                        <input type="text" name="end_time" id="end_time">
-
+                        <input type="text" name="end_time" id="end_time" class="time_picker_input">
                     </div>
                 </div>
 
                 <div class="form_row clearfix">
-                    <div class="form_col_half ">
+                    <div class="form_col_full ">
                         <label for="short_desc">
                             <span class="field_name">Short description</span>
                         </label>
-                        <textarea form="event_form" name="short_desc" id="short_desc">
+                        <textarea form="event_form" name="short_desc" id="short_desc" rows="5">
                         <%=event.getShortDescription()%></textarea>
                     </div>
                 </div>
 
                 <div class="form_row clearfix">
-                    <div class="form_col_half ">
+                    <div class="form_col_full ">
                         <label for="short_desc">
                             <span class="field_name">Full description</span>
                         </label>
-                        <textarea form="event_form" name="full_desc" id="full_desc">
+                        <textarea form="event_form" name="full_desc" id="full_desc" rows="7">
                         <%=event.getFullDescription()%></textarea>
                     </div>
                 </div>
 
                 <div class="form_row clearfix">
-                    <div class="form_col_half">
+                    <div class="form_col_full">
                         <label for="location">
                             <span class="field_name">Location</span>
                         </label>
@@ -128,7 +126,7 @@
                     List<Category> categoryList = (List<Category>) request.getAttribute("categories");
                     if (!categoryList.isEmpty()) { %>
                 <div class="form_row clearfix">
-                    <div class="form_col_half">
+                    <div class="form_col_full">
                         <label for="location">
                             <span class="field_name">Select Category</span>
                         </label>
@@ -145,43 +143,65 @@
                 <%} %>
 
                 <div class="form_row clearfix">
-                    <div class="form_col_half">
+                    <div class="form_col_full">
                         <label for="event_image">
                             <span class="field_name">Attachment</span>
                         </label>
-                        <div class="file_button_wrapper">
-                            Event image
-                            <input class="input_file" name="event_image" id="event_image" type="file">
+                        <div class="form_col_half">
+                            <div class="file_button_wrapper">
+                                Event image
+                                <input class="input_file" name="event_image" id="event_image" type="file">
+                            </div>
                         </div>
-                        <div class="file_button_wrapper">
-                            Attach a file
-                            <input type="file" class="input_file" name="event_file" id="event_file">
+                        <div class="form_col_half">
+                            <div class="file_button_wrapper">
+                                Attach a file
+                                <input type="file" class="input_file" name="event_file" id="event_file">
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="form_row clearfix">
-                    <div class="form_col_half">
+                    <div class="form_col_full">
                         <label>
-                            <span class="field_name">Visibility</span>
+                            <span class="field_name">Permissions</span>
                         </label>
+                    </div>
+                    <div class="form_col_half">
                         <div class="file_button_wrapper">
-                            <div class="file_button_wrapper">
+                            Visibility
+                            <div class="radio_wrapper">
                                 <input type="radio" class="event_radio" name="public_accessed"
-                                       value="1"  <%= (event.isPublicAccessed())? "checked": ""%>>Public
+                                       value="1"  <%= (event.isPublicAccessed())? "checked": ""%>><span>Public</span>
                                 <input type="radio" class="event_radio" name="public_accessed"
-                                       value="0" <%= (!event.isPublicAccessed())? "checked": ""%>>Private
+                                       value="0" <%= (!event.isPublicAccessed())? "checked": ""%>><span>Private</span>
                             </div>
                         </div>
                     </div>
                     <div class="form_col_half">
-                        <label>
-                            <span class="field_name">Guests allowed</span>
+                        Guests allowed
+                        <div class="radio_wrapper">
+                            <input type="radio" class="event_radio" name="guests_allowed"
+                                   value="1"  <%= (event.isGuestsAllowed())? "checked": ""%>><span>Yes</span>
+                            <input type="radio" class="event_radio" name="guests_allowed"
+                                   value="0" <%= (!event.isGuestsAllowed())? "checked": ""%>><span>No</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form_row clearfix">
+                    <div class="form_col_full">
+                        <label for="event_title">
+                            <span class="field_name">Invitations</span>
                         </label>
-                        <div class="file_button_wrapper">
-                            <input type="radio" class="event_radio" name="guests_allowed"
-                                   value="1"  <%= (event.isGuestsAllowed())? "checked": ""%>>Yes
-                            <input type="radio" class="event_radio" name="guests_allowed"
-                                   value="0" <%= (!event.isGuestsAllowed())? "checked": ""%>>No
+                        <input class="input_text" name="invitation_input" id="invitation_input" type="text"
+                               placeholder="Enter guest email address">
+                        <input type="button" value="Add" id="add_invitation_btn">
+                    </div>
+                </div>
+                <div class="form_row clearfix">
+                    <div class="form_col_full" id="guests_list">
+                        <span>Guests</span>
+                        <div id="invitation_list">
                         </div>
                     </div>
                 </div>
@@ -202,5 +222,7 @@
     <jsp:include page="footer.jsp"/>
     <!-- End Footer -->
 </div>
+
+<script src="<c:url value="/resources/js/event-edit.js" />"></script>
 </body>
 </html>
