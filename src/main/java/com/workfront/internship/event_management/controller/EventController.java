@@ -4,8 +4,11 @@ import com.workfront.internship.event_management.controller.util.CustomResponse;
 import com.workfront.internship.event_management.controller.util.DateParser;
 import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Event;
+import com.workfront.internship.event_management.model.Invitation;
 import com.workfront.internship.event_management.service.CategoryService;
 import com.workfront.internship.event_management.service.EventService;
+import com.workfront.internship.event_management.service.InvitationService;
+import com.workfront.internship.event_management.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +31,10 @@ public class EventController {
 
     @Autowired
     private EventService eventService;
+    @Autowired
+    private InvitationService invitationService;
+    @Autowired
+    private UserService userService;
     @Autowired
     private CategoryService categoryService;
 
@@ -90,23 +99,35 @@ public class EventController {
 
     @RequestMapping(value = "/add-event", method = RequestMethod.POST)
     public String addEvent(HttpServletRequest request, Model model) {
+
         Event event = new Event();
 
-        String title = request.getParameter("event_title");
-        String shortDescription = request.getParameter("short_desc");
-        String fullDescription = request.getParameter("full_desc");
+        String title = request.getParameter("eventTitle");
+        String shortDescription = request.getParameter("shortDesc");
+        String fullDescription = request.getParameter("fullDesc");
         String location = request.getParameter("location");
+        String invitationsString = request.getParameter("invitations");
 
-        int categoryId = Integer.parseInt(request.getParameter("category_id"));
+        //get invitations list
+        List<Invitation> invitations = new ArrayList<>();
+        List<String> invitationEmails = Arrays.asList(invitationsString.split(","));
+        for (String email : invitationEmails) {
+            Invitation invitation = invitationService.createInvitationForEmail(email);
+            invitations.add(invitation);
+        }
+
+        //get category
+        int categoryId = Integer.parseInt(request.getParameter("categoryId"));
         Category category = new Category().setId(categoryId);
 
-        boolean publicAccessed = Boolean.parseBoolean(request.getParameter("public_accessed"));
-        boolean guestsAllowed = Boolean.parseBoolean(request.getParameter("guests_allowed"));
+        boolean publicAccessed = Boolean.parseBoolean(request.getParameter("publicAccessed"));
+        boolean guestsAllowed = Boolean.parseBoolean(request.getParameter("guestsAllowed"));
 
-        String startDateString = request.getParameter("start_date");
-        String endDateString = request.getParameter("end_date");
-        String startTimeString = request.getParameter("start_time");
-        String endTimeString = request.getParameter("end_time");
+        String startDateString = request.getParameter("startDate");
+        String endDateString = request.getParameter("endDate");
+        String startTimeString = request.getParameter("startTime");
+        String endTimeString = request.getParameter("endTime");
+
 
         Date startDate = DateParser.parseStringToDate(startDateString, startTimeString);
         Date endDate = DateParser.parseStringToDate(endDateString, endTimeString);
@@ -119,7 +140,8 @@ public class EventController {
                 .setGuestsAllowed(guestsAllowed)
                 .setCategory(category)
                 .setStartDate(startDate)
-                .setEndDate(endDate);
+                .setEndDate(endDate)
+                .setInvitations(invitations);
 
         eventService.createEvent(event);
 

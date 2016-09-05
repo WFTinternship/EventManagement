@@ -29,6 +29,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addAccount(User user) {
+        //set user default fields
+        setDefaultFields(user);
+
         //check if user object is valid
         if (!isValidUser(user)) {
             throw new InvalidObjectException("Invalid user object");
@@ -38,8 +41,6 @@ public class UserServiceImpl implements UserService {
         String encryptedPassword = HashGenerator.generateHashString(user.getPassword());
         user.setPassword(encryptedPassword);
 
-        //set user default fields
-        setDefaultFields(user);
 
         try {
             //insert user into db

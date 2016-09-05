@@ -30,8 +30,8 @@ public class TestObjectCreator {
     public static User createTestUser() {
         User testUser = new User();
         testUser.setFirstName("Test FirstName")
-                .setLastName("Test LastName")
-                .setPassword("testPassword")
+//                .setLastName("Test LastName")
+//                .setPassword("testPassword")
                 .setEmail("test" + getRandomNumber() + "@test.com")
                 .setPhoneNumber("1111111")
                 .setAvatarPath("/users/test_user_av" + getRandomNumber() + ".jpg")
@@ -93,7 +93,7 @@ public class TestObjectCreator {
         user.setId(1);
 
         Invitation invitation = new Invitation();
-        invitation.setUserRole("Member")
+        invitation.setUserRole(UserRole.MEMBER)
                 .setAttendeesCount(1)
                 .setParticipated(false)
                 .setUserResponse("Yes")

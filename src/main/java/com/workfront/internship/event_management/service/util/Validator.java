@@ -113,10 +113,11 @@ public class Validator {
         boolean valid = false;
         if (event != null) {
             if (!isEmptyString(event.getTitle())
-                    && isValidCategory(event.getCategory())
+                    // && isValidCategory(event.getCategory())
                     && event.getStartDate() != null
                     && event.getEndDate() != null
-                    && event.getCreationDate() != null) {
+                // && event.getCreationDate() != null
+                    ) {
                 valid = true;
             }
         }
@@ -129,7 +130,7 @@ public class Validator {
         if (invitation != null) {
             if (invitation.getEventId() > 0
                     && isValidUser(invitation.getUser())
-                    && !isEmptyString(invitation.getUserRole())
+                    //   && !isEmptyString(invitation.getUserRole())
                     && (invitation.getUserResponse() != null)) {
                 valid = true;
             }

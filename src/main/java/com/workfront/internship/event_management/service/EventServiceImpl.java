@@ -5,6 +5,7 @@ import com.workfront.internship.event_management.exception.service.InvalidObject
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Event;
+import com.workfront.internship.event_management.model.Invitation;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -51,8 +52,17 @@ public class EventServiceImpl implements EventService {
         //set generated id to event
         event.setId(eventId);
 
+
         //if event info is successfully inserted into db, insert also invitations
         if (eventId != 0 && !isEmptyCollection(event.getInvitations())) {
+
+            //set event id to all invitations
+            List<Invitation> invitations = event.getInvitations();
+            for (int i = 0; i < invitations.size(); i++) {
+                invitations.get(i).setEventId(eventId);
+            }
+
+            //insert into db
             invitationService.addInvitations(event.getInvitations());
         }
 
