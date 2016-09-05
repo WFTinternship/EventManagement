@@ -63,14 +63,14 @@
                     </h2>
                 </div>
             </div>
-            <form id="event_form" action="/add-event" method="POST">
+            <form id="event_form" enctype="multipart/form-data">
                 <div class="form_row clearfix">
                     <div class="form_col_full">
-                        <label for="event_title">
+                        <label for="eventTitle">
                             <span class="field_name">Title</span>
                             <span class="required_star">*</span>
                         </label>
-                        <input class="input_text" name="event_title" id="event_title" type="text"
+                        <input class="input_text" name="eventTitle" id="eventTitle" type="text"
                                value="<%=event.getTitle()%>">
                     </div>
                 </div>
@@ -78,18 +78,20 @@
                     <div class="form_col_half">
                         <label for="start_date">
                             <span class="field_name">Start date</span>
+                            <span class="required_star">*</span>
                         </label>
-                        <input type="text" name="start_date" id="start_date" class="date_picker_input"
+                        <input type="text" name="startDate" id="start_date" class="date_picker_input"
                                value="<%=(event.getStartDate() != null) ? event.getStartDate() : ""%>">
-                        <input type="text" name="start_time" id="start_time" class="time_picker_input">
+                        <input type="text" name="startTime" id="start_time" class="time_picker_input">
                     </div>
                     <div class="form_col_half">
                         <label for="end_date">
                             <span class="field_name">End date</span>
+                            <span class="required_star">*</span>
                         </label>
-                        <input type="text" name="end_date" id="end_date" class="date_picker_input"
+                        <input type="text" name="endDate" id="end_date" class="date_picker_input"
                                value="<%=(event.getEndDate() != null) ? event.getEndDate() : ""%>">
-                        <input type="text" name="end_time" id="end_time" class="time_picker_input">
+                        <input type="text" name="endTime" id="end_time" class="time_picker_input">
                     </div>
                 </div>
 
@@ -98,7 +100,7 @@
                         <label for="short_desc">
                             <span class="field_name">Short description</span>
                         </label>
-                        <textarea form="event_form" name="short_desc" id="short_desc" rows="5">
+                        <textarea form="event_form" name="shortDesc" id="short_desc" rows="5">
                         <%=event.getShortDescription()%></textarea>
                     </div>
                 </div>
@@ -108,7 +110,7 @@
                         <label for="short_desc">
                             <span class="field_name">Full description</span>
                         </label>
-                        <textarea form="event_form" name="full_desc" id="full_desc" rows="7">
+                        <textarea form="event_form" name="fullDesc" id="full_desc" rows="7">
                         <%=event.getFullDescription()%></textarea>
                     </div>
                 </div>
@@ -130,7 +132,7 @@
                         <label for="location">
                             <span class="field_name">Select Category</span>
                         </label>
-                        <select name="category_id" id="category_select">
+                        <select name="categoryId" id="category_select">
                             <% for (Category category : categoryList) { %>
                             <option class="cat_option" value="<%=category.getId()%>"
                                     <%= (categoryId == category.getId()) ? "selected" : ""%>>
@@ -150,13 +152,13 @@
                         <div class="form_col_half">
                             <div class="file_button_wrapper">
                                 Event image
-                                <input class="input_file" name="event_image" id="event_image" type="file">
+                                <input class="input_file" name="eventImage" id="event_image" type="file">
                             </div>
                         </div>
                         <div class="form_col_half">
                             <div class="file_button_wrapper">
                                 Attach a file
-                                <input type="file" class="input_file" name="event_file" id="event_file">
+                                <input type="file" class="input_file" name="eventFile" id="event_file">
                             </div>
                         </div>
                     </div>
@@ -171,9 +173,9 @@
                         <div class="file_button_wrapper">
                             Visibility
                             <div class="radio_wrapper">
-                                <input type="radio" class="event_radio" name="public_accessed"
+                                <input type="radio" class="event_radio" name="publicAccessed"
                                        value="1"  <%= (event.isPublicAccessed())? "checked": ""%>><span>Public</span>
-                                <input type="radio" class="event_radio" name="public_accessed"
+                                <input type="radio" class="event_radio" name="publicAccessed"
                                        value="0" <%= (!event.isPublicAccessed())? "checked": ""%>><span>Private</span>
                             </div>
                         </div>
@@ -181,19 +183,19 @@
                     <div class="form_col_half">
                         Guests allowed
                         <div class="radio_wrapper">
-                            <input type="radio" class="event_radio" name="guests_allowed"
+                            <input type="radio" class="event_radio" name="guestsAllowed"
                                    value="1"  <%= (event.isGuestsAllowed())? "checked": ""%>><span>Yes</span>
-                            <input type="radio" class="event_radio" name="guests_allowed"
+                            <input type="radio" class="event_radio" name="guestsAllowed"
                                    value="0" <%= (!event.isGuestsAllowed())? "checked": ""%>><span>No</span>
                         </div>
                     </div>
                 </div>
                 <div class="form_row clearfix">
                     <div class="form_col_full">
-                        <label for="event_title">
+                        <label for="invitationEmail">
                             <span class="field_name">Invitations</span>
                         </label>
-                        <input class="input_text" name="invitation_input" id="invitation_input" type="text"
+                        <input class="input_text" name="invitationEmail" id="invitationEmail" type="text"
                                placeholder="Enter guest email address">
                         <input type="button" value="Add" id="add_invitation_btn">
                     </div>
