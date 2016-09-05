@@ -6,6 +6,8 @@ import com.workfront.internship.event_management.exception.service.InvalidObject
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Invitation;
+import com.workfront.internship.event_management.model.User;
+import com.workfront.internship.event_management.model.UserRole;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 import static com.workfront.internship.event_management.service.util.Validator.isEmptyCollection;
+import static com.workfront.internship.event_management.service.util.Validator.isValidEmailAddressForm;
 import static com.workfront.internship.event_management.service.util.Validator.isValidInvitation;
 
 /**
@@ -26,6 +29,30 @@ public class InvitationServiceImpl implements InvitationService {
 
     @Autowired
     private InvitationDAO invitationDAO;
+    @Autowired
+    private UserService userService;
+
+    @Override
+    public Invitation createInvitationForEmail(String email) {
+        if (!isValidEmailAddressForm(email)) {
+            throw new InvalidObjectException("Invalid email address form");
+        }
+
+        User user = userService.getUserByEmail(email);
+
+        if (user == null) {
+            throw new ObjectNotFoundException("User not found!");
+        } else {
+            Invitation invitation = new Invitation();
+            invitation.setUser(user)
+                    .setUserRole(UserRole.MEMBER)
+                    .setAttendeesCount(1)
+                    .setParticipated(false)
+                    .setUserResponse("Undefined");
+
+            return invitation;
+        }
+    }
 
     @Override
     public Invitation addInvitation(Invitation invitation) {

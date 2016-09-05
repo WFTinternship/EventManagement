@@ -4,6 +4,7 @@ package com.workfront.internship.event_management.model;
  * Created by Hermine Turshujyan 7/21/16.
  */
 public class UserResponse {
+
     private int id;
     private String title;
 

@@ -5,6 +5,7 @@ import com.workfront.internship.event_management.exception.dao.DuplicateEntryExc
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.Invitation;
 import com.workfront.internship.event_management.model.User;
+import com.workfront.internship.event_management.model.UserRole;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -42,7 +43,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             } else {
                 stmt.setInt(2, 0);
             }
-            stmt.setString(3, invitation.getUserRole());
+            stmt.setObject(3, invitation.getUserRole().name());
             stmt.setString(4, invitation.getUserResponse());
 
             stmt.setInt(5, invitation.getAttendeesCount());
@@ -97,7 +98,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
                     stmt.setInt(2, 0);
                 }
 
-                stmt.setString(3, invitation.getUserRole());
+                stmt.setString(3, invitation.getUserRole().name());
 
                 if (invitation.getUserResponse() != null) {
                     stmt.setString(4, invitation.getUserResponse());
@@ -191,7 +192,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
             //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);
-            stmt.setString(1, invitation.getUserRole());
+            stmt.setString(1, invitation.getUserRole().name());
             stmt.setString(2, invitation.getUserResponse());
             stmt.setInt(3, invitation.getAttendeesCount());
             stmt.setBoolean(4, invitation.isParticipated());
@@ -301,7 +302,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
                     .setEventId(rs.getInt("event_id"))
                     .setAttendeesCount(rs.getInt("attendees_count"))
                     .setUserResponse(rs.getString("user_response"))
-                    .setUserRole(rs.getString("user_role"))
+                    .setUserRole(UserRole.findByName(rs.getString("user_role")))
                     .setParticipated(rs.getBoolean("participated"));
 
             invitationsList.add(invitation);

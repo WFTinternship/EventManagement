@@ -4,10 +4,7 @@ import com.workfront.internship.event_management.TestObjectCreator;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
-import com.workfront.internship.event_management.model.Category;
-import com.workfront.internship.event_management.model.Event;
-import com.workfront.internship.event_management.model.Invitation;
-import com.workfront.internship.event_management.model.User;
+import com.workfront.internship.event_management.model.*;
 import org.junit.*;
 
 import java.util.List;
@@ -141,7 +138,7 @@ public class InvitationDAOIntegrationTest {
     public void updateInvitation_Success() throws DuplicateEntryException, ObjectNotFoundException, DAOException {
         //change test invitation object
         testInvitation.setAttendeesCount(10)
-                .setUserRole("Organizer");
+                .setUserRole(UserRole.ORGANIZER);
 
         //test method
         invitationDAO.updateInvitation(testInvitation);

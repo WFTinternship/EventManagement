@@ -3,10 +3,7 @@ package com.workfront.internship.event_management.service;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
-import com.workfront.internship.event_management.model.Category;
-import com.workfront.internship.event_management.model.Event;
-import com.workfront.internship.event_management.model.Invitation;
-import com.workfront.internship.event_management.model.User;
+import com.workfront.internship.event_management.model.*;
 import com.workfront.internship.event_management.spring.TestApplicationConfig;
 import org.junit.After;
 import org.junit.Before;
@@ -37,9 +34,9 @@ public class InvitationServiceIntegrationTest {
     @Autowired
     private UserService userService;
     @Autowired
-    CategoryService categoryService;
+    private CategoryService categoryService;
     @Autowired
-    InvitationService invitationService;
+    private InvitationService invitationService;
 
     private Event testEvent;
     private User testUser;
@@ -102,7 +99,7 @@ public class InvitationServiceIntegrationTest {
     public void updateInvitation() {
         //change test invitation object
         testInvitation.setAttendeesCount(10)
-                .setUserRole("Organizer");
+                .setUserRole(UserRole.ORGANIZER);
 
         //test method
         invitationService.editInvitation(testInvitation);

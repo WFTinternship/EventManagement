@@ -9,6 +9,8 @@ import java.util.List;
  */
 public interface InvitationService {
 
+    Invitation createInvitationForEmail(String email);
+
     Invitation addInvitation(Invitation invitation);
 
     void addInvitations(List<Invitation> invitationList);
