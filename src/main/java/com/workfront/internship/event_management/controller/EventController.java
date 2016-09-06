@@ -5,6 +5,7 @@ import com.workfront.internship.event_management.controller.util.DateParser;
 import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.Invitation;
+import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.CategoryService;
 import com.workfront.internship.event_management.service.EventService;
 import com.workfront.internship.event_management.service.InvitationService;
@@ -146,6 +147,28 @@ public class EventController {
         eventService.createEvent(event);
 
         return ALL_EVENTS_VIEW;
+    }
+
+    @RequestMapping(value = "/check-invitation-email")
+    @ResponseBody
+    public CustomResponse isRegisteredUser(HttpServletRequest request) {
+
+        CustomResponse customResponse = new CustomResponse();
+
+        String email = request.getParameter("email");
+        User user = userService.getUserByEmail(email);
+
+        if (user != null) {
+            List<User> users = new ArrayList<>();
+            users.add(user);
+            customResponse.setStatus(ACTION_SUCCESS);
+            customResponse.setResult(users);
+        } else {
+            customResponse.setStatus(ACTION_FAIL);
+            customResponse.setMessage("Not existing user!");
+        }
+
+        return customResponse;
     }
 
 

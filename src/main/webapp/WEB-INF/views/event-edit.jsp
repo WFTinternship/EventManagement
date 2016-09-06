@@ -190,23 +190,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form_row clearfix">
-                    <div class="form_col_full">
-                        <label for="invitationEmail">
-                            <span class="field_name">Invitations</span>
-                        </label>
-                        <input class="input_text" name="invitationEmail" id="invitationEmail" type="text"
-                               placeholder="Enter guest email address">
-                        <input type="button" value="Add" id="add_invitation_btn">
-                    </div>
-                </div>
-                <div class="form_row clearfix">
-                    <div class="form_col_full" id="guests_list">
-                        <span>Guests</span>
-                        <div id="invitation_list">
-                        </div>
-                    </div>
-                </div>
+
                 <div class="form_row clearfix">
                     <button type="submit" class="btn full_button" id="event_submit">
                         <i class="icon-check"></i>
@@ -215,6 +199,29 @@
                 </div>
 
             </form>
+
+            <form id="check-invitation-email">
+                <div class="form_row clearfix">
+                    <div class="form_col_full">
+                        <label for="invitation-email">
+                            <span class="field_name">Invitations</span>
+                        </label>
+                        <input class="input_text" name="invitationEmail" id="invitation-email" type="text"
+                               placeholder="Enter guest email address">
+                        <input type="button" value="Add" id="add_invitation_btn">
+                    </div>
+                </div>
+                <div id="suggested_emails"></div>
+
+                <div class="form_row clearfix">
+                    <div class="form_col_full" id="guests_list">
+                        <span>Guests</span>
+                        <div id="invitation_list">
+                        </div>
+                    </div>
+                </div>
+            </form>
+
         </div>
     </section>
     <!-- End Content Section -->

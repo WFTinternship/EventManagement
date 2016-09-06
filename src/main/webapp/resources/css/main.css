@@ -43,7 +43,7 @@ b {
 }
 
 /* Rounded corners */
-.login_dialog, input[type="text"], input[type=button], input[type="password"], .btn, .btn_a, .lf_header, .lf_forget_pass {
+.login_dialog, input[type="text"], input[type=button], input[type="password"], .btn, .btn_a, .lf_header, .lf_forget_pass, #suggested_emails {
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     -ms-border-radius: 3px;
@@ -732,7 +732,7 @@ input[type="text"]:focus, input[type="password"]:focus {
 }
 
 /** Create / edit event ***/
-#event_form {
+#event_form, #check-invitation-email {
     width: 60%;
 }
 
@@ -755,12 +755,22 @@ input[type="text"]:focus, input[type="password"]:focus {
 }
 
 #category_select {
-    width: 100%
+    width: 100%;
 }
 
-#invitation_input {
-    width: 90%;
+#invitation-email {
+    width: 90% !important;
     float: left;
+}
+
+#suggested_emails {
+    display: none;
+    width: 90%;
+    bordeR: solid 1px #00AFB2;
+    padding: 10px 12px;
+    color: #666;
+    font-size: 13px;
+    background: #fff;
 }
 
 #add_invitation_btn {

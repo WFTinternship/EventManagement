@@ -10,6 +10,8 @@ function getEventsByCategory(categoryId) {
 
     $.getJSON("/events-ajax?categoryId=" + categoryId, function (data) {
         if (data.status == "SUCCESS") {
+            debugger;
+
             var events = [];
             $.each(data.result, function (key, event) {
                 var eventHTML = createEventItem(event)
