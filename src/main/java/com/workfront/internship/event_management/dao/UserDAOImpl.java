@@ -97,6 +97,37 @@ public class UserDAOImpl extends GenericDAO implements UserDAO {
     }
 
     @Override
+    public List<User> getUsersMatchingEmail(String email) throws DAOException {
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        String query = "SELECT * FROM user WHERE email LIKE ?";
+        List<User> usersList = new ArrayList<>();
+
+        try {
+            //get connection
+            conn = dataSource.getConnection();
+
+            //create statement
+            stmt = conn.prepareStatement(query);
+            stmt.setString(1, email + "%");
+            //execute query
+            rs = stmt.executeQuery();
+
+            //get results
+            usersList = createUsersListFromRS(rs);
+        } catch (SQLException e) {
+            LOGGER.error("SQL exception", e);
+            throw new DAOException(e);
+        } finally {
+            closeResources(rs, stmt, conn);
+        }
+        return usersList;
+    }
+
+    @Override
     public User getUserById(int userId) throws DAOException, ObjectNotFoundException {
         return getUserByField("id", userId);
     }

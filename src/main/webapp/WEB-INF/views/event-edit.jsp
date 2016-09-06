@@ -207,7 +207,7 @@
                             <span class="field_name">Invitations</span>
                         </label>
                         <input class="input_text" name="invitationEmail" id="invitation-email" type="text"
-                               placeholder="Enter guest email address">
+                               placeholder="Enter guest email address" autocomplete="off">
                         <input type="button" value="Add" id="add_invitation_btn">
                     </div>
                 </div>

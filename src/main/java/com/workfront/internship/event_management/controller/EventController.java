@@ -39,6 +39,7 @@ public class EventController {
     @Autowired
     private CategoryService categoryService;
 
+
     @RequestMapping(value = "/events")
     public String loadAllEventsAndCategories(Model model) {
 
@@ -156,16 +157,18 @@ public class EventController {
         CustomResponse customResponse = new CustomResponse();
 
         String email = request.getParameter("email");
-        User user = userService.getUserByEmail(email);
 
-        if (user != null) {
-            List<User> users = new ArrayList<>();
-            users.add(user);
+        if (email.isEmpty()) {
+            customResponse.setStatus(ACTION_FAIL);
+            customResponse.setMessage("Empty email");
+
+            return customResponse;
+        }
+
+        List<User> users = userService.getUsersMatchingEmail(email);
+        if (users != null && !users.isEmpty()) {
             customResponse.setStatus(ACTION_SUCCESS);
             customResponse.setResult(users);
-        } else {
-            customResponse.setStatus(ACTION_FAIL);
-            customResponse.setMessage("Not existing user!");
         }
 
         return customResponse;

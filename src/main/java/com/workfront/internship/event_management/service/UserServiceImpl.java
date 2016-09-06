@@ -141,11 +141,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByEmail(String email) {
         if (!isValidEmailAddressForm(email)) {
-            throw new InvalidObjectException("Invalid email address form");
+            throw new InvalidObjectException("Invalid email address form!");
         }
 
         //get user data from db
         return userDAO.getUserByEmail(email);
+    }
+
+    @Override
+    public List<User> getUsersMatchingEmail(String email) {
+        if (email.isEmpty()) {
+            throw new InvalidObjectException("Empty string!");
+        }
+
+        //get user data from db
+        return userDAO.getUsersMatchingEmail(email);
     }
 
     @Override

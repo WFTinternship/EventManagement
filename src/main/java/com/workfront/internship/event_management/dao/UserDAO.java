@@ -18,6 +18,8 @@ public interface UserDAO {
     //read data from db
     List<User> getAllUsers() throws DAOException;
 
+    List<User> getUsersMatchingEmail(String email) throws DAOException;
+
     User getUserById(int userId) throws DAOException, ObjectNotFoundException;
 
     User getUserByEmail(String email) throws DAOException;

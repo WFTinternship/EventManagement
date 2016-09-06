@@ -95,27 +95,30 @@ $(document).ready(function () {
     $('#invitation-email').keyup(function () {
 
         var email = $('#invitation-email').val();
+        if (email) {
+            $.getJSON("/check-invitation-email?email=" + email, function (response) {
+                if (response.status == "SUCCESS") {
+                    var emailsHTML = [];
+                    $.each(response.result, function (key, user) {
+                        var suggestedEmailHTML = createEmailSuggestion(user)
+                        emailsHTML.push(suggestedEmailHTML);
+                    });
 
-        $.getJSON("/check-invitation-email?email=" + email, function (response) {
-            if (response.status == "SUCCESS") {
-                var emailsHTML = [];
-                $.each(response.result, function (key, user) {
-                    var suggestedEmailHTML = createEmailSuggestion(user)
-                    emailsHTML.push(suggestedEmailHTML);
-                });
-
-                if (emailsHTML != "") {
-
-                    $("#suggested_emails").css("display", "block");
-                    $("#suggested_emails").html(emailsHTML.join(""));
-                } else {
-                    //$("#event_list").html("There are no events in this category.");
-                }                   // window.location = "/"
-            } else if (response.status == "FAIL") {
-                $("#suggested_emails").css("display", "none");
-                $("#suggested_emails").html("");
-            }
-        })
+                    if (emailsHTML != "") {
+                        $("#suggested_emails").css("display", "block");
+                        $("#suggested_emails").html(emailsHTML.join(""));
+                    } else {
+                        //$("#event_list").html("There are no events in this category.");
+                    }                   // window.location = "/"
+                } else if (response.status == "FAIL") {
+                    $("#suggested_emails").css("display", "none");
+                    $("#suggested_emails").html("");
+                }
+            })
+        } else {
+            $("#suggested_emails").css("display", "none");
+            $("#suggested_emails").html("");
+        }
     })
 
     function createEmailSuggestion(user) {

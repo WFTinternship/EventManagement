@@ -21,6 +21,8 @@ public interface UserService {
 
     User getUserByEmail(String email);
 
+    List<User> getUsersMatchingEmail(String email);
+
     List<User> getAllUsers();
 
     boolean deleteAccount(int userId);
