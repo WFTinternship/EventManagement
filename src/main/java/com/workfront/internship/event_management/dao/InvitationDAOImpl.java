@@ -44,7 +44,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
                 stmt.setInt(2, 0);
             }
             stmt.setObject(3, invitation.getUserRole().name());
-            stmt.setString(4, invitation.getUserResponse());
+            stmt.setInt(4, invitation.getUserResponse().getId());
 
             stmt.setInt(5, invitation.getAttendeesCount());
             stmt.setBoolean(6, invitation.isParticipated());
@@ -101,7 +101,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
                 stmt.setString(3, invitation.getUserRole().name());
 
                 if (invitation.getUserResponse() != null) {
-                    stmt.setString(4, invitation.getUserResponse());
+                    stmt.setInt(4, invitation.getUserResponse().getId());
                 } else {
                     stmt.setInt(4, 0);
                 }
@@ -193,7 +193,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);
             stmt.setString(1, invitation.getUserRole().name());
-            stmt.setString(2, invitation.getUserResponse());
+            stmt.setInt(2, invitation.getUserResponse().getId());
             stmt.setInt(3, invitation.getAttendeesCount());
             stmt.setBoolean(4, invitation.isParticipated());
             stmt.setInt(5, invitation.getId());
@@ -301,7 +301,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
                     .setId(rs.getInt("event_invitation.id"))
                     .setEventId(rs.getInt("event_id"))
                     .setAttendeesCount(rs.getInt("attendees_count"))
-                    .setUserResponse(rs.getString("user_response"))
+                    // .setUserResponse(new Users.getString("user_response").)
                     .setUserRole(UserRole.findByName(rs.getString("user_role")))
                     .setParticipated(rs.getBoolean("participated"));
 

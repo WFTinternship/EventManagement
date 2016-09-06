@@ -96,7 +96,7 @@ public class TestObjectCreator {
         invitation.setUserRole(UserRole.MEMBER)
                 .setAttendeesCount(1)
                 .setParticipated(false)
-                .setUserResponse("Yes")
+                .setUserResponse(new UserResponse(1, "Yes")) // TODO: 9/6/16 check
                 .setEventId(1)
                 .setUser(user);
 

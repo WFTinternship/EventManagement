@@ -7,6 +7,7 @@ import com.workfront.internship.event_management.exception.service.ObjectNotFoun
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Invitation;
 import com.workfront.internship.event_management.model.User;
+import com.workfront.internship.event_management.model.UserResponse;
 import com.workfront.internship.event_management.model.UserRole;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,7 @@ public class InvitationServiceImpl implements InvitationService {
                     .setUserRole(UserRole.MEMBER)
                     .setAttendeesCount(1)
                     .setParticipated(false)
-                    .setUserResponse("Undefined");
+                    .setUserResponse(new UserResponse(1, "Undefined")); // TODO: 9/6/16 check
 
             return invitation;
         }
