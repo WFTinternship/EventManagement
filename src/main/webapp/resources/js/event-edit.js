@@ -3,6 +3,7 @@
  */
 $(document).ready(function () {
 
+    /***** Date/time picker configs *****/
     $("#start_date").datepicker({
         dateFormat: 'dd/mm/yy'
         //dateFormat: 'yy-mm-dd'
@@ -28,36 +29,23 @@ $(document).ready(function () {
             eventTitle: "required",
             startDate: "required",
             endDate: "required",
-            invitationEmail: {
-                /* email: true,
-                 remote: {
-                 url: "/check-email",
-                 type: "POST",
-                 data: {
-                 email: function () {
-                 return $("#email").val();
-                 }
-                 }*/
-            }
         },
 
         messages: {
             eventTitle: "Please enter a title for event.",
             startDate: "Please provide start date for event",
             endDate: "Please provide end date for event",
-            invitationEmail: {
-                email: "Please enter a valid email address.",
-            }
         },
 
         submitHandler: function (form) {
 
             //get invitations array
-            var invitations = [];
-            $('#invitation_list').children('div').each(function (index, value) {
-                var email = $(this).text();
-                invitations.push(email);
-            });
+            var invitations = getSelectedInvitationEmails();
+
+            // $('#invitation_list').children('div').each(function (index, value) {
+            //     var email = $(this).text();
+            //     invitations.push(email);
+            // });
 
             var formData = new FormData($('#event_form')[0]);
             formData.append("invitations", invitations);
@@ -74,24 +62,25 @@ $(document).ready(function () {
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-
                 }
             })
         }
     })
 
-    //validate and submit add event form
-
+    //add email to invitations list
     $('#add_invitation_btn').click(function (e) {
 
-        var email = $('#invitationEmail').val();
-        var str = "<i class='lf_icon icon-user'></i><div class='invitation-item'>" + email + "</div>";
-
-        $('#invitation_list').append(str);
-        $("#guests_list").css("display", "block");
+        var email = $('#invitation-email').val();
+        if (email == "") {
+            alert("Empty email!");
+        } else if (isValidEmailAddress(email)) {
+            addEmailToGuestsList(email);
+        } else {
+            alert("Invalid email form!")
+        }
     });
 
-
+    //create email suggestions list
     $('#invitation-email').keyup(function () {
 
         var email = $('#invitation-email').val();
@@ -100,8 +89,16 @@ $(document).ready(function () {
                 if (response.status == "FOUND") {
                     var emailsHTML = [];
                     $.each(response.result, function (key, user) {
-                        var suggestedEmailHTML = createEmailSuggestion(user)
-                        emailsHTML.push(suggestedEmailHTML);
+                        //get already selected emails
+                        var invitation_emails = getSelectedInvitationEmails();
+
+                        //check if email already selected
+                        var found = $.inArray(user.email, invitation_emails) > -1;
+
+                        if (!found) {
+                            var suggestedEmailHTML = createEmailSuggestion(user)
+                            emailsHTML.push(suggestedEmailHTML);
+                        }
                     });
 
                     if (emailsHTML != "") {
@@ -111,20 +108,58 @@ $(document).ready(function () {
                         //$("#event_list").html("There are no events in this category.");
                     }                   // window.location = "/"
                 } else if (response.status == "NOT FOUND") {
-                    $("#suggested_emails").css("display", "none");
-                    $("#suggested_emails").html("");
+                    clearEmailSuggestionsList();
                 }
             })
         } else {
-            $("#suggested_emails").css("display", "none");
-            $("#suggested_emails").html("");
+            clearEmailSuggestionsList();
         }
     })
 
+    //choose email from suggestions list
+    $('#suggested_emails').on("click", '.suggested_email', function () {
+        addEmailToGuestsList($(this).text());
+        clearEmailSuggestionsList();
+
+        //empty input content
+        $('#invitation-email').val('');
+    })
+
+    //helper methods
     function createEmailSuggestion(user) {
-
         var emailHTML = '<div class="suggested_email">' + user.email + '</div>';
-
         return emailHTML;
+    }
+
+    function isValidEmailAddress(emailAddress) {
+        var pattern = new RegExp(/^[+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i);
+        // alert( pattern.test(emailAddress) );
+        return pattern.test(emailAddress);
+    }
+
+    function addEmailToGuestsList(email) {
+        var str = "<div class='invitation_item clearfix' >" +
+            "<i class='icon-user'></i>" +
+            "<div class='invitation-email'>" + email + "</div>" +
+            "</div>";
+
+        $('#invitation_list').append(str);
+        $("#guests_list").css("display", "block");
+    }
+
+    function clearEmailSuggestionsList() {
+        $("#suggested_emails").css("display", "none");
+        $("#suggested_emails").html("");
+    }
+
+    function getSelectedInvitationEmails() {
+
+        //get invitations array
+        var invitations = [];
+        $('#invitation_list').children('div').each(function (index, value) {
+            var email = $(this).text();
+            invitations.push(email);
+        });
+        return invitations;
     }
 })

@@ -783,5 +783,12 @@ input[type="text"]:focus, input[type="password"]:focus {
 
 #invitation_list {
     position: relative;
+}
 
+.invitation_item i, .invitation_email {
+    float: left;
+}
+
+.invitation_item i {
+    margin-right: 10px;
 }

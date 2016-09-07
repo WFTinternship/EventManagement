@@ -215,7 +215,7 @@
 
                 <div class="form_row clearfix">
                     <div class="form_col_full" id="guests_list">
-                        <span>Guests</span>
+                        <h4>Guests</h4>
                         <div id="invitation_list">
                         </div>
                     </div>
