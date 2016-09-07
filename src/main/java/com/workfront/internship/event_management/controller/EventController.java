@@ -167,8 +167,10 @@ public class EventController {
 
         List<User> users = userService.getUsersMatchingEmail(email);
         if (users != null && !users.isEmpty()) {
-            customResponse.setStatus(ACTION_SUCCESS);
+            customResponse.setStatus(ACTION_FOUND);
             customResponse.setResult(users);
+        } else {
+            customResponse.setStatus(ACTION_NOT_FOUND);
         }
 
         return customResponse;

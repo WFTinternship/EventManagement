@@ -97,7 +97,7 @@ $(document).ready(function () {
         var email = $('#invitation-email').val();
         if (email) {
             $.getJSON("/check-invitation-email?email=" + email, function (response) {
-                if (response.status == "SUCCESS") {
+                if (response.status == "FOUND") {
                     var emailsHTML = [];
                     $.each(response.result, function (key, user) {
                         var suggestedEmailHTML = createEmailSuggestion(user)
@@ -110,7 +110,7 @@ $(document).ready(function () {
                     } else {
                         //$("#event_list").html("There are no events in this category.");
                     }                   // window.location = "/"
-                } else if (response.status == "FAIL") {
+                } else if (response.status == "NOT FOUND") {
                     $("#suggested_emails").css("display", "none");
                     $("#suggested_emails").html("");
                 }
