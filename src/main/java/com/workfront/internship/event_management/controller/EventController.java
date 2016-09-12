@@ -127,9 +127,21 @@ public class EventController {
         List<Invitation> invitations = new ArrayList<>();
         List<String> invitationEmails = Arrays.asList(invitationsString.split(","));
         for (String email : invitationEmails) {
-            Invitation invitation = invitationService.createInvitationForEmail(email);
+            Invitation invitation = invitationService.createInvitationForMember(email);
             invitations.add(invitation);
         }
+        //create invitation record for event organizer
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            String message = "You are not authorized to per-form this action!";
+            logger.info(message);
+
+            result.setStatus(ACTION_FAIL);
+            result.setMessage(message);
+            return result;
+        }
+        Invitation invitation = invitationService.createInvitationForOrganizer(user.getEmail());
+        invitations.add(invitation);
 
         //get category
         int categoryId = Integer.parseInt(request.getParameter("categoryId"));
@@ -142,7 +154,6 @@ public class EventController {
         String endDateString = request.getParameter("endDate");
         String startTimeString = request.getParameter("startTime");
         String endTimeString = request.getParameter("endTime");
-
 
         Date startDate = DateParser.parseStringToDate(startDateString, startTimeString);
         Date endDate = DateParser.parseStringToDate(endDateString, endTimeString);
@@ -238,8 +249,6 @@ public class EventController {
 
         return customResponse;
     }
-
-
 
     @RequestMapping(value = "/edit-event/{eventId}")
     public String goToEditEventPage(@PathVariable("eventId") int id, HttpServletRequest request, Model model) {
