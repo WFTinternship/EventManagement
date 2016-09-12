@@ -93,6 +93,7 @@
                                value="<%=(event.getEndDate() != null) ? event.getEndDate() : ""%>">
                         <input type="text" name="endTime" id="end_time" class="time_picker_input">
                     </div>
+                    <input type="checkbox" id="check-all-day"> All day
                 </div>
 
                 <div class="form_row clearfix">

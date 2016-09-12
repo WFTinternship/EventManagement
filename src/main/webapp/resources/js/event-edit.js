@@ -42,11 +42,6 @@ $(document).ready(function () {
             //get invitations array
             var invitations = getSelectedInvitationEmails();
 
-            // $('#invitation_list').children('div').each(function (index, value) {
-            //     var email = $(this).text();
-            //     invitations.push(email);
-            // });
-
             var formData = new FormData($('#event_form')[0]);
             formData.append("invitations", invitations);
 
@@ -149,7 +144,24 @@ $(document).ready(function () {
         }
     });
 
-    //helper methods
+    $("#check-all-day").change(function () {
+        if (this.checked) {
+            $("#start_time").css("display", "none");
+            $("#start_time").val("00:00");
+
+            $("#end_time").css("display", "none");
+            $("#end_time").val("00:00");
+        } else {
+            $("#start_time").val("");
+            $("#start_time").css("display", "block");
+
+            $("#end_time").val("");
+            $("#end_time").css("display", "block");
+
+        }
+    });
+
+    /********  helper methods **********/
     function createEmailSuggestion(user) {
         var emailHTML = '<div class="suggested_email">' + user.email + '</div>';
         return emailHTML;
