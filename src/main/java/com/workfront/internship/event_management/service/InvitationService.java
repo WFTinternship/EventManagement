@@ -9,7 +9,10 @@ import java.util.List;
  */
 public interface InvitationService {
 
-    Invitation createInvitationForEmail(String email);
+    Invitation createInvitationForMember(String email);
+
+    Invitation createInvitationForOrganizer(String email);
+
 
     Invitation addInvitation(Invitation invitation);
 

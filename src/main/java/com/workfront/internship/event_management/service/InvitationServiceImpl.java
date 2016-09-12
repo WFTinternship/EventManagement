@@ -13,11 +13,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
-import static com.workfront.internship.event_management.service.util.Validator.isEmptyCollection;
-import static com.workfront.internship.event_management.service.util.Validator.isValidEmailAddressForm;
-import static com.workfront.internship.event_management.service.util.Validator.isValidInvitation;
+import static com.workfront.internship.event_management.service.util.Validator.*;
 
 /**
  * Created by Hermine Turshujyan 7/26/16.
@@ -34,25 +33,13 @@ public class InvitationServiceImpl implements InvitationService {
     private UserService userService;
 
     @Override
-    public Invitation createInvitationForEmail(String email) {
-        if (!isValidEmailAddressForm(email)) {
-            throw new InvalidObjectException("Invalid email address form");
-        }
+    public Invitation createInvitationForMember(String email) {
+        return createInvitationForUser(email, UserRole.MEMBER);
+    }
 
-        User user = userService.getUserByEmail(email);
-
-        if (user == null) {
-            throw new ObjectNotFoundException("User not found!");
-        } else {
-            Invitation invitation = new Invitation();
-            invitation.setUser(user)
-                    .setUserRole(UserRole.MEMBER)
-                    .setAttendeesCount(1)
-                    .setParticipated(false)
-                    .setUserResponse(new UserResponse(1, "Undefined")); // TODO: 9/6/16 check
-
-            return invitation;
-        }
+    @Override
+    public Invitation createInvitationForOrganizer(String email) {
+        return createInvitationForUser(email, UserRole.ORGANIZER);
     }
 
     @Override
@@ -225,5 +212,27 @@ public class InvitationServiceImpl implements InvitationService {
             }
         }
         return null;
+    }
+
+    private Invitation createInvitationForUser(String email, UserRole userRole) {
+        if (!isValidEmailAddressForm(email)) {
+            throw new InvalidObjectException("Invalid email address form");
+        }
+
+        User user = userService.getUserByEmail(email);
+
+        if (user == null) {
+            throw new ObjectNotFoundException("User not found!");
+        } else {
+            Invitation invitation = new Invitation();
+            invitation.setUser(user)
+                    .setUserRole(userRole)
+                    .setAttendeesCount(1)
+                    .setParticipated(false)
+                    .setUserResponse(new UserResponse(1, "Undefined")) // TODO: 9/6/16 check
+                    .setCreationDate(new Date());
+
+            return invitation;
+        }
     }
 }

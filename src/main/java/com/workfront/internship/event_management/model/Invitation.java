@@ -1,5 +1,7 @@
 package com.workfront.internship.event_management.model;
 
+import java.util.Date;
+
 /**
  * Created by Hermine Turshujyan 7/1/16.
  */
@@ -12,6 +14,7 @@ public class Invitation {
     private UserResponse userResponse;
     private int attendeesCount;
     private boolean participated;
+    private Date creationDate;
 
     public int getId() {
         return id;
@@ -90,4 +93,14 @@ public class Invitation {
         this.user = user;
         return this;
     }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public Invitation setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+        return this;
+    }
+
 }

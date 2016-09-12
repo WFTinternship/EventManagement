@@ -113,6 +113,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             }
             //execute query
             stmt.executeBatch();
+            conn.commit();
         } catch (SQLIntegrityConstraintViolationException e) {
             LOGGER.error("Duplicate invitation entry", e);
             throw new DuplicateEntryException("Invitation already exists", e);
