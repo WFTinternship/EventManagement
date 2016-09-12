@@ -68,28 +68,45 @@ $(document).ready(function () {
     })
 
     //add email to invitations list
-    $('#add_invitation_btn').click(function (e) {
+    $('#add_invitation_btn').click(function (event) {
+        event.preventDefault();
+
+        clearEmailSuggestionsList();
 
         var email = $('#invitation-email').val();
         if (email == "") {
-            alert("Empty email!");
+            generateErrorMessage("Empty email!")
         } else if (isValidEmailAddress(email)) {
-            addEmailToGuestsList(email);
+            var invitation_emails = getSelectedInvitationEmails();
+
+            //check if email already selected
+            var found = $.inArray(email, invitation_emails) > -1;
+
+            if (!found) {
+                addEmailToGuestsList(email);
+            } else {
+                generateErrorMessage("Guest already invited!")
+            }
         } else {
-            alert("Invalid email form!")
+            generateErrorMessage("Invalid email form!");
         }
     });
 
     //create email suggestions list
     $('#invitation-email').keyup(function () {
 
+        hideErrorMessage();
+
         var email = $('#invitation-email').val();
+
         if (email) {
             $.getJSON("/check-invitation-email?email=" + email, function (response) {
                 if (response.status == "FOUND") {
+
                     var emailsHTML = [];
+
                     $.each(response.result, function (key, user) {
-                        //get already selected emails
+                        //get selected invitation emails
                         var invitation_emails = getSelectedInvitationEmails();
 
                         //check if email already selected
@@ -104,9 +121,7 @@ $(document).ready(function () {
                     if (emailsHTML != "") {
                         $("#suggested_emails").css("display", "block");
                         $("#suggested_emails").html(emailsHTML.join(""));
-                    } else {
-                        //$("#event_list").html("There are no events in this category.");
-                    }                   // window.location = "/"
+                    }
                 } else if (response.status == "NOT FOUND") {
                     clearEmailSuggestionsList();
                 }
@@ -125,6 +140,15 @@ $(document).ready(function () {
         $('#invitation-email').val('');
     })
 
+    //remove invitation from list
+    $('#invitation_list').on("click", '.remove_email', function () {
+
+        $(this).parent().remove();
+        if ($('#invitation_list').children().length == 0) {
+            $("#guests_list").css("display", "none");
+        }
+    });
+
     //helper methods
     function createEmailSuggestion(user) {
         var emailHTML = '<div class="suggested_email">' + user.email + '</div>';
@@ -133,15 +157,14 @@ $(document).ready(function () {
 
     function isValidEmailAddress(emailAddress) {
         var pattern = new RegExp(/^[+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i);
-        // alert( pattern.test(emailAddress) );
         return pattern.test(emailAddress);
     }
 
     function addEmailToGuestsList(email) {
         var str = "<div class='invitation_item clearfix' >" +
             "<i class='icon-user'></i>" +
-            "<div class='invitation-email'>" + email + "</div>" +
-            "</div>";
+            "<div class='invitation_item_email'>" + email + "</div>" +
+            "<span class ='remove_email'>x</span></div>";
 
         $('#invitation_list').append(str);
         $("#guests_list").css("display", "block");
@@ -157,9 +180,23 @@ $(document).ready(function () {
         //get invitations array
         var invitations = [];
         $('#invitation_list').children('div').each(function (index, value) {
-            var email = $(this).text();
+            var email = $(this).children('div').text();
             invitations.push(email);
         });
         return invitations;
     }
+
+    function generateErrorMessage(message) {
+        if ($("#email_error").length == 0) {
+            var errorHTML = "<label id='email_error' class= error'>" + message + "</label>";
+            $("#invitation_email").append(errorHTML);
+        }
+    }
+
+    function hideErrorMessage() {
+        if ($("#email_error").length > 0) {
+            $("#email_error").remove();
+        }
+    }
+
 })

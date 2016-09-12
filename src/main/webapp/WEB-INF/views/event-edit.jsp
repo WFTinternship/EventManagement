@@ -192,23 +192,13 @@
                 </div>
 
                 <div class="form_row clearfix">
-                    <button type="submit" class="btn full_button" id="event_submit">
-                        <i class="icon-check"></i>
-                        <span>Save</span>
-                    </button>
-                </div>
-
-            </form>
-
-            <form id="check-invitation-email">
-                <div class="form_row clearfix">
-                    <div class="form_col_full">
+                    <div class="form_col_full" id="invitation_email">
                         <label for="invitation-email">
                             <span class="field_name">Invitations</span>
                         </label>
                         <input class="input_text" name="invitationEmail" id="invitation-email" type="text"
                                placeholder="Enter guest email address" autocomplete="off">
-                        <input type="button" value="Add" id="add_invitation_btn">
+                        <button id="add_invitation_btn" class="btn">Add</button>
                     </div>
                 </div>
                 <div id="suggested_emails"></div>
@@ -220,6 +210,36 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="form_row clearfix">
+                    <button type="submit" class="btn full_button" id="event_submit">
+                        <i class="icon-check"></i>
+                        <span>Save</span>
+                    </button>
+                </div>
+
+            </form>
+
+            <form id="check-invitation-email">
+                <%--<div class="form_row clearfix">--%>
+                <%--<div class="form_col_full" id="invitation_email">--%>
+                <%--<label for="invitation-email">--%>
+                <%--<span class="field_name">Invitations</span>--%>
+                <%--</label>--%>
+                <%--<input class="input_text" name="invitationEmail" id="invitation-email" type="text"--%>
+                <%--placeholder="Enter guest email address" autocomplete="off">--%>
+                <%--<input type="button" value="Add" id="add_invitation_btn">--%>
+                <%--</div>--%>
+                <%--</div>--%>
+                <%--<div id="suggested_emails"></div>--%>
+
+                <%--<div class="form_row clearfix">--%>
+                <%--<div class="form_col_full" id="guests_list">--%>
+                <%--<h4>Guests</h4>--%>
+                <%--<div id="invitation_list">--%>
+                <%--</div>--%>
+                <%--</div>--%>
+                <%--</div>--%>
             </form>
 
         </div>
