@@ -4,8 +4,8 @@ import com.workfront.internship.event_management.controller.util.CustomResponse;
 import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
+import com.workfront.internship.event_management.service.FileService;
 import com.workfront.internship.event_management.service.UserService;
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,9 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
 
 import static com.workfront.internship.event_management.controller.util.PageParameters.*;
 
@@ -32,10 +30,12 @@ public class UserController {
     private static final Logger logger = Logger.getLogger(UserController.class);
 
     // location to store file uploaded
-    private static final String UPLOAD_DIRECTORY = "upload";
+    private static final String UPLOAD_DIRECTORY = "uploads/avatar";
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private FileService fileService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
@@ -87,7 +87,7 @@ public class UserController {
         //save uploaded file if avatar is uploaded
         if (!image.isEmpty()) {
 
-            if (!isValidImage(image)) {
+            if (!fileService.isValidImage(image)) {
                 String message = "Invalid image type!";
                 logger.info(message);
 
@@ -99,7 +99,7 @@ public class UserController {
             try {
                 ServletContext servletContext = request.getSession().getServletContext();
                 String uploadPath = servletContext.getRealPath("") + UPLOAD_DIRECTORY;
-                String avatarPath = saveFile(uploadPath, image);
+                String avatarPath = fileService.saveFile(uploadPath, image);
 
                 //save avatar path to user obj
                 user.setAvatarPath(avatarPath);
@@ -156,41 +156,4 @@ public class UserController {
         user.setPassword(password);
         user.setPhoneNumber(phone);
     }
-
-
-    private boolean isValidImage(MultipartFile image) {
-        return (image.getContentType().equals("image/jpeg") || image.getContentType().equals("image/png"));
-    }
-
-    private String saveFile(String uploadPath, MultipartFile image) throws IOException {
-
-        // creates the directory if it does not exist
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdir();
-        }
-
-        String fileName = image.getOriginalFilename();
-        String filePath = null;
-
-        if (!fileName.isEmpty()) {
-
-            //get uploaded file extension
-            String ext = fileName.substring(fileName.lastIndexOf("."));
-
-            //generate random image name
-            String uuid = UUID.randomUUID().toString();
-            String uniqueFileName = String.format("%s.%s", uuid, ext);
-
-            //create file path
-            filePath = uploadPath + File.separator + uniqueFileName;
-            File storeFile = new File(filePath);
-
-            // saves the file on disk
-            FileUtils.writeByteArrayToFile(storeFile, image.getBytes());
-        }
-
-        return filePath;
-    }
-
 }

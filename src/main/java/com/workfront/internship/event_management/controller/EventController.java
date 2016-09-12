@@ -6,17 +6,18 @@ import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.Invitation;
 import com.workfront.internship.event_management.model.User;
-import com.workfront.internship.event_management.service.CategoryService;
-import com.workfront.internship.event_management.service.EventService;
-import com.workfront.internship.event_management.service.InvitationService;
-import com.workfront.internship.event_management.service.UserService;
+import com.workfront.internship.event_management.service.*;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -30,6 +31,11 @@ import static com.workfront.internship.event_management.controller.util.PagePara
 @Controller
 public class EventController {
 
+    private static final Logger logger = Logger.getLogger(EventController.class);
+
+    private static final String EVENT_FILE_UPLOAD_DIRECTORY = "uploads/events/files";
+    private static final String EVENT_IMAGE_UPLOAD_DIRECTORY = "uploads/events/images";
+
     @Autowired
     private EventService eventService;
     @Autowired
@@ -38,6 +44,8 @@ public class EventController {
     private UserService userService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private FileService fileService;
 
 
     @RequestMapping(value = "/events")
@@ -100,7 +108,12 @@ public class EventController {
     }
 
     @RequestMapping(value = "/add-event", method = RequestMethod.POST)
-    public String addEvent(HttpServletRequest request, Model model) {
+    @ResponseBody
+    public CustomResponse addEvent(HttpServletRequest request,
+                                   @RequestParam(value = "eventImage", required = false) MultipartFile image,
+                                   @RequestParam(value = "eventFile", required = false) MultipartFile file) {
+
+        CustomResponse result = new CustomResponse();
 
         Event event = new Event();
 
@@ -145,9 +158,59 @@ public class EventController {
                 .setEndDate(endDate)
                 .setInvitations(invitations);
 
+        //saving event image (if uploaded)
+        if (!image.isEmpty()) {
+
+            if (!fileService.isValidImage(image)) {
+                String message = "Invalid image type!";
+                logger.info(message);
+
+                result.setStatus(ACTION_FAIL);
+                result.setMessage(message);
+                return result;
+            }
+
+            try {
+                ServletContext servletContext = request.getSession().getServletContext();
+                String uploadPath = servletContext.getRealPath("") + EVENT_IMAGE_UPLOAD_DIRECTORY;
+                String imagePath = fileService.saveFile(uploadPath, image);
+
+                event.setImagePath(imagePath);
+            } catch (IOException e) {
+                result.setStatus(ACTION_FAIL);
+                result.setMessage("Unable to upload an image!");
+                return result;
+            }
+        }
+
+        //saving event file (if uploaded)
+        if (!file.isEmpty()) {
+
+            if (!fileService.isValidFile(file)) {
+                String message = "Invalid file type!";
+                logger.info(message);
+
+                result.setStatus(ACTION_FAIL);
+                result.setMessage(message);
+                return result;
+            }
+
+            try {
+                ServletContext servletContext = request.getSession().getServletContext();
+                String uploadPath = servletContext.getRealPath("") + EVENT_FILE_UPLOAD_DIRECTORY;
+                String filePath = fileService.saveFile(uploadPath, file);
+
+                event.setFilePath(filePath);
+            } catch (IOException e) {
+                result.setStatus(ACTION_FAIL);
+                result.setMessage("Unable to upload a file!");
+                return result;
+            }
+        }
+
         eventService.createEvent(event);
 
-        return ALL_EVENTS_VIEW;
+        return result;
     }
 
     @RequestMapping(value = "/check-invitation-email")
