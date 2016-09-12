@@ -3,6 +3,7 @@ package com.workfront.internship.event_management.controller;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
+import com.workfront.internship.event_management.exception.service.UnauthorizedAccessException;
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -50,6 +51,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidObjectException.class)
     public ModelAndView handleInvalidObjectException(HttpServletRequest request, InvalidObjectException e) {
         logger.info("InvalidObjectException Occurred:: URL=" + request.getRequestURL());
+
+        ModelAndView mov = new ModelAndView(DEFAULT_ERROR_VIEW);
+        mov.addObject("message", e.getMessage());
+
+        return mov;
+    }
+
+    @ExceptionHandler(UnauthorizedAccessException.class)
+    public ModelAndView handleUnauthorizedAccessException(HttpServletRequest request, UnauthorizedAccessException e) {
+        logger.info("UnauthorizedAccessException Occurred:: URL=" + request.getRequestURL());
 
         ModelAndView mov = new ModelAndView(DEFAULT_ERROR_VIEW);
         mov.addObject("message", e.getMessage());
