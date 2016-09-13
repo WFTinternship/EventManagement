@@ -137,7 +137,7 @@ public class EventController {
 
             result.setStatus(ACTION_FAIL);
             result.setMessage(message);
-            return result;
+            return result; // TODO: 9/13/16 throw exception 
         }
         Invitation invitation = invitationService.createInvitationForOrganizer(user.getEmail());
         invitations.add(invitation);

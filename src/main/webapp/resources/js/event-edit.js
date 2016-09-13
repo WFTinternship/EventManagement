@@ -53,7 +53,9 @@ $(document).ready(function () {
                 data: formData,
                 success: function (result) {
                     if (result.status == "SUCCESS") {
-                        //   window.location = "/";
+                        window.location = "/events";
+                    } else if (result.status == "FAIL") {
+                        window.location = "/error";
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {

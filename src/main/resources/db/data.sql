@@ -16,5 +16,3 @@ INSERT INTO `user` VALUES
 
 
 INSERT INTO `user_response` VALUES (3, 'Maybe'), (2, 'No'), (4, 'Undefined'), (1, 'Yes');
-
-
