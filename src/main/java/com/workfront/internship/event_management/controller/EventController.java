@@ -114,7 +114,6 @@ public class EventController {
                                    @RequestParam(value = "eventFile", required = false) MultipartFile file) {
 
         CustomResponse result = new CustomResponse();
-
         Event event = new Event();
 
         String title = request.getParameter("eventTitle");
