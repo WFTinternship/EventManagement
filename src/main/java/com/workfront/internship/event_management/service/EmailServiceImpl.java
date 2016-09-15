@@ -1,17 +1,59 @@
 package com.workfront.internship.event_management.service;
-
 import com.workfront.internship.event_management.model.User;
+import com.workfront.internship.event_management.spring.DevApplicationConfig;
+import org.apache.velocity.app.VelocityEngine;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Component;
+import org.springframework.mail.*;
+import org.springframework.ui.velocity.VelocityEngineUtils;
+
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * Created by Hermine Turshujyan 7/25/16.
  */
 @Component
 public class EmailServiceImpl implements EmailService {
-    @Override
-    public boolean sendVerificationEmail(User user) {
 
-        // TODO: 7/25/16 implement
-        return false;
+    @Autowired
+    private JavaMailSender mailSender;
+
+    @Autowired
+    private VelocityEngine velocityEngine;
+
+    public void setMailSender(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
     }
+
+    public void setVelocityEngine(VelocityEngine velocityEngine) {
+        this.velocityEngine = velocityEngine;
+    }
+
+    public boolean sendConfirmationEmail(final User user) {
+
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper mailMsg = new MimeMessageHelper(mimeMessage);
+        try {
+            mailMsg.setFrom("turshujyan@gmail.com");
+            mailMsg.setTo(user.getEmail());
+            mailMsg.setSubject("Test mail");
+            mailMsg.setText("Hello World!");
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+       return false;
+    }
+
 }
