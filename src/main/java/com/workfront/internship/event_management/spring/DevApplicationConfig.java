@@ -1,5 +1,7 @@
 package com.workfront.internship.event_management.spring;
 
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.exception.VelocityException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -7,10 +9,18 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.ui.velocity.VelocityEngineFactory;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import javax.mail.Authenticator;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.util.Properties;
+
 /**
  * Created by Hermine Turshujyan 8/29/16.
  */
@@ -33,7 +43,7 @@ public class DevApplicationConfig {
 //
 //        //loading db property list
 //        Properties props = new Properties();
-//        props.load(DevApplicationConfig.class.getClassLoader().getResourceAsStream("config.properties"));
+//        props.load(DevApplicationConfig.class.getClassLoader().getResourceAsStream("db.properties"));
 //
 //        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
 //
@@ -52,9 +62,37 @@ public class DevApplicationConfig {
         return db;
     }
 
-//    @Bean
-//    public JdbcTemplate getJdbcTemplate() throws IOException {
-//        return new JdbcTemplate(dataSource());
-//    }
+    @Bean
+    public VelocityEngine getVelocityEngine() throws VelocityException, IOException{
+        VelocityEngineFactory factory = new VelocityEngineFactory();
+        Properties props = new Properties();
+        props.put("resource.loader", "class");
+        props.put("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+        factory.setVelocityProperties(props);
 
+        return factory.createVelocityEngine();
+    }
+
+    @Bean
+    public JavaMailSenderImpl javaMailSenderImpl() throws IOException {
+
+        //load smtp properties
+        ClassLoader classLoader = DevApplicationConfig.class.getClassLoader();
+        Properties properties = new Properties();
+        properties.load(classLoader.getResourceAsStream("mail.smtp.properties"));
+
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+
+        //set smtp properties
+        mailSender.setJavaMailProperties(properties);
+        mailSender.setHost(properties.getProperty("mail.smtp.host"));
+        mailSender.setPort(Integer.parseInt(properties.getProperty("mail.smtp.port")));
+        mailSender.setProtocol(properties.getProperty("mail.transport.protocol"));
+
+        //Set gmail and password
+        mailSender.setUsername(properties.getProperty("user.email"));
+        mailSender.setPassword(properties.getProperty("user.password"));
+
+        return mailSender;
+    }
 }
