@@ -18,7 +18,7 @@ public class ApplicationConfig {
 
         //loading db property list
         Properties props = new Properties();
-        props.load(DevApplicationConfig.class.getClassLoader().getResourceAsStream("config.properties"));
+        props.load(DevApplicationConfig.class.getClassLoader().getResourceAsStream("db.properties"));
 
         dataSource.setDriverClassName(props.getProperty("jdbc.driver"));
 

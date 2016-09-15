@@ -4,6 +4,7 @@ import com.workfront.internship.event_management.controller.util.CustomResponse;
 import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.User;
+import com.workfront.internship.event_management.service.EmailService;
 import com.workfront.internship.event_management.service.FileService;
 import com.workfront.internship.event_management.service.UserService;
 import org.apache.log4j.Logger;
@@ -36,6 +37,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private FileService fileService;
+    @Autowired
+    private EmailService emailService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
@@ -53,6 +56,8 @@ public class UserController {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
             result.setStatus(ACTION_SUCCESS);
+            emailService.sendConfirmationEmail(user); // TODO: 9/15/16 remove this line 
+
         } catch (InvalidObjectException | OperationFailedException e) {
             result.setStatus(ACTION_FAIL);
             result.setMessage(e.getMessage());

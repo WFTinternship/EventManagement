@@ -1,0 +1,6 @@
+.gitignore
+.idea/
+event-management.iml
+EventManagement.iml
+target/
+/out/
