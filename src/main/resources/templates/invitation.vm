@@ -1,0 +1,12 @@
+<html>
+<body>
+<h3>${event.title}, welcome!</h3>
+
+
+<div>${event.startDate} ${event.startTime} - ${event.endDate} ${event.endTime}</div>
+<div>
+	${event.shortDescription}
+</div>
+<div></div>
+</body>
+</html>
