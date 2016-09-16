@@ -13,7 +13,6 @@ public interface InvitationService {
 
     Invitation createInvitationForOrganizer(String email);
 
-
     Invitation addInvitation(Invitation invitation);
 
     void addInvitations(List<Invitation> invitationList);
@@ -27,11 +26,12 @@ public interface InvitationService {
 
     List<Invitation> getInvitationsByUser(int userId);
 
-
     //update record in db
     boolean editInvitation(Invitation invitation);
 
     void editInvitationList(int eventId, List<Invitation> invitationList);
+
+    boolean respondToInvitation(int eventId, int userId, int responseId);
 
     //delete records from db
     boolean deleteInvitation(int invitationId);
