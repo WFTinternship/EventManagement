@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.workfront.internship.event_management.controller.util.PageParameters.*;
+import static com.workfront.internship.event_management.service.util.Validator.*;
 
 /**
  * Created by Hermine Turshujyan 8/22/16.
@@ -105,10 +106,20 @@ public class EventController {
 				// TODO: 9/16/16 implement
 			}
 			int responseId = Integer.parseInt(request.getParameter("response"));
-			Event event = eventService.getEventById(eventId);
-			model.addAttribute("event", event);
-			model.addAttribute("action", "invitation-respond");
-			return EVENT_DETAILS_VIEW;
+
+            //update invitation response in db
+            invitationService.respondToInvitation(eventId, userId, responseId);
+
+            //load event with invitations
+            Event event = eventService.getEventById(eventId);
+            List<Invitation> invitations = invitationService.getInvitationsByEvent(eventId);
+            if(!isEmptyCollection(invitations)){
+                event.setInvitations(invitations);
+            }
+
+            model.addAttribute("event", event);
+            model.addAttribute("action", "invitation-respond");
+            return EVENT_DETAILS_VIEW;
 
         }
     }
