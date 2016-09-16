@@ -1,12 +1,20 @@
 <html>
 <body>
-<h3>${event.title}, welcome!</h3>
+	<div>
+		Hi ${invitation.user.firstName}
+	</div>
+	Event invitation
+	<h3>${event.title}</h3>
 
-
-<div>${event.startDate} ${event.startTime} - ${event.endDate} ${event.endTime}</div>
-<div>
-	${event.shortDescription}
-</div>
-<div></div>
+	<div>${event.startDate} - ${event.endDate}</div>
+	<div>
+		${event.shortDescription}
+	</div>
+	<div>Going?
+		<a href="http://localhost:8080/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=1">Yes</a>
+		<a href="http://localhost:8080/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=2">No</a>
+		<a href="http://localhost:8080/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=3">Maybe</a>
+	</div>
+	<div><a href="http://localhost:8080/events/${event.id}/invitation-respond">Event Details</a></div>
 </body>
 </html>

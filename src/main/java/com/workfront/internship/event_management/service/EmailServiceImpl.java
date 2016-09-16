@@ -32,14 +32,6 @@ public class EmailServiceImpl implements EmailService {
 	@Autowired
 	private VelocityEngine velocityEngine;
 
-	public void setMailSender(JavaMailSender mailSender) {
-		this.mailSender = mailSender;
-	}
-
-	public void setVelocityEngine(VelocityEngine velocityEngine) {
-		this.velocityEngine = velocityEngine;
-	}
-
 	public boolean sendConfirmationEmail(final User user) {
 
 		MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -56,7 +48,7 @@ public class EmailServiceImpl implements EmailService {
 
 		return false;
 	}
-
+	@Override
 	public void sendInvitations(final Event event) {
 
 		List<Invitation> invitations = event.getInvitations();
@@ -64,6 +56,7 @@ public class EmailServiceImpl implements EmailService {
 		if (isEmptyCollection(invitations)) {
 			return; // TODO: 9/16/16 implement
 		}
+
 		for (final Invitation invitation : invitations) {
 			MimeMessagePreparator preparator = new MimeMessagePreparator() {
 
@@ -72,11 +65,12 @@ public class EmailServiceImpl implements EmailService {
 					MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
 					message.setTo(invitation.getUser().getEmail());
 					message.setFrom("turshujyan@gmail.com"); // TODO: 9/16/16 read from plist
+					message.setSubject(String.format("Invitation: %s", event.getTitle()));
 					Map model = new HashMap();
 					model.put("invitation", invitation);
-
+					model.put("event", event);
 					String text = VelocityEngineUtils.mergeTemplateIntoString(
-						velocityEngine, "templates/invitation", "UTF-8", model);
+						velocityEngine, "templates/invitation.vm", "UTF-8", model);
 					message.setText(text, true);
 				}
 			};

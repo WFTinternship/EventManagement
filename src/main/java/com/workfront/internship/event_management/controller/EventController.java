@@ -2,11 +2,13 @@ package com.workfront.internship.event_management.controller;
 
 import com.workfront.internship.event_management.controller.util.CustomResponse;
 import com.workfront.internship.event_management.controller.util.DateParser;
+import com.workfront.internship.event_management.exception.service.*;
 import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.Invitation;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.*;
+import org.apache.http.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,6 +40,8 @@ public class EventController {
 
     @Autowired
     private EventService eventService;
+	@Autowired
+	private EmailService emailService;
     @Autowired
     private InvitationService invitationService;
     @Autowired
@@ -86,6 +90,35 @@ public class EventController {
         model.addAttribute("event", event);
 
         return EVENT_DETAILS_VIEW;
+    }
+
+    @GetMapping(value = "/events/{eventId}/invitation-respond")
+    public String goToRespondToEventPage(@PathVariable("eventId") int eventId, Model model, HttpServletRequest request) {
+		User sessionUser = (User) request.getSession().getAttribute("user");
+        if( sessionUser == null){
+			// TODO: 9/16/16 redirect to login page
+			return null;
+        } else{
+			int userId = Integer.parseInt(request.getParameter("user"));
+			if(sessionUser.getId() != userId){
+				throw new UnauthorizedAccessException("Unauthorized access");
+				// TODO: 9/16/16 implement
+			}
+			int responseId = Integer.parseInt(request.getParameter("response"));
+			Event event = eventService.getEventById(eventId);
+			model.addAttribute("event", event);
+			model.addAttribute("action", "invitation-respond");
+			return EVENT_DETAILS_VIEW;
+
+        }
+    }
+
+    @GetMapping(value = "/events/{eventId}/invitation-respond/{userId}")
+    public String respondToEvent(@PathVariable("eventId") int eventId, @PathVariable("userId") int userId, 
+                                 Model model, HttpServletRequest request) {
+        // TODO: 9/16/16 implement 
+        return null;
+       
     }
 
     @RequestMapping(value = "/new-event")
@@ -219,6 +252,8 @@ public class EventController {
         }
 
         eventService.createEvent(event);
+
+		emailService.sendInvitations(event);
 
         return result;
     }

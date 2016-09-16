@@ -27,6 +27,8 @@ public interface InvitationDAO {
     //update record in db
     boolean updateInvitation(Invitation invitation);
 
+    boolean updateInvitationResponse(int eventId, int userId, int responseId);
+
     //delete records from db
     boolean deleteInvitation(int invitationId);
 

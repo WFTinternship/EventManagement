@@ -49,8 +49,6 @@
             %>
             <div class="content_block">
                 <div class="event_list clearfix" id="event_list">
-
-
                         <div class="list_item">
                             <div class="list_content">
                                 <h6 class="title">
@@ -93,6 +91,23 @@
                                 </p>
                             </div>
                         </div>
+                    <%
+                        String action = (String) request.getAttribute("action");
+                        if(action == "invitation-respond"){
+                    %>
+                        <div>Respond to invitation</div>
+                            <div class="radio_wrapper">
+                                <input type="radio" class="event_radio" name="guestsAllowed"
+                                       value="yes"  <%= (event.isGuestsAllowed())? "checked": ""%>><span>Yes</span>
+                                <input type="radio" class="event_radio" name="guestsAllowed"
+                                       value="no" <%= (!event.isGuestsAllowed())? "checked": ""%>><span>No</span>
+                                <input type="radio" class="event_radio" name="guestsAllowed"
+                                       value="maybe" <%= (!event.isGuestsAllowed())? "checked": ""%>><span>Maybe</span>
+                            </div>
+                        <div>
+                        <% } %>
+
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 package com.workfront.internship.event_management.service;
 
-import com.workfront.internship.event_management.model.User;
+import com.workfront.internship.event_management.model.*;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -11,4 +11,6 @@ import java.io.IOException;
 public interface EmailService {
 
     public boolean sendConfirmationEmail(User user);
+    public void sendInvitations(final Event event);
+
 }

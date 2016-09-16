@@ -29,7 +29,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
         int id = 0;
         String query = "INSERT INTO event_invitation "
-                + "(event_id, user_id, user_role, user_response, attendees_count, participated) VALUES "
+                + "(event_id, user_id, user_role, user_response_id, attendees_count, participated) VALUES "
                 + "(?, ?, ?, ?, ?, ? )";
         try {
             //get connection
@@ -75,7 +75,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
         int id = 0;
         String query = "INSERT INTO event_invitation "
-                + "(event_id, user_id, user_role, user_response, attendees_count, participated) VALUES "
+                + "(event_id, user_id, user_role, user_response_id, attendees_count, participated) VALUES "
                 + "(?, ?, ?, ?, ?, ? )";
         try {
             //get connection
@@ -184,7 +184,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
         PreparedStatement stmt = null;
         boolean success = false;
 
-        String sqlStr = "UPDATE event_invitation SET user_role = ? , user_response = ?, attendees_count = ?, " +
+        String sqlStr = "UPDATE event_invitation SET user_role = ? , user_response_id = ?, attendees_count = ?, " +
                 "participated = ? WHERE id = ?";
 
         try {
@@ -208,6 +208,43 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             LOGGER.error("Duplicate invitation entry", e);
             throw new DuplicateEntryException("Invitation for user with id "
                     + invitation.getUser().getId() + " and event with id " + invitation.getEventId() + " already exists", e);
+        } catch (SQLException e) {
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
+        } finally {
+            closeResources(stmt, conn);
+        }
+        return success;
+    }
+
+    @Override
+    public boolean updateInvitationResponse(int eventId, int userId, int responseId) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        boolean success = false;
+
+        String sqlStr = "UPDATE event_invitation SET user_response_id = ?," +
+            "WHERE eventId = ? AND userId = ?";
+
+        try {
+            //get connection
+            conn = dataSource.getConnection();
+
+            //create and initialize statement
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setInt(1, responseId);
+            stmt.setInt(2, eventId);
+            stmt.setInt(3, userId);
+
+            //execute query
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows != 0) {
+                success = true;
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            LOGGER.error("Duplicate invitation entry", e);
+            throw new DuplicateEntryException("Invitation for user with id "
+                +userId + " and event with id " + eventId + " already exists", e);
         } catch (SQLException e) {
             LOGGER.error("SQL Exception", e);
             throw new DAOException(e);
