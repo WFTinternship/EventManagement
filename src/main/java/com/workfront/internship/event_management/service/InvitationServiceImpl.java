@@ -173,6 +173,21 @@ public class InvitationServiceImpl implements InvitationService {
     }
 
     @Override
+    public boolean respondToInvitation(int eventId, int userId, int responseId) {
+        if (eventId < 1) {
+            throw new InvalidObjectException("Invalid event id");
+        }
+        if (userId < 1) {
+            throw new InvalidObjectException("Invalid user id");
+        }
+        if (responseId < 1) {
+            throw new InvalidObjectException("Invalid response id");
+        }
+
+        return invitationDAO.updateInvitationResponse(eventId, userId, responseId);
+    }
+
+    @Override
     public boolean deleteInvitation(int invitationId) {
         if (invitationId < 1) {
             throw new InvalidObjectException("Invalid invitation id");
