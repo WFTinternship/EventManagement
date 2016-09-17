@@ -13,6 +13,8 @@ public interface InvitationService {
 
     Invitation createInvitationForOrganizer(String email);
 
+    Invitation createOrganizerRecord(String email);
+
     Invitation addInvitation(Invitation invitation);
 
     void addInvitations(List<Invitation> invitationList);

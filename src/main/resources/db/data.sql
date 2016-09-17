@@ -15,4 +15,4 @@ INSERT INTO `user` VALUES
    'turshujyan@gmail.com', '', NULL, 0, '2016-08-26 12:49:15');
 
 
-INSERT INTO `user_response` VALUES (3, 'Maybe'), (2, 'No'), (4, 'Undefined'), (1, 'Yes');
+INSERT INTO `user_response` VALUES (3, 'Maybe'), (2, 'No'), (4, 'Undefined'), (1, 'Yes'), (5, 'Waiting for response');

@@ -2,13 +2,12 @@ package com.workfront.internship.event_management.controller;
 
 import com.workfront.internship.event_management.controller.util.CustomResponse;
 import com.workfront.internship.event_management.controller.util.DateParser;
-import com.workfront.internship.event_management.exception.service.*;
+import com.workfront.internship.event_management.exception.service.UnauthorizedAccessException;
 import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.Invitation;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.*;
-import org.apache.http.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,7 +25,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.workfront.internship.event_management.controller.util.PageParameters.*;
-import static com.workfront.internship.event_management.service.util.Validator.*;
+import static com.workfront.internship.event_management.service.util.Validator.isEmptyCollection;
 
 /**
  * Created by Hermine Turshujyan 8/22/16.
@@ -41,8 +40,8 @@ public class EventController {
 
     @Autowired
     private EventService eventService;
-	@Autowired
-	private EmailService emailService;
+    @Autowired
+    private EmailService emailService;
     @Autowired
     private InvitationService invitationService;
     @Autowired
@@ -95,17 +94,17 @@ public class EventController {
 
     @GetMapping(value = "/events/{eventId}/invitation-respond")
     public String goToRespondToEventPage(@PathVariable("eventId") int eventId, Model model, HttpServletRequest request) {
-		User sessionUser = (User) request.getSession().getAttribute("user");
-        if( sessionUser == null){
-			// TODO: 9/16/16 redirect to login page
-			return null;
-        } else{
-			int userId = Integer.parseInt(request.getParameter("user"));
-			if(sessionUser.getId() != userId){
-				throw new UnauthorizedAccessException("Unauthorized access");
-				// TODO: 9/16/16 implement
-			}
-			int responseId = Integer.parseInt(request.getParameter("response"));
+        User sessionUser = (User) request.getSession().getAttribute("user");
+        if (sessionUser == null) {
+            // TODO: 9/16/16 redirect to login page
+            return null;
+        } else {
+            int userId = Integer.parseInt(request.getParameter("user"));
+            if (sessionUser.getId() != userId) {
+                throw new UnauthorizedAccessException("Unauthorized access");
+                // TODO: 9/16/16 implement
+            }
+            int responseId = Integer.parseInt(request.getParameter("response"));
 
             //update invitation response in db
             invitationService.respondToInvitation(eventId, userId, responseId);
@@ -113,7 +112,7 @@ public class EventController {
             //load event with invitations
             Event event = eventService.getEventById(eventId);
             List<Invitation> invitations = invitationService.getInvitationsByEvent(eventId);
-            if(!isEmptyCollection(invitations)){
+            if (!isEmptyCollection(invitations)) {
                 event.setInvitations(invitations);
             }
 
@@ -125,11 +124,11 @@ public class EventController {
     }
 
     @GetMapping(value = "/events/{eventId}/invitation-respond/{userId}")
-    public String respondToEvent(@PathVariable("eventId") int eventId, @PathVariable("userId") int userId, 
+    public String respondToEvent(@PathVariable("eventId") int eventId, @PathVariable("userId") int userId,
                                  Model model, HttpServletRequest request) {
         // TODO: 9/16/16 implement 
         return null;
-       
+
     }
 
     @RequestMapping(value = "/new-event")
@@ -139,12 +138,12 @@ public class EventController {
         //check if user is logged in
         // if (session.getAttribute("user") != null) {
 
-            List<Category> categoryList = categoryService.getAllCategories();
+        List<Category> categoryList = categoryService.getAllCategories();
 
-            model.addAttribute("categories", categoryList);
-            model.addAttribute("event", createEmptyEvent());
+        model.addAttribute("categories", categoryList);
+        model.addAttribute("event", createEmptyEvent());
 
-            return EVENT_EDIT_VIEW;
+        return EVENT_EDIT_VIEW;
        /* } else {
             model.addAttribute("message", "Access is denied!");
             return DEFAULT_ERROR_VIEW;
@@ -158,6 +157,18 @@ public class EventController {
                                    @RequestParam(value = "eventFile", required = false) MultipartFile file) {
 
         CustomResponse result = new CustomResponse();
+
+        //check if user is logged in
+        User sessionUser = (User) request.getSession().getAttribute("user");
+        if (sessionUser == null) {
+            String message = "You are not authorized to per-form this action!";
+            logger.info(message);
+
+            result.setStatus(ACTION_FAIL);
+            result.setMessage(message);
+            return result; // TODO: 9/13/16 throw exception 
+        }
+
         Event event = new Event();
 
         String title = request.getParameter("eventTitle");
@@ -166,25 +177,28 @@ public class EventController {
         String location = request.getParameter("location");
         String invitationsString = request.getParameter("invitations");
 
-        //get invitations list
         List<Invitation> invitations = new ArrayList<>();
-        List<String> invitationEmails = Arrays.asList(invitationsString.split(","));
-        for (String email : invitationEmails) {
-            Invitation invitation = invitationService.createInvitationForMember(email);
-            invitations.add(invitation);
-        }
-        //create invitation record for event organizer
-        User user = (User) request.getSession().getAttribute("user");
-        if (user == null) {
-            String message = "You are not authorized to per-form this action!";
-            logger.info(message);
 
-            result.setStatus(ACTION_FAIL);
-            result.setMessage(message);
-            return result; // TODO: 9/13/16 throw exception 
+        if(invitationsString != null) {
+            //get invitees email list
+            List<String> invitationEmails = Arrays.asList(invitationsString.split(","));
+
+            for (String email : invitationEmails) {
+                Invitation invitation;
+                if (email == sessionUser.getEmail()) { //invitation for organizer
+                    invitation = invitationService.createInvitationForOrganizer(email);
+                } else {
+                    invitation = invitationService.createInvitationForMember(email);
+                }
+                invitations.add(invitation);
+            }
+
+            //if there is no invitation for organizer, just save organizer record
+            if (!invitationEmails.contains(sessionUser.getEmail())) {
+                Invitation organizerInvitation = invitationService.createOrganizerRecord(sessionUser.getEmail());
+                invitations.add(organizerInvitation);
+            }
         }
-        Invitation invitation = invitationService.createInvitationForOrganizer(user.getEmail());
-        invitations.add(invitation);
 
         //get category
         int categoryId = Integer.parseInt(request.getParameter("categoryId"));
@@ -264,7 +278,7 @@ public class EventController {
 
         eventService.createEvent(event);
 
-		emailService.sendInvitations(event);
+        emailService.sendInvitations(event);
 
         return result;
     }

@@ -34,12 +34,17 @@ public class InvitationServiceImpl implements InvitationService {
 
     @Override
     public Invitation createInvitationForMember(String email) {
-        return createInvitationForUser(email, UserRole.MEMBER);
+        return createInvitationForUser(email, UserRole.MEMBER, "Waiting for response");
     }
 
     @Override
     public Invitation createInvitationForOrganizer(String email) {
-        return createInvitationForUser(email, UserRole.ORGANIZER);
+        return createInvitationForUser(email, UserRole.ORGANIZER, "Waiting for response");
+    }
+
+    @Override
+    public Invitation createOrganizerRecord(String email) {
+        return createInvitationForUser(email, UserRole.ORGANIZER, "Undefined");
     }
 
     @Override
@@ -229,7 +234,7 @@ public class InvitationServiceImpl implements InvitationService {
         return null;
     }
 
-    private Invitation createInvitationForUser(String email, UserRole userRole) {
+    private Invitation createInvitationForUser(String email, UserRole userRole, String responseString) {
         if (!isValidEmailAddressForm(email)) {
             throw new InvalidObjectException("Invalid email address form");
         }
@@ -239,12 +244,13 @@ public class InvitationServiceImpl implements InvitationService {
         if (user == null) {
             throw new ObjectNotFoundException("User not found!");
         } else {
+
             Invitation invitation = new Invitation();
             invitation.setUser(user)
                     .setUserRole(userRole)
                     .setAttendeesCount(1)
                     .setParticipated(false)
-                    .setUserResponse(new UserResponse(1, "Undefined")) // TODO: 9/6/16 check
+                    .setUserResponse(new UserResponse(1, responseString))
                     .setCreationDate(new Date());
 
             return invitation;
