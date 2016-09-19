@@ -53,3 +53,16 @@
     content: "\f00c";
 
 }
+
+.icon-response-Maybe::before{
+    content: "\f29c";
+    color: #888;
+}
+.icon-response-No::before{
+    content: "\f00d";
+    color: #F86923;
+}
+.icon-response-Yes::before{
+    content: "\f00c";
+    color: #1ccdca;
+}

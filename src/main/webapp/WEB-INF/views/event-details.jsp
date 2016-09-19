@@ -5,7 +5,10 @@
 <%@ page import="com.workfront.internship.event_management.service.CategoryServiceImpl" %>
 <%@ page import="com.workfront.internship.event_management.service.EventService" %>
 <%@ page import="com.workfront.internship.event_management.service.EventServiceImpl" %>
-<%@ page import="java.util.List" %><%--
+<%@ page import="java.util.List" %>
+<%@ page import="static com.workfront.internship.event_management.service.util.Validator.isEmptyCollection" %>
+<%@ page import="com.workfront.internship.event_management.model.Invitation" %>
+<%@ page import="com.workfront.internship.event_management.model.UserRole" %><%--
   Created by IntelliJ IDEA.
   User: Inmelet
   Date: 8/8/2016
@@ -49,53 +52,72 @@
             %>
             <div class="content_block">
                 <div class="event_list clearfix" id="event_list">
-                        <div class="list_item">
-                            <div class="list_content">
-                                <h6 class="title">
-                                    <a href="#"><%=event.getTitle() %>
-                                    </a>
-                                </h6>
-                                <span class="meta">
-                                       <span class="meta_part ">
-                                           <a href="#">
-                                               <i class="ev_icon icon-clock"></i>
-                                               <span><%=event.getStartDate() %></span>
-                                           </a>
-                                       </span>
+                    <div class="list_item">
+                        <div class="list_content">
+                            <h6 class="title">
+                                <a href="#"><%=event.getTitle()%>
+                                </a>
+                            </h6>
+                            <span class="meta">
                                    <span class="meta_part">
                                        <a href="#">
-                                           <i class="ev_icon icon-map-marker"></i>
-                                           <span>
-                                               <%=event.getLocation()%>
-                                           </span>
+                                           <i class="ev_icon icon-clock"></i>
+                                           <span><%=event.getStartDate() %></span>
                                        </a>
                                    </span>
-                                       <span class="meta_part">
-                                           <i class="ev_icon icon-folder"></i>
-                                           <span>
-                                               <a href="#">
-                                                   <%= event.getCategory().getTitle()%>
-                                               </a>
-                                           </span>
+                               <span class="meta_part">
+                                   <a href="#">
+                                       <i class="ev_icon icon-map-marker"></i>
+                                       <span>
+                                           <%=event.getLocation()%>
                                        </span>
-                                       <span class="meta_part">
-                                            <a href="#">
-                                               <i class="ev_icon icon-user"></i>
-                                               <span><%=event.getOrganizer().getFirstName() %> <%=event.getOrganizer().getLastName() %></span>
+                                   </a>
+                               </span>
+                                   <span class="meta_part">
+                                       <i class="ev_icon icon-folder"></i>
+                                       <span>
+                                           <a href="#">
+                                               <%= event.getCategory().getTitle()%>
                                            </a>
                                        </span>
                                    </span>
-                                <p class="desc"><%=event.getShortDescription()%>
+                                   <span class="meta_part">
+                                        <a href="#">
+                                           <i class="ev_icon icon-user"></i>
+                                           <span><%=event.getOrganizer().getFirstName() %> <%=event.getOrganizer().getLastName() %></span>
+                                       </a>
+                                   </span>
+                               </span>
+                                <p class="desc"><%=event.getShortDescription()%></p>
 
                                 <p class="desc"><%=event.getFullDescription()%>
                                 </p>
+
+                                <% List<Invitation> invitations = event.getInvitations();
+                                    if(!isEmptyCollection(invitations)) { %>
+                                <div class="invitees">
+                                    <% for(Invitation invitation :invitations) { %>
+                                        <div class="invitees_email">
+                                            <i class='icon-user'></i>
+
+                                            <%=invitation.getUser().getEmail()%>
+
+                                            <i class='icon-response-<%= invitation.getUserResponse().getTitle()%>'></i>
+                                            <% if(invitation.getUserRole().equals(UserRole.ORGANIZER)){%>
+                                                <span class="organizer"> (Organizer)</span>
+                                            <% }%>
+
+                                        </div>
+                                    <% }%>
+                                </div>
+                            <% }%>
                             </div>
-                        </div>
                     <%
                         String action = (String) request.getAttribute("action");
                         if(action == "invitation-respond"){
                     %>
-                        <div>Respond to invitation</div>
+                    <div class="respond_wrapper">
+                        <h4>Respond to invitation</h4>
                             <div class="radio_wrapper">
                                 <input type="radio" class="event_radio" name="guestsAllowed"
                                        value="yes"  <%= (event.isGuestsAllowed())? "checked": ""%>><span>Yes</span>
@@ -104,9 +126,15 @@
                                 <input type="radio" class="event_radio" name="guestsAllowed"
                                        value="maybe" <%= (!event.isGuestsAllowed())? "checked": ""%>><span>Maybe</span>
                             </div>
-                        <div>
-                        <% } %>
 
+                            <div class="btn_wrapper">
+                                <a class="btn" href="">Save</a>
+                                <a class="btn" href="/events">Discard changed</a>
+                            </div>
+                        <div>
+                            </div>>
+                        <% } %>
+                        </div>
                     </div>
                 </div>
             </div>
