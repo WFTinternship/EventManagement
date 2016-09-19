@@ -3,6 +3,7 @@ package com.workfront.internship.event_management.spring;
 import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.VelocityException;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,8 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.ui.velocity.VelocityEngineFactory;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.mail.Authenticator;
@@ -96,4 +99,6 @@ public class DevApplicationConfig {
 
         return mailSender;
     }
+
+
 }

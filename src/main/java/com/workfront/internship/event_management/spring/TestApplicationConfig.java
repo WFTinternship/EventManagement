@@ -25,7 +25,7 @@ public class TestApplicationConfig {
 
         //loading db property list
         Properties props = new Properties();
-        props.load(ApplicationConfig.class.getClassLoader().getResourceAsStream("db.properties"));
+        props.load(TestApplicationConfig.class.getClassLoader().getResourceAsStream("db.properties"));
 
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
 

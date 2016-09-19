@@ -1,20 +1,34 @@
 <html>
+<head>
+	<script type="text/css">
+        .wrapper{
+            border:solid 1px red;
+        }
+	</script>
+</head>
 <body>
-	<div>
+	<div class="wrapper">
 		Hi ${invitation.user.firstName}
 	</div>
 	Event invitation
 	<h3>${event.title}</h3>
 
-	<div>${event.startDate} - ${event.endDate}</div>
-	<div>
+	<div class="date">${event.startDate} - ${event.endDate}</div>
+	<div class="short_desc">
 		${event.shortDescription}
 	</div>
-	<div>Going?
+	<div class="email_list">
+		#foreach ($invitationItem in $event.invitations)
+		<div class="email_item">
+    		$invitationItem.user.email
+		</div>
+		#end
+	</div>
+	<div class="response_box">Going?
 		<a href="http://localhost:8080/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=1">Yes</a>
 		<a href="http://localhost:8080/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=2">No</a>
 		<a href="http://localhost:8080/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=3">Maybe</a>
 	</div>
-	<div><a href="http://localhost:8080/events/${event.id}/invitation-respond">Event Details</a></div>
+	<div class="details_link"><a href="http://localhost:8080/events/${event.id}/invitation-respond">Event Details</a></div>
 </body>
 </html>
