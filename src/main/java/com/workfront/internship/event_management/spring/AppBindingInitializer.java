@@ -11,12 +11,11 @@ import org.springframework.web.bind.annotation.InitBinder;
  * Created by Hermine Turshujyan 8/19/16.
  */
 @ControllerAdvice
-public class ControllerSetup {
+public class AppBindingInitializer {
 
-    @InitBinder
-    public void initBinder ( WebDataBinder binder ) {
-        StringTrimmerEditor stringTrimmer = new StringTrimmerEditor(true);
-        binder.registerCustomEditor(String.class, stringTrimmer);
-
-    }
+//    @InitBinder
+//    public void initBinder (WebDataBinder binder ) {
+//        StringTrimmerEditor stringTrimmer = new StringTrimmerEditor(true);
+//        binder.registerCustomEditor(String.class, stringTrimmer);
+//    }
 }
