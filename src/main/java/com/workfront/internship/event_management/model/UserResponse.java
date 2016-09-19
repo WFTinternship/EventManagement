@@ -8,7 +8,7 @@ public class UserResponse {
     private int id;
     private String title;
 
-    UserResponse() {
+    public UserResponse() {
     }
 
     public UserResponse(int id, String title) {

@@ -70,10 +70,4 @@ public class GlobalExceptionHandler {
 
         return mov;
     }
-
-    @InitBinder
-    public void initBinder ( WebDataBinder binder ) {
-        StringTrimmerEditor stringtrimmer = new StringTrimmerEditor(true);
-        binder.registerCustomEditor(String.class, stringtrimmer);
-    }
 }

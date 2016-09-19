@@ -25,10 +25,10 @@
 		#end
 	</div>
 	<div class="response_box">Going?
-		<a href="http://localhost:8080/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=1">Yes</a>
-		<a href="http://localhost:8080/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=2">No</a>
-		<a href="http://localhost:8080/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=3">Maybe</a>
+		<a href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=1">Yes</a>
+		<a href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=2">No</a>
+		<a href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=3">Maybe</a>
 	</div>
-	<div class="details_link"><a href="http://localhost:8080/events/${event.id}/invitation-respond">Event Details</a></div>
+	<div class="details_link"><a href="http://localhost:8085/events/${event.id}/invitation-respond">Event Details</a></div>
 </body>
 </html>
