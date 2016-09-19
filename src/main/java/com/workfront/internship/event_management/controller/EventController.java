@@ -85,8 +85,8 @@ public class EventController {
     }
 
     @GetMapping(value = "/events/{eventId}")
-    public String getEvent(@PathVariable("eventId") int id, Model model) {
-        Event event = eventService.getEventById(id);
+    public String getEventDetails(@PathVariable("eventId") int id, Model model) {
+        Event event = eventService.getFullEventById(id);
         model.addAttribute("event", event);
 
         return EVENT_DETAILS_VIEW;
@@ -104,7 +104,10 @@ public class EventController {
                 throw new UnauthorizedAccessException("Unauthorized access");
                 // TODO: 9/16/16 implement
             }
+
+            //if comming from email
             int responseId = Integer.parseInt(request.getParameter("response"));
+            // TODO: 9/19/16 check if is integer
 
             //update invitation response in db
             invitationService.respondToInvitation(eventId, userId, responseId);

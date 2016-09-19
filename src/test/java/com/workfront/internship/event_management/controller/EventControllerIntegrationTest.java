@@ -106,7 +106,7 @@ public class EventControllerIntegrationTest {
     @Test
     public void getEvent() {
         //method under test
-        String pageName = eventController.getEvent(testEvent.getId(), testModel);
+        String pageName = eventController.getEventDetails(testEvent.getId(), testModel);
 
         Event event = (Event) testModel.asMap().get("event");
 

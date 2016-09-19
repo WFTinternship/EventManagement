@@ -15,6 +15,8 @@ public interface EventService {
     //Read
     Event getEventById(int eventId);
 
+    Event getFullEventById(int eventId);
+
     List<Event> getEventsByCategory(int categoryId);
 
     List<Event> getUserOrganizedEvents(int userId);

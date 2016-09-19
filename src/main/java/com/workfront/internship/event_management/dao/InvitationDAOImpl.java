@@ -5,6 +5,7 @@ import com.workfront.internship.event_management.exception.dao.DuplicateEntryExc
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.Invitation;
 import com.workfront.internship.event_management.model.User;
+import com.workfront.internship.event_management.model.UserResponse;
 import com.workfront.internship.event_management.model.UserRole;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -223,8 +224,8 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
         PreparedStatement stmt = null;
         boolean success = false;
 
-        String sqlStr = "UPDATE event_invitation SET user_response_id = ?," +
-            "WHERE eventId = ? AND userId = ?";
+        String sqlStr = "UPDATE event_invitation SET user_response_id = ? " +
+            "WHERE event_id = ? AND user_id = ?";
 
         try {
             //get connection
@@ -292,7 +293,8 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
         List<Invitation> invitationsList = new ArrayList<>();
         String sqlStr = "SELECT * FROM event_invitation " +
                 "LEFT JOIN user ON event_invitation.user_id = user.id " +
-                "WHERE " + columnName + " = ?";
+                "LEFT JOIN user_response ON event_invitation.user_response_id = user_response.id " +
+                "WHERE " + columnName + " = ? AND event_invitation.user_response_id != 4";
         try {
             //get connection
             conn = dataSource.getConnection();
@@ -333,13 +335,16 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
                     .setVerified(rs.getBoolean("verified"))
                     .setRegistrationDate(rs.getTimestamp("registration_date"));
 
+            UserResponse userResponse = new UserResponse();
+            userResponse.setId(rs.getInt("user_response.id"));
+            userResponse.setTitle(rs.getString("user_response.title"));
 
             Invitation invitation = new Invitation();
             invitation.setUser(user)
                     .setId(rs.getInt("event_invitation.id"))
                     .setEventId(rs.getInt("event_id"))
                     .setAttendeesCount(rs.getInt("attendees_count"))
-                    // .setUserResponse(new Users.getString("user_response").)
+                    .setUserResponse(userResponse)
                     .setUserRole(UserRole.findByName(rs.getString("user_role")))
                     .setParticipated(rs.getBoolean("participated"));
 

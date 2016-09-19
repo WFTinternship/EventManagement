@@ -97,6 +97,18 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public Event getFullEventById(int eventId) {
+        //get event main info
+        Event event = getEventById(eventId);
+
+        //get event invitations
+        List<Invitation> invitations = invitationService.getInvitationsByEvent(eventId);
+        event.setInvitations(invitations);
+
+        return event;
+    }
+
+    @Override
     public boolean editEvent(Event event) throws OperationFailedException {
         if (!isValidEvent(event)) {
             throw new InvalidObjectException("Invalid event");
