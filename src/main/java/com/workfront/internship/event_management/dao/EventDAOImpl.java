@@ -92,7 +92,10 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         Event event = null;
         String query = "SELECT * FROM (event LEFT JOIN event_category " +
-                "ON event.category_id = event_category.id) WHERE event.id = ?";
+                "ON event.category_id = event_category.id)" +
+                "LEFT JOIN event_invitation on event_invitation.event_id = event.id " +
+                "LEFT JOIN user ON user.id = event_invitation.user_id " +
+                "WHERE event.id = ? AND event_invitation.user_role = \'Organizer\'";
         try {
             //get connection
             conn = dataSource.getConnection();
@@ -110,27 +113,6 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                 event = eventList.get(0);
             }
 
-
-            //get invitations list
-          /*  InvitationDAO invitationDAO = new InvitationDAOImpl();
-            List<Invitation> invitations = invitationDAO.getInvitationsByEventId(eventId);
-            if (!invitations.isEmpty()) {
-                event.setInvitations(invitations);
-            }
-
-            //get event recurrences
-            RecurrenceDAO recurrenceDAO = new RecurrenceDAOImpl();
-            List<Recurrence> recurrences = recurrenceDAO.getRecurrencesByEventId(eventId);
-            if (!recurrences.isEmpty()) {
-                event.setEventRecurrences(recurrences);
-            }
-
-            //get media list
-            MediaDAO mediaDAO = new MediaDAOImpl();
-            List<Media> media = mediaDAO.getMediaByEventId(eventId);
-            if (!media.isEmpty()) {
-                event.setMedia(media);
-            }*/
         } catch (SQLException e) {
             LOGGER.error("SQL Exception ", e);
             throw new DAOException(e);
@@ -150,7 +132,9 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         List<Event> eventsList = null;
         String query = "SELECT * FROM (event LEFT JOIN event_category " +
                 "ON event.category_id = event_category.id) " +
-                "WHERE event.category_id = ?";
+                "LEFT JOIN event_invitation on event_invitation.event_id = event.id " +
+                "LEFT JOIN user ON user.id = event_invitation.user_id " +
+                "WHERE event.category_id = ? AND event_invitation.user_role = \'Organizer\'";
         try {
             //get connection
             conn = dataSource.getConnection();
@@ -231,7 +215,11 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         List<Event> eventsList = null;
 
         String query = "SELECT * FROM event " +
-                "LEFT JOIN event_category ON event.category_id = event_category.id ";
+                "LEFT JOIN event_category ON event.category_id = event_category.id "+
+                "LEFT JOIN event_invitation on event_invitation.event_id = event.id " +
+                "LEFT JOIN user ON user.id = event_invitation.user_id " +
+                "WHERE event_invitation.user_role = \'Organizer\'";
+                ;
         try {
             //get connection
             conn = dataSource.getConnection();
@@ -444,6 +432,17 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                     .setDescription(rs.getString("event_category.description"))
                     .setCreationDate(rs.getTimestamp("event_category.creation_date"));
 
+            User organizer = new User();
+            organizer.setId(rs.getInt("id"))
+                    .setFirstName(rs.getString("first_name"))
+                    .setLastName(rs.getString("last_name"))
+                    .setPassword(rs.getString("password"))
+                    .setEmail(rs.getString("email"))
+                    .setPhoneNumber(rs.getString("phone_number"))
+                    .setAvatarPath(rs.getString("avatar_path"))
+                    .setVerified(rs.getBoolean("verified"))
+                    .setRegistrationDate(rs.getTimestamp("registration_date"));
+
             Event event = new Event();
             event.setId(rs.getInt("event.id"))
                     .setTitle(rs.getString("event.title"))
@@ -460,7 +459,8 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                     .setLastModifiedDate(rs.getTimestamp("event.last_modified"))
                     .setStartDate(rs.getTimestamp("start"))
                     .setEndDate(rs.getTimestamp("end"))
-                    .setCategory(category);
+                    .setCategory(category)
+                    .setOrganizer(organizer);
 
             eventsList.add(event);
         }

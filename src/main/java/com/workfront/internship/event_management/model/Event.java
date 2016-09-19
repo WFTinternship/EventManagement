@@ -12,6 +12,7 @@ public class Event {
     private String shortDescription;
     private String fullDescription;
     private String location;
+    private User organizer;
     private double lat;
     private double lng;
     private String filePath;
@@ -200,6 +201,15 @@ public class Event {
 
     public Event setEndDate(Date endDate) {
         this.endDate = endDate;
+        return this;
+    }
+
+    public User getOrganizer() {
+        return organizer;
+    }
+
+    public Event setOrganizer(User organizer) {
+        this.organizer = organizer;
         return this;
     }
 }

@@ -111,7 +111,7 @@
                                        <span class="meta_part">
                                            <a href="#">
                                                <i class="ev_icon icon-user"></i>
-                                               <span>Event Organizer</span>
+                                               <span><%=event.getOrganizer().getFirstName() %> <%=event.getOrganizer().getLastName() %></span>
                                            </a>
                                        </span>
                                    </span>

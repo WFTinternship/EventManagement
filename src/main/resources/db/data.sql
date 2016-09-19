@@ -16,3 +16,6 @@ INSERT INTO `user` VALUES
 
 
 INSERT INTO `user_response` VALUES (3, 'Maybe'), (2, 'No'), (4, 'Undefined'), (1, 'Yes'), (5, 'Waiting for response');
+INSERT INTO `event_invitation` VALUES
+  (1, 127, 355, 'Organizer',4 , '1', 0, null, '2016-08-10 12:09:26'),
+  (2, 128, 355, 'Organizer', 4, '1', 0,  null, '2016-08-10 12:09:26');
