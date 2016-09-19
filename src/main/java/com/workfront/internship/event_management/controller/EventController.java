@@ -178,25 +178,14 @@ public class EventController {
         String invitationsString = request.getParameter("invitations");
 
         List<Invitation> invitations = new ArrayList<>();
-
         if(invitationsString != null) {
+
             //get invitees email list
             List<String> invitationEmails = Arrays.asList(invitationsString.split(","));
 
             for (String email : invitationEmails) {
-                Invitation invitation;
-                if (email == sessionUser.getEmail()) { //invitation for organizer
-                    invitation = invitationService.createInvitationForOrganizer(email);
-                } else {
-                    invitation = invitationService.createInvitationForMember(email);
-                }
+                Invitation invitation = invitationService.createInvitationForMember(email);
                 invitations.add(invitation);
-            }
-
-            //if there is no invitation for organizer, just save organizer record
-            if (!invitationEmails.contains(sessionUser.getEmail())) {
-                Invitation organizerInvitation = invitationService.createOrganizerRecord(sessionUser.getEmail());
-                invitations.add(organizerInvitation);
             }
         }
 
@@ -218,6 +207,7 @@ public class EventController {
         event.setTitle(title)
                 .setShortDescription(shortDescription)
                 .setFullDescription(fullDescription)
+                .setOrganizer(sessionUser)
                 .setLocation(location)
                 .setPublicAccessed(publicAccessed)
                 .setGuestsAllowed(guestsAllowed)

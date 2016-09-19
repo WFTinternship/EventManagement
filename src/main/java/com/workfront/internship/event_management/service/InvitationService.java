@@ -11,8 +11,6 @@ public interface InvitationService {
 
     Invitation createInvitationForMember(String email);
 
-    Invitation createInvitationForOrganizer(String email);
-
     Invitation createOrganizerRecord(String email);
 
     Invitation addInvitation(Invitation invitation);
