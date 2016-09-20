@@ -822,3 +822,7 @@ input[type="text"]:focus, input[type="password"]:focus {
 .organizer{
     font-size:11px;
 }
+
+.event_img{
+    width:600px;
+}

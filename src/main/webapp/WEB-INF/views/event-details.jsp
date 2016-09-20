@@ -65,6 +65,7 @@
                                            <span><%=event.getStartDate() %></span>
                                        </a>
                                    </span>
+                                <% if(event.getLocation() != null) { %>
                                <span class="meta_part">
                                    <a href="#">
                                        <i class="ev_icon icon-map-marker"></i>
@@ -73,6 +74,7 @@
                                        </span>
                                    </a>
                                </span>
+                                <% } %>
                                    <span class="meta_part">
                                        <i class="ev_icon icon-folder"></i>
                                        <span>
@@ -89,7 +91,7 @@
                                    </span>
                                </span>
                             <% if(event.getImageName() != null) {%>
-                                <img src = "/events/images/<%=event.getImageName()%>" />
+                                <img class="event_img" src = "/resources/uploads/events/images/<%=event.getImageName()%>" />
                             <% } %>
                                 <p class="desc"><%=event.getShortDescription()%></p>
 

@@ -74,9 +74,8 @@ public class FileService {
 
     public byte[] getEventImage(String webRoot, String fileName) throws IOException {
         String imagePath = webRoot + EVENT_IMAGE_DIRECTORY + File.separator + fileName;
-        InputStream in = this.getClass().getClassLoader().getResourceAsStream(imagePath);
-
-        return ByteStreams.toByteArray(in);
+        //InputStream in = this.getClass().getClassLoader().getResourceAsStream(imagePath);
+        return FileUtils.readFileToByteArray(new File(imagePath));
     }
 
     public byte[] getAvatar(String imageName) throws IOException {
