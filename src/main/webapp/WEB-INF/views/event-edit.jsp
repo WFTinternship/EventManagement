@@ -120,6 +120,7 @@
                     <div class="form_col_full">
                         <label for="location">
                             <span class="field_name">Location</span>
+                            <span class="required_star">*</span>
                         </label>
                         <input class="input_text" name="location" id="location" type="text"
                                value="<%=event.getLocation()%>">

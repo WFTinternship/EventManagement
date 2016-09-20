@@ -58,13 +58,12 @@
                                 </a>
                             </h6>
                             <span class="meta">
-                                   <span class="meta_part">
-                                       <a href="#">
-                                           <i class="ev_icon icon-clock"></i>
-                                           <span><%=DateParser.parseDateToString(event.getStartDate()) %></span>
-                                       </a>
-                                   </span>
-                                <% if(event.getLocation() != null) { %>
+                               <span class="meta_part">
+                                   <a href="#">
+                                       <i class="ev_icon icon-clock"></i>
+                                       <span><%=DateParser.parseDateToString(event.getStartDate()) %></span>
+                                   </a>
+                               </span>
                                <span class="meta_part">
                                    <a href="#">
                                        <i class="ev_icon icon-map-marker"></i>
@@ -73,22 +72,21 @@
                                        </span>
                                    </a>
                                </span>
-                                <% } %>
-                                   <span class="meta_part">
-                                       <i class="ev_icon icon-folder"></i>
-                                       <span>
-                                           <a href="#">
-                                               <%= event.getCategory().getTitle()%>
-                                           </a>
-                                       </span>
-                                   </span>
-                                   <span class="meta_part">
-                                        <a href="#">
-                                           <i class="ev_icon icon-user"></i>
-                                           <span><%=event.getOrganizer().getFirstName() %> <%=event.getOrganizer().getLastName() %></span>
+                               <span class="meta_part">
+                                   <i class="ev_icon icon-folder"></i>
+                                   <span>
+                                       <a href="#">
+                                           <%= event.getCategory().getTitle()%>
                                        </a>
                                    </span>
                                </span>
+                               <span class="meta_part">
+                                    <a href="#">
+                                       <i class="ev_icon icon-user"></i>
+                                       <span><%=event.getOrganizer().getFirstName() %> <%=event.getOrganizer().getLastName() %></span>
+                                   </a>
+                               </span>
+                            </span>
                             <% if (event.getImageName() != null) {%>
                                 <img class="event_img" src = "/resources/uploads/events/images/<%=event.getImageName()%>" />
                             <% } %>

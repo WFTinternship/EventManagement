@@ -29,12 +29,14 @@ $(document).ready(function () {
             eventTitle: "required",
             startDate: "required",
             endDate: "required",
+            location: "required"
         },
 
         messages: {
             eventTitle: "Please enter a title for event.",
             startDate: "Please provide start date for event",
             endDate: "Please provide end date for event",
+            location: "Please provide location for event"
         },
 
         submitHandler: function (form) {

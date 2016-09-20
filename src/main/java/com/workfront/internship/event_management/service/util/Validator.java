@@ -117,6 +117,7 @@ public class Validator {
                     && event.getStartDate() != null
                     && event.getEndDate() != null
                     && event.getOrganizer() != null
+                    && event.getLocation() != null
                     && event.getCreationDate() != null
                     ) {
                 valid = true;
