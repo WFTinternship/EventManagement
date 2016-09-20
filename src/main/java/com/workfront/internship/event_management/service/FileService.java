@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.service;
 
+import com.google.common.io.ByteStreams;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -7,6 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.UUID;
 
 /**
@@ -15,7 +18,23 @@ import java.util.UUID;
 @Component
 public class FileService {
 
+    private static final String EVENT_FILE_DIRECTORY = "/events/files";
+    private static final String EVENT_IMAGE_DIRECTORY = "/events/images";
+    private static final String USER_AVATAR_DIRECTORY = "/avatars";
+
     private static final Logger logger = Logger.getLogger(FileService.class);
+
+    public String saveEventImage(String rootPath, MultipartFile image) throws IOException {
+        return saveFile(rootPath + EVENT_IMAGE_DIRECTORY, image);
+    }
+
+    public String saveEventFile(String rootPath, MultipartFile file) throws IOException {
+        return saveFile(rootPath + EVENT_FILE_DIRECTORY, file);
+    }
+
+    public String saveAvatar(String rootPath, MultipartFile image) throws IOException {
+        return saveFile(rootPath + USER_AVATAR_DIRECTORY, image);
+    }
 
     public String saveFile(String uploadPath, MultipartFile image) throws IOException {
 
@@ -27,6 +46,7 @@ public class FileService {
 
         String fileName = image.getOriginalFilename();
         String filePath = null;
+        String uniqueFileName = null;
 
         if (!fileName.isEmpty()) {
 
@@ -35,7 +55,7 @@ public class FileService {
 
             //generate random image name
             String uuid = UUID.randomUUID().toString();
-            String uniqueFileName = String.format("%s.%s", uuid, ext);
+            uniqueFileName = String.format("%s.%s", uuid, ext);
 
             //create file path
             filePath = uploadPath + File.separator + uniqueFileName;
@@ -45,8 +65,24 @@ public class FileService {
             FileUtils.writeByteArrayToFile(storeFile, image.getBytes());
         }
 
-        return filePath;
+        return uniqueFileName;
     }
+
+    public byte[] getEventFile(String fileName) throws IOException {
+        return null;
+    }
+
+    public byte[] getEventImage(String webRoot, String fileName) throws IOException {
+        String imagePath = webRoot + EVENT_IMAGE_DIRECTORY + File.separator + fileName;
+        InputStream in = this.getClass().getClassLoader().getResourceAsStream(imagePath);
+
+        return ByteStreams.toByteArray(in);
+    }
+
+    public byte[] getAvatar(String imageName) throws IOException {
+        return null;
+    }
+
 
     public boolean isValidImage(MultipartFile image) {
         return (image.getContentType().equals("image/jpeg") || image.getContentType().equals("image/png"));

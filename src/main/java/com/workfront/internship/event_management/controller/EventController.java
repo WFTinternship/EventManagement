@@ -232,11 +232,11 @@ public class EventController {
             }
 
             try {
-                ServletContext servletContext = request.getSession().getServletContext();
-                String uploadPath = servletContext.getRealPath("") + EVENT_IMAGE_UPLOAD_DIRECTORY;
-                String imagePath = fileService.saveFile(uploadPath, image);
+                ServletContext context = request.getSession().getServletContext();
+                String webContentRoot = context.getRealPath("/resources/uploads");
+                String imagePath = fileService.saveEventImage(webContentRoot, image);
 
-                event.setImagePath(imagePath);
+                event.setImageName(imagePath);
             } catch (IOException e) {
                 result.setStatus(ACTION_FAIL);
                 result.setMessage("Unable to upload an image!");
@@ -257,11 +257,10 @@ public class EventController {
             }
 
             try {
-                ServletContext servletContext = request.getSession().getServletContext();
-                String uploadPath = servletContext.getRealPath("") + EVENT_FILE_UPLOAD_DIRECTORY;
-                String filePath = fileService.saveFile(uploadPath, file);
-
-                event.setFilePath(filePath);
+                ServletContext context = request.getSession().getServletContext();
+                String webContentRoot = context.getRealPath("/resources/uploads");
+                String filePath = fileService.saveEventFile(webContentRoot, file);
+                event.setFileName(filePath);
             } catch (IOException e) {
                 result.setStatus(ACTION_FAIL);
                 result.setMessage("Unable to upload a file!");

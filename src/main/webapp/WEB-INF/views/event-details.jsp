@@ -88,6 +88,9 @@
                                        </a>
                                    </span>
                                </span>
+                            <% if(event.getImageName() != null) {%>
+                                <img src = "/events/images/<%=event.getImageName()%>" />
+                            <% } %>
                                 <p class="desc"><%=event.getShortDescription()%></p>
 
                                 <p class="desc"><%=event.getFullDescription()%>
@@ -95,6 +98,7 @@
 
                                 <% List<Invitation> invitations = event.getInvitations();
                                     if(!isEmptyCollection(invitations)) { %>
+                            <h4>Invitations</h4>
                                 <div class="invitees">
                                     <% for(Invitation invitation :invitations) { %>
                                         <div class="invitees_email">

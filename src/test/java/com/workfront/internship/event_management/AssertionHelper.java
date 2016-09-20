@@ -99,8 +99,8 @@ public class AssertionHelper {
         assertEquals(actualEvent.getLocation(), expectedEvent.getLocation());
         assertEquals(actualEvent.getLat(), expectedEvent.getLat(), 0);
         assertEquals(actualEvent.getLng(), expectedEvent.getLng(), 0);
-        assertEquals(actualEvent.getFilePath(), expectedEvent.getFilePath());
-        assertEquals(actualEvent.getImagePath(), expectedEvent.getImagePath());
+        assertEquals(actualEvent.getFileName(), expectedEvent.getFileName());
+        assertEquals(actualEvent.getImageName(), expectedEvent.getImageName());
         assertNotNull(actualEvent.getCreationDate());
         //assertEquals(actualEvent.getLastModifiedDate(), expectedEvent.getLastModifiedDate());
         assertEquals(actualEvent.isPublicAccessed(), expectedEvent.isPublicAccessed());

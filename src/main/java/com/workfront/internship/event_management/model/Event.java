@@ -15,8 +15,8 @@ public class Event {
     private User organizer;
     private double lat;
     private double lng;
-    private String filePath;
-    private String imagePath;
+    private String fileName;
+    private String imageName;
     private Category category;
     private Date startDate;
     private Date endDate;
@@ -94,21 +94,21 @@ public class Event {
         return this;
     }
 
-    public String getFilePath() {
-        return filePath;
+    public String getFileName() {
+        return fileName;
     }
 
-    public Event setFilePath(String filePath) {
-        this.filePath = filePath;
+    public Event setFileName(String fileName) {
+        this.fileName = fileName;
         return this;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public String getImageName() {
+        return imageName;
     }
 
-    public Event setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public Event setImageName(String imageName) {
+        this.imageName = imageName;
         return this;
     }
 

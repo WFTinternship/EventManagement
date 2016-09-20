@@ -265,8 +265,8 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             stmt.setString(4, event.getLocation());
             stmt.setDouble(5, event.getLat());
             stmt.setDouble(6, event.getLng());
-            stmt.setString(7, event.getFilePath());
-            stmt.setString(8, event.getImagePath());
+            stmt.setString(7, event.getFileName());
+            stmt.setString(8, event.getImageName());
 
             if (event.getCategory() != null) {
                 stmt.setInt(9, event.getCategory().getId());
@@ -347,8 +347,8 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             stmt.setString(4, event.getLocation());
             stmt.setDouble(5, event.getLat());
             stmt.setDouble(6, event.getLng());
-            stmt.setString(7, event.getFilePath());
-            stmt.setString(8, event.getImagePath());
+            stmt.setString(7, event.getFileName());
+            stmt.setString(8, event.getImageName());
             stmt.setInt(9, event.getCategory().getId());
             stmt.setBoolean(10, event.isPublicAccessed());
             stmt.setBoolean(11, event.isGuestsAllowed());
@@ -451,8 +451,8 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                     .setLocation(rs.getString("location"))
                     .setLat(rs.getDouble("lat"))
                     .setLng(rs.getDouble("lng"))
-                    .setFilePath(rs.getString("file_path"))
-                    .setImagePath(rs.getString("image_path"))
+                    .setFileName(rs.getString("file_path"))
+                    .setImageName(rs.getString("image_path"))
                     .setPublicAccessed(rs.getBoolean("public_accessed"))
                     .setGuestsAllowed(rs.getBoolean("guests_allowed"))
                     .setCreationDate(rs.getTimestamp("event.creation_date"))
