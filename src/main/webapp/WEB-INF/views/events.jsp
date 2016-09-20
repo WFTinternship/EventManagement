@@ -6,7 +6,8 @@
 <%@ page import="com.workfront.internship.event_management.service.EventService" %>
 <%@ page import="com.workfront.internship.event_management.service.EventServiceImpl" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.workfront.internship.event_management.common.DateParser" %><%--
+<%@ page import="com.workfront.internship.event_management.common.DateParser" %>
+<%@ page import="static com.workfront.internship.event_management.service.util.Validator.isEmptyCollection" %><%--
   Created by IntelliJ IDEA.
   User: Inmelet
   Date: 8/8/2016
@@ -44,40 +45,43 @@
 
     <section class="content_section">
         <div class="content">
+            <%
+                List<Category> categoryList = (List<Category>) request.getAttribute("categories");
+                if (!isEmptyCollection(categoryList)) { %>
             <aside class="left_sidebar">
 
                 <div class="cat_menu">
                     <h6 class="title">Categories</h6>
                     <ul class="cat_list">
                         <%
-                            List<Category> categoryList = (List<Category>) request.getAttribute("categories");
-                            if (!categoryList.isEmpty()) {
-                                for (Category category : categoryList) { %>
+                            for (Category category : categoryList) { %>
                         <li>
                             <div class="cat_item"
-                                 onclick='getEventsByCategory("<%=category.getId()%>");'><%=category.getTitle() %>
+                                 onclick='getEventsByCategory("<%=category.getId()%>", this);'><%=category.getTitle() %>
                             </div>
                             <span class="num_events">
                                 <% /*= eventService.getEventsByCategory(category.getId()).size()*/%>
                             </span>
                         </li>
-                        <% }
-                        } %>
+                        <% } %>
+
                     </ul>
                 </div>
             </aside>
+            <% } %>
 
             <div class="content_block">
                 <div class="event_list clearfix" id="event_list">
                     <div class="main_title centered upper">
                         <h2><span class="line"><i class="icon-calendar"></i></span>
-                            <span class="list_header">All Events</span>
+                            <span class="list_header"><%= (String) request.getAttribute("list-name") %></span>
                         </h2>
                     </div>
                     <div class="list">
                         <%
                             List<Event> eventList = (List<Event>) request.getAttribute("events");
-                            if (!eventList.isEmpty()) {
+
+                            if (!isEmptyCollection(eventList)) {
                                 for (Event event : eventList) {
                         %>
                         <div class="list_item">
@@ -93,7 +97,7 @@
                                                <span><%=DateParser.parseDateToString(event.getStartDate()) %></span>
                                            </a>
                                        </span>
-                                    <% if(event.getLocation() != null) { %>
+                                    <% if (event.getLocation() != null) { %>
 
                                <span class="meta_part">
                                    <a href="#">
@@ -126,7 +130,10 @@
                             </div>
                         </div>
                         <% }
-                        } %>
+                        } else { %>
+                        <div> There are no <%=((String)request.getAttribute("list-name")).toLowerCase()%>.</div>
+
+                        <% } %>
                     </div>
                 </div>
             </div>

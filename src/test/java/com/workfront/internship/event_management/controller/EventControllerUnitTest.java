@@ -86,7 +86,7 @@ public class EventControllerUnitTest {
         String pageName = eventController.loadAllEventsAndCategories(testModel);
 
         verify(testModel).addAttribute("events", testEventList);
-        assertEquals("Incorrect redirect page", pageName, ALL_EVENTS_VIEW);
+        assertEquals("Incorrect redirect page", pageName, EVENTS_LIST_VIEW);
     }
 
     @Test
@@ -158,7 +158,7 @@ public class EventControllerUnitTest {
         when(testRequest.getParameter("categoryId")).thenReturn(String.valueOf(VALID_ID));
 
         //method under test
-        CustomResponse result = eventController.loadEvents(testRequest);
+        CustomResponse result = eventController.loadEventsByCategory(testRequest);
 
         verify(eventService).getEventsByCategory(VALID_ID);
         assertEquals("Status is incorrect", result.getStatus(), ACTION_SUCCESS);
@@ -169,7 +169,7 @@ public class EventControllerUnitTest {
         when(testRequest.getParameter("categoryId")).thenReturn(null);
 
         //method under test
-        CustomResponse result = eventController.loadEvents(testRequest);
+        CustomResponse result = eventController.loadEventsByCategory(testRequest);
 
         verify(eventService).getAllEvents();
         assertEquals("Status is incorrect", result.getStatus(), ACTION_SUCCESS);

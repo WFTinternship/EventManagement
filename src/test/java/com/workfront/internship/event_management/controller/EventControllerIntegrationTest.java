@@ -100,7 +100,7 @@ public class EventControllerIntegrationTest {
         assertFalse("Category list is empty", categoryList.isEmpty());
         assertEquals("Failed to load categories", categoryList.size(), 1);
 
-        assertEquals("Invalid redirect page", pageView, ALL_EVENTS_VIEW);
+        assertEquals("Invalid redirect page", pageView, EVENTS_LIST_VIEW);
     }
 
     @Test
@@ -123,7 +123,7 @@ public class EventControllerIntegrationTest {
         testRequest.setAttribute("categoryId", testCategory.getId());
 
         //method under test
-        CustomResponse response = eventController.loadEvents(testRequest);
+        CustomResponse response = eventController.loadEventsByCategory(testRequest);
         List<Event> eventList = (List<Event>) response.getResult();
 
         //assertions

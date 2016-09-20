@@ -15,16 +15,18 @@ import static com.workfront.internship.event_management.controller.util.PagePara
  * Created by Hermine Turshujyan 8/22/16.
  */
 @Controller
-public class MainController {
+public class HomeController {
 
     @Autowired
     private EventService eventService;
 
     @RequestMapping(value = {"/", "home"})
-    public String loadUpcomingEvents(Model model) {
-        List<Event> eventList = eventService.getAllEvents();
+    public String loadUpcomingEventsForHomePage(Model model) {
+        List<Event> eventList = eventService.getUpcomingEvents();
         model.addAttribute("events", eventList);
 
         return HOME_VIEW;
     }
+
+
 }

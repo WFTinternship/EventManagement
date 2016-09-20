@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
  */
 public class MainControllerUnitTest {
 
-    private static MainController mainController;
+    private static HomeController mainController;
 
     private EventService eventService;
     private Event testEvent;
@@ -28,7 +28,7 @@ public class MainControllerUnitTest {
 
     @BeforeClass
     public static void setUpClass() {
-        mainController = new MainController();
+        mainController = new HomeController();
     }
 
     @AfterClass
@@ -66,7 +66,7 @@ public class MainControllerUnitTest {
         when(eventService.getAllEvents()).thenReturn(testEventList);
 
         //method under test
-        String pageView = mainController.loadUpcomingEvents(testModel);
+        String pageView = mainController.loadUpcomingEventsForHomePage(testModel);
 
         verify(testModel).addAttribute("events", testEventList);
         assertEquals("Incorrect redirect page", pageView, HOME_VIEW);

@@ -242,6 +242,81 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     @Override
+    public List<Event> getUpcomingEvents() throws DAOException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        List<Event> eventsList = null;
+
+        String query = "SELECT * FROM event " +
+                "LEFT JOIN event_category ON event.category_id = event_category.id "+
+                "LEFT JOIN event_invitation on event_invitation.event_id = event.id " +
+                "LEFT JOIN user ON user.id = event_invitation.user_id " +
+                "WHERE event_invitation.user_role = \'Organizer\'" +
+                "AND event.start > ?";
+
+        ;
+        try {
+            //get connection
+            conn = dataSource.getConnection();
+
+            //create statement
+            stmt = conn.prepareStatement(query);
+            stmt.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
+
+            //execute query
+            rs = stmt.executeQuery();
+
+            //get results
+            eventsList = createEventListFromRS(rs);
+        } catch (SQLException e) {
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
+        } finally {
+            closeResources(rs, stmt, conn);
+        }
+        return eventsList;
+    }
+
+    @Override
+    public List<Event> getPastEvents() throws DAOException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        List<Event> eventsList = null;
+
+        String query = "SELECT * FROM event " +
+                "LEFT JOIN event_category ON event.category_id = event_category.id "+
+                "LEFT JOIN event_invitation on event_invitation.event_id = event.id " +
+                "LEFT JOIN user ON user.id = event_invitation.user_id " +
+                "WHERE event_invitation.user_role = \'Organizer\' " +
+                "AND event.start < ?";
+        ;
+        try {
+            //get connection
+            conn = dataSource.getConnection();
+
+            //create statement
+            stmt = conn.prepareStatement(query);
+            stmt.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
+
+            //execute query
+            rs = stmt.executeQuery();
+
+            //get results
+            eventsList = createEventListFromRS(rs);
+        } catch (SQLException e) {
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
+        } finally {
+            closeResources(rs, stmt, conn);
+        }
+    return eventsList;
+    }
+
+    @Override
     public boolean updateEvent(Event event) throws DAOException, ObjectNotFoundException {
 
         Connection conn = null;

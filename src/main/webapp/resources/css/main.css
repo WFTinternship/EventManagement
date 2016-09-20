@@ -474,6 +474,10 @@ input[type="text"]:focus, input[type="password"]:focus {
 .list_content {
 }
 
+.selected{
+    color: #00AFB2;
+    font-weight:bold;
+}
 .list_content {
     padding: 0 0 30px 30px;
 }

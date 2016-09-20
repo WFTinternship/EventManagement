@@ -49,10 +49,10 @@
                             <a href="/events"><span id="all_events">All Events</span></a>
                         </li>
                         <li>
-                            <a href="/events"><span>Upcoming events</span></a>
+                            <a href="/upcoming-events"><span>Upcoming events</span></a>
                         </li>
                         <li>
-                            <a href="/events"><span>Past events</span></a>
+                            <a href="/past-events"><span>Past events</span></a>
                         </li>
                         <% if (session.getAttribute("user") != null) { %>
                         <li>

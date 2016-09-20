@@ -35,7 +35,7 @@ import static org.junit.Assert.assertFalse;
 public class MainControllerIntegrationTest {
 
     @Autowired
-    private MainController mainController;
+    private HomeController mainController;
     @Autowired
     private EventService eventService;
     @Autowired
@@ -73,7 +73,7 @@ public class MainControllerIntegrationTest {
         testEventList.add(testEvent);
 
         //method under test
-        String pageView = mainController.loadUpcomingEvents(testModel);
+        String pageView = mainController.loadUpcomingEventsForHomePage(testModel);
 
         List eventList = (ArrayList) testModel.asMap().get("events");
         assertNotNull("Event list is null", eventList);

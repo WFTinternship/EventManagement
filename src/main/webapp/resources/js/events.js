@@ -6,12 +6,16 @@ $(document).ready(function () {
     //  loadAllEvents();
 });
 
-function getEventsByCategory(categoryId) {
+function getEventsByCategory(categoryId, elem) {
+    debugger;
+    elem.className = "selected";
+
+    $(elem).siblings().each(function() {
+        $(this).removeClass('selected');
+    });
 
     $.getJSON("/events-ajax?categoryId=" + categoryId, function (data) {
         if (data.status == "SUCCESS") {
-            debugger;
-
             var events = [];
             $.each(data.result, function (key, event) {
                 var eventHTML = createEventItem(event)

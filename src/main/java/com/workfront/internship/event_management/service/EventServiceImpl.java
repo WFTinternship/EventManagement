@@ -177,6 +177,16 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public List<Event> getUpcomingEvents() {
+        return eventDAO.getUpcomingEvents();
+    }
+
+    @Override
+    public List<Event> getPastEvents() {
+        return eventDAO.getPastEvents();
+    }
+
+    @Override
     public boolean deleteEvent(int eventId) {
         if (eventId < 1) {
             throw new InvalidObjectException("Invalid event id");

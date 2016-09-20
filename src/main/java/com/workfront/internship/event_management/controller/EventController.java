@@ -60,13 +60,14 @@ public class EventController {
 
         model.addAttribute("events", eventList);
         model.addAttribute("categories", categoryList);
+        model.addAttribute("list-name", ALL_EVENTS_HEADER);
 
-        return ALL_EVENTS_VIEW;
+        return EVENTS_LIST_VIEW;
     }
 
     @RequestMapping(value = "/events-ajax")
     @ResponseBody
-    public CustomResponse loadEvents(HttpServletRequest request) {
+    public CustomResponse loadEventsByCategory(HttpServletRequest request) {
 
         List<Event> eventList;
         String categoryIdStr = request.getParameter("categoryId");
@@ -82,6 +83,24 @@ public class EventController {
         result.setResult(eventList);
 
         return result;
+    }
+
+    @RequestMapping(value = "/past-events")
+    public String loadPastEvents(Model model) {
+        List<Event> eventList = eventService.getPastEvents();
+        model.addAttribute("events", eventList);
+        model.addAttribute("list-name", PAST_EVENTS_HEADER);
+
+        return EVENTS_LIST_VIEW;
+    }
+
+    @RequestMapping(value = "/upcoming-events")
+    public String loadUpcomingEvents(Model model) {
+        List<Event> eventList = eventService.getUpcomingEvents();
+        model.addAttribute("events", eventList);
+        model.addAttribute("list-name", UPCOMING_EVENTS_HEADER);
+
+        return EVENTS_LIST_VIEW;
     }
 
     @GetMapping(value = "/events/{eventId}")
