@@ -5,7 +5,8 @@
 <%@ page import="com.workfront.internship.event_management.service.CategoryServiceImpl" %>
 <%@ page import="com.workfront.internship.event_management.service.EventService" %>
 <%@ page import="com.workfront.internship.event_management.service.EventServiceImpl" %>
-<%@ page import="java.util.List" %><%--
+<%@ page import="java.util.List" %>
+<%@ page import="com.workfront.internship.event_management.common.DateParser" %><%--
   Created by IntelliJ IDEA.
   User: Inmelet
   Date: 8/8/2016
@@ -89,17 +90,20 @@
                                        <span class="meta_part ">
                                            <a href="#">
                                                <i class="ev_icon icon-clock"></i>
-                                               <span><%=event.getStartDate() %></span>
+                                               <span><%=DateParser.parseDateToString(event.getStartDate()) %></span>
                                            </a>
                                        </span>
-                                   <span class="meta_part">
-                                       <a href="#">
-                                           <i class="ev_icon icon-map-marker"></i>
-                                           <span>
-                                               <%=event.getLocation()%>
-                                           </span>
-                                       </a>
-                                   </span>
+                                    <% if(event.getLocation() != null) { %>
+
+                               <span class="meta_part">
+                                   <a href="#">
+                                       <i class="ev_icon icon-map-marker"></i>
+                                       <span>
+                                           <%=event.getLocation()%>
+                                       </span>
+                                   </a>
+                               </span>
+                                <% } %>
                                        <span class="meta_part">
                                            <i class="ev_icon icon-folder"></i>
                                            <span>

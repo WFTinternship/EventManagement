@@ -56,8 +56,8 @@ function createEventItem(event) {
         '</span></a></span>' +
         '<span class="meta_part"><i class="ev_icon icon-folder"></i><span><a href="#">' + event.category.title +
         '</a></span></span>' +
-        '<span class="meta_part"><a href="#"><i class="ev_icon icon-user"></i><span>Event Organizer' +
-        '</span></a></span>' +
+        '<span class="meta_part"><a href="#"><i class="ev_icon icon-user"></i><span>' + event.organizer.firstName +
+        ' ' + event.organizer.lastName + '</span></a></span>' +
         '</span>' +
         '<p class="desc">' + event.shortDescription + '</p>' +
         '<a class="btn" href="/events/' + event.id + '"><span>Details</span></a>' +

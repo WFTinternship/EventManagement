@@ -1,14 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="com.workfront.internship.event_management.model.Category" %>
-<%@ page import="com.workfront.internship.event_management.model.Event" %>
 <%@ page import="com.workfront.internship.event_management.service.CategoryService" %>
 <%@ page import="com.workfront.internship.event_management.service.CategoryServiceImpl" %>
 <%@ page import="com.workfront.internship.event_management.service.EventService" %>
 <%@ page import="com.workfront.internship.event_management.service.EventServiceImpl" %>
 <%@ page import="java.util.List" %>
 <%@ page import="static com.workfront.internship.event_management.service.util.Validator.isEmptyCollection" %>
-<%@ page import="com.workfront.internship.event_management.model.Invitation" %>
-<%@ page import="com.workfront.internship.event_management.model.UserRole" %><%--
+<%@ page import="com.workfront.internship.event_management.common.DateParser" %>
+<%@ page import="com.workfront.internship.event_management.model.*" %><%--
   Created by IntelliJ IDEA.
   User: Inmelet
   Date: 8/8/2016
@@ -49,6 +47,7 @@
 
             <%
                 Event event = (Event) request.getAttribute("event");
+                User sessionUser = (User) session.getAttribute("user");
             %>
             <div class="content_block">
                 <div class="event_list clearfix" id="event_list">
@@ -62,7 +61,7 @@
                                    <span class="meta_part">
                                        <a href="#">
                                            <i class="ev_icon icon-clock"></i>
-                                           <span><%=event.getStartDate() %></span>
+                                           <span><%=DateParser.parseDateToString(event.getStartDate()) %></span>
                                        </a>
                                    </span>
                                 <% if(event.getLocation() != null) { %>
@@ -90,7 +89,7 @@
                                        </a>
                                    </span>
                                </span>
-                            <% if(event.getImageName() != null) {%>
+                            <% if (event.getImageName() != null) {%>
                                 <img class="event_img" src = "/resources/uploads/events/images/<%=event.getImageName()%>" />
                             <% } %>
                                 <p class="desc"><%=event.getShortDescription()%></p>
@@ -100,27 +99,32 @@
 
                                 <% List<Invitation> invitations = event.getInvitations();
                                     if(!isEmptyCollection(invitations)) { %>
-                            <h4>Invitations</h4>
-                                <div class="invitees">
-                                    <% for(Invitation invitation :invitations) { %>
-                                        <div class="invitees_email">
-                                            <i class='icon-user'></i>
 
-                                            <%=invitation.getUser().getEmail()%>
+                                    <h4>Invitations</h4>
+                                    <div class="invitees">
+                                        <% for(Invitation invitation :invitations) { %>
+                                            <div class="invitees_email">
+                                                <i class='icon-user'></i>
 
-                                            <i class='icon-response-<%= invitation.getUserResponse().getTitle()%>'></i>
-                                            <% if(invitation.getUserRole().equals(UserRole.ORGANIZER)){%>
-                                                <span class="organizer"> (Organizer)</span>
-                                            <% }%>
+                                                <%=invitation.getUser().getEmail()%>
 
-                                        </div>
-                                    <% }%>
-                                </div>
+                                                <i class='icon-response-<%= invitation.getUserResponse().getTitle()%>'></i>
+                                                <% if(invitation.getUserRole().equals(UserRole.ORGANIZER)){%>
+                                                    <span class="organizer"> (Organizer)</span>
+                                                    <% if(invitation.getUser().getId() == sessionUser.getId()) {%>
+                                                        <button class="" >Change response</button>
+                                                    <% }%>
+
+                                                <% }%>
+
+                                            </div>
+                                        <% }%>
+                                    </div>
                             <% }%>
                             </div>
                     <%
                         String action = (String) request.getAttribute("action");
-                        if(action == "invitation-respond"){
+                        if(action == "invitation-responded"){
                     %>
                     <div class="respond_wrapper">
                         <h4>Respond to invitation</h4>
@@ -140,7 +144,7 @@
                         <div>
                             </div>>
                         <% } %>
-                        </div>
+                    </div>
                     </div>
                 </div>
             </div>

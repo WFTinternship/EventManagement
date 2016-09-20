@@ -1,7 +1,7 @@
 package com.workfront.internship.event_management.controller;
 
 import com.workfront.internship.event_management.controller.util.CustomResponse;
-import com.workfront.internship.event_management.controller.util.DateParser;
+import com.workfront.internship.event_management.common.DateParser;
 import com.workfront.internship.event_management.exception.service.UnauthorizedAccessException;
 import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Event;
@@ -105,12 +105,11 @@ public class EventController {
                 // TODO: 9/16/16 implement
             }
 
-            //if comming from email
+            //if coming from email
             int responseId = Integer.parseInt(request.getParameter("response"));
-            // TODO: 9/19/16 check if is integer
 
             //update invitation response in db
-            invitationService.respondToInvitation(eventId, userId, responseId);
+            boolean updated = invitationService.respondToInvitation(eventId, userId, responseId);
 
             //load event with invitations
             Event event = eventService.getEventById(eventId);
@@ -120,13 +119,12 @@ public class EventController {
             }
 
             model.addAttribute("event", event);
-            model.addAttribute("action", "invitation-respond");
+            model.addAttribute("action", "invitation-responded");
             return EVENT_DETAILS_VIEW;
-
         }
     }
 
-    @GetMapping(value = "/events/{eventId}/invitation-respond/{userId}")
+    @GetMapping(value = "/events/{eventId}/respond")
     public String respondToEvent(@PathVariable("eventId") int eventId, @PathVariable("userId") int userId,
                                  Model model, HttpServletRequest request) {
         // TODO: 9/16/16 implement 
