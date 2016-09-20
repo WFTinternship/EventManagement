@@ -68,21 +68,6 @@ public class FileService {
         return uniqueFileName;
     }
 
-    public byte[] getEventFile(String fileName) throws IOException {
-        return null;
-    }
-
-    public byte[] getEventImage(String webRoot, String fileName) throws IOException {
-        String imagePath = webRoot + EVENT_IMAGE_DIRECTORY + File.separator + fileName;
-        //InputStream in = this.getClass().getClassLoader().getResourceAsStream(imagePath);
-        return FileUtils.readFileToByteArray(new File(imagePath));
-    }
-
-    public byte[] getAvatar(String imageName) throws IOException {
-        return null;
-    }
-
-
     public boolean isValidImage(MultipartFile image) {
         return (image.getContentType().equals("image/jpeg") || image.getContentType().equals("image/png"));
     }
@@ -91,6 +76,5 @@ public class FileService {
         // TODO: 9/12/16 implement 
         return true;
     }
-
 
 }
