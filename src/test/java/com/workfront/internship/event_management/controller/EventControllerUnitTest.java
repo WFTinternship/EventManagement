@@ -83,7 +83,7 @@ public class EventControllerUnitTest {
         when(categoryService.getAllCategories()).thenReturn(testCategoryList);
         when(eventService.getAllEvents()).thenReturn(testEventList);
 
-        String pageName = eventController.loadAllEventsAndCategories(testModel);
+        String pageName = eventController.loadAllEventsAndCategories(testRequest, testModel);
 
         verify(testModel).addAttribute("events", testEventList);
         assertEquals("Incorrect redirect page", pageName, EVENTS_LIST_VIEW);

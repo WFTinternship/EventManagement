@@ -7,12 +7,12 @@ $(document).ready(function () {
 });
 
 function getEventsByCategory(categoryId, elem) {
-    debugger;
-    elem.className = "selected";
-
-    $(elem).siblings().each(function() {
-        $(this).removeClass('selected');
-    });
+    // elem.className = "selected";
+    //
+    // $(elem).parent().siblings().children().each(function() {
+    //     alert($(this).className);
+    //     $(this).removeClass('selected');
+    // });
 
     $.getJSON("/events-ajax?categoryId=" + categoryId, function (data) {
         if (data.status == "SUCCESS") {

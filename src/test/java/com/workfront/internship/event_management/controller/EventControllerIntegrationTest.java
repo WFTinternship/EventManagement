@@ -86,7 +86,7 @@ public class EventControllerIntegrationTest {
         testCategoryList.add(testCategory);
 
         //method under test
-        String pageView = eventController.loadAllEventsAndCategories(testModel);
+        String pageView = eventController.loadAllEventsAndCategories(testRequest, testModel);
 
         List eventList = (ArrayList) testModel.asMap().get("events");
         List categoryList = (ArrayList) testModel.asMap().get("categories");

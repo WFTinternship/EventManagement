@@ -177,13 +177,28 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> getUpcomingEvents() {
-        return eventDAO.getUpcomingEvents();
+    public List<Event> getPublicEvents() {
+        return eventDAO.getPublicEvents();
     }
 
     @Override
-    public List<Event> getPastEvents() {
-        return eventDAO.getPastEvents();
+    public List<Event> getAllUpcomingEvents() {
+        return eventDAO.getAllUpcomingEvents();
+    }
+
+    @Override
+    public List<Event> getPublicUpcomingEvents() {
+        return eventDAO.getPublicUpcomingEvents();
+    }
+
+    @Override
+    public List<Event> getAllPastEvents() {
+        return eventDAO.getAllPastEvents();
+    }
+
+    @Override
+    public List<Event> getPublicPastEvents() {
+        return eventDAO.getPublicPastEvents();
     }
 
     @Override

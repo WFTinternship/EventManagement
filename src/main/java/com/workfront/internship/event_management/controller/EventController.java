@@ -53,10 +53,16 @@ public class EventController {
 
 
     @RequestMapping(value = "/events")
-    public String loadAllEventsAndCategories(Model model) {
-
+    public String loadAllEventsAndCategories(HttpServletRequest request, Model model) {
         List<Category> categoryList = categoryService.getAllCategories();
-        List<Event> eventList = eventService.getAllEvents();
+
+        User sessionUser = (User) request.getSession().getAttribute("user");
+        List<Event> eventList;
+        if (sessionUser == null){
+            eventList = eventService.getPublicEvents();
+        } else {
+            eventList = eventService.getAllEvents();
+        }
 
         model.addAttribute("events", eventList);
         model.addAttribute("categories", categoryList);
@@ -69,14 +75,8 @@ public class EventController {
     @ResponseBody
     public CustomResponse loadEventsByCategory(HttpServletRequest request) {
 
-        List<Event> eventList;
         String categoryIdStr = request.getParameter("categoryId");
-
-        if (categoryIdStr == null) {
-            eventList = eventService.getAllEvents();
-        } else {
-            eventList = eventService.getEventsByCategory(Integer.parseInt(categoryIdStr));
-        }
+        List<Event> eventList = eventService.getEventsByCategory(Integer.parseInt(categoryIdStr));
 
         CustomResponse result = new CustomResponse();
         result.setStatus(ACTION_SUCCESS);
@@ -86,8 +86,17 @@ public class EventController {
     }
 
     @RequestMapping(value = "/past-events")
-    public String loadPastEvents(Model model) {
-        List<Event> eventList = eventService.getPastEvents();
+    public String loadPastEvents(HttpServletRequest request, Model model) {
+
+        List<Event> eventList;
+        User sessionUser = (User) request.getSession().getAttribute("user");
+
+        if (sessionUser == null){
+            eventList = eventService.getPublicPastEvents();
+        } else {
+            eventList = eventService.getAllPastEvents();
+        }
+
         model.addAttribute("events", eventList);
         model.addAttribute("list-name", PAST_EVENTS_HEADER);
 
@@ -95,8 +104,15 @@ public class EventController {
     }
 
     @RequestMapping(value = "/upcoming-events")
-    public String loadUpcomingEvents(Model model) {
-        List<Event> eventList = eventService.getUpcomingEvents();
+    public String loadUpcomingEvents(HttpServletRequest request, Model model) {
+        List<Event> eventList;
+        User sessionUser = (User) request.getSession().getAttribute("user");
+
+        if (sessionUser == null){
+            eventList = eventService.getPublicUpcomingEvents();
+        } else {
+            eventList = eventService.getAllUpcomingEvents();
+        }
         model.addAttribute("events", eventList);
         model.addAttribute("list-name", UPCOMING_EVENTS_HEADER);
 

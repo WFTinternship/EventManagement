@@ -32,11 +32,15 @@ public interface EventDAO {
 
     List<Event> getAllEvents() throws DAOException;
 
-    List<Event> getUpcomingEvents() throws DAOException;
+    List<Event> getPublicEvents() throws DAOException;
 
-    List<Event> getPastEvents() throws DAOException;
+    List<Event> getAllUpcomingEvents() throws DAOException;
 
+    List<Event> getPublicUpcomingEvents() throws DAOException;
 
+    List<Event> getAllPastEvents() throws DAOException;
+
+    List<Event> getPublicPastEvents() throws DAOException;
 
     //update record in db
     boolean updateEvent(Event event) throws DAOException, ObjectNotFoundException;

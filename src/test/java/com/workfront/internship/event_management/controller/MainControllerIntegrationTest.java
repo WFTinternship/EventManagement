@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.controller;
 
+import com.workfront.internship.event_management.controller.util.TestHttpServletRequest;
 import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.service.CategoryService;
@@ -42,6 +43,7 @@ public class MainControllerIntegrationTest {
     private CategoryService categoryService;
 
     private Model testModel;
+    private TestHttpServletRequest testRequst;
     private Event testEvent;
 
     @Before
@@ -73,7 +75,7 @@ public class MainControllerIntegrationTest {
         testEventList.add(testEvent);
 
         //method under test
-        String pageView = mainController.loadUpcomingEventsForHomePage(testModel);
+        String pageView = mainController.loadUpcomingEventsForHomePage(testRequst, testModel);
 
         List eventList = (ArrayList) testModel.asMap().get("events");
         assertNotNull("Event list is null", eventList);

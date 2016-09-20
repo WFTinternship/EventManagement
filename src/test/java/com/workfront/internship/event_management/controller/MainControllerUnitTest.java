@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.controller;
 
+import com.workfront.internship.event_management.controller.util.TestHttpServletRequest;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.service.EventService;
 import com.workfront.internship.event_management.service.EventServiceImpl;
@@ -25,6 +26,8 @@ public class MainControllerUnitTest {
     private EventService eventService;
     private Event testEvent;
     private Model testModel;
+    private TestHttpServletRequest testRequest;
+
 
     @BeforeClass
     public static void setUpClass() {
@@ -66,7 +69,7 @@ public class MainControllerUnitTest {
         when(eventService.getAllEvents()).thenReturn(testEventList);
 
         //method under test
-        String pageView = mainController.loadUpcomingEventsForHomePage(testModel);
+        String pageView = mainController.loadUpcomingEventsForHomePage(testRequest, testModel);
 
         verify(testModel).addAttribute("events", testEventList);
         assertEquals("Incorrect redirect page", pageView, HOME_VIEW);

@@ -27,9 +27,15 @@ public interface EventService {
 
     List<Event> getAllEvents();
 
-    List<Event> getUpcomingEvents();
+    List<Event> getPublicEvents();
 
-    List<Event> getPastEvents();
+    List<Event> getPublicUpcomingEvents();
+
+    List<Event> getPublicPastEvents();
+
+    List<Event> getAllUpcomingEvents();
+
+    List<Event> getAllPastEvents();
 
     //Update
     boolean editEvent(Event event);

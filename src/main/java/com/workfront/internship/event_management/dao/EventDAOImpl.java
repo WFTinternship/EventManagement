@@ -207,113 +207,32 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
     @Override
     public List<Event> getAllEvents() throws DAOException {
-
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        List<Event> eventsList = null;
-
-        String query = "SELECT * FROM event " +
-                "LEFT JOIN event_category ON event.category_id = event_category.id "+
-                "LEFT JOIN event_invitation on event_invitation.event_id = event.id " +
-                "LEFT JOIN user ON user.id = event_invitation.user_id " +
-                "WHERE event_invitation.user_role = \'Organizer\'";
-                ;
-        try {
-            //get connection
-            conn = dataSource.getConnection();
-
-            //create statement
-            stmt = conn.prepareStatement(query);
-
-            //execute query
-            rs = stmt.executeQuery();
-
-            //get results
-            eventsList = createEventListFromRS(rs);
-        } catch (SQLException e) {
-            LOGGER.error("SQL Exception", e);
-            throw new DAOException(e);
-        } finally {
-            closeResources(rs, stmt, conn);
-        }
-        return eventsList;
+        return getEvents(false);
     }
 
     @Override
-    public List<Event> getUpcomingEvents() throws DAOException {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        List<Event> eventsList = null;
-
-        String query = "SELECT * FROM event " +
-                "LEFT JOIN event_category ON event.category_id = event_category.id "+
-                "LEFT JOIN event_invitation on event_invitation.event_id = event.id " +
-                "LEFT JOIN user ON user.id = event_invitation.user_id " +
-                "WHERE event_invitation.user_role = \'Organizer\'" +
-                "AND event.start > ?";
-
-        ;
-        try {
-            //get connection
-            conn = dataSource.getConnection();
-
-            //create statement
-            stmt = conn.prepareStatement(query);
-            stmt.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
-
-            //execute query
-            rs = stmt.executeQuery();
-
-            //get results
-            eventsList = createEventListFromRS(rs);
-        } catch (SQLException e) {
-            LOGGER.error("SQL Exception", e);
-            throw new DAOException(e);
-        } finally {
-            closeResources(rs, stmt, conn);
-        }
-        return eventsList;
+    public List<Event> getPublicEvents() throws DAOException {
+        return getEvents(true);
     }
 
     @Override
-    public List<Event> getPastEvents() throws DAOException {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
+    public List<Event> getAllUpcomingEvents() throws DAOException {
+        return getUpcomingEvents(false);
+    }
 
-        List<Event> eventsList = null;
+    @Override
+    public List<Event> getPublicUpcomingEvents() throws DAOException {
+        return getUpcomingEvents(true);
+    }
 
-        String query = "SELECT * FROM event " +
-                "LEFT JOIN event_category ON event.category_id = event_category.id "+
-                "LEFT JOIN event_invitation on event_invitation.event_id = event.id " +
-                "LEFT JOIN user ON user.id = event_invitation.user_id " +
-                "WHERE event_invitation.user_role = \'Organizer\' " +
-                "AND event.start < ?";
-        ;
-        try {
-            //get connection
-            conn = dataSource.getConnection();
+    @Override
+    public List<Event> getAllPastEvents() throws DAOException {
+        return getPastEvents(false);
+    }
 
-            //create statement
-            stmt = conn.prepareStatement(query);
-            stmt.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
-
-            //execute query
-            rs = stmt.executeQuery();
-
-            //get results
-            eventsList = createEventListFromRS(rs);
-        } catch (SQLException e) {
-            LOGGER.error("SQL Exception", e);
-            throw new DAOException(e);
-        } finally {
-            closeResources(rs, stmt, conn);
-        }
-    return eventsList;
+    @Override
+    public List<Event> getPublicPastEvents() throws DAOException {
+        return getPastEvents(true);
     }
 
     @Override
@@ -391,6 +310,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         return success;
     }
+
 
     @Override
     public boolean deleteEvent(int eventId) throws DAOException, ObjectNotFoundException {
@@ -495,6 +415,119 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         }
         return eventsList;
     }
+
+    private List<Event> getUpcomingEvents(boolean publicAccessed) throws DAOException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        List<Event> eventsList = null;
+
+        String query = "SELECT * FROM event " +
+                "LEFT JOIN event_category ON event.category_id = event_category.id "+
+                "LEFT JOIN event_invitation on event_invitation.event_id = event.id " +
+                "LEFT JOIN user ON user.id = event_invitation.user_id " +
+                "WHERE event_invitation.user_role = \'Organizer\'" +
+                "AND event.start > ? AND event.public_accessed = ?";
+
+        ;
+        try {
+            //get connection
+            conn = dataSource.getConnection();
+
+            //create statement
+            stmt = conn.prepareStatement(query);
+            stmt.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
+            stmt.setBoolean(2, publicAccessed);
+
+            //execute query
+            rs = stmt.executeQuery();
+
+            //get results
+            eventsList = createEventListFromRS(rs);
+        } catch (SQLException e) {
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
+        } finally {
+            closeResources(rs, stmt, conn);
+        }
+        return eventsList;
+    }
+
+    private List<Event> getPastEvents(boolean publicAccessed) throws DAOException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        List<Event> eventsList = null;
+
+        String query = "SELECT * FROM event " +
+                "LEFT JOIN event_category ON event.category_id = event_category.id "+
+                "LEFT JOIN event_invitation on event_invitation.event_id = event.id " +
+                "LEFT JOIN user ON user.id = event_invitation.user_id " +
+                "WHERE event_invitation.user_role = \'Organizer\' " +
+                "AND event.start < ?  AND event.public_accessed = ?";
+
+        try {
+            //get connection
+            conn = dataSource.getConnection();
+
+            //create statement
+            stmt = conn.prepareStatement(query);
+            stmt.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
+            stmt.setBoolean(2, publicAccessed);
+
+            //execute query
+            rs = stmt.executeQuery();
+
+            //get results
+            eventsList = createEventListFromRS(rs);
+        } catch (SQLException e) {
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
+        } finally {
+            closeResources(rs, stmt, conn);
+        }
+        return eventsList;
+    }
+
+    private List<Event> getEvents(boolean publicAccessed) throws DAOException {
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        List<Event> eventsList = null;
+
+        String query = "SELECT * FROM event " +
+                "LEFT JOIN event_category ON event.category_id = event_category.id "+
+                "LEFT JOIN event_invitation on event_invitation.event_id = event.id " +
+                "LEFT JOIN user ON user.id = event_invitation.user_id " +
+                "WHERE event_invitation.user_role = \'Organizer\' " +
+                "AND  event.public_accessed = ?";
+
+        try {
+            //get connection
+            conn = dataSource.getConnection();
+
+            //create statement
+            stmt = conn.prepareStatement(query);
+            stmt.setBoolean(1, publicAccessed);
+
+            //execute query
+            rs = stmt.executeQuery();
+
+            //get results
+            eventsList = createEventListFromRS(rs);
+        } catch (SQLException e) {
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
+        } finally {
+            closeResources(rs, stmt, conn);
+        }
+        return eventsList;
+    }
+
 
     private List<Event> createEventListFromRS(ResultSet rs) throws SQLException {
         List<Event> eventsList = new ArrayList<>();
