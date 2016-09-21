@@ -57,10 +57,6 @@ $(document).ready(function () {
 
     });
 
-    $(".tabs-navi").ch("a").on(click, function(){
-        alert("aaa");
-    })
-
     //**** Edit/Delete Event ***/
     $("#edit-event").click(function (event) {
 

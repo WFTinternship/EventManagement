@@ -26,6 +26,7 @@ import java.util.List;
 
 import static com.workfront.internship.event_management.controller.util.PageParameters.*;
 import static com.workfront.internship.event_management.service.util.Validator.isEmptyCollection;
+import static com.workfront.internship.event_management.service.util.Validator.isEmptyString;
 
 /**
  * Created by Hermine Turshujyan 8/22/16.
@@ -246,14 +247,12 @@ public class EventController {
         CustomResponse result = new CustomResponse();
 
         //check if user is logged in
-        User sessionUser = (User) request.getSession().getAttribute("user");
+        HttpSession session = request.getSession();
+        User sessionUser = (User) session.getAttribute("user");
         if (sessionUser == null) {
-            String message = "You are not authorized to per-form this action!";
-            logger.info(message);
+            logger.warn(UNAUTHORIZED_ACCESS_MESSAGE);
 
-            result.setStatus(ACTION_FAIL);
-            result.setMessage(message);
-            return result; // TODO: 9/13/16 throw exception 
+            throw new UnauthorizedAccessException(UNAUTHORIZED_ACCESS_MESSAGE);
         }
 
         Event event = new Event();
@@ -265,7 +264,7 @@ public class EventController {
         String invitationsString = request.getParameter("invitations");
 
         List<Invitation> invitations = new ArrayList<>();
-        if(invitationsString != null) {
+        if(!isEmptyString(invitationsString)) {
 
             //get invitees email list
             List<String> invitationEmails = Arrays.asList(invitationsString.split(","));
@@ -353,6 +352,12 @@ public class EventController {
         }
 
         eventService.createEvent(event);
+
+        //update logged in user's organized events in session
+        List<Event> userOrganizedEvents = (List<Event>) session.getAttribute("userOrganizedEvents");
+        userOrganizedEvents.add(event);
+        session.setAttribute("userOrganizedEvents", userOrganizedEvents); // TODO: 9/21/16
+
         emailService.sendInvitations(event);
 
         return result;

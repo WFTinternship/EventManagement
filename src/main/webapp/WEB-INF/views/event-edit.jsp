@@ -1,6 +1,8 @@
 <%@ page import="com.workfront.internship.event_management.model.Category" %>
 <%@ page import="com.workfront.internship.event_management.model.Event" %>
 <%@ page import="java.util.List" %>
+<%@ page import="static com.workfront.internship.event_management.common.DateParser.getDateStringFromDate" %>
+<%@ page import="static com.workfront.internship.event_management.common.DateParser.getTimeStringFromDate" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
@@ -81,8 +83,9 @@
                             <span class="required_star">*</span>
                         </label>
                         <input type="text" name="startDate" id="start_date" class="date_picker_input"
-                               value="<%=(event.getStartDate() != null) ? event.getStartDate() : ""%>">
-                        <input type="text" name="startTime" id="start_time" class="time_picker_input">
+                               value="<%=(event.getStartDate() != null) ? getDateStringFromDate(event.getStartDate()) : ""%>">
+                        <input type="text" name="startTime" id="start_time" class="time_picker_input"
+                               value="<%=(event.getStartDate() != null) ? getTimeStringFromDate(event.getStartDate()) : ""%>">
                     </div>
                     <div class="form_col_half">
                         <label for="end_date">
@@ -90,8 +93,9 @@
                             <span class="required_star">*</span>
                         </label>
                         <input type="text" name="endDate" id="end_date" class="date_picker_input"
-                               value="<%=(event.getEndDate() != null) ? event.getEndDate() : ""%>">
-                        <input type="text" name="endTime" id="end_time" class="time_picker_input">
+                               value="<%=(event.getEndDate() != null) ? getDateStringFromDate(event.getEndDate()) : ""%>">
+                        <input type="text" name="endTime" id="end_time" class="time_picker_input"
+                                value="<%=(event.getEndDate() != null) ? getTimeStringFromDate(event.getEndDate()) : ""%>">
                     </div>
                     <input type="checkbox" id="check-all-day"> All day
                 </div>
@@ -101,8 +105,7 @@
                         <label for="short_desc">
                             <span class="field_name">Short description</span>
                         </label>
-                        <textarea form="event_form" name="shortDesc" id="short_desc" rows="5">
-                        <%=event.getShortDescription()%></textarea>
+                        <textarea form="event_form" name="shortDesc" id="short_desc" rows="5"><%=event.getShortDescription()%></textarea>
                     </div>
                 </div>
 
@@ -111,8 +114,7 @@
                         <label for="short_desc">
                             <span class="field_name">Full description</span>
                         </label>
-                        <textarea form="event_form" name="fullDesc" id="full_desc" rows="7">
-                        <%=event.getFullDescription()%></textarea>
+                        <textarea form="event_form" name="fullDesc" id="full_desc" rows="7"><%=event.getFullDescription()%></textarea>
                     </div>
                 </div>
 

@@ -1,6 +1,5 @@
 package com.workfront.internship.event_management.common;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,6 +25,16 @@ public class DateParser {
 
     public static String parseDateToString(Date date) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+        return formatter.format(date);
+    }
+
+    public static String getDateStringFromDate(Date date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        return formatter.format(date);
+    }
+
+    public static String getTimeStringFromDate(Date date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("hh:mm");
         return formatter.format(date);
     }
 }
