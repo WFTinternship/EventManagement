@@ -47,12 +47,12 @@
     <section class="content_section">
         <div class="content">
             <div class="content_block">
-                <a id="new-event-btn" class="btn upper" href="/new-event">New event</a>
+                <a id="new-event-btn" class="btn upper" href="/new-event"><span><i class="icon-pencil"></i></span>New event</a>
 
                 <div class="hm-tabs tabs2 uppper is-ended"><nav class="clearfix">
                     <ul class="tabs-navi">
-                        <li><a data-content="my-events" class="selected" href="#"><span><i class="icon-pencil"></i></span>My Events</a></li>
-                        <li><a data-content="all-invitations" href="#"><span><i class="icon-calendar"></i></span>All invitations</a></li>
+                        <li><a data-content="my-events" class="selected" href="#"><span><i class="icon-calendar"></i></span>Events I'm hosting</a></li>
+                        <li><a data-content="all-invitations" href="#"><span><i class="icon-envelope"></i></span>Invites</a></li>
                         <li><a data-content="accepted-invitations" href="#"><span><i class="icon-accepted"></i></span>Accepted Invitation</a></li>
                         <li><a data-content="pending-invitations" href="#"><span><i class="icon-question"></i></span>Pending Invitations</a></li>
                         <li><a data-content="participated-events" href="#"><span><i class="icon-group"></i></span>Participated Events</a></li>

@@ -53,7 +53,10 @@ $(document).ready(function () {
             },
             location: "required",
             startTime: "required",
-            endTime: "required"
+            endTime: "required",
+            eventImage:{
+                // accept: "image/*"
+            },
         },
 
         messages: {
@@ -62,11 +65,14 @@ $(document).ready(function () {
                 required: "Please provide start date for event"
             },
             endDate: {
-                required:"Please provide end date for event"
+                required: "Please provide end date for event"
             },
             location: "Please provide location for event",
             startTime: "Please, provide start time or choose 'All day'",
             endTime: "Please, provide end time or choose 'All day'",
+            eventImage: {
+                // accept: "sfsfs"
+            }
         },
 
         submitHandler: function (form) {

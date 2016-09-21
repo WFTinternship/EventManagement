@@ -6,7 +6,6 @@
 <header id="header">
     <div id="topbar">
         <div class="content">
-
             <% User user = (User) session.getAttribute("user");
                 if (user == null) {
             %>
@@ -21,20 +20,22 @@
                 </span>
             </div>
             <% } else { %>
-            <span class="top_registration">
-                    <i class="top_icon icon-user"></i>
-                    Hi, <%=user.getFirstName()%>
-            </span>
-            <div class="dropdown" style="float:right;">
-                <button class="dropbtn">Hi, <%=user.getFirstName()%></button>
+            <div class="dropdown">
+                <span class="dropbtn">
+                    <i class="top_icon icon-user">
+                    </i>Hi, <%=user.getFirstName()%>
+                    <i class="icon-angle-down"></i>
+                </span>
                 <div class="dropdown-content">
-                    <a href="#">My events</a>
+                    <a href="#">My Account</a>
                     <a href="#">Invited events</a>
                     <a href="#">Accepted Events</a>
                     <a href="#">Participated Events</a>
-                    <a href="/logout" class="upper" id="logout_button" >Logout</a>
                 </div>
             </div>
+            <span><a href="/logout" class="upper" id="logout_button" >Logout</a></span>
+
+
             <% }
                 ; %>
         </div>

@@ -18,6 +18,9 @@
 
     <script src="<c:url value="/resources/js/lib/jquery-3.1.0.min.js" />"></script>
     <script src="<c:url value="/resources/js/lib/jquery.validate.js" />"></script>
+    <script src="<c:url value="/resources/js/lib/jquery.validate-additional-methods.js" />"></script>
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/additional-methods.min.js"></script>
+
     <script src="<c:url value="/resources/js/lib/jquery-ui.js" />"></script>
     <script src="<c:url value="/resources/js/lib/jquery.timepicker.js" />"></script>
     <script src="<c:url value="/resources/js/lib/bootstrap.min.js" />"></script>
