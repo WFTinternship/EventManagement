@@ -354,9 +354,8 @@ public class EventController {
         eventService.createEvent(event);
 
         //update logged in user's organized events in session
-        List<Event> userOrganizedEvents = (List<Event>) session.getAttribute("userOrganizedEvents");
-        userOrganizedEvents.add(event);
-        session.setAttribute("userOrganizedEvents", userOrganizedEvents); // TODO: 9/21/16
+        List<Event> userOrganizedEvents = eventService.getUserOrganizedEvents(sessionUser.getId());
+        session.setAttribute("userOrganizedEvents", userOrganizedEvents);
 
         emailService.sendInvitations(event);
 
