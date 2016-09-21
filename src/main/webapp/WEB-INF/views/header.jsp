@@ -63,12 +63,6 @@
                         <li>
                             <a href="/past-events"><span>Past events</span></a>
                         </li>
-                        <% if (session.getAttribute("user") != null) { %>
-                        <li>
-                            <a href="/new-event"><span>Create Event</span></a>
-                        </li>
-                        <% }
-                            ; %>
                         <li>
                             <a href=""><span>Gallery</span></a>
                         </li>

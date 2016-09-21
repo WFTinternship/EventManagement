@@ -132,7 +132,7 @@
 .tabs2 .tabs-navi a.selected > span i {
     color: #1ccdca;
 }
-.tabs2 .tabs-navi a {
+.tabs2 .tabs-navi a{
     border-color: #E5E5E5;
     line-height: 45px;
     color: #888;
@@ -251,4 +251,11 @@ a{
 }
 .my-account .list_content {
     padding: 20px 30px 30px 30px;
+}
+
+#new-event-btn{
+    line-height: 45px;
+    color: #fff;
+    padding: 0 18px;
+    margin-bottom:20px;
 }

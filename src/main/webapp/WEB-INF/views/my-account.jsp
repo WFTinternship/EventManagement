@@ -47,6 +47,8 @@
     <section class="content_section">
         <div class="content">
             <div class="content_block">
+                <a id="new-event-btn" class="btn upper" href="/new-event">New event</a>
+
                 <div class="hm-tabs tabs2 uppper is-ended"><nav class="clearfix">
                     <ul class="tabs-navi">
                         <li><a data-content="my-events" class="selected" href="#"><span><i class="icon-pencil"></i></span>My Events</a></li>
