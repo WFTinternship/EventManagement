@@ -24,18 +24,39 @@ $(document).ready(function () {
 
 
     //validate and submit add event form
+    $.validator.addMethod("endDate_greater_startDate", function(value, element) {
+        var startDate = new stringToDate($("#start_date").val(), "dd/MM/yyyy", "/");
+        var endDate = new stringToDate($("#end_date").val(),  "dd/MM/yyyy", "/");
+        if(endDate < startDate) {
+            return false
+        } else if(endDate > startDate){
+            return true;
+        } else {
+           return  $("#end_time").val() > $("#start_time").val()
+        }
+    }, "* End date should be greater than start date");
+
     $('#event_form').validate({
         rules: {
             eventTitle: "required",
-            startDate: "required",
-            endDate: "required",
+            startDate: {
+                required:true,
+            },
+            endDate: {
+                required:true,
+                endDate_greater_startDate: true
+            },
             location: "required"
         },
 
         messages: {
             eventTitle: "Please enter a title for event.",
-            startDate: "Please provide start date for event",
-            endDate: "Please provide end date for event",
+            startDate: {
+                required: "Please provide start date for event"
+            },
+            endDate: {
+                required:"Please provide end date for event"
+            },
             location: "Please provide location for event"
         },
 
@@ -165,6 +186,8 @@ $(document).ready(function () {
         }
     });
 
+
+
     /********  helper methods **********/
     function createEmailSuggestion(user) {
         var emailHTML = '<div class="suggested_email">' + user.email + '</div>';
@@ -216,3 +239,17 @@ $(document).ready(function () {
     }
 
 })
+
+//helper methods
+function stringToDate(_date,_format,_delimiter) {
+    var formatLowerCase = _format.toLowerCase();
+    var formatItems = formatLowerCase.split(_delimiter);
+    var dateItems = _date.split(_delimiter);
+    var monthIndex = formatItems.indexOf("mm");
+    var dayIndex = formatItems.indexOf("dd");
+    var yearIndex = formatItems.indexOf("yyyy");
+    var month = parseInt(dateItems[monthIndex]);
+    month -= 1;
+    var formatedDate = new Date(dateItems[yearIndex],month,dateItems[dayIndex]);
+    return formatedDate;
+}
