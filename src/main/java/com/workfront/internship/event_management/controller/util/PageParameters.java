@@ -17,7 +17,6 @@ public class PageParameters {
     public static final String MY_ACCOUNT_VIEW = "my-account";
 
 
-
     //response messages, parameter values
     public static final String ACTION_SUCCESS = "SUCCESS";
     public static final String ACTION_FAIL = "FAIL";
@@ -31,4 +30,8 @@ public class PageParameters {
     public static final String PAST_EVENTS_HEADER = "Past Events";
     public static final String ALL_EVENTS_HEADER = "All Events";
 
+    //error messages
+    public static final String OPERATION_NOT_ALLOWED_MESSAGE = "Operation not allowed!";
+    public static final String UNAUTHORIZED_ACCESS_MESSAGE = "Unauthorized access!";
+    public static final String OPERATION_FAILED_MESSAGE = "An error occurred while processing your request. Please, try again later";
 }

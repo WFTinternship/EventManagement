@@ -87,5 +87,37 @@ $(document).ready(function () {
 });
 
 function deleteEvent(id){
-    alert(id);
+    $.ajax({
+        url: '/events/' + id + "/delete",
+        type: 'GET',
+        success: function (result) {
+            if (result.status == "SUCCESS") {
+                $.notify(
+                    { message: 'Event successfully deleted' },
+                    { type: 'success',
+                        delay: 2000
+                    }
+                );
+                //delete from ui
+                $("#event_" + id).hide('slow', function(){
+                    $("#event_" + id).remove();
+                    if($('#organized-events-list').children().length == 0) {
+                        $("#organized-events-tab").html('<div class="no-events">No organized events.</div>');
+                    }
+                });
+
+            } else if (result.status == "FAIL") {
+                $.notify(
+                    { message: result.message },
+                    { type: 'danger'}
+                );
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+        }
+    })
+}
+
+function removeDeletedEvent(){
+
 }

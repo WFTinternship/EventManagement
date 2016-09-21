@@ -121,7 +121,7 @@ public class EventControllerUnitTest {
         when(testSession.getAttribute("user")).thenReturn(null);
 
         //method under test
-        String pageName = eventController.goToEditEventPage(VALID_ID, testRequest, testModel);
+        String pageName = eventController.goToEditEventPage(testRequest, testModel, VALID_ID);
 
         assertEquals("Incorrect redirect page", pageName, DEFAULT_ERROR_VIEW);
     }
@@ -134,7 +134,7 @@ public class EventControllerUnitTest {
         when(categoryService.getAllCategories()).thenReturn(testCategoryList);
 
         //method under test
-        String pageName = eventController.goToEditEventPage(VALID_ID, testRequest, testModel);
+        String pageName = eventController.goToEditEventPage(testRequest, testModel, VALID_ID);
 
         verify(categoryService).getAllCategories();
         verify(testModel).addAttribute("categories", testCategoryList);

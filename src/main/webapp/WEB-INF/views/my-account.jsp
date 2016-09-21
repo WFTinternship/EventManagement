@@ -18,6 +18,7 @@
     <script src="<c:url value="/resources/js/lib/jquery-3.1.0.min.js" />"></script>
     <script src="<c:url value="/resources/js/lib/jquery.validate.js" />"></script>
     <script src="<c:url value="/resources/js/lib/jquery.flexslider.js" />"></script>
+    <script src="<c:url value="/resources/js/lib/bootstrap-notify.js" />"></script>
     <script src="<c:url value="/resources/js/lib/bootstrap.min.js" />"></script>
     <script src="<c:url value="/resources/js/my-account.js" />"></script>
     <script src="<c:url value="/resources/js/events.js" />"></script>
@@ -36,7 +37,7 @@
     <link href="<c:url value="/resources/css/icon_font.css" />" rel="stylesheet">
 
 </head>
-<body class="home_page">
+<body class="my-account">
 <div id="main_wrapper">
     <!-- Main Header -->
     <jsp:include page="header.jsp"/>
@@ -56,14 +57,14 @@
                     </ul>
                     <!-- tabs-navi --></nav>
                     <ul style="height: auto;" class="tabs-body">
-                        <li data-content="my-events" class="selected clearfix">
+                        <li data-content="my-events" class="selected clearfix" id="organized-events-tab">
                             <% List<Event> userOrganizedEvents = (List<Event>)session.getAttribute("userOrganizedEvents");
                             if(!isEmptyCollection(userOrganizedEvents)) { %>
 
-                            <div class="list">
+                            <div class="list" id="organized-events-list">
                                 <% for (Event event : userOrganizedEvents) {
                                 %>
-                                <div class="list_item">
+                                <div class="list_item" id="event_<%=event.getId()%>">
                                     <div class="list_content">
                                         <h6 class="title">
                                             <a href="#"><%=event.getTitle() %></a>
@@ -72,7 +73,7 @@
                                             <i class="icon-pencil"></i>
                                             <span>Edit</span>
                                         </a>
-                                        <button id="delete-event" class="change-event-btn" onclick="deleteEvent(<%=event.getId()%>">
+                                        <button id="delete-event" class="change-event-btn" onclick="deleteEvent(<%=event.getId()%>)">
                                             <i class="icon-delete"></i>
                                             <span>Delete</span>
                                         </button>
@@ -117,7 +118,10 @@
                                 </div>
                                 <% } %>
                                 </div>
-                                <% } %>
+                                <% } else { %>
+
+                            <div class="no-events">No organized events.</div>
+                            <% } %>
 
                         </li>
                         <li data-content="all-invitations">

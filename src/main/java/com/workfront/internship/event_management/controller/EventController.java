@@ -131,12 +131,13 @@ public class EventController {
     public String goToRespondToEventPage(@PathVariable("eventId") int eventId, Model model, HttpServletRequest request) {
         User sessionUser = (User) request.getSession().getAttribute("user");
         if (sessionUser == null) {
-            throw new UnauthorizedAccessException();
+            throw new UnauthorizedAccessException(UNAUTHORIZED_ACCESS_MESSAGE);
         }
 
         int userId = Integer.parseInt(request.getParameter("user"));
         if (sessionUser.getId() != userId) {
-            throw new UnauthorizedAccessException();
+// TODO: 9/21/16 redirect to login
+
         }
 
         //if coming from email
@@ -171,7 +172,7 @@ public class EventController {
 
         //check if user is logged in
         if (session.getAttribute("user") == null) {
-            throw new UnauthorizedAccessException();
+            throw new UnauthorizedAccessException(UNAUTHORIZED_ACCESS_MESSAGE);
         }
 
         List<Category> categoryList = categoryService.getAllCategories();
@@ -189,20 +190,51 @@ public class EventController {
 
         //check if user is logged in
         if (sessionUser == null) {
-            throw new UnauthorizedAccessException("Unauthorized access");
+            throw new UnauthorizedAccessException(UNAUTHORIZED_ACCESS_MESSAGE);
         }
 
         Event event = eventService.getFullEventById(eventId);
         if(event.getOrganizer().getId() != sessionUser.getId()){
-            throw new UnauthorizedAccessException("Unauthorized access");
+            throw new UnauthorizedAccessException(OPERATION_NOT_ALLOWED_MESSAGE);
         }
-
 
         List<Category> categoryList = categoryService.getAllCategories();
         model.addAttribute("categories", categoryList);
         model.addAttribute("event", event);
 
         return EVENT_EDIT_VIEW;
+    }
+
+    @RequestMapping(value = "/events/{eventId}/delete")
+    @ResponseBody
+    public CustomResponse deleteEvent(HttpServletRequest request, Model model, @PathVariable("eventId") int eventId) {
+        HttpSession session = request.getSession();
+        User sessionUser = (User) session.getAttribute("user");
+
+        //check if user is logged in
+        if (sessionUser == null) {
+            throw new UnauthorizedAccessException(OPERATION_NOT_ALLOWED_MESSAGE);
+        }
+
+        Event event = eventService.getEventById(eventId);
+        if(event.getOrganizer().getId() != sessionUser.getId()){
+            throw new UnauthorizedAccessException(OPERATION_NOT_ALLOWED_MESSAGE);
+        }
+
+        CustomResponse response = new CustomResponse();
+        boolean success = eventService.deleteEvent(eventId);
+        if(success){
+            List<Event> updatedOrganizedEventsList = eventService.getUserOrganizedEvents(sessionUser.getId());
+            session.setAttribute("userOrganizedEvents", updatedOrganizedEventsList);
+            response.setStatus(ACTION_SUCCESS);
+        } else {
+            logger.warn(OPERATION_FAILED_MESSAGE);
+
+            response.setStatus(ACTION_FAIL);
+            response.setMessage(OPERATION_FAILED_MESSAGE);
+        }
+
+        return response;
     }
 
     @RequestMapping(value = "/add-event", method = RequestMethod.POST)
@@ -321,7 +353,6 @@ public class EventController {
         }
 
         eventService.createEvent(event);
-
         emailService.sendInvitations(event);
 
         return result;
@@ -353,28 +384,7 @@ public class EventController {
         return customResponse;
     }
 
-    @RequestMapping(value = "/edit-event/{eventId}")
-    public String goToEditEventPage(@PathVariable("eventId") int id, HttpServletRequest request, Model model) {
-
-        HttpSession session = request.getSession();
-
-        //check if user is logged in
-        if (session.getAttribute("user") != null) {
-
-            Event event = eventService.getEventById(id);
-            List<Category> categoryList = categoryService.getAllCategories();
-
-            model.addAttribute("event", event);
-            model.addAttribute("categories", categoryList);
-
-            return EVENT_EDIT_VIEW;
-        } else {
-            model.addAttribute("message", "Access is denied!");
-            return DEFAULT_ERROR_VIEW;
-        }
-    }
-
-
+    // TODO: 9/21/16 move to service
     private Event createEmptyEvent() {
         Event event = new Event();
         event.setTitle("")
