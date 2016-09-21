@@ -3,7 +3,8 @@
  */
 $(document).ready(function () {
 
-    /***** Date/time picker configs *****/
+/***** Date/time picker configs *****/
+
     $("#start_date").datepicker({
         dateFormat: 'dd/mm/yy'
         //dateFormat: 'yy-mm-dd'
@@ -28,7 +29,8 @@ $(document).ready(function () {
         $("#guests_list").css("display", "block");
     }
 
-    //validate and submit add event form
+/******* Validate and submit add event form ******/
+
     $.validator.addMethod("endDate_greater_startDate", function(value, element) {
         var startDate = new stringToDate($("#start_date").val(), "dd/MM/yyyy", "/");
         var endDate = new stringToDate($("#end_date").val(),  "dd/MM/yyyy", "/");
@@ -40,6 +42,10 @@ $(document).ready(function () {
            return  $("#end_time").val() >= $("#start_time").val()
         }
     }, "* End date should be greater than start date");
+
+    $.validator.addMethod('fileSize', function(value, element, param) {
+        return this.optional(element) || (element.files[0].size <= param)
+    });
 
     $('#event_form').validate({
         rules: {
@@ -55,7 +61,12 @@ $(document).ready(function () {
             startTime: "required",
             endTime: "required",
             eventImage:{
-                // accept: "image/*"
+                extension: "png|jpeg|jpg",
+                fileSize: 5242880, //5MB
+            },
+            eventFile:{
+                extension: "pdf|doc|docx|xls|xlsx",
+                fileSize: 5242880, //5MB
             },
         },
 
@@ -71,7 +82,12 @@ $(document).ready(function () {
             startTime: "Please, provide start time or choose 'All day'",
             endTime: "Please, provide end time or choose 'All day'",
             eventImage: {
-                // accept: "sfsfs"
+                extension: "Only .jpg and .png files are allowed",
+                fileSize: "Image size should be less then 5MB"
+            },
+            eventFile: {
+                extension: "Only .pdf, .doc, .xls files are allowed",
+                fileSize: "File size should be less then 5MB"
             }
         },
 

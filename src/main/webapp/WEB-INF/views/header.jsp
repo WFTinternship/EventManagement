@@ -27,7 +27,7 @@
                     <i class="icon-angle-down"></i>
                 </span>
                 <div class="dropdown-content">
-                    <a href="#">My Account</a>
+                    <a href="/my-account">My Account</a>
                     <a href="#">Invited events</a>
                     <a href="#">Accepted Events</a>
                     <a href="#">Participated Events</a>
