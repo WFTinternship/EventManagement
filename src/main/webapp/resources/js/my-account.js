@@ -1,6 +1,6 @@
-//=====> Tabs
 $(document).ready(function () {
 
+    /**** TAB BAR ***/
     jQuery('.hm-tabs').each(function (index) {
         var allparent = jQuery(this);
         var all_width = allparent.width();
@@ -56,4 +56,36 @@ $(document).ready(function () {
         }
 
     });
+
+    $(".tabs-navi").ch("a").on(click, function(){
+        alert("aaa");
+    })
+
+    //**** Edit/Delete Event ***/
+    $("#edit-event").click(function (event) {
+
+    });
+
+    $("#edit-delete").click(function (event) {
+        $.ajax({
+            url: '/delet-event',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (result) {
+                if (result.status == "SUCCESS") {
+                    window.location = "/events";
+                } else if (result.status == "FAIL") {
+                    window.location = "/error";
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+            }
+        })
+    });
 });
+
+function deleteEvent(id){
+    alert(id);
+}

@@ -388,10 +388,11 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         ResultSet rs = null;
 
         List<Event> eventsList = null;
-        String sqlStr = "SELECT event.*, event_category.* FROM event " +
+        String sqlStr = "SELECT event.*, user.*, event_category.* FROM event " +
                 "LEFT JOIN event_category ON event.category_id = event_category.id " +
                 "LEFT JOIN event_invitation ON event_invitation.event_id = event.id " +
-                "LEFT JOIN user_response ON event_invitation.user_response = user_response.id " +
+                "LEFT JOIN user ON user.id = event_invitation.user_id " +
+                "LEFT JOIN user_response ON event_invitation.user_response_id = user_response.id " +
                 "WHERE event_invitation.user_id = ? AND " + columnName + " = ?";
         try {
             //get connection
@@ -541,7 +542,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                     .setCreationDate(rs.getTimestamp("event_category.creation_date"));
 
             User organizer = new User();
-            organizer.setId(rs.getInt("id"))
+            organizer.setId(rs.getInt("user.id"))
                     .setFirstName(rs.getString("first_name"))
                     .setLastName(rs.getString("last_name"))
                     .setPassword(rs.getString("password"))

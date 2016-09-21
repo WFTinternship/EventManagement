@@ -80,4 +80,7 @@
 .icon-group::before{
     content: "\f0c0";
 }
+.icon-delete::before{
+    content: "\f00d";
+}
 

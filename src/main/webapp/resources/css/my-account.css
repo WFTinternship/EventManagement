@@ -214,14 +214,33 @@
     border-radius: 3px;
 }
 
-.tabs-navi a::after{
+.tabs-navi a::after, .change-event-btn{
     -webkit-transition: all 0.4s ease;
     -moz-transition: all 0.4s ease;
     -o-transition: all 0.4s ease;
     -ms-transition: all 0.4s ease;
     transition: all 0.4s ease;
 }
+
+
+/******************/
 h6, .tabs-navi li a{
     text-transform: uppercase;
+    display:inline-block;
+}
 
+.change-event-btn{
+    margin-left:20px;
+    color: #00AFB2;
+    border: none;
+    background: none;
+}
+.change-event-btn:hover{
+    color: #666;
+}
+#delete-event{
+    margin-left:10px;
+}
+a{
+    text-decoration: none;
 }

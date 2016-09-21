@@ -1,7 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="com.workfront.internship.event_management.model.Category" %>
-<%@ page import="java.util.List" %>
+<%@ page import="com.workfront.internship.event_management.common.DateParser" %>
+<%@ page import="com.workfront.internship.event_management.model.Event" %>
 <%@ page import="static com.workfront.internship.event_management.service.util.Validator.isEmptyCollection" %>
+<%@ page import="java.util.List" %>
 <%--
   Created by IntelliJ IDEA.
   User: Inmelet
@@ -19,6 +20,7 @@
     <script src="<c:url value="/resources/js/lib/jquery.flexslider.js" />"></script>
     <script src="<c:url value="/resources/js/lib/bootstrap.min.js" />"></script>
     <script src="<c:url value="/resources/js/my-account.js" />"></script>
+    <script src="<c:url value="/resources/js/events.js" />"></script>
 
     <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
@@ -39,47 +41,10 @@
     <!-- Main Header -->
     <jsp:include page="header.jsp"/>
     <!-- End Main Header -->
-
-    <div class="flexslider">
-        <ul class="slides">
-            <li>
-                <img src="<c:url value="/resources/img/slide2.jpg" />"/>
-            </li>
-            <li>
-                <img src="<c:url value="/resources/img/slide2.jpg" />"/>
-            </li>
-        </ul>
-    </div>
-
     <!-- Content Section -->
 
     <section class="content_section">
         <div class="content">
-            <%
-                List<Category> categoryList = (List<Category>) request.getAttribute("categories");
-                if (!isEmptyCollection(categoryList)) { %>
-            <aside class="left_sidebar">
-
-                <div class="cat_menu">
-                    <h6 class="title">Categories</h6>
-                    <ul class="cat_list">
-                        <%
-                            for (Category category : categoryList) { %>
-                        <li>
-                            <div class="cat_item"
-                                 onclick='getEventsByCategory("<%=category.getId()%>", this);'><%=category.getTitle() %>
-                            </div>
-                            <span class="num_events">
-                                <% /*= eventService.getEventsByCategory(category.getId()).size()*/%>
-                            </span>
-                        </li>
-                        <% } %>
-
-                    </ul>
-                </div>
-            </aside>
-            <% } %>
-
             <div class="content_block">
                 <div class="hm-tabs tabs2 uppper is-ended"><nav class="clearfix">
                     <ul class="tabs-navi">
@@ -92,9 +57,68 @@
                     <!-- tabs-navi --></nav>
                     <ul style="height: auto;" class="tabs-body">
                         <li data-content="my-events" class="selected clearfix">
-                            <h6>Why Choose Us ?</h6>
-                            <p>Inbox Lorem ipsum dolor sit amet, consectetur adipisicing elit. Earum recusandae rem animi accusamus quisquam reprehenderit sed voluptates, numquam, quibusdam velit dolores repellendus tempora corrupti accusantium obcaecati voluptate totam eveniet laboriosam?</p>
-                            <p>Inbox Lorem ipsum dolor sit amet, consectetur adipisicing elit. Earum recusandae rem animi accusamus quisquam reprehenderit sed voluptates, numquam, quibusdam velit dolores repellendus tempora corrupti accusantium obcaecati voluptate totam eveniet laboriosam?</p>
+                            <% List<Event> userOrganizedEvents = (List<Event>)session.getAttribute("userOrganizedEvents");
+                            if(!isEmptyCollection(userOrganizedEvents)) { %>
+
+                            <div class="list">
+                                <% for (Event event : userOrganizedEvents) {
+                                %>
+                                <div class="list_item">
+                                    <div class="list_content">
+                                        <h6 class="title">
+                                            <a href="#"><%=event.getTitle() %></a>
+                                        </h6>
+                                        <a id="edit-event" class="change-event-btn" href="/events/<%=event.getId()%>/edit">
+                                            <i class="icon-pencil"></i>
+                                            <span>Edit</span>
+                                        </a>
+                                        <button id="delete-event" class="change-event-btn" onclick="deleteEvent(<%=event.getId()%>">
+                                            <i class="icon-delete"></i>
+                                            <span>Delete</span>
+                                        </button>
+                                        <span class="meta">
+                                       <span class="meta_part ">
+                                           <a href="#">
+                                               <i class="ev_icon icon-clock"></i>
+                                               <span><%=DateParser.parseDateToString(event.getStartDate()) %></span>
+                                           </a>
+                                       </span>
+                                    <% if (event.getLocation() != null) { %>
+
+                               <span class="meta_part">
+                                   <a href="#">
+                                       <i class="ev_icon icon-map-marker"></i>
+                                       <span>
+                                           <%=event.getLocation()%>
+                                       </span>
+                                   </a>
+                               </span>
+                                <% } %>
+                                       <span class="meta_part">
+                                           <i class="ev_icon icon-folder"></i>
+                                           <span>
+                                               <a href="#">
+                                                   <%= event.getCategory().getTitle()%>
+                                               </a>
+                                           </span>
+                                       </span>
+                                       <span class="meta_part">
+                                           <a href="#">
+                                               <i class="ev_icon icon-user"></i>
+                                               <span><%=event.getOrganizer().getFirstName() %> <%=event.getOrganizer().getLastName() %></span>
+                                           </a>
+                                       </span>
+                                   </span>
+                                        <p class="desc"><%=event.getShortDescription()%>
+                                        </p>
+
+                                        <a class="btn" href="/events/<%=event.getId()%>"><span>Details</span></a>
+                                    </div>
+                                </div>
+                                <% } %>
+                                </div>
+                                <% } %>
+
                         </li>
                         <li data-content="all-invitations">
                             <p>New Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non a voluptatibus, ex odit totam cumque nihil eos asperiores ea, labore rerum. Doloribus tenetur quae impedit adipisci, laborum dolorum eaque ratione quaerat, eos dicta consequuntur atque ex facere voluptate cupiditate incidunt.</p>
