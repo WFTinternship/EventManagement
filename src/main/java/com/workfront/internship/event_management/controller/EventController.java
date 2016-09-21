@@ -131,32 +131,30 @@ public class EventController {
     public String goToRespondToEventPage(@PathVariable("eventId") int eventId, Model model, HttpServletRequest request) {
         User sessionUser = (User) request.getSession().getAttribute("user");
         if (sessionUser == null) {
-            // TODO: 9/16/16 redirect to login page
-            return null;
-        } else {
-            int userId = Integer.parseInt(request.getParameter("user"));
-            if (sessionUser.getId() != userId) {
-                throw new UnauthorizedAccessException("Unauthorized access");
-                // TODO: 9/16/16 implement
-            }
-
-            //if coming from email
-            int responseId = Integer.parseInt(request.getParameter("response"));
-
-            //update invitation response in db
-            boolean updated = invitationService.respondToInvitation(eventId, userId, responseId);
-
-            //load event with invitations
-            Event event = eventService.getEventById(eventId);
-            List<Invitation> invitations = invitationService.getInvitationsByEvent(eventId);
-            if (!isEmptyCollection(invitations)) {
-                event.setInvitations(invitations);
-            }
-
-            model.addAttribute("event", event);
-            model.addAttribute("action", "invitation-responded");
-            return EVENT_DETAILS_VIEW;
+            throw new UnauthorizedAccessException();
         }
+
+        int userId = Integer.parseInt(request.getParameter("user"));
+        if (sessionUser.getId() != userId) {
+            throw new UnauthorizedAccessException();
+        }
+
+        //if coming from email
+        int responseId = Integer.parseInt(request.getParameter("response"));
+
+        //update invitation response in db
+        boolean updated = invitationService.respondToInvitation(eventId, userId, responseId);
+
+        //load event with invitations
+        Event event = eventService.getEventById(eventId);
+        List<Invitation> invitations = invitationService.getInvitationsByEvent(eventId);
+        if (!isEmptyCollection(invitations)) {
+            event.setInvitations(invitations);
+        }
+
+        model.addAttribute("event", event);
+        model.addAttribute("action", "invitation-responded");
+        return EVENT_DETAILS_VIEW;
     }
 
     @GetMapping(value = "/events/{eventId}/respond")
@@ -172,7 +170,9 @@ public class EventController {
         HttpSession session = request.getSession();
 
         //check if user is logged in
-        // if (session.getAttribute("user") != null) {
+        if (session.getAttribute("user") == null) {
+            throw new UnauthorizedAccessException();
+        }
 
         List<Category> categoryList = categoryService.getAllCategories();
 
@@ -180,10 +180,29 @@ public class EventController {
         model.addAttribute("event", createEmptyEvent());
 
         return EVENT_EDIT_VIEW;
-       /* } else {
-            model.addAttribute("message", "Access is denied!");
-            return DEFAULT_ERROR_VIEW;
-        }*/
+    }
+
+    @RequestMapping(value = "/events/{eventId}/edit")
+    public String goToEditEventPage(HttpServletRequest request, Model model, @PathVariable("eventId") int eventId) {
+        HttpSession session = request.getSession();
+        User sessionUser = (User) session.getAttribute("user");
+
+        //check if user is logged in
+        if (sessionUser == null) {
+            throw new UnauthorizedAccessException("Unauthorized access");
+        }
+
+        Event event = eventService.getFullEventById(eventId);
+        if(event.getOrganizer().getId() != sessionUser.getId()){
+            throw new UnauthorizedAccessException("Unauthorized access");
+        }
+
+
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categories", categoryList);
+        model.addAttribute("event", event);
+
+        return EVENT_EDIT_VIEW;
     }
 
     @RequestMapping(value = "/add-event", method = RequestMethod.POST)

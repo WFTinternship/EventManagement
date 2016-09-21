@@ -3,8 +3,10 @@ package com.workfront.internship.event_management.controller;
 import com.workfront.internship.event_management.controller.util.CustomResponse;
 import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
+import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.EmailService;
+import com.workfront.internship.event_management.service.EventService;
 import com.workfront.internship.event_management.service.FileService;
 import com.workfront.internship.event_management.service.UserService;
 import org.apache.log4j.Logger;
@@ -20,6 +22,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
 import static com.workfront.internship.event_management.controller.util.PageParameters.*;
 
@@ -35,6 +38,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private EventService eventService;
     @Autowired
     private FileService fileService;
     @Autowired
@@ -56,6 +61,10 @@ public class UserController {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
             result.setStatus(ACTION_SUCCESS);
+
+            //load user related events from db and save in session
+            List<Event> userOrganizedEvents = eventService.getUserOrganizedEvents(user.getId());
+            session.setAttribute("userOrganizedEvents", userOrganizedEvents);
 
         } catch (InvalidObjectException | OperationFailedException e) {
             result.setStatus(ACTION_FAIL);
