@@ -207,16 +207,18 @@ $(document).ready(function () {
 
             $("#end_time").css("display", "none");
             $("#end_time").val("23:59");
+
+            $("#start_time-error").css("display", "none");
+            $("#end_time-error").css("display", "none");
+
         } else {
             $("#start_time").val("");
             $("#start_time").css("display", "block");
 
             $("#end_time").val("");
             $("#end_time").css("display", "block");
-
         }
     });
-
 
 
     /********  helper methods **********/
@@ -269,18 +271,18 @@ $(document).ready(function () {
         }
     }
 
+    function stringToDate(_date,_format,_delimiter) {
+        var formatLowerCase = _format.toLowerCase();
+        var formatItems = formatLowerCase.split(_delimiter);
+        var dateItems = _date.split(_delimiter);
+        var monthIndex = formatItems.indexOf("mm");
+        var dayIndex = formatItems.indexOf("dd");
+        var yearIndex = formatItems.indexOf("yyyy");
+        var month = parseInt(dateItems[monthIndex]);
+        month -= 1;
+        var formatedDate = new Date(dateItems[yearIndex],month,dateItems[dayIndex]);
+        return formatedDate;
+    }
+
 })
 
-//helper methods
-function stringToDate(_date,_format,_delimiter) {
-    var formatLowerCase = _format.toLowerCase();
-    var formatItems = formatLowerCase.split(_delimiter);
-    var dateItems = _date.split(_delimiter);
-    var monthIndex = formatItems.indexOf("mm");
-    var dayIndex = formatItems.indexOf("dd");
-    var yearIndex = formatItems.indexOf("yyyy");
-    var month = parseInt(dateItems[monthIndex]);
-    month -= 1;
-    var formatedDate = new Date(dateItems[yearIndex],month,dateItems[dayIndex]);
-    return formatedDate;
-}
