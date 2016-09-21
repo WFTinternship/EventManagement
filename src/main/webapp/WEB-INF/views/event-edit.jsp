@@ -1,8 +1,8 @@
-<%@ page import="com.workfront.internship.event_management.model.Category" %>
-<%@ page import="com.workfront.internship.event_management.model.Event" %>
-<%@ page import="java.util.List" %>
 <%@ page import="static com.workfront.internship.event_management.common.DateParser.getDateStringFromDate" %>
 <%@ page import="static com.workfront.internship.event_management.common.DateParser.getTimeStringFromDate" %>
+<%@ page import="static com.workfront.internship.event_management.service.util.Validator.isEmptyCollection" %>
+<%@ page import="com.workfront.internship.event_management.model.*" %>
+<%@ page import="java.util.List" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
@@ -39,22 +39,22 @@
     <link href="<c:url value="/resources/css/icon_font.css" />" rel="stylesheet">
 
 </head>
+<%
+    Event event = (Event) request.getAttribute("event");
+    User sessionUser = (User) session.getAttribute("user");
+
+    boolean emptyEvent = true;
+    int categoryId = 0;
+    if (event.getId() != 0) {
+    emptyEvent = false;
+    categoryId = event.getCategory().getId();
+    }
+%>
 <body>
 <div id="main_wrapper">
     <!-- Main Header -->
     <jsp:include page="header.jsp"/>
     <!-- End Main Header -->
-    <% Event event = (Event) request.getAttribute("event");
-        boolean emptyEvent = true;
-        int categoryId = 0;
-
-
-        if (event.getId() != 0) {
-            emptyEvent = false;
-            categoryId = event.getCategory().getId();
-        }
-    %>
-
     <!-- Content Section -->
     <section class="content_section">
         <div class="content content clearfix">
@@ -207,11 +207,27 @@
                 </div>
                 <div id="suggested_emails"></div>
 
+
+                <!-- Invitees -->
                 <div class="form_row clearfix">
                     <div class="form_col_full" id="guests_list">
                         <h4>Guests</h4>
                         <div id="invitation_list">
-                        </div>
+
+                    <%  if(!isEmptyCollection(event.getInvitations())) {
+                            for(Invitation invitation: event.getInvitations()) { %>
+                            <div class='invitation_item clearfix' >
+                                <i class='icon-response-<%= invitation.getUserResponse().getId()%>'></i>
+                                <div class='invitation_item_email'><%=invitation.getUser().getEmail()%></div>
+                                <span class ='remove_email'>x</span>
+
+                                <% if(invitation.getUserRole().equals(UserRole.ORGANIZER)){%>
+                                    <span class="organizer"> (Organizer)</span>
+                                <% }%>
+                            </div>
+                        <% }
+                    } %></div>
+
                     </div>
                 </div>
 
@@ -223,29 +239,6 @@
                 </div>
 
             </form>
-
-            <form id="check-invitation-email">
-                <%--<div class="form_row clearfix">--%>
-                <%--<div class="form_col_full" id="invitation_email">--%>
-                <%--<label for="invitation-email">--%>
-                <%--<span class="field_name">Invitations</span>--%>
-                <%--</label>--%>
-                <%--<input class="input_text" name="invitationEmail" id="invitation-email" type="text"--%>
-                <%--placeholder="Enter guest email address" autocomplete="off">--%>
-                <%--<input type="button" value="Add" id="add_invitation_btn">--%>
-                <%--</div>--%>
-                <%--</div>--%>
-                <%--<div id="suggested_emails"></div>--%>
-
-                <%--<div class="form_row clearfix">--%>
-                <%--<div class="form_col_full" id="guests_list">--%>
-                <%--<h4>Guests</h4>--%>
-                <%--<div id="invitation_list">--%>
-                <%--</div>--%>
-                <%--</div>--%>
-                <%--</div>--%>
-            </form>
-
         </div>
     </section>
     <!-- End Content Section -->

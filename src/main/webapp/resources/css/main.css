@@ -840,6 +840,10 @@ textarea{
     float: left;
 }
 
+.invitation_item .organizer{
+    margin-top:3px;
+    margin-left:10px;
+}
 .invitation_item i {
     margin-right: 10px;
 }
@@ -857,6 +861,8 @@ textarea{
     margin-left: 15px;
     float: left;
     font-weight: bold;
+    cursor: pointer;
+    cursor: hand;
 }
 
 #event_form .error {

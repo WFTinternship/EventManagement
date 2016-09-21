@@ -34,6 +34,10 @@
     <link href="<c:url value="/resources/css/icon_font.css" />" rel="stylesheet">
 
 </head>
+<%
+    Event event = (Event) request.getAttribute("event");
+    User sessionUser = (User) session.getAttribute("user");
+%>
 <body class="events_page">
 <div id="main_wrapper">
     <!-- Main Header -->
@@ -44,11 +48,6 @@
 
     <section class="content_section">
         <div class="content clearfix">
-
-            <%
-                Event event = (Event) request.getAttribute("event");
-                User sessionUser = (User) session.getAttribute("user");
-            %>
             <div class="content_block">
                 <div class="event_list clearfix" id="event_list">
                     <div class="list_item">
@@ -98,7 +97,7 @@
                                 <% List<Invitation> invitations = event.getInvitations();
                                     if(!isEmptyCollection(invitations)) { %>
 
-                                    <h4>Invitations</h4>
+                                    <h4>Guests</h4>
                                     <div class="invitees">
                                         <% for(Invitation invitation :invitations) { %>
                                             <div class="invitees_email">

@@ -54,17 +54,21 @@
 
 }
 
-.icon-response-Maybe::before{
+.icon-response-3::before{
     content: "\f29c";
-    color: #888;
+    color: #ffd410;
 }
-.icon-response-No::before{
+.icon-response-2::before{
     content: "\f00d";
     color: #F86923;
 }
-.icon-response-Yes::before{
+.icon-response-1::before{
     content: "\f00c";
     color: #1ccdca;
+}
+.icon-response-5::before{
+    content: "\f29c";
+    color: #888;
 }
 
 .icon-pencil::before{

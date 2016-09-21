@@ -22,6 +22,11 @@ $(document).ready(function () {
         interval: 15
     });
 
+    if ($('#invitation_list').children().length == 0) {
+        $("#guests_list").css("display", "none");
+    } else{
+        $("#guests_list").css("display", "block");
+    }
 
     //validate and submit add event form
     $.validator.addMethod("endDate_greater_startDate", function(value, element) {
