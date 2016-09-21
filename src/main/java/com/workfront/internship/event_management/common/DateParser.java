@@ -10,6 +10,10 @@ import java.util.Date;
 public class DateParser {
 
     public static Date parseStringToDate(String dateString, String timeString) {
+        if (timeString.isEmpty()) {
+            timeString = "00:00";
+        }
+
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm");
 
         String dateTimeString = dateString + " " + timeString;

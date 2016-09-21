@@ -32,7 +32,7 @@ $(document).ready(function () {
         } else if(endDate > startDate){
             return true;
         } else {
-           return  $("#end_time").val() > $("#start_time").val()
+           return  $("#end_time").val() >= $("#start_time").val()
         }
     }, "* End date should be greater than start date");
 
@@ -46,7 +46,9 @@ $(document).ready(function () {
                 required:true,
                 endDate_greater_startDate: true
             },
-            location: "required"
+            location: "required",
+            startTime: "required",
+            endTime: "required"
         },
 
         messages: {
@@ -57,7 +59,9 @@ $(document).ready(function () {
             endDate: {
                 required:"Please provide end date for event"
             },
-            location: "Please provide location for event"
+            location: "Please provide location for event",
+            startTime: "Please, provide start time or choose 'All day'",
+            endTime: "Please, provide end time or choose 'All day'",
         },
 
         submitHandler: function (form) {
@@ -175,7 +179,7 @@ $(document).ready(function () {
             $("#start_time").val("00:00");
 
             $("#end_time").css("display", "none");
-            $("#end_time").val("00:00");
+            $("#end_time").val("23:59");
         } else {
             $("#start_time").val("");
             $("#start_time").css("display", "block");
