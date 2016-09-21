@@ -10,22 +10,31 @@
             <% User user = (User) session.getAttribute("user");
                 if (user == null) {
             %>
+            <div id="login-reg-menu">
             <span class="top_registration">
                     <i class="top_icon icon-user"></i>
                     <a class="upper" href="/registration">Registration</a>
                 </span>
-            <span class="top_login">
+                <span class="top_login">
                     <i class="top_icon icon-lock"></i>
                     <button id="login_button" class="login_button upper">Login</button>
                 </span>
+            </div>
             <% } else { %>
             <span class="top_registration">
-                        <i class="top_icon icon-user"></i>
-                        Hi, <%=user.getFirstName()%>
-                </span>
-            <form action="/logout" method="GET" id="logout_form">
-                <input class="upper" type="submit" value="Logout" id="logout_button"/>
-            </form>
+                    <i class="top_icon icon-user"></i>
+                    Hi, <%=user.getFirstName()%>
+            </span>
+            <div class="dropdown" style="float:right;">
+                <button class="dropbtn">Hi, <%=user.getFirstName()%></button>
+                <div class="dropdown-content">
+                    <a href="#">My events</a>
+                    <a href="#">Invited events</a>
+                    <a href="#">Accepted Events</a>
+                    <a href="#">Participated Events</a>
+                    <a href="/logout" class="upper" id="logout_button" >Logout</a>
+                </div>
+            </div>
             <% }
                 ; %>
         </div>

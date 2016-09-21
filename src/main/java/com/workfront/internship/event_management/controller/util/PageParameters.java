@@ -11,7 +11,12 @@ public class PageParameters {
     public static final String EVENT_DETAILS_VIEW = "event-details";
     public static final String EVENT_INVITATION_RESPOND = "invitation-respond";
     public static final String EVENTS_LIST_VIEW = "events";
+
     public static final String HOME_VIEW = "index";
+    public static final String REGISTRATION_VIEW = "index";
+    public static final String MY_ACCOUNT_VIEW = "my-account";
+
+
 
     //response messages, parameter values
     public static final String ACTION_SUCCESS = "SUCCESS";

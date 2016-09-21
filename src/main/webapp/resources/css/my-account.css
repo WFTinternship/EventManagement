@@ -1,0 +1,227 @@
+
+/* ----------------------------------------------------------------
+	Tabs
+-----------------------------------------------------------------*/
+.hm-tabs {
+    position: relative;
+    margin: 0px auto 50px;
+    clear: both;
+}
+.hm-tabs nav {
+    -webkit-overflow-scrolling: touch;
+    background: #f8f7ee;
+    box-shadow: inset 0 -2px 3px rgba(203, 196, 130, 0.06);
+    -moz-box-shadow: inset 0 -2px 3px rgba(203, 196, 130, 0.06);
+    -webkit-box-shadow: inset 0 -2px 3px rgba(203, 196, 130, 0.06);
+    position: relative;
+    float: none;
+    background: transparent;
+    box-shadow: none;
+    z-index: 1;
+}
+.hm-tabs:last-child {
+    margin-bottom: 0;
+}
+.hm-tabs:after, .tabs-navi:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+.tabs-navi {
+    width: auto;
+    font-size: 0;
+    margin-bottom: 0px;
+}
+.tabs-navi li {
+    display: inline-block;
+}
+.tabs-navi a {
+    display: block;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #888;
+    line-height: 50px;
+    width: auto;
+    text-align: left;
+    font-size: 12px;
+    padding: 0 25px;
+    position: relative;
+    background: #f9fafc;
+}
+.tabs-navi a i {
+    font-size: 18px;
+    margin-right: 10px;
+    vertical-align: sub;
+}
+.tabs2:not(.fill_active) .tabs-navi a:hover {
+    color: #1ccdca;
+}
+.hm-tabs:not(.simple_tabs) .tabs-body {
+    background: #ffffff;
+    clear: both;
+}
+.hm-tabs:not(.simple_tabs) .tabs-body > li {
+    padding: 20px 25px 20px;
+}
+.tabs-body > li {
+    display: none;
+}
+.tabs-body li table {
+    margin: 5px 0;
+}
+.tabs-body li .counter_a {
+    margin-bottom: 26px;
+}
+.tabs-body li.selected {
+    display: block;
+    -webkit-animation: cd-fade-in 0.5s;
+    -moz-animation: cd-fade-in 0.5s;
+    animation: cd-fade-in 0.5s;
+}
+.tabs-body ul.list1 {
+    padding: 10px 0;
+}
+.tabs-body ul.list1 li {
+    margin-bottom: 15px;
+}
+.ver_tabs .tabs-navi li:last-child a.selected {
+    border-bottom: 1px solid #E5E5E5;
+    margin-bottom: 15px;
+}
+.ver_tabs .tabs-navi li {
+    display: block;
+    width: 100%;
+}
+.ver_tabs .tabs-navi a:before {
+    background: none;
+    content: "";
+    height: 100%;
+    left: -1px;
+    position: absolute;
+    top: 0;
+    width: 3px;
+}
+.ver_tabs .tabs-navi a.selected:before {
+    background: #1ccdca;
+}
+.tabs2 .tabs-navi a.selected:after {
+    border-color: transparent transparent #fff;
+    border-style: solid;
+    border-width: 8px;
+    bottom: -27px;
+    content: "";
+    display: block;
+    position: absolute;
+}
+.tabs2 .tabs-navi a.selected:before {
+    border-color: transparent transparent #666;
+    border-style: solid;
+    border-width: 8px;
+    bottom: -27px;
+    content: "";
+    display: block;
+    position: absolute;
+}
+.tabs2 .tabs-navi li {
+    margin-right: 8px;
+}
+.tabs2 .tabs-navi a.selected {
+    border-color: #1ccdca;
+    color: #1ccdca;
+}
+.tabs2 .tabs-navi a.selected > span i {
+    color: #1ccdca;
+}
+.tabs2 .tabs-navi a {
+    border-color: #E5E5E5;
+    line-height: 45px;
+    color: #888;
+    padding: 0 18px;
+    background: #fff;
+    border: 1px solid #E5E5E5;
+}
+.tabs2 .tabs-body {
+    margin-top: 25px;
+    border: 1px solid #E5E5E5;
+}
+.bg_gray .tabs2 .tabs-body, .bg_gray .tabs1 .tabs-body, .bg_gray .tabs1:not(.ver_tabs) .tabs-navi a, .bg_gray .tabs2 .tabs-navi a:not(.selected) {
+    border-color: #e5e5e5;
+}
+.tabs2.fill_active .tabs-navi a.selected, .tabs2.fill_active .tabs-navi a:hover, .tabs1.fill_active .tabs-navi a.selected, .tabs1.fill_active .tabs-navi a:hover {
+    background: #1ccdca;
+    color: #fff;
+    border-color: #1ccdca;
+}
+.tabs1.fill_active .tabs-navi li:first-child a.selected, .tabs1.fill_active .tabs-navi li:first-child a:hover {
+    border-left: 1px solid #1ccdca;
+}
+.ver_tabs:not(.gradient_active) .tabs-navi a.selected:after {
+    background: #fff;
+    content: "";
+    display: block;
+    height: 100%;
+    position: absolute;
+    right: -1px;
+    top: 0;
+    width: 1px;
+}
+.bg_gray .hm-tabs.tabs1.ver_tabs {
+    background: #fff;
+    border: 1px solid #E5E5E5;
+}
+.bg_gray .tabs-navi a {
+    background: #fff;
+}
+.hm-tabs.tabs1.ver_tabs {
+    border: 1px solid #dedede;
+}
+.icon_alone, .tabs-navi a i.icon_alone {
+    margin-right: 0;
+}
+.hm-tabs li > p:not(last-child), .panel-body p:not(last-child) {
+    margin-bottom: 15px;
+}
+.hm-tabs li > p:last-child, .panel-body p:last-child {
+    margin-bottom: 0px;
+}
+
+.tabs2 .tabs-navi a.selected::before {
+    border-color: transparent transparent #666;
+    border-style: solid;
+    border-width: 8px;
+    bottom: -27px;
+    content: "";
+    display: block;
+    position: absolute;
+}
+
+.tabs2 .tabs-navi a.selected::after {
+    border-color: transparent transparent #fff;
+    border-style: solid;
+    border-width: 8px;
+    bottom: -27px;
+    content: "";
+    display: block;
+    position: absolute;
+}
+
+.tabs2 .tabs-navi a, .tabs2 .tabs-body{
+    text-decoration: none;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.tabs-navi a::after{
+    -webkit-transition: all 0.4s ease;
+    -moz-transition: all 0.4s ease;
+    -o-transition: all 0.4s ease;
+    -ms-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+}
+h6, .tabs-navi li a{
+    text-transform: uppercase;
+
+}

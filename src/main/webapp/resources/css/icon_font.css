@@ -66,3 +66,18 @@
     content: "\f00c";
     color: #1ccdca;
 }
+
+.icon-pencil::before{
+    content: "\f044";
+}
+
+.icon-accepted::before{
+    content: "\f046";
+}
+.icon-question::before{
+    content: "\f29c";
+}
+.icon-group::before{
+    content: "\f0c0";
+}
+

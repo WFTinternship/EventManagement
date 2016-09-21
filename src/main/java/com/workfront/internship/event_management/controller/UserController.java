@@ -9,10 +9,11 @@ import com.workfront.internship.event_management.service.FileService;
 import com.workfront.internship.event_management.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
@@ -76,8 +77,18 @@ public class UserController {
 
     @RequestMapping(value = "/registration")
     public String goToRegistrationPage() {
-        return "registration";
+        return REGISTRATION_VIEW;
     }
+
+    @RequestMapping(value = "/my-account")
+    public String goToMyAccountPage(HttpServletRequest request) {
+//        if(request.getSession().getAttribute("user") != null ){
+            return MY_ACCOUNT_VIEW;
+//        } else {
+//            return "forward:/home";
+//        }
+    }
+
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
@@ -160,9 +171,9 @@ public class UserController {
         user.setPhoneNumber(phone);
     }
 
-    @InitBinder
-    public void initBinder (WebDataBinder binder ) {
-        StringTrimmerEditor stringTrimmer = new StringTrimmerEditor(true);
-        binder.registerCustomEditor(String.class, stringTrimmer);
-    }
+//    @InitBinder
+//    public void initBinder (WebDataBinder binder ) {
+//        StringTrimmerEditor stringTrimmer = new StringTrimmerEditor(true);
+//        binder.registerCustomEditor(String.class, stringTrimmer);
+//    }
 }
