@@ -158,39 +158,6 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     @Override
-    public User getEventOrganizer(int eventId) throws DAOException, ObjectNotFoundException {
-
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        User user;
-        String query = "SELECT * FROM (event LEFT JOIN user " +
-                "ON event.user_id = user.id) " +
-                "WHERE event.user_role = \'Organizer\' AND event.id = ?";
-        try {
-            //get connection
-            conn = dataSource.getConnection();
-
-            //create and initialize statement
-            stmt = conn.prepareStatement(query);
-            stmt.setInt(1, eventId);
-
-            //execute query
-            rs = stmt.executeQuery();
-
-            //get results
-            user = createUserFromRS(rs);
-        } catch (SQLException e) {
-            LOGGER.error("SQL Exception", e);
-            throw new DAOException(e);
-        } finally {
-            closeResources(rs, stmt, conn);
-        }
-        return user;
-    }
-
-    @Override
     public List<Event> getUserOrganizedEvents(int userId) throws DAOException {
         return getUserEventsByField(userId, "user_role", "Organizer");
     }
@@ -424,14 +391,18 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         List<Event> eventsList = null;
 
+        String privacyChecking = "";
+        if(publicAccessed){
+            privacyChecking = " AND event.public_accessed = true";
+        }
+
         String query = "SELECT * FROM event " +
                 "LEFT JOIN event_category ON event.category_id = event_category.id "+
                 "LEFT JOIN event_invitation on event_invitation.event_id = event.id " +
                 "LEFT JOIN user ON user.id = event_invitation.user_id " +
                 "WHERE event_invitation.user_role = \'Organizer\'" +
-                "AND event.start > ? AND event.public_accessed = ?";
+                "AND event.start > ? " + privacyChecking + " ORDER BY event.start";
 
-        ;
         try {
             //get connection
             conn = dataSource.getConnection();
@@ -439,7 +410,6 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             //create statement
             stmt = conn.prepareStatement(query);
             stmt.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
-            stmt.setBoolean(2, publicAccessed);
 
             //execute query
             rs = stmt.executeQuery();
@@ -462,12 +432,17 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         List<Event> eventsList = null;
 
+        String privacyChecking = "";
+        if(publicAccessed){
+            privacyChecking = " AND event.public_accessed = true";
+        }
+
         String query = "SELECT * FROM event " +
                 "LEFT JOIN event_category ON event.category_id = event_category.id "+
                 "LEFT JOIN event_invitation on event_invitation.event_id = event.id " +
                 "LEFT JOIN user ON user.id = event_invitation.user_id " +
                 "WHERE event_invitation.user_role = \'Organizer\' " +
-                "AND event.start < ?  AND event.public_accessed = ?";
+                "AND event.start < ? " + privacyChecking + " ORDER BY event.start desc";
 
         try {
             //get connection
@@ -476,7 +451,6 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             //create statement
             stmt = conn.prepareStatement(query);
             stmt.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
-            stmt.setBoolean(2, publicAccessed);
 
             //execute query
             rs = stmt.executeQuery();
@@ -500,12 +474,16 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         List<Event> eventsList = null;
 
+        String privacyChecking = "";
+        if(publicAccessed){
+            privacyChecking = " AND event.public_accessed = true";
+        }
+
         String query = "SELECT * FROM event " +
                 "LEFT JOIN event_category ON event.category_id = event_category.id "+
                 "LEFT JOIN event_invitation on event_invitation.event_id = event.id " +
                 "LEFT JOIN user ON user.id = event_invitation.user_id " +
-                "WHERE event_invitation.user_role = \'Organizer\' " +
-                "AND  event.public_accessed = ?";
+                "WHERE event_invitation.user_role = \'Organizer\' " + privacyChecking;
 
         try {
             //get connection
@@ -513,7 +491,6 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
             //create statement
             stmt = conn.prepareStatement(query);
-            stmt.setBoolean(1, publicAccessed);
 
             //execute query
             rs = stmt.executeQuery();
@@ -528,7 +505,6 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         }
         return eventsList;
     }
-
 
     private List<Event> createEventListFromRS(ResultSet rs) throws SQLException {
         List<Event> eventsList = new ArrayList<>();
