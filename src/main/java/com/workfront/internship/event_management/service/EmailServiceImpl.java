@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.service;
 
+import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.*;
 import com.workfront.internship.event_management.spring.DevApplicationConfig;
 import org.apache.velocity.app.VelocityEngine;
@@ -54,27 +55,30 @@ public class EmailServiceImpl implements EmailService {
 		List<Invitation> invitations = event.getInvitations();
 
 		if (isEmptyCollection(invitations)) {
-			return; // TODO: 9/16/16 implement
+			throw new OperationFailedException("Empty email list");
 		}
 
 		for (final Invitation invitation : invitations) {
-			MimeMessagePreparator preparator = new MimeMessagePreparator() {
+			//don't send invitation if organizer is not invited
+			if(invitation.getUserResponse().getId() != 4 ) {
+				MimeMessagePreparator preparator = new MimeMessagePreparator() {
 
-				public void prepare(MimeMessage mimeMessage) throws Exception {
+					public void prepare(MimeMessage mimeMessage) throws Exception {
 
-					MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
-					message.setTo(invitation.getUser().getEmail());
-					message.setFrom("turshujyan@gmail.com"); // TODO: 9/16/16 read from plist
-					message.setSubject(String.format("Invitation: %s", event.getTitle()));
-					Map model = new HashMap();
-					model.put("invitation", invitation);
-					model.put("event", event);
-					String text = VelocityEngineUtils.mergeTemplateIntoString(
-						velocityEngine, "templates/invitation.vm", "UTF-8", model);
-					message.setText(text, true);
-				}
-			};
-			mailSender.send(preparator);
+						MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
+						message.setTo(invitation.getUser().getEmail());
+						message.setFrom("turshujyan@gmail.com"); // TODO: 9/16/16 read from plist
+						message.setSubject(String.format("Invitation: %s", event.getTitle()));
+						Map model = new HashMap();
+						model.put("invitation", invitation);
+						model.put("event", event);
+						String text = VelocityEngineUtils.mergeTemplateIntoString(
+								velocityEngine, "templates/invitation.vm", "UTF-8", model);
+						message.setText(text, true);
+					}
+				};
+				mailSender.send(preparator);
+			}
 		}
 	}
 }

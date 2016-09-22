@@ -357,8 +357,10 @@ public class EventController {
         List<Event> userOrganizedEvents = eventService.getUserOrganizedEvents(sessionUser.getId());
         session.setAttribute("userOrganizedEvents", userOrganizedEvents);
 
+        //send invitations to invitees
         emailService.sendInvitations(event);
 
+        result.setStatus(ACTION_SUCCESS);
         return result;
     }
 
