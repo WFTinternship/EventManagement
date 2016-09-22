@@ -40,8 +40,12 @@
                 <div class="main_desc ">
                     <div class="error-message"><%=request.getAttribute("message")%>
                     </div>
+                    <% if(request.getAttribute("additionalErrorInfo") != null) { %>
+                    <p><%=request.getAttribute("additionalErrorInfo")%></p>
+                    <% } else { %>
                     <p>An error occurred while processing your request.</p>
                     <p>Please, try again later.</p>
+                    <% } %>
                 </div>
             </div>
         </div>

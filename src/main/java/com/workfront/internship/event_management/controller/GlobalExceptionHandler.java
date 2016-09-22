@@ -67,6 +67,7 @@ public class GlobalExceptionHandler {
 
         ModelAndView mov = new ModelAndView(DEFAULT_ERROR_VIEW);
         mov.addObject("message", e.getMessage());
+        mov.addObject("additionalErrorInfo", "Please login to perform this action!");
 
         return mov;
     }
