@@ -579,8 +579,7 @@ a{
     text-decoration: none;
 }
 
-.list_item .desc {
-    margin-bottom: 30px;
+.list_item .desc , .meta-row{
     border-bottom: dotted 1px #ccc;
     padding: 10px 0px;
 }
@@ -924,6 +923,19 @@ textarea{
 .event_img{
     width:600px;
     margin-bottom:30px;
+}
+
+span.meta_header {
+    font-size: 13px;
+    font-style: italic;
+    width: 120px;
+    display: inline-block;
+}
+
+.col_half{
+    width:50%;
+    float:left
+
 }
 
 #respond_wrapper {

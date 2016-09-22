@@ -105,10 +105,44 @@
                             <% if (event.getImageName() != null) {%>
                                 <img class="event_img" src = "/resources/uploads/events/images/<%=event.getImageName()%>" />
                             <% } %>
+                            <div class="meta-row clearfix">
+                            <div class="col_half">
+                                <div>
+                                    <span class="meta_header">Start date:</span>
+                                    <i class="ev_icon icon-clock"></i> <%=DateParser.parseDateToString(event.getStartDate()) %>
+                                </div>
+                                <div>
+                                    <span class="meta_header">End date:</span>
+                                    <i class="ev_icon icon-clock"></i>
+                                    <span><%=DateParser.parseDateToString(event.getEndDate()) %></span>
+                                </div>
+                                <div>
+                                    <span class="meta_header">Location:</span>
+                                    <i class="ev_icon icon-map-marker"></i>
+                                   <span><%=event.getLocation()%></span>
+                                </div>
+                            </div>
+                            <div class="col_half">
+                                <div>
+                                    <span class="meta_header">Created on:</span>
+                                    <i class="ev_icon icon-clock"></i>
+                                    <span><%=DateParser.parseDateToString(event.getCreationDate()) %></span>
+                                </div>
+                                <div>
+                                    <span class="meta_header">Organized by:</span>
+                                    <i class="ev_icon icon-user"></i>
+                                    <span><%=event.getOrganizer().getFirstName() %> <%=event.getOrganizer().getLastName() %></span>
+                                </div>
+                                <div>
+                                    <span class="meta_header">Event category:</span>
+                                    <i class="ev_icon icon-folder"></i>
+                                   <span><%= event.getCategory().getTitle()%></span>
+                                </div>
+                            </div>
+                            </div>
 
                             <% if (!isEmptyString(event.getShortDescription())) { %>
                                 <p class="desc"><%=event.getShortDescription()%></p>
-
                             <% }
 
                                 if (!isEmptyString(event.getFullDescription())) { %>
@@ -129,7 +163,7 @@
                                                     <% if(invitation.getUser().getId() == event.getOrganizer().getId()){%>
                                                     <span class="organizer"> (Organizer)</span>
                                                     <% }%>
-                                                    <% if(sessionUser.getId() == invitation.getUser().getId()){  %>
+                                                    <% if(sessionUser != null && sessionUser.getId() == invitation.getUser().getId()){  %>
                                                     <div id="change_response_wrapper">
                                                         <button id="change_response" class="">
                                                             <i class="icon-pencil change-response-icon"></i>

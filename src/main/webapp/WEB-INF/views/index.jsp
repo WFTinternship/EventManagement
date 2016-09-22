@@ -2,6 +2,7 @@
 <%@ page import="com.workfront.internship.event_management.model.Event" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.workfront.internship.event_management.model.User" %>
+<%@ page import="com.workfront.internship.event_management.common.DateParser" %>
 <%--
   Created by IntelliJ IDEA.
   User: Inmelet
@@ -91,7 +92,7 @@
                                        <span class="meta_part ">
                                            <a href="#">
                                                <i class="ev_icon icon-clock"></i>
-                                               <span><%=event.getStartDate() %></span>
+                                               <span><%=DateParser.parseDateToString(event.getStartDate()) %></span>
                                            </a>
                                        </span>
                                    <span class="meta_part">
