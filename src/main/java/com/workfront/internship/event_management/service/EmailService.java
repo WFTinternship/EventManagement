@@ -11,6 +11,9 @@ import java.io.IOException;
 public interface EmailService {
 
     public boolean sendConfirmationEmail(User user);
+
+    public void sendInvitation(final Event event, final Invitation invitation);
+
     public void sendInvitations(final Event event);
 
 }

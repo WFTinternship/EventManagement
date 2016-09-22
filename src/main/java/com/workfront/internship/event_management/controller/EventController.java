@@ -278,7 +278,7 @@ public class EventController {
             List<String> invitationEmails = Arrays.asList(invitationsString.split(","));
 
             for (String email : invitationEmails) {
-                Invitation invitation = invitationService.createInvitationForMember(email);
+                Invitation invitation = invitationService.createInvitation(email);
                 invitation.setEventId(eventId);
                 invitations.add(invitation);
             }
@@ -371,9 +371,6 @@ public class EventController {
         //update logged in user's organized events in session
         List<Event> userOrganizedEvents = eventService.getUserOrganizedEvents(sessionUser.getId());
         session.setAttribute("userOrganizedEvents", userOrganizedEvents);
-
-        //send invitations to invitees
-        emailService.sendInvitations(event);
 
         result.setStatus(ACTION_SUCCESS);
         return result;

@@ -59,26 +59,35 @@ public class EmailServiceImpl implements EmailService {
 		}
 
 		for (final Invitation invitation : invitations) {
-			//don't send invitation if organizer is not invited
-			if(invitation.getUserResponse().getId() != 4 ) {
-				MimeMessagePreparator preparator = new MimeMessagePreparator() {
-
-					public void prepare(MimeMessage mimeMessage) throws Exception {
-
-						MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
-						message.setTo(invitation.getUser().getEmail());
-						message.setFrom("turshujyan@gmail.com"); // TODO: 9/16/16 read from plist
-						message.setSubject(String.format("Invitation: %s", event.getTitle()));
-						Map model = new HashMap();
-						model.put("invitation", invitation);
-						model.put("event", event);
-						String text = VelocityEngineUtils.mergeTemplateIntoString(
-								velocityEngine, "templates/invitation.vm", "UTF-8", model);
-						message.setText(text, true);
-					}
-				};
-				mailSender.send(preparator);
-			}
+			sendInvitation(event, invitation);
 		}
+	}
+
+	@Override
+	public void sendInvitation(final Event event, final Invitation invitation) {
+
+		List<Invitation> invitations = event.getInvitations();
+
+		if (isEmptyCollection(invitations)) {
+			throw new OperationFailedException("Empty email list");
+		}
+			//don't send invitation if organizer is not invited
+			MimeMessagePreparator preparator = new MimeMessagePreparator() {
+
+				public void prepare(MimeMessage mimeMessage) throws Exception {
+
+					MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
+					message.setTo(invitation.getUser().getEmail());
+					message.setFrom("turshujyan@gmail.com"); // TODO: 9/16/16 read from plist
+					message.setSubject(String.format("Invitation: %s", event.getTitle()));
+					Map model = new HashMap();
+					model.put("invitation", invitation);
+					model.put("event", event);
+					String text = VelocityEngineUtils.mergeTemplateIntoString(
+							velocityEngine, "templates/invitation.vm", "UTF-8", model);
+					message.setText(text, true);
+				}
+			};
+			mailSender.send(preparator);
 	}
 }

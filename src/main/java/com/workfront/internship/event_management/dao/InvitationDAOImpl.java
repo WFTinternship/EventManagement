@@ -29,8 +29,8 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
         int id = 0;
         String query = "INSERT INTO event_invitation "
-                + "(event_id, user_id, user_role, user_response_id, attendees_count, participated) VALUES "
-                + "(?, ?, ?, ?, ?, ? )";
+                + "(event_id, user_id, user_response_id, attendees_count, participated) VALUES "
+                + "(?, ?, ?, ?, ? )";
         try {
             //get connection
             conn = dataSource.getConnection();

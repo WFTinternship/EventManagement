@@ -5,10 +5,7 @@ import com.workfront.internship.event_management.exception.dao.DuplicateEntryExc
 import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
-import com.workfront.internship.event_management.model.Invitation;
-import com.workfront.internship.event_management.model.User;
-import com.workfront.internship.event_management.model.UserResponse;
-import com.workfront.internship.event_management.model.UserRole;
+import com.workfront.internship.event_management.model.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,15 +28,31 @@ public class InvitationServiceImpl implements InvitationService {
     private InvitationDAO invitationDAO;
     @Autowired
     private UserService userService;
+    @Autowired
+    private EmailService emailService;
 
     @Override
-    public Invitation createInvitationForMember(String email) {
-        return createInvitationForUser(email, UserRole.MEMBER, new UserResponse(5, "Waiting for response"));
-    }
+    public Invitation createInvitation(String email) {
 
-    @Override
-    public Invitation createOrganizerRecord(String email) {
-        return createInvitationForUser(email, UserRole.ORGANIZER, new UserResponse(4, "Undefined"));
+        if (!isValidEmailAddressForm(email)) {
+            throw new InvalidObjectException("Invalid email address form");
+        }
+
+        User user = userService.getUserByEmail(email);
+
+        if (user == null) {
+            throw new ObjectNotFoundException("User not found!");
+        } else {
+
+            Invitation invitation = new Invitation();
+            invitation.setUser(user)
+                    .setAttendeesCount(1)
+                    .setParticipated(false)
+                    .setUserResponse(new UserResponse(5, "Waiting for response"))
+                    .setCreationDate(new Date());
+
+            return invitation;
+        }
     }
 
     @Override
@@ -139,7 +152,10 @@ public class InvitationServiceImpl implements InvitationService {
     }
 
     @Override
-    public void editInvitationList(int eventId, List<Invitation> invitationList) {
+    public void editInvitationList(Event event) {
+
+        List<Invitation> invitationList = event.getInvitations();
+        int eventId = event.getId();
 
         if (isEmptyCollection(invitationList)) {
            // delete all invitations
@@ -150,23 +166,23 @@ public class InvitationServiceImpl implements InvitationService {
 
             if (isEmptyCollection(dbInvitationList)) {
                 addInvitations(invitationList);
+                emailService.sendInvitations(event);
             } else {
 
                 for (Invitation dbInvitation : dbInvitationList) {
-                    int invitationId = dbInvitation.getId();
+                    int userId = dbInvitation.getUser().getId();
 
-                    if (getInvitationWithIdFromList(invitationList, invitationId) == null) {
-                        deleteInvitation(invitationId);
-                    } else if (dbInvitation != getInvitationWithIdFromList(invitationList, invitationId)) {
-                        editInvitation(getInvitationWithIdFromList(invitationList, invitationId));
+                    if (getInvitationWithUserIdFromList(invitationList, userId) == null) {
+                        deleteInvitation(dbInvitation.getId());
                     }
                 }
 
                 for (Invitation invitation : invitationList) {
-                    int invitationId = invitation.getId();
+                    int userId = invitation.getUser().getId();
 
-                    if (getInvitationWithIdFromList(dbInvitationList, invitationId) == null) {
+                    if (getInvitationWithUserIdFromList(dbInvitationList, userId) == null) {
                         addInvitation(invitation);
+                        emailService.sendInvitation(event, invitation);
                     }
                 }
             }
@@ -222,35 +238,13 @@ public class InvitationServiceImpl implements InvitationService {
     }
 
     //helper methods
-    private Invitation getInvitationWithIdFromList(List<Invitation> invitationList, int id) {
+    private Invitation getInvitationWithUserIdFromList(List<Invitation> invitationList, int id) {
         for (Invitation invitation : invitationList) {
-            if (invitation.getId() == id) {
+            if (invitation.getUser().getId() == id) {
                 return invitation;
             }
         }
         return null;
-    }
-
-    private Invitation createInvitationForUser(String email, UserRole userRole, UserResponse userResponse) {
-        if (!isValidEmailAddressForm(email)) {
-            throw new InvalidObjectException("Invalid email address form");
-        }
-
-        User user = userService.getUserByEmail(email);
-
-        if (user == null) {
-            throw new ObjectNotFoundException("User not found!");
-        } else {
-
-            Invitation invitation = new Invitation();
-            invitation.setUser(user)
-                    .setAttendeesCount(1)
-                    .setParticipated(false)
-                    .setUserResponse(new UserResponse(userResponse.getId(), userResponse.getTitle()))
-                    .setCreationDate(new Date());
-
-            return invitation;
-        }
     }
 
 }

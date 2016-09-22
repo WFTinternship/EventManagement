@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.service;
 
+import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.Invitation;
 
 import java.util.List;
@@ -9,9 +10,7 @@ import java.util.List;
  */
 public interface InvitationService {
 
-    Invitation createInvitationForMember(String email);
-
-    Invitation createOrganizerRecord(String email);
+    Invitation createInvitation(String email);
 
     Invitation addInvitation(Invitation invitation);
 
@@ -29,7 +28,7 @@ public interface InvitationService {
     //update record in db
     boolean editInvitation(Invitation invitation);
 
-    void editInvitationList(int eventId, List<Invitation> invitationList);
+    void editInvitationList(Event event);
 
     boolean respondToInvitation(int eventId, int userId, int responseId);
 

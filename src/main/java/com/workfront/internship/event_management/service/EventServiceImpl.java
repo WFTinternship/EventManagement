@@ -31,6 +31,8 @@ public class EventServiceImpl implements EventService {
     private RecurrenceService recurrenceService;
     @Autowired
     private InvitationService invitationService;
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public Event createEvent(Event event) {
@@ -68,6 +70,9 @@ public class EventServiceImpl implements EventService {
 
         //insert into db
         invitationService.addInvitations(event.getInvitations());
+
+        //send invitations to invitees
+        emailService.sendInvitations(event);
 
         return event;
     }
@@ -113,7 +118,7 @@ public class EventServiceImpl implements EventService {
             recurrenceService.editRecurrenceList(event.getId(), event.getEventRecurrences());
 
             //update event invitations
-            invitationService.editInvitationList(event.getId(), event.getInvitations());
+            invitationService.editInvitationList(event);
         } else {
             throw new ObjectNotFoundException("Event not found");
         }

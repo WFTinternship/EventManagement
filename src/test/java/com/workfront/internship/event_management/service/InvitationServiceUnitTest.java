@@ -206,8 +206,9 @@ public class InvitationServiceUnitTest {
     //testing editInvitationList method
     @Test
     public void editInvitations_Empty_List() {
+
         //method under test
-        invitationService.editInvitationList(VALID_ID, new ArrayList<Invitation>());
+        invitationService.editInvitationList(createTestEvent());
 
         verify(invitationService).deleteInvitationsByEvent(VALID_ID);
     }
@@ -217,7 +218,7 @@ public class InvitationServiceUnitTest {
         when(invitationService.getInvitationsByEvent(VALID_ID)).thenReturn(null);
 
         //method under test
-        invitationService.editInvitationList(VALID_ID, testInvitationList);
+        invitationService.editInvitationList(createTestEvent());
 
         verify(invitationService).addInvitations(testInvitationList);
     }
@@ -234,7 +235,7 @@ public class InvitationServiceUnitTest {
         when(invitationService.getInvitationsByEvent(VALID_ID)).thenReturn(dbList);
 
         //method under test
-        invitationService.editInvitationList(VALID_ID, testInvitationList);
+        invitationService.editInvitationList(createTestEvent());
 
         verify(invitationService).addInvitation(testInvitationList.get(0));
     }
@@ -253,7 +254,7 @@ public class InvitationServiceUnitTest {
         doReturn(true).when(invitationService).editInvitation((Invitation) anyObject());
 
         //method under test
-        invitationService.editInvitationList(VALID_ID, testInvitationList);
+        invitationService.editInvitationList(createTestEvent());
 
         verify(invitationService).editInvitation(testInvitation);
     }
@@ -268,7 +269,7 @@ public class InvitationServiceUnitTest {
         when(invitationService.getInvitationsByEvent(TestObjectCreator.VALID_ID)).thenReturn(dbList);
 
         //method under test
-        invitationService.editInvitationList(VALID_ID, testInvitationList);
+        invitationService.editInvitationList(createTestEvent());
 
         verify(invitationService).deleteInvitation(dbInvitation.getId());
     }
