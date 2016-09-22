@@ -130,7 +130,7 @@
                         </li>
                         <li data-content="pending-invitations">
                         </li>
-                        <li data-content="technology">
+                        <li data-content="accepted-invitations">
                         </li>
                         <li data-content="participated-events">
                         </li>

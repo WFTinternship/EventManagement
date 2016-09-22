@@ -161,11 +161,28 @@ public class EventController {
     }
 
     @GetMapping(value = "/events/{eventId}/respond")
-    public String respondToEvent(@PathVariable("eventId") int eventId, @PathVariable("userId") int userId,
-                                 Model model, HttpServletRequest request) {
-        // TODO: 9/16/16 implement 
-        return null;
+    @ResponseBody
+    public CustomResponse respondToEvent(@PathVariable("eventId") int eventId, HttpServletRequest request) {
+        User sessionUser = (User) request.getSession().getAttribute("user");
+        if (sessionUser == null) {
+            throw new UnauthorizedAccessException(UNAUTHORIZED_ACCESS_MESSAGE);
+        }
 
+        //if coming from email
+        int responseId = Integer.parseInt(request.getParameter("response"));
+
+        //update invitation response in db
+        boolean updated = invitationService.respondToInvitation(eventId, sessionUser.getId(), responseId);
+
+        CustomResponse response = new CustomResponse();
+        if(updated) {
+            response.setStatus(ACTION_SUCCESS);
+        } else {
+            response.setStatus(ACTION_FAIL);
+            response.setMessage("Could not update invitation response!");
+        }
+
+        return response;
     }
 
     @RequestMapping(value = "/new-event")

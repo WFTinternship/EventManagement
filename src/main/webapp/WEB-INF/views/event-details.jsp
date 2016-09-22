@@ -21,8 +21,11 @@
     <script src="<c:url value="/resources/js/lib/jquery-3.1.0.min.js" />"></script>
     <script src="<c:url value="/resources/js/lib/jquery.validate.js" />"></script>
     <script src="<c:url value="/resources/js/lib/bootstrap.min.js" />"></script>
+    <script src="<c:url value="/resources/js/lib/bootstrap-notify.js" />"></script>
+
     <script src="<c:url value="/resources/js/events.js" />"></script>
     <script src="<c:url value="/resources/js/event-details.js" />"></script>
+
 
     <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
@@ -31,6 +34,8 @@
     <link href="<c:url value="/resources/css/reset.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/lib/bootstrap.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/lib/bootstrap.min.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/lib/bootstrap-notify.animate.css" />" rel="stylesheet">
+
     <link href="<c:url value="/resources/css/main.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/icon_font.css" />" rel="stylesheet">
 
@@ -58,7 +63,9 @@
                             <%
                                 if(action == "invitation-responded"){
                             %>
-                               <h4>Response saved!</h4>
+                            <script type="text/javascript">
+                                showResponseSavedMessage();
+                            </script>
                             <% } %>
                             <h6 class="title">
                                 <a href="#"><%=event.getTitle()%>
@@ -126,17 +133,17 @@
                                                         <div id="respond_wrapper"  >
                                                             <div>Respond to invitation</div>
                                                             <div class="radio_wrapper">
-                                                                <input type="radio" class="event_radio" name="guestsAllowed"
-                                                                       value="yes"  <%= (event.isGuestsAllowed())? "checked": ""%>><span>Yes</span>
-                                                                <input type="radio" class="event_radio" name="guestsAllowed"
-                                                                       value="no" <%= (!event.isGuestsAllowed())? "checked": ""%>><span>No</span>
-                                                                <input type="radio" class="event_radio" name="guestsAllowed"
-                                                                       value="maybe" <%= (!event.isGuestsAllowed())? "checked": ""%>><span>Maybe</span>
+                                                                <input type="radio" class="event_radio" name="response"
+                                                                       value="1"  <%=(invitation.getUserResponse().getId() == 1)? "checked": ""%>><span>Yes</span>
+                                                                <input type="radio" class="event_radio" name="response"
+                                                                       value="2" <%=(invitation.getUserResponse().getId() == 2)? "checked": ""%>><span>No</span>
+                                                                <input type="radio" class="event_radio" name="response"
+                                                                       value="3" <%=(invitation.getUserResponse().getId() == 3)?  "checked": ""%>><span>Maybe</span>
                                                             </div>
 
                                                             <div class="btn_wrapper btn_wrapper clearfix">
-                                                                <button class="btn"  >Save</button>
-                                                                <button class="btn" >Cancel</button>
+                                                                <button class="btn" id="respond" onclick="saveResponse(this, <%=event.getId()%>)" >Save</button>
+                                                                <button class="btn" id="cancel_response">Cancel</button>
                                                             </div>
                                                         </div>
                                                     </div>

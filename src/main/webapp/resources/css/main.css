@@ -44,7 +44,7 @@ b {
 
 /* Rounded corners */
 .login_dialog, input[type="text"], input[type=button], input[type="password"], .btn, .btn_a, .lf_header, .lf_forget_pass,
-#suggested_emails, #respond_wrapper{
+#suggested_emails, #respond_wrapper, [data-notify="container"]{
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     -ms-border-radius: 3px;
@@ -938,6 +938,13 @@ textarea{
 #change_response span{
 }
 .change-response-icon{
-  margin-left:10px;
+    margin-left:10px;
     margin-right:5px !important;
+}
+
+[data-notify="container"]{
+    background-color: #fbfbfb;
+    border: solid 1px #00AFB2 !important;
+    color: #00AFB2;
+    font-weight:bold
 }
