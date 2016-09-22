@@ -138,7 +138,7 @@ public class EventController {
 
         int userId = Integer.parseInt(request.getParameter("user"));
         if (sessionUser.getId() != userId) {
-// TODO: 9/21/16 redirect to login
+            // TODO: 9/21/16 redirect to login
 
         }
 

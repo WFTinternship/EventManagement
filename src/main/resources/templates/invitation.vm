@@ -1,34 +1,42 @@
 <html>
 <head>
-	<script type="text/css">
-        .wrapper{
-            border:solid 1px red;
-        }
-	</script>
+    <script src="/resources/css/invitation.css"></script>
 </head>
-<body>
-	<div class="wrapper">
-		Hi ${invitation.user.firstName}
-	</div>
-	Event invitation
-	<h3>${event.title}</h3>
+<body style="line-heigh">
 
-	<div class="date">${event.startDate} - ${event.endDate}</div>
-	<div class="short_desc">
+	<h3>${event.title}</h3>
+    <br/>
+
+	<div >
 		${event.shortDescription}
 	</div>
-	<div class="email_list">
+
+    <br/>
+
+    <div >
+        <b>Organizer: </b>${event.organizer.firstName} ${event.organizer.lastName}
+    </div>
+    <div >
+        <b>Date: </b> ${event.startDate} - ${event.endDate}
+	</div>
+    <div>
+        <b>Location: </b> ${event.location}
+	</div>
+
+    <div class="email_list">
 		#foreach ($invitationItem in $event.invitations)
-		<div class="email_item">
-    		$invitationItem.user.email
+		<div class="email_item" style="padding-left:10px;">
+    		$invitationItem.user.email (${invitationItem.userResponse.title})
 		</div>
 		#end
 	</div>
+	<br/>
 	<div class="response_box">Going?
 		<a href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=1">Yes</a>
 		<a href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=2">No</a>
 		<a href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=3">Maybe</a>
 	</div>
+	<br/>
 	<div class="details_link"><a href="http://localhost:8085/events/${event.id}/invitation-respond">Event Details</a></div>
 </body>
 </html>

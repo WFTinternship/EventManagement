@@ -22,6 +22,7 @@
     <script src="<c:url value="/resources/js/lib/jquery.validate.js" />"></script>
     <script src="<c:url value="/resources/js/lib/bootstrap.min.js" />"></script>
     <script src="<c:url value="/resources/js/events.js" />"></script>
+    <script src="<c:url value="/resources/js/event-details.js" />"></script>
 
     <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
@@ -37,6 +38,8 @@
 <%
     Event event = (Event) request.getAttribute("event");
     User sessionUser = (User) session.getAttribute("user");
+    String action = (String) request.getAttribute("action");
+
 %>
 <body class="events_page">
 <div id="main_wrapper">
@@ -52,6 +55,11 @@
                 <div class="event_list clearfix" id="event_list">
                     <div class="list_item">
                         <div class="list_content">
+                            <%
+                                if(action == "invitation-responded"){
+                            %>
+                               <h4>Response saved!</h4>
+                            <% } %>
                             <h6 class="title">
                                 <a href="#"><%=event.getTitle()%>
                                 </a>
@@ -101,47 +109,49 @@
                                     <div class="invitees">
                                         <% for(Invitation invitation :invitations) { %>
                                             <div class="invitees_email">
-                                                <i class='icon-user'></i>
+                                                <div class='invitation_item clearfix' >
+                                                    <i class='icon-response-<%= invitation.getUserResponse().getId()%>'></i>
+                                                    <div class='invitation_item_email'><%=invitation.getUser().getEmail()%></div>
 
-                                                <%=invitation.getUser().getEmail()%>
-
-                                                <i class='icon-response-<%= invitation.getUserResponse().getTitle()%>'></i>
-                                                <% if(invitation.getUserRole().equals(UserRole.ORGANIZER)){%>
+                                                    <% if(invitation.getUser().getId() == event.getOrganizer().getId()){%>
                                                     <span class="organizer"> (Organizer)</span>
-                                                    <% if(invitation.getUser().getId() == sessionUser.getId()) {%>
-                                                        <button class="" >Change response</button>
                                                     <% }%>
+                                                    <% if(sessionUser.getId() == invitation.getUser().getId()){  %>
+                                                    <div id="change_response_wrapper">
+                                                        <button id="change_response" class="">
+                                                            <i class="icon-pencil change-response-icon"></i>
+                                                            <span>Change response</span>
+                                                        </button>
 
-                                                <% }%>
+                                                        <div id="respond_wrapper"  >
+                                                            <div>Respond to invitation</div>
+                                                            <div class="radio_wrapper">
+                                                                <input type="radio" class="event_radio" name="guestsAllowed"
+                                                                       value="yes"  <%= (event.isGuestsAllowed())? "checked": ""%>><span>Yes</span>
+                                                                <input type="radio" class="event_radio" name="guestsAllowed"
+                                                                       value="no" <%= (!event.isGuestsAllowed())? "checked": ""%>><span>No</span>
+                                                                <input type="radio" class="event_radio" name="guestsAllowed"
+                                                                       value="maybe" <%= (!event.isGuestsAllowed())? "checked": ""%>><span>Maybe</span>
+                                                            </div>
+
+                                                            <div class="btn_wrapper btn_wrapper clearfix">
+                                                                <button class="btn"  >Save</button>
+                                                                <button class="btn" >Cancel</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                        <% } %>
+                                                </div>
 
                                             </div>
                                         <% }%>
                                     </div>
                             <% }%>
-                            </div>
-                    <%
-                        String action = (String) request.getAttribute("action");
-                        if(action == "invitation-responded"){
-                    %>
-                    <div class="respond_wrapper">
-                        <h4>Respond to invitation</h4>
-                            <div class="radio_wrapper">
-                                <input type="radio" class="event_radio" name="guestsAllowed"
-                                       value="yes"  <%= (event.isGuestsAllowed())? "checked": ""%>><span>Yes</span>
-                                <input type="radio" class="event_radio" name="guestsAllowed"
-                                       value="no" <%= (!event.isGuestsAllowed())? "checked": ""%>><span>No</span>
-                                <input type="radio" class="event_radio" name="guestsAllowed"
-                                       value="maybe" <%= (!event.isGuestsAllowed())? "checked": ""%>><span>Maybe</span>
-                            </div>
 
-                            <div class="btn_wrapper">
-                                <a class="btn" href="">Save</a>
-                                <a class="btn" href="/events">Discard changed</a>
+
+
+
                             </div>
-                        <div>
-                            </div>>
-                        <% } %>
-                    </div>
                     </div>
                 </div>
             </div>

@@ -43,7 +43,8 @@ b {
 }
 
 /* Rounded corners */
-.login_dialog, input[type="text"], input[type=button], input[type="password"], .btn, .btn_a, .lf_header, .lf_forget_pass, #suggested_emails {
+.login_dialog, input[type="text"], input[type=button], input[type="password"], .btn, .btn_a, .lf_header, .lf_forget_pass,
+#suggested_emails, #respond_wrapper{
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     -ms-border-radius: 3px;
@@ -870,9 +871,10 @@ textarea{
 }
 
 .invitation_item .organizer{
-    margin-top:3px;
     margin-left:10px;
+    float:left;
 }
+
 .invitation_item i {
     margin-right: 10px;
 }
@@ -899,10 +901,43 @@ textarea{
 }
 
 /* Event details */
-.organizer{
-    font-size:11px;
-}
-
 .event_img{
     width:600px;
+}
+
+#respond_wrapper {
+    display:none;
+    margin: 10px;
+    bordeR: dotted 1px #ccc;
+    padding: 20px;
+    width: 240px;
+    text-align: center;
+    vertical-align: top;
+}
+#respond_wrapper button:first-child{
+    float:left;
+    width:45%
+}
+#respond_wrapper button:last-child{
+    float:right;
+    width:45%
+}
+#change_response_wrapper {
+    display: inline-block;
+}
+
+#respond_wrapper .btn_wrapper {
+    margin-top:10px
+}
+
+#change_response{
+    border: 0px;
+    background: none;
+    color:#00AFB2;
+}
+#change_response span{
+}
+.change-response-icon{
+  margin-left:10px;
+    margin-right:5px !important;
 }
