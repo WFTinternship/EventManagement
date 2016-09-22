@@ -98,8 +98,7 @@ public class InvitationServiceIntegrationTest {
     @Test
     public void updateInvitation() {
         //change test invitation object
-        testInvitation.setAttendeesCount(10)
-                .setUserRole(UserRole.ORGANIZER);
+        testInvitation.setAttendeesCount(10);
 
         //test method
         invitationService.editInvitation(testInvitation);

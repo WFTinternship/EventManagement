@@ -57,27 +57,13 @@ public class EventServiceImpl implements EventService {
             throw new OperationFailedException("Unable to add event!");
         }
 
-        //if event info is successfully inserted into db, insert also invitations
-        boolean organizerInvited = false;
-
         if (!isEmptyCollection(event.getInvitations())) {
             //set event id to all invitations
             List<Invitation> invitations = event.getInvitations();
             for (int i = 0; i < invitations.size(); i++) {
                 Invitation invitation = invitations.get(i);
                 invitation.setEventId(eventId);
-                if(invitation.getUser().getId() == event.getOrganizer().getId()){
-                    organizerInvited = true;
-                    invitation.setUserRole(UserRole.ORGANIZER);
-                }
             }
-        }
-
-        //if organizer not invited, just insert organizer record
-        if (!organizerInvited){
-            Invitation organizerRecord = invitationService.createOrganizerRecord(event.getOrganizer().getEmail());
-            organizerRecord.setEventId(eventId);
-            event.getInvitations().add(organizerRecord);
         }
 
         //insert into db

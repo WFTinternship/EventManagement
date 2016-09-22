@@ -92,10 +92,9 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         Event event = null;
         String query = "SELECT * FROM (event LEFT JOIN event_category " +
-                "ON event.category_id = event_category.id)" +
-                "LEFT JOIN event_invitation on event_invitation.event_id = event.id " +
-                "LEFT JOIN user ON user.id = event_invitation.user_id " +
-                "WHERE event.id = ? AND event_invitation.user_role = \'Organizer\'";
+                "ON event.category_id = event_category.id) " +
+                "LEFT JOIN user ON event.organizer_id= user.id " +
+                "WHERE event.id = ?";
         try {
             //get connection
             conn = dataSource.getConnection();
@@ -130,11 +129,12 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         ResultSet rs = null;
 
         List<Event> eventsList = null;
+
         String query = "SELECT * FROM (event LEFT JOIN event_category " +
                 "ON event.category_id = event_category.id) " +
-                "LEFT JOIN event_invitation on event_invitation.event_id = event.id " +
-                "LEFT JOIN user ON user.id = event_invitation.user_id " +
-                "WHERE event.category_id = ? AND event_invitation.user_role = \'Organizer\'";
+                "LEFT JOIN user ON event.organizer_id= user.id " +
+                "WHERE event.category_id = ?";
+
         try {
             //get connection
             conn = dataSource.getConnection();
@@ -159,8 +159,37 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
     @Override
     public List<Event> getUserOrganizedEvents(int userId) throws DAOException {
-        return getUserEventsByField(userId, "user_role", "Organizer");
-    }
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        List<Event> eventsList = null;
+        String sqlStr = "SELECT event.*, user.*, event_category.* FROM (event " +
+                "LEFT JOIN event_category ON event.category_id = event_category.id )" +
+                "LEFT JOIN user ON user.id = event.organizer_id " +
+                "WHERE event.organizer_id = ?  " +
+                "ORDER BY event.start DESC";
+        try {
+            //get connection
+            conn = dataSource.getConnection();
+
+            //create and initialize statement
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setInt(1, userId);
+
+            //execute query
+            rs = stmt.executeQuery();
+
+            //get results
+            eventsList = createEventListFromRS(rs);
+        } catch (SQLException e) {
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
+        } finally {
+            closeResources(rs, stmt, conn);
+        }
+        return eventsList;    }
 
     @Override
     public List<Event> getUserParticipatedEvents(int userId) throws DAOException {
@@ -212,7 +241,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         String query = "UPDATE event SET " +
                 "title = ?, short_desc = ?, full_desc = ?, location = ?, lat = ?, lng = ?, " +
                 "file_path = ?, image_path = ?, category_id = ?, public_accessed = ?, guests_allowed = ?, " +
-                "start = ?, end = ?, creation_date = ?, last_modified = ?" +
+                "start = ?, end = ?, last_modified = ?" +
                 "WHERE id = ?";
         try {
             //get connection
@@ -249,19 +278,12 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             else
                 stmt.setObject(13, null);
 
-
-            if (event.getCreationDate() != null) {
-                stmt.setTimestamp(14, new Timestamp(event.getCreationDate().getTime()));
+            if (event.getLastModifiedDate() != null) {
+                stmt.setTimestamp(14, new Timestamp(event.getLastModifiedDate().getTime()));
             } else {
                 stmt.setObject(14, null);
             }
-
-            if (event.getLastModifiedDate() != null) {
-                stmt.setTimestamp(15, new Timestamp(event.getLastModifiedDate().getTime()));
-            } else {
-                stmt.setObject(15, null);
-            }
-            stmt.setInt(16, event.getId());
+            stmt.setInt(15, event.getId());
 
             //execute query
             int affectedRows = stmt.executeUpdate();
@@ -297,8 +319,8 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         int id = 0;
         String insertEvent = "INSERT INTO event "
                 + "(title, short_desc, full_desc, location, lat, lng, file_path, image_path, "
-                + "category_id, public_accessed, guests_allowed, start, end, creation_date) VALUES "
-                + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+                + "category_id, public_accessed, guests_allowed, start, end, creation_date, organizer_id) VALUES "
+                + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 
         try {
             //create and initialize statement
@@ -333,6 +355,8 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                 stmt.setObject(14, null);
             }
 
+            stmt.setInt(15, event.getOrganizer().getId());
+
             //execute query
             stmt.executeUpdate();
 
@@ -360,7 +384,8 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
                 "LEFT JOIN event_invitation ON event_invitation.event_id = event.id " +
                 "LEFT JOIN user ON user.id = event_invitation.user_id " +
                 "LEFT JOIN user_response ON event_invitation.user_response_id = user_response.id " +
-                "WHERE event_invitation.user_id = ? AND " + columnName + " = ?";
+                "WHERE event_invitation.user_id = ? AND " + columnName + " = ? " +
+                "ORDER BY event.start DESC";
         try {
             //get connection
             conn = dataSource.getConnection();
@@ -396,12 +421,10 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             privacyChecking = " AND event.public_accessed = true";
         }
 
-        String query = "SELECT * FROM event " +
-                "LEFT JOIN event_category ON event.category_id = event_category.id "+
-                "LEFT JOIN event_invitation on event_invitation.event_id = event.id " +
-                "LEFT JOIN user ON user.id = event_invitation.user_id " +
-                "WHERE event_invitation.user_role = \'Organizer\'" +
-                "AND event.start > ? " + privacyChecking + " ORDER BY event.start";
+        String query = "SELECT * FROM (event " +
+                "LEFT JOIN event_category ON event.category_id = event_category.id) "+
+                "LEFT JOIN user ON user.id = event.organizer_id " +
+                "WHERE event.start > ? " + privacyChecking + " ORDER BY event.start";
 
         try {
             //get connection
@@ -439,9 +462,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         String query = "SELECT * FROM event " +
                 "LEFT JOIN event_category ON event.category_id = event_category.id "+
-                "LEFT JOIN event_invitation on event_invitation.event_id = event.id " +
-                "LEFT JOIN user ON user.id = event_invitation.user_id " +
-                "WHERE event_invitation.user_role = \'Organizer\' " +
+                "LEFT JOIN user ON user.id = event.organizer_id " +
                 "AND event.start < ? " + privacyChecking + " ORDER BY event.start desc";
 
         try {
@@ -476,14 +497,12 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         String privacyChecking = "";
         if(publicAccessed){
-            privacyChecking = " AND event.public_accessed = true";
+            privacyChecking = " WHERE event.public_accessed = true";
         }
 
         String query = "SELECT * FROM event " +
                 "LEFT JOIN event_category ON event.category_id = event_category.id "+
-                "LEFT JOIN event_invitation on event_invitation.event_id = event.id " +
-                "LEFT JOIN user ON user.id = event_invitation.user_id " +
-                "WHERE event_invitation.user_role = \'Organizer\' " + privacyChecking;
+                "LEFT JOIN user ON user.id = event.organizer_id " + privacyChecking;
 
         try {
             //get connection

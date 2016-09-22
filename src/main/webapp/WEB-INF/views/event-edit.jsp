@@ -45,12 +45,13 @@
 <%
     Event event = (Event) request.getAttribute("event");
     User sessionUser = (User) session.getAttribute("user");
+    String action = (String) request.getAttribute("action");
 
     boolean emptyEvent = true;
     int categoryId = 0;
     if (event.getId() != 0) {
-    emptyEvent = false;
-    categoryId = event.getCategory().getId();
+        emptyEvent = false;
+        categoryId = event.getCategory().getId();
     }
 %>
 <body>
@@ -69,6 +70,7 @@
                 </div>
             </div>
             <form id="event_form" enctype="multipart/form-data">
+                <input type="hidden" name="eventId" value="<%=event.getId()%>">
                 <div class="form_row clearfix">
                     <div class="form_col_full">
                         <label for="eventTitle">
@@ -159,13 +161,38 @@
                         <div class="form_col_half">
                             <div class="file_button_wrapper">
                                 Event image
+                                <% if (event.getImageName() != null) { %>
+                                 <div >
+                                     <img class="thumb-img" src = "/resources/uploads/events/images/<%=event.getImageName()%>" >
+                                     <button id="edit-img" class="thumb" onclick="">
+                                         <i class="icon-pencil"></i>
+                                     </button>
+                                     <button id="delete-img" class="thumb" onclick="">
+                                         <i class="icon-delete"></i>
+                                     </button>
+                                 </div>
+                                <% } else { %>
                                 <input class="input_file" name="eventImage" id="event_image" type="file">
+                                <% } %>
                             </div>
                         </div>
                         <div class="form_col_half">
                             <div class="file_button_wrapper">
-                                Attach a file
+                                Event file
+                                <%if(event.getFileName() != null) { %>
+                                <div >
+                                    <i class="icon-pdf"></i>
+                                    <%--<img class="thumb-file" src = "/resources/uploads/events/images/<%=event.getFileName()%>" >--%>
+                                    <button id="edit-file" class="thumb" onclick="">
+                                        <i class="icon-pencil"></i>
+                                    </button>
+                                    <button id="delete-file" class="thumb" onclick="">
+                                        <i class="icon-delete"></i>
+                                    </button>
+                                </div>
+                                <% } else { %>
                                 <input type="file" class="input_file" name="eventFile" id="event_file">
+                                <% } %>
                             </div>
                         </div>
                     </div>
@@ -210,7 +237,6 @@
                 </div>
                 <div id="suggested_emails"></div>
 
-
                 <!-- Invitees -->
                 <div class="form_row clearfix">
                     <div class="form_col_full" id="guests_list">
@@ -224,7 +250,7 @@
                                 <div class='invitation_item_email'><%=invitation.getUser().getEmail()%></div>
                                 <span class ='remove_email'>x</span>
 
-                                <% if(invitation.getUserRole().equals(UserRole.ORGANIZER)){%>
+                                <% if(invitation.getUser().getId() == event.getOrganizer().getId()){%>
                                     <span class="organizer"> (Organizer)</span>
                                 <% }%>
                             </div>
@@ -233,13 +259,28 @@
 
                     </div>
                 </div>
-
+                <% if(action.equals("create-event")) { %>
                 <div class="form_row clearfix">
-                    <button type="submit" class="btn full_button" id="event_submit">
+                    <input type="hidden" name="action" value="create">
+                    <button class="btn full_button" id="event_submit">
                         <i class="icon-check"></i>
                         <span>Save</span>
                     </button>
                 </div>
+
+                <% } else if(action.equals("edit-event")) { %>
+                <div class="form_row clearfix btn_row">
+                    <input type="hidden" name="action" value="edit">
+                    <button type="submit" class="btn" id="event_save">
+                        <i class="icon-check"></i>
+                        <span>Save</span>
+                    </button>
+                    <button class="btn " id="event_discard">
+                        <i class="icon-check"></i>
+                        <span>Discard Changes</span>
+                    </button>
+                </div>
+                <% } %>
 
             </form>
         </div>

@@ -118,7 +118,6 @@ public class Validator {
                     && event.getEndDate() != null
                     && event.getOrganizer() != null
                     && event.getLocation() != null
-                    && event.getCreationDate() != null
                     ) {
                 valid = true;
             }
@@ -132,7 +131,6 @@ public class Validator {
         if (invitation != null) {
             if (invitation.getEventId() > 0
                     && isValidUser(invitation.getUser())
-                    && (invitation.getUserRole() != null)
                     && (invitation.getUserResponse() != null)) {
                 valid = true;
             }

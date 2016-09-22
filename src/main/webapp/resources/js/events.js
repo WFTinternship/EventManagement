@@ -50,7 +50,6 @@ function loadAllEvents() {
 }
 
 function createEventItem(event) {
-    alert('aaa');
 
     var eventHTML = '<div class="list_item"><div class="list_content">' +
         '<h6 class="title"><a href="#">' + event.title + '</a></h6>' +

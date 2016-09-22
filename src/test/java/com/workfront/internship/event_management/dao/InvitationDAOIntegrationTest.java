@@ -137,8 +137,7 @@ public class InvitationDAOIntegrationTest {
     @Test
     public void updateInvitation_Success() throws DuplicateEntryException, ObjectNotFoundException, DAOException {
         //change test invitation object
-        testInvitation.setAttendeesCount(10)
-                .setUserRole(UserRole.ORGANIZER);
+        testInvitation.setAttendeesCount(10);
 
         //test method
         invitationDAO.updateInvitation(testInvitation);

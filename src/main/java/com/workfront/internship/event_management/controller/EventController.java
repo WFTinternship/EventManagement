@@ -2,6 +2,7 @@ package com.workfront.internship.event_management.controller;
 
 import com.workfront.internship.event_management.controller.util.CustomResponse;
 import com.workfront.internship.event_management.common.DateParser;
+import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.exception.service.UnauthorizedAccessException;
 import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Event;
@@ -178,6 +179,7 @@ public class EventController {
 
         List<Category> categoryList = categoryService.getAllCategories();
 
+        model.addAttribute("action", "create-event");
         model.addAttribute("categories", categoryList);
         model.addAttribute("event", createEmptyEvent());
 
@@ -200,6 +202,8 @@ public class EventController {
         }
 
         List<Category> categoryList = categoryService.getAllCategories();
+
+        model.addAttribute("action", "edit-event");
         model.addAttribute("categories", categoryList);
         model.addAttribute("event", event);
 
@@ -238,9 +242,10 @@ public class EventController {
         return response;
     }
 
-    @RequestMapping(value = "/add-event", method = RequestMethod.POST)
+
+    @RequestMapping(value = "/save-event", method = RequestMethod.POST)
     @ResponseBody
-    public CustomResponse addEvent(HttpServletRequest request,
+    public CustomResponse saveEvent(HttpServletRequest request,
                                    @RequestParam(value = "eventImage", required = false) MultipartFile image,
                                    @RequestParam(value = "eventFile", required = false) MultipartFile file) {
 
@@ -251,11 +256,15 @@ public class EventController {
         User sessionUser = (User) session.getAttribute("user");
         if (sessionUser == null) {
             logger.warn(UNAUTHORIZED_ACCESS_MESSAGE);
-
             throw new UnauthorizedAccessException(UNAUTHORIZED_ACCESS_MESSAGE);
         }
 
         Event event = new Event();
+        String action = request.getParameter("action");
+
+        //if action id ADD EVENT, eventId would be 0
+        int eventId = Integer.parseInt(request.getParameter("eventId"));
+        event.setId(eventId);
 
         String title = request.getParameter("eventTitle");
         String shortDescription = request.getParameter("shortDesc");
@@ -265,12 +274,12 @@ public class EventController {
 
         List<Invitation> invitations = new ArrayList<>();
         if(!isEmptyString(invitationsString)) {
-
             //get invitees email list
             List<String> invitationEmails = Arrays.asList(invitationsString.split(","));
 
             for (String email : invitationEmails) {
                 Invitation invitation = invitationService.createInvitationForMember(email);
+                invitation.setEventId(eventId);
                 invitations.add(invitation);
             }
         }
@@ -303,7 +312,7 @@ public class EventController {
                 .setInvitations(invitations);
 
         //saving event image (if uploaded)
-        if (!image.isEmpty()) {
+        if (image!= null && !image.isEmpty()) {
 
             if (!fileService.isValidImage(image)) {
                 String message = "Invalid image type!";
@@ -328,7 +337,7 @@ public class EventController {
         }
 
         //saving event file (if uploaded)
-        if (!file.isEmpty()) {
+        if (file!= null && !file.isEmpty()) {
 
             if (!fileService.isValidFile(file)) {
                 String message = "Invalid file type!";
@@ -351,7 +360,13 @@ public class EventController {
             }
         }
 
-        eventService.createEvent(event);
+        if (action.equals("create")) {
+            eventService.createEvent(event);
+        } else if (action.equals("edit")) {
+            eventService.editEvent(event);
+        } else {
+            throw new OperationFailedException("Unknown action");
+        }
 
         //update logged in user's organized events in session
         List<Event> userOrganizedEvents = eventService.getUserOrganizedEvents(sessionUser.getId());

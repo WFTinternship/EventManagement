@@ -91,11 +91,12 @@ public class UserController {
 
     @RequestMapping(value = "/my-account")
     public String goToMyAccountPage(HttpServletRequest request) {
-//        if(request.getSession().getAttribute("user") != null ){
+        if(request.getSession().getAttribute("user") != null ){
             return MY_ACCOUNT_VIEW;
-//        } else {
-//            return "forward:/home";
-//        }
+        } else {
+            //redirect to home
+            return "forward:/home";
+        }
     }
 
 

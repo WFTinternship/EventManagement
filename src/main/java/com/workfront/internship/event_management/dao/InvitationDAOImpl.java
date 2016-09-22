@@ -6,7 +6,6 @@ import com.workfront.internship.event_management.exception.service.ObjectNotFoun
 import com.workfront.internship.event_management.model.Invitation;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.model.UserResponse;
-import com.workfront.internship.event_management.model.UserRole;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -44,11 +43,10 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             } else {
                 stmt.setInt(2, 0);
             }
-            stmt.setObject(3, invitation.getUserRole().name());
-            stmt.setInt(4, invitation.getUserResponse().getId());
+            stmt.setInt(3, invitation.getUserResponse().getId());
 
-            stmt.setInt(5, invitation.getAttendeesCount());
-            stmt.setBoolean(6, invitation.isParticipated());
+            stmt.setInt(4, invitation.getAttendeesCount());
+            stmt.setBoolean(5, invitation.isParticipated());
 
             //execute query
             stmt.executeUpdate();
@@ -76,8 +74,8 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
         int id = 0;
         String query = "INSERT INTO event_invitation "
-                + "(event_id, user_id, user_role, user_response_id, attendees_count, participated) VALUES "
-                + "(?, ?, ?, ?, ?, ? )";
+                + "(event_id, user_id, user_response_id, attendees_count, participated) VALUES "
+                + "(?, ?, ?, ?, ? )";
         try {
             //get connection
             conn = dataSource.getConnection();
@@ -99,16 +97,14 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
                     stmt.setInt(2, 0);
                 }
 
-                stmt.setString(3, invitation.getUserRole().name());
-
                 if (invitation.getUserResponse() != null) {
-                    stmt.setInt(4, invitation.getUserResponse().getId());
+                    stmt.setInt(3, invitation.getUserResponse().getId());
                 } else {
-                    stmt.setInt(4, 0);
+                    stmt.setInt(3, 0);
                 }
 
-                stmt.setInt(5, invitation.getAttendeesCount());
-                stmt.setBoolean(6, invitation.isParticipated());
+                stmt.setInt(4, invitation.getAttendeesCount());
+                stmt.setBoolean(5, invitation.isParticipated());
 
                 stmt.addBatch();
             }
@@ -185,7 +181,7 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
         PreparedStatement stmt = null;
         boolean success = false;
 
-        String sqlStr = "UPDATE event_invitation SET user_role = ? , user_response_id = ?, attendees_count = ?, " +
+        String sqlStr = "UPDATE event_invitation SET user_response_id = ?, attendees_count = ?, " +
                 "participated = ? WHERE id = ?";
 
         try {
@@ -194,11 +190,10 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
 
             //create and initialize statement
             stmt = conn.prepareStatement(sqlStr);
-            stmt.setString(1, invitation.getUserRole().name());
-            stmt.setInt(2, invitation.getUserResponse().getId());
-            stmt.setInt(3, invitation.getAttendeesCount());
-            stmt.setBoolean(4, invitation.isParticipated());
-            stmt.setInt(5, invitation.getId());
+            stmt.setInt(1, invitation.getUserResponse().getId());
+            stmt.setInt(2, invitation.getAttendeesCount());
+            stmt.setBoolean(3, invitation.isParticipated());
+            stmt.setInt(4, invitation.getId());
 
             //execute query
             int affectedRows = stmt.executeUpdate();
@@ -260,12 +255,29 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
         return deleteRecordById("event_invitation", invitationId);
     }
 
+
     @Override
     public void deleteInvitationsByEventId(int eventId) throws DAOException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        boolean success = false;
+
+        String query = "DELETE FROM event_invitation WHERE event_id = ? ";
         try {
-            deleteRecord("event_invitation", "event_id", eventId);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.error(eventId + " not found", e);
+            //get connection
+            conn = dataSource.getConnection();
+
+            //create and initialize statement
+            stmt = conn.prepareStatement(query);
+            stmt.setInt(1, eventId);
+
+            //execute query
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.error("SQL exception", e);
+            throw new DAOException(e);
+        } finally {
+            closeResources(stmt, conn);
         }
     }
 
@@ -345,7 +357,6 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
                     .setEventId(rs.getInt("event_id"))
                     .setAttendeesCount(rs.getInt("attendees_count"))
                     .setUserResponse(userResponse)
-                    .setUserRole(UserRole.findByName(rs.getString("user_role")))
                     .setParticipated(rs.getBoolean("participated"));
 
             invitationsList.add(invitation);

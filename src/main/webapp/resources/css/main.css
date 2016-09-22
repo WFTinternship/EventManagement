@@ -789,6 +789,24 @@ input[type="text"]:focus, input[type="password"]:focus {
     width: 60%;
 }
 
+.thumb-img{
+    height:30px;
+}
+
+.thumb{
+    color: #666;
+    border: none;
+    background: none;
+}
+.btn_row button{
+    width:49%;
+}
+#event_save{
+    float:left;
+}
+#event_discard{
+    float:right;
+}
 textarea{
     padding: 10px;
 }

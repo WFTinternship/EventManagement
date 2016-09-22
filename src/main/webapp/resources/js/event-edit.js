@@ -92,7 +92,7 @@ $(document).ready(function () {
         },
 
         submitHandler: function (form) {
-
+            debugger;
             //get invitations array
             var invitations = getSelectedInvitationEmails();
 
@@ -100,14 +100,14 @@ $(document).ready(function () {
             formData.append("invitations", invitations);
 
             $.ajax({
-                url: '/add-event',
+                url: '/save-event',
                 type: 'POST',
                 processData: false,
                 contentType: false,
                 data: formData,
                 success: function (result) {
                     if (result.status == "SUCCESS") {
-                        window.location = "/events";
+                        window.location = "/my-account";
                     } else if (result.status == "FAIL") {
                         window.location = "/error";
                     }
@@ -283,6 +283,12 @@ $(document).ready(function () {
         var formatedDate = new Date(dateItems[yearIndex],month,dateItems[dayIndex]);
         return formatedDate;
     }
+
+    // edit event methods
+    $("#event_discard").click(function (event) {
+        window.location = "/my-account";
+
+    })
 
 })
 

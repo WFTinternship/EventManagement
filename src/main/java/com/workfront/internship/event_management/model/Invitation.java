@@ -10,7 +10,6 @@ public class Invitation {
     private int id;
     private int eventId;
     private User user;
-    private UserRole userRole;
     private UserResponse userResponse;
     private int attendeesCount;
     private boolean participated;
@@ -29,7 +28,6 @@ public class Invitation {
         this.id = invitation.id;
         this.eventId = invitation.eventId;
         this.user = invitation.user;
-        this.userRole = invitation.userRole;
         this.userResponse = invitation.userResponse;
         this.attendeesCount = invitation.attendeesCount;
         this.participated = invitation.participated;
@@ -74,16 +72,6 @@ public class Invitation {
         this.participated = participated;
         return this;
     }
-
-    public UserRole getUserRole() {
-        return userRole;
-    }
-
-    public Invitation setUserRole(UserRole userRole) {
-        this.userRole = userRole;
-        return this;
-    }
-
 
     public User getUser() {
         return user;

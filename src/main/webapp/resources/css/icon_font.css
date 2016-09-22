@@ -100,3 +100,16 @@
     content: "\f107";
     margin-left: 10px;
 }
+
+.icon-pdf::before{
+    content: "\f1c1";
+    height:30px;
+}
+.icon-doc::before{
+    content: "\f1c2";
+    height:30px;
+}
+.icon-xls::before{
+    content: "\f1c3";
+    height:30px;
+}

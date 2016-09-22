@@ -142,6 +142,7 @@ public class InvitationServiceImpl implements InvitationService {
     public void editInvitationList(int eventId, List<Invitation> invitationList) {
 
         if (isEmptyCollection(invitationList)) {
+           // delete all invitations
             deleteInvitationsByEvent(eventId);
         } else {
 
@@ -205,6 +206,7 @@ public class InvitationServiceImpl implements InvitationService {
         invitationDAO.deleteInvitationsByEventId(eventId);
     }
 
+
     @Override
     public void deleteInvitationsByUser(int userId) {
         if (userId < 1) {
@@ -242,7 +244,6 @@ public class InvitationServiceImpl implements InvitationService {
 
             Invitation invitation = new Invitation();
             invitation.setUser(user)
-                    .setUserRole(userRole)
                     .setAttendeesCount(1)
                     .setParticipated(false)
                     .setUserResponse(new UserResponse(userResponse.getId(), userResponse.getTitle()))
@@ -251,4 +252,5 @@ public class InvitationServiceImpl implements InvitationService {
             return invitation;
         }
     }
+
 }
