@@ -73,8 +73,10 @@ public class FileService {
     }
 
     public boolean isValidFile(MultipartFile file) {
-        // TODO: 9/12/16 implement 
-        return true;
+        // TODO: 9/12/16
+        return (file.getContentType().equals("application/pdf")
+                || file.getContentType().equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                || file.getContentType().equals("application/msword"));
     }
 
 }
