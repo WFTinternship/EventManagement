@@ -210,6 +210,17 @@ public class EventServiceImpl implements EventService {
         eventDAO.deleteAllEvents();
     }
 
+    @Override
+    public Event createEmptyEvent() {
+        Event event = new Event();
+        event.setTitle("")
+                .setShortDescription("")
+                .setFullDescription("")
+                .setLocation("")
+                .setPublicAccessed(true);
+
+        return event;
+    }
     //helper methods
     private void setDefaultFields(Event event) {
         event.setCreationDate(new Date());

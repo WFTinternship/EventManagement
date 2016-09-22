@@ -44,7 +44,7 @@ b {
 
 /* Rounded corners */
 .login_dialog, input[type="text"], input[type=button], input[type="password"], .btn, .btn_a, .lf_header, .lf_forget_pass,
-#suggested_emails, #respond_wrapper, [data-notify="container"]{
+#suggested_emails, #respond_wrapper, [data-notify="container"], .list_item{
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     -ms-border-radius: 3px;
@@ -556,13 +556,33 @@ input[type="text"]:focus, input[type="password"]:focus {
 .list_item h6 a, .meta a {
     color: #576162;
 }
+.list_item h6 {
+    display:inline-block;
+}
 
 .list_item h6 a:hover, .meta a:hover {
     color: #00AFB2;
 }
+.list_item {
+    margin-bottom: 25px;
+    border: 1px solid #e9e9e9;
+}
+.list_content {
+    padding: 20px 30px 30px 30px;
+}
+
+#delete-event{
+    margin-left:0px;
+}
+
+a{
+    text-decoration: none;
+}
 
 .list_item .desc {
     margin-bottom: 30px;
+    border-bottom: dotted 1px #ccc;
+    padding: 10px 0px;
 }
 
 /* Left sidebar */
@@ -903,6 +923,7 @@ textarea{
 /* Event details */
 .event_img{
     width:600px;
+    margin-bottom:30px;
 }
 
 #respond_wrapper {
@@ -947,4 +968,15 @@ textarea{
     border: solid 1px #00AFB2 !important;
     color: #00AFB2;
     font-weight:bold
+}
+
+/**** edit/delete event buttons ***/
+.change-event-btn, .change-event-btn:visited{
+    margin-left:25px;
+    color: #00AFB2;
+    border: none !important;
+    background: none !important;
+}
+.change-event-btn:hover{
+    color: #666;
 }

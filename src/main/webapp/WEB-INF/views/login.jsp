@@ -51,14 +51,10 @@
                     },
                     url: '/login',
                     success: function (result) {
-                        /* if (result.success != null) {
-                         window.location = "/"
-                        } else if (result.error != null) {
-                            $("#login_failed_label").show();
-                            $("#login_failed_label").html(result.error);
-                         }*/
                         if (result.status == "SUCCESS") {
-                            window.location = "/"
+                            window.location = "/";
+                            location.reload();
+
                         } else if (result.status == "FAIL") {
                             $("#login_failed_label").show();
                             $("#login_failed_label").html(result.message);

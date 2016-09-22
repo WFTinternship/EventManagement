@@ -6,7 +6,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="static com.workfront.internship.event_management.service.util.Validator.isEmptyCollection" %>
 <%@ page import="com.workfront.internship.event_management.common.DateParser" %>
-<%@ page import="com.workfront.internship.event_management.model.*" %><%--
+<%@ page import="com.workfront.internship.event_management.model.*" %>
+<%@ page import="static com.workfront.internship.event_management.service.util.Validator.isEmptyString" %><%--
   Created by IntelliJ IDEA.
   User: Inmelet
   Date: 8/8/2016
@@ -104,11 +105,16 @@
                             <% if (event.getImageName() != null) {%>
                                 <img class="event_img" src = "/resources/uploads/events/images/<%=event.getImageName()%>" />
                             <% } %>
+
+                            <% if (!isEmptyString(event.getShortDescription())) { %>
                                 <p class="desc"><%=event.getShortDescription()%></p>
 
-                                <p class="desc"><%=event.getFullDescription()%>
-                                </p>
+                            <% }
 
+                                if (!isEmptyString(event.getFullDescription())) { %>
+                             <p class="desc"><%=event.getFullDescription()%>
+                                </p>
+                            <% } %>
                                 <% List<Invitation> invitations = event.getInvitations();
                                     if(!isEmptyCollection(invitations)) { %>
 

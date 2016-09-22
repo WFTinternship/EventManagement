@@ -7,7 +7,8 @@
 <%@ page import="com.workfront.internship.event_management.service.EventServiceImpl" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.workfront.internship.event_management.common.DateParser" %>
-<%@ page import="static com.workfront.internship.event_management.service.util.Validator.isEmptyCollection" %><%--
+<%@ page import="static com.workfront.internship.event_management.service.util.Validator.isEmptyCollection" %>
+<%@ page import="com.workfront.internship.event_management.model.User" %><%--
   Created by IntelliJ IDEA.
   User: Inmelet
   Date: 8/8/2016
@@ -35,6 +36,13 @@
     <link href="<c:url value="/resources/css/icon_font.css" />" rel="stylesheet">
 
 </head>
+<%
+    User sessionUser = (User) session.getAttribute("user");
+    int userId = 0;
+    if(sessionUser != null) {
+        userId = sessionUser.getId();
+    }
+%>
 <body class="events_page">
 <div id="main_wrapper">
     <!-- Main Header -->
@@ -90,6 +98,16 @@
                                     <a href="#"><%=event.getTitle() %>
                                     </a>
                                 </h6>
+                                <% if(userId == event.getOrganizer().getId()) { %>
+                                <a id="edit-event" class="change-event-btn" href="/events/<%=event.getId()%>/edit">
+                                    <i class="icon-pencil"></i>
+                                    <span>Edit</span>
+                                </a>
+                                <button id="delete-event" class="change-event-btn" onclick="deleteEvent(<%=event.getId()%>)">
+                                    <i class="icon-delete"></i>
+                                    <span>Delete</span>
+                                </button>
+                                 <%} %>
                                 <span class="meta">
                                        <span class="meta_part ">
                                            <a href="#">

@@ -12,6 +12,8 @@ public interface EventService {
     //Create
     Event createEvent(Event event);
 
+    Event createEmptyEvent();
+
     //Read
     Event getEventById(int eventId);
 

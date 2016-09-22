@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="com.workfront.internship.event_management.model.Event" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.workfront.internship.event_management.model.User" %>
 <%--
   Created by IntelliJ IDEA.
   User: Inmelet
@@ -17,7 +18,7 @@
     <script src="<c:url value="/resources/js/lib/jquery.validate.js" />"></script>
     <script src="<c:url value="/resources/js/lib/jquery.flexslider.js" />"></script>
     <script src="<c:url value="/resources/js/lib/bootstrap.min.js" />"></script>
-    <script src="<c:url value="/resources/js/home.js" />"></script>
+    <script src="<c:url value="/resources/js/index.js" />"></script>
 
     <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
@@ -31,6 +32,13 @@
     <link href="<c:url value="/resources/css/icon_font.css" />" rel="stylesheet">
 
 </head>
+<%
+    User sessionUser = (User) session.getAttribute("user");
+    int userId = 0;
+    if(sessionUser != null) {
+        userId = sessionUser.getId();
+    }
+%>
 <body class="home_page">
 <div id="main_wrapper">
     <!-- Main Header -->
@@ -69,6 +77,16 @@
                                     <a href="#"><%=event.getTitle() %>
                                     </a>
                                 </h6>
+                                <% if(userId == event.getOrganizer().getId()) { %>
+                                <a id="edit-event" class="change-event-btn" href="/events/<%=event.getId()%>/edit">
+                                    <i class="icon-pencil"></i>
+                                    <span>Edit</span>
+                                </a>
+                                <button id="delete-event" class="change-event-btn" onclick="deleteEvent(<%=event.getId()%>)">
+                                    <i class="icon-delete"></i>
+                                    <span>Delete</span>
+                                </button>
+                                <%} %>
                                 <span class="meta">
                                        <span class="meta_part ">
                                            <a href="#">
@@ -117,6 +135,9 @@
     <!-- Footer -->
     <jsp:include page="footer.jsp"/>
     <!-- End Footer -->
+    <%--<% if(response.getAttribute("redirect_url") != null) { %>--%>
+        <%--<script type="text/javascript" >alert("kuku");</script>--%>
+    <%--<% } %>--%>
 </div>
 </body>
 </html>

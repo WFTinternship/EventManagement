@@ -81,7 +81,7 @@ public class UserController {
         session.setAttribute("user", null);
         session.invalidate();
 
-        return "forward:/home";
+        return "redirect:/";
     }
 
     @RequestMapping(value = "/registration")

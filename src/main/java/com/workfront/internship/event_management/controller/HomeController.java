@@ -25,6 +25,7 @@ public class HomeController {
     @RequestMapping(value = {"/", "home"})
     public String loadUpcomingEventsForHomePage(HttpServletRequest request, Model model) {
         User sessionUser = (User) request.getSession().getAttribute("user");
+
         List<Event> eventList = null;
 
         if (sessionUser == null) {

@@ -132,14 +132,14 @@ public class EventController {
     @GetMapping(value = "/events/{eventId}/invitation-respond")
     public String goToRespondToEventPage(@PathVariable("eventId") int eventId, Model model, HttpServletRequest request) {
         User sessionUser = (User) request.getSession().getAttribute("user");
+
         if (sessionUser == null) {
             throw new UnauthorizedAccessException(UNAUTHORIZED_ACCESS_MESSAGE);
         }
 
         int userId = Integer.parseInt(request.getParameter("user"));
         if (sessionUser.getId() != userId) {
-            // TODO: 9/21/16 redirect to login
-
+            throw new UnauthorizedAccessException(UNAUTHORIZED_ACCESS_MESSAGE);
         }
 
         //if coming from email
@@ -198,7 +198,7 @@ public class EventController {
 
         model.addAttribute("action", "create-event");
         model.addAttribute("categories", categoryList);
-        model.addAttribute("event", createEmptyEvent());
+        model.addAttribute("event", eventService.createEmptyEvent());
 
         return EVENT_EDIT_VIEW;
     }
@@ -419,15 +419,4 @@ public class EventController {
         return customResponse;
     }
 
-    // TODO: 9/21/16 move to service
-    private Event createEmptyEvent() {
-        Event event = new Event();
-        event.setTitle("")
-                .setShortDescription("")
-                .setFullDescription("")
-                .setLocation("")
-                .setPublicAccessed(true);
-
-        return event;
-    }
 }
