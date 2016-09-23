@@ -275,7 +275,7 @@
                         <i class="icon-check"></i>
                         <span>Save</span>
                     </button>
-                    <button class="btn " id="event_discard">
+                    <button class="btn " id="event_discard" type="button">
                         <i class="icon-check"></i>
                         <span>Cancel</span>
                     </button>

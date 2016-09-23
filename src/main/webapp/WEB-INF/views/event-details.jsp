@@ -142,16 +142,22 @@
                             </div>
 
                             <% if (!isEmptyString(event.getShortDescription())) { %>
-                                <p class="desc"><%=event.getShortDescription()%></p>
+                                <p class="desc">
+                                    <div class="desc_header">Short description:</div>
+                                    <%=event.getShortDescription()%>
+                                </p>
                             <% }
 
                                 if (!isEmptyString(event.getFullDescription())) { %>
-                             <p class="desc"><%=event.getFullDescription()%>
+                             <p class="desc">
+                            <div class="desc_header">Full description:</div>
+                                <%=event.getFullDescription()%>
+
                                 </p>
                             <% } %>
                                 <% List<Invitation> invitations = event.getInvitations();
                                     if(!isEmptyCollection(invitations)) { %>
-
+<div class="guest_list">
                                     <h4>Guests</h4>
                                     <div class="invitees">
                                         <% for(Invitation invitation :invitations) { %>
@@ -163,7 +169,7 @@
                                                     <% if(invitation.getUser().getId() == event.getOrganizer().getId()){%>
                                                     <span class="organizer"> (Organizer)</span>
                                                     <% }%>
-                                                    <% if(sessionUser != null && sessionUser.getId() == invitation.getUser().getId()){  %>
+                                                    <% if (sessionUser != null && sessionUser.getId() == invitation.getUser().getId()){  %>
                                                     <div id="change_response_wrapper">
                                                         <button id="change_response" class="">
                                                             <i class="icon-pencil change-response-icon"></i>
@@ -193,6 +199,7 @@
                                             </div>
                                         <% }%>
                                     </div>
+    </div>
                             <% }%>
 
 

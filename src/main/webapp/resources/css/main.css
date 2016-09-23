@@ -928,6 +928,10 @@ textarea{
     margin-bottom:30px;
 }
 
+.desc_header{
+    margin-bottom:20px;
+    font-weight:bold;
+}
 span.meta_header {
     font-size: 13px;
     font-style: italic;
@@ -939,6 +943,9 @@ span.meta_header {
     width:50%;
     float:left
 
+}
+.guest_list{
+    margin-top:35px;
 }
 
 #respond_wrapper {

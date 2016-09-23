@@ -37,9 +37,6 @@ public class EventController {
 
     private static final Logger logger = Logger.getLogger(EventController.class);
 
-    private static final String EVENT_FILE_UPLOAD_DIRECTORY = "uploads/events/files";
-    private static final String EVENT_IMAGE_UPLOAD_DIRECTORY = "uploads/events/images";
-
     @Autowired
     private EventService eventService;
     @Autowired

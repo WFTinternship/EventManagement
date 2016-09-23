@@ -1,42 +1,81 @@
+
 <html>
 <head>
-    <script src="/resources/css/invitation.css"></script>
+    <style>
+		#include( "/templates/invitation.css" )
+	</style>
 </head>
-<body style="line-heigh">
 
-	<h3>${event.title}</h3>
-    <br/>
+<body class="events_page">
 
-	<div >
-		${event.shortDescription}
-	</div>
-
-    <br/>
-
-    <div >
-        <b>Organizer: </b>${event.organizer.firstName} ${event.organizer.lastName}
+<div class="list_item">
+    <h6 class="title">${event.title}</h6>
+    <div class="meta-row clearfix">
+        <div class="col_half">
+            <div>
+                <span class="meta_header">Start date:</span>
+                <i class="ev_icon icon-clock"></i> ${event.startDate}
+            </div>
+            <div>
+                <span class="meta_header">End date:</span>
+                <i class="ev_icon icon-clock"></i>
+                <span>${event.endDate}</span>
+            </div>
+            <div>
+                <span class="meta_header">Location:</span>
+                <i class="ev_icon icon-map-marker"></i>
+                <span>${event.location}</span>
+            </div>
+        </div>
+        <div class="col_half">
+            <div>
+                <span class="meta_header">Created on:</span>
+                <i class="ev_icon icon-clock"></i>
+                <span>${event.creationDate}</span>
+            </div>
+            <div>
+                <span class="meta_header">Organized by:</span>
+                <i class="ev_icon icon-user"></i>
+                <span>${event.organizer.firstName} ${event.organizer.lastName}</span>
+            </div>
+            <div>
+                <span class="meta_header">Event category:</span>
+                <i class="ev_icon icon-folder"></i>
+                <span>${event.category.title}</span>
+            </div>
+        </div>
     </div>
-    <div >
-        <b>Date: </b> ${event.startDate} - ${event.endDate}
-	</div>
-    <div>
-        <b>Location: </b> ${event.location}
-	</div>
 
-    <div class="email_list">
+    <p class="desc">
+    <div class="desc_header">Short description:</div>
+    	${event.shortDescription}
+    </p>
+	<div class="guest_list">
+    	<h4>Guests</h4>
+
 		#foreach ($invitationItem in $event.invitations)
-		<div class="email_item" style="padding-left:10px;">
-    		$invitationItem.user.email (${invitationItem.userResponse.title})
-		</div>
+
+        <div class="invitees">
+            <div class="invitees_email">
+                <div class='invitation_item clearfix' >
+                    <i class='icon-response-${invitation.userResponse.id}'></i>
+                    <div class='invitation_item_email'>${invitation.user.email}</div>
+
+                    <span class="organizer"> (Organizer)</span>
+                </div>
+            </div>
+
+        </div>
 		#end
+    </div>
 	</div>
-	<br/>
-	<div class="response_box">Going?
-		<a href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=1">Yes</a>
-		<a href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=2">No</a>
-		<a href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=3">Maybe</a>
-	</div>
-	<br/>
-	<div class="details_link"><a href="http://localhost:8085/events/${event.id}/invitation-respond">Event Details</a></div>
+    <div class="response_box">Going?
+        <a href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=1">Yes</a>
+        <a href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=2">No</a>
+        <a href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=3">Maybe</a>
+    </div>
+    <br/>
+    <div class="details_link"><a href="http://localhost:8085/events/${event.id}/invitation-respond">Event Details</a></div>
 </body>
 </html>
+

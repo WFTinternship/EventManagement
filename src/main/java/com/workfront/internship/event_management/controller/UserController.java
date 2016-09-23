@@ -85,7 +85,12 @@ public class UserController {
     }
 
     @RequestMapping(value = "/registration")
-    public String goToRegistrationPage() {
+    public String goToRegistrationPage(HttpServletRequest request) {
+
+        if(request.getSession().getAttribute("user") != null ) {
+            return "redirect:/";
+        }
+
         return REGISTRATION_VIEW;
     }
 
@@ -95,7 +100,7 @@ public class UserController {
             return MY_ACCOUNT_VIEW;
         } else {
             //redirect to home
-            return "forward:/home";
+            return "redirect:/";
         }
     }
 

@@ -13,7 +13,7 @@ public class PageParameters {
     public static final String EVENTS_LIST_VIEW = "events";
 
     public static final String HOME_VIEW = "index";
-    public static final String REGISTRATION_VIEW = "index";
+    public static final String REGISTRATION_VIEW = "registration";
     public static final String MY_ACCOUNT_VIEW = "my-account";
 
 

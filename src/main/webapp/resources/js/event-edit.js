@@ -285,6 +285,7 @@ $(document).ready(function () {
 
     // edit event methods
     $("#event_discard").click(function (event) {
+        event.preventDefault();
         window.location = "/my-account";
 
     })
