@@ -1,20 +1,17 @@
-
 <html>
 <head>
     <style>
-		#include( "/templates/invitation.css" )
+		#include( "/templates/css/invitation.css" )
 	</style>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 </head>
-
-<body class="events_page">
-
+<body>
 <div class="list_item">
-    <h6 class="title">${event.title}</h6>
-    <div class="meta-row clearfix">
-        <div class="col_half">
+    <h6 class="title"><a href="http://localhost:8085/events/${event.id}/">${event.title}</a></h6>
+    <div class="meta-row">
             <div>
                 <span class="meta_header">Start date:</span>
-                <i class="ev_icon icon-clock"></i> ${event.startDate}
+                <i class="ev_icon icon-clock"></i>${event.startDate}
             </div>
             <div>
                 <span class="meta_header">End date:</span>
@@ -26,56 +23,46 @@
                 <i class="ev_icon icon-map-marker"></i>
                 <span>${event.location}</span>
             </div>
-        </div>
-        <div class="col_half">
-            <div>
-                <span class="meta_header">Created on:</span>
-                <i class="ev_icon icon-clock"></i>
-                <span>${event.creationDate}</span>
-            </div>
             <div>
                 <span class="meta_header">Organized by:</span>
                 <i class="ev_icon icon-user"></i>
                 <span>${event.organizer.firstName} ${event.organizer.lastName}</span>
             </div>
-            <div>
-                <span class="meta_header">Event category:</span>
-                <i class="ev_icon icon-folder"></i>
-                <span>${event.category.title}</span>
-            </div>
-        </div>
+                    <div>
+                        <span class="meta_header">Event category:</span>
+                        <i class="ev_icon icon-folder"></i>
+                        <span>$event.getCategory().getTitle()</span>
+                    </div>
     </div>
-
-    <p class="desc">
-    <div class="desc_header">Short description:</div>
-    	${event.shortDescription}
-    </p>
+	#if (${event.shortDescription})
+		<div class="desc">
+		<div class="desc_header">Short description:</div>
+			${event.shortDescription}
+		</div>
+	#end
 	<div class="guest_list">
     	<h4>Guests</h4>
-
 		#foreach ($invitationItem in $event.invitations)
-
-        <div class="invitees">
-            <div class="invitees_email">
-                <div class='invitation_item clearfix' >
-                    <i class='icon-response-${invitation.userResponse.id}'></i>
-                    <div class='invitation_item_email'>${invitation.user.email}</div>
-
+                <div class='invitation_item' >
+                    <i class='icon-response-${invitationItem.userResponse.id}'></i>
+                    <div class='invitation_item_email'><span>${invitationItem.user.email}</span></div>
+			  	#if (${event.organizer.id} == ${invitationItem.user.id})
                     <span class="organizer"> (Organizer)</span>
-                </div>
+			  	#end
             </div>
-
-        </div>
 		#end
     </div>
-	</div>
+	<br>
     <div class="response_box">Going?
         <a href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=1">Yes</a>
         <a href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=2">No</a>
         <a href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=3">Maybe</a>
     </div>
+    <div class="details_link"><a href="http://localhost:8085/events/${event.id}/">Event Details</a></div>
+
     <br/>
-    <div class="details_link"><a href="http://localhost:8085/events/${event.id}/invitation-respond">Event Details</a></div>
+</div>
+
 </body>
 </html>
 
