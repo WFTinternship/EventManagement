@@ -4,6 +4,7 @@ import com.workfront.internship.event_management.dao.EventDAO;
 import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
+import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.Invitation;
 import com.workfront.internship.event_management.model.UserRole;
@@ -29,6 +30,8 @@ public class EventServiceImpl implements EventService {
     private EventDAO eventDAO;
     @Autowired
     private RecurrenceService recurrenceService;
+    @Autowired
+    private CategoryService categoryService;
     @Autowired
     private InvitationService invitationService;
     @Autowired
@@ -112,6 +115,12 @@ public class EventServiceImpl implements EventService {
 
         //update event main info
         boolean success = eventDAO.updateEvent(event);
+
+        Category updatedCategory = categoryService.getCategoryById(event.getCategory().getId());
+
+        //read updated main data from db (included category title and event creation date)
+        event.setCategory(updatedCategory);
+
         if (success) {
             //update event recurrences
             recurrenceService.editRecurrenceList(event.getId(), event.getEventRecurrences());
