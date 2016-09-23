@@ -121,7 +121,6 @@ a, .btn, .close, .main_title .line::before, .dropdown-content{
     position: relative;
     display: inline-block;
     z-index:999;
-
 }
 
 .dropdown-content {
@@ -141,10 +140,12 @@ a, .btn, .close, .main_title .line::before, .dropdown-content{
     color:#555;
     background-color: white;
 }
+
 .dropdown-content {
     border: 1px solid #E4E4E4;
 
 }
+
 .dropdown-content a:hover {
     background-color: #fbfbfb;
     color:#00AFB2 !important;
@@ -244,6 +245,7 @@ img {
 .flexslider {
     bordeR: none !important;
 }
+
 .flexslider .slides img, .slider_img{
     height:550px !important;
 }
@@ -327,7 +329,6 @@ input[type="text"]:focus, input[type="password"]:focus {
 .full_button {
     width: 100%;
 }
-
 
 /* login */
 #login_form {
@@ -942,7 +943,6 @@ span.meta_header {
 .col_half{
     width:50%;
     float:left
-
 }
 .guest_list{
     margin-top:35px;

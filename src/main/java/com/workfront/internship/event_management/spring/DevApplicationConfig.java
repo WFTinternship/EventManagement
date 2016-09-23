@@ -36,27 +36,27 @@ public class DevApplicationConfig {
     @Bean
     public DataSource dataSource() throws IOException {
 
-//        BasicDataSource dataSource = new BasicDataSource();
-//
-//        //loading db property list
-//        Properties props = new Properties();
-//        props.load(DevApplicationConfig.class.getClassLoader().getResourceAsStream("db.properties"));
-//
-//        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-//
-//        dataSource.setUsername(props.getProperty("jdbc.username"));
-//        dataSource.setPassword(props.getProperty("jdbc.password"));
-//        dataSource.setUrl(props.getProperty("jdbc.url"));
-//
-//        return dataSource;
+        BasicDataSource dataSource = new BasicDataSource();
 
-        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-        EmbeddedDatabase db = builder
-                .setType(EmbeddedDatabaseType.H2)
-                .addScript("db/schema.sql")
-                .addScript("db/data.sql")
-                .build();
-        return db;
+        //loading db property list
+        Properties props = new Properties();
+        props.load(DevApplicationConfig.class.getClassLoader().getResourceAsStream("db.properties"));
+
+        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+
+        dataSource.setUsername(props.getProperty("jdbc.username"));
+        dataSource.setPassword(props.getProperty("jdbc.password"));
+        dataSource.setUrl(props.getProperty("jdbc.url"));
+
+        return dataSource;
+
+//        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+//        EmbeddedDatabase db = builder
+//                .setType(EmbeddedDatabaseType.H2)
+//                .addScript("db/schema.sql")
+//                .addScript("db/data.sql")
+//                .build();
+//        return db;
     }
 
     @Bean
