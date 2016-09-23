@@ -74,7 +74,7 @@
                             if (!eventList.isEmpty()) {
                                 for (Event event : eventList) {
                         %>
-                        <div class="list_item">
+                        <div class="list_item" id="event_<%=event.getId()%>">
                             <div class="list_content">
                                 <h6 class="title">
                                     <a href="#"><%=event.getTitle() %>
