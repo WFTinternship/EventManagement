@@ -244,6 +244,9 @@ img {
 .flexslider {
     bordeR: none !important;
 }
+.flexslider .slides img, .slider_img{
+    height:550px !important;
+}
 
 /* Registration form */
 .form_header {

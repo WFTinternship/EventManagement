@@ -28,7 +28,7 @@ public class DateParser {
     }
 
     public static String parseDateToString(Date date) {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return formatter.format(date);
     }
 
@@ -38,7 +38,7 @@ public class DateParser {
     }
 
     public static String getTimeStringFromDate(Date date) {
-        SimpleDateFormat formatter = new SimpleDateFormat("hh:mm");
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
         return formatter.format(date);
     }
 }
