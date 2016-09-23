@@ -84,7 +84,7 @@ public class AssertionHelper {
         TestCase.assertEquals(actualInvitation.getId(), expectedInvitation.getId());
         TestCase.assertEquals(actualInvitation.getEventId(), expectedInvitation.getEventId());
         TestCase.assertEquals(actualInvitation.getUser().getId(), expectedInvitation.getUser().getId());
-        TestCase.assertEquals(actualInvitation.getUserResponse(), expectedInvitation.getUserResponse());
+        TestCase.assertEquals(actualInvitation.getUserResponse().getId(), expectedInvitation.getUserResponse().getId());
         TestCase.assertEquals(actualInvitation.getAttendeesCount(), expectedInvitation.getAttendeesCount());
         TestCase.assertEquals(actualInvitation.isParticipated(), expectedInvitation.isParticipated());
     }

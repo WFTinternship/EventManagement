@@ -1,10 +1,17 @@
 package com.workfront.internship.event_management.spring;
 
 import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.exception.VelocityException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.ui.velocity.VelocityEngineFactory;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -34,5 +41,25 @@ public class TestApplicationConfig {
         dataSource.setUrl(props.getProperty("jdbc.url.test"));
 
         return dataSource;
+
+//        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+//        EmbeddedDatabase db = builder
+//                .setType(EmbeddedDatabaseType.H2)
+//                .addScript("db/schema.sql")
+//                .addScript("db/data.sql")
+//                .build();
+//        return db;
+    }
+
+
+    @Bean
+    public VelocityEngine getVelocityEngine() throws VelocityException, IOException{
+        return null;
+    }
+
+    @Bean
+    public JavaMailSenderImpl javaMailSenderImpl() throws IOException {
+
+        return null;
     }
 }

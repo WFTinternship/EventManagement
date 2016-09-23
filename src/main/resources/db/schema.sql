@@ -1,5 +1,6 @@
 CREATE TABLE event (
   id              INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  organizer_id    INTEGER UNSIGNED NOT NULL,
   title           VARCHAR(255)     NOT NULL,
   short_desc      VARCHAR(300),
   full_desc       VARCHAR(1500),
@@ -29,7 +30,6 @@ CREATE TABLE event_invitation (
   id               INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
   event_id         INTEGER          NOT NULL,
   user_id          INTEGER          NOT NULL,
-  user_role        VARCHAR(20)      NOT NULL,
   user_response_id INTEGER          NOT NULL,
   attendees_count  INTEGER,
   participated     INTEGER,
@@ -93,6 +93,11 @@ CREATE TABLE user_response (
 
 ALTER TABLE event
   ADD FOREIGN KEY (category_id) REFERENCES event_category (id)
+  ON DELETE SET NULL
+  ON UPDATE NO ACTION;
+
+  ALTER TABLE event
+  ADD FOREIGN KEY (organizer_id) REFERENCES user (id)
   ON DELETE SET NULL
   ON UPDATE NO ACTION;
 

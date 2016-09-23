@@ -92,7 +92,6 @@ $(document).ready(function () {
         },
 
         submitHandler: function (form) {
-            debugger;
             //get invitations array
             var invitations = getSelectedInvitationEmails();
 

@@ -113,7 +113,7 @@ public class Validator {
         boolean valid = false;
         if (event != null) {
             if (!isEmptyString(event.getTitle())
-                    && event.getCategory().getId() != 0
+                    && event.getCategory() != null && event.getCategory().getId() != 0
                     && event.getStartDate() != null
                     && event.getEndDate() != null
                     && event.getOrganizer() != null

@@ -1,7 +1,9 @@
 package com.workfront.internship.event_management.service;
 
 import com.workfront.internship.event_management.TestObjectCreator;
+import com.workfront.internship.event_management.dao.CategoryDAOImpl;
 import com.workfront.internship.event_management.dao.UserDAO;
+import com.workfront.internship.event_management.dao.UserDAOImpl;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.service.InvalidObjectException;
@@ -10,14 +12,13 @@ import com.workfront.internship.event_management.exception.service.OperationFail
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.util.HashGenerator;
 import com.workfront.internship.event_management.spring.TestApplicationConfig;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.internal.util.reflection.Whitebox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -35,26 +36,30 @@ import static org.mockito.Mockito.*;
 /**
  * Created by Hermine Turshujyan 7/27/16.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestApplicationConfig.class)
-@ActiveProfiles("Test")
 public class UserServiceUnitTest {
 
-    @Autowired
-    @InjectMocks
-    private UserService userService;
-
-    @Mock
+    private static UserService userService;
+    private EmailService emailService;
     private UserDAO userDAO;
 
-//    @Mock
-//    private EmailService emailService;
+    @BeforeClass
+    public static void setUpClass() {
+        userService = new UserServiceImpl();
+    }
+
+    @AfterClass
+    public static void tearDownClass() {
+        userService = null;
+    }
 
     private User testUser;
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        userDAO = Mockito.mock(UserDAOImpl.class);
+
+        //inject mocks
+        Whitebox.setInternalState(userService, "userDAO", userDAO);
 
         //create test user object
         testUser = TestObjectCreator.createTestUser();

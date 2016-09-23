@@ -66,13 +66,12 @@ public class EventServiceImpl implements EventService {
                 Invitation invitation = invitations.get(i);
                 invitation.setEventId(eventId);
             }
+            //insert into db
+            invitationService.addInvitations(event.getInvitations());
+
+            //send invitations to invitees
+            emailService.sendInvitations(event);
         }
-
-        //insert into db
-        invitationService.addInvitations(event.getInvitations());
-
-        //send invitations to invitees
-        emailService.sendInvitations(event);
 
         return event;
     }
@@ -221,6 +220,7 @@ public class EventServiceImpl implements EventService {
 
         return event;
     }
+
     //helper methods
     private void setDefaultFields(Event event) {
         event.setCreationDate(new Date());

@@ -22,6 +22,7 @@ import static org.mockito.Mockito.when;
 /**
  * Created by Hermine Turshujyan 7/18/16.
  */
+
 public class CategoryDAOUnitTest {
 
     private static DataSource dataSource;

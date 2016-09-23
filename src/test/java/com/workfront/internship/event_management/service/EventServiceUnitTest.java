@@ -6,6 +6,7 @@ import com.workfront.internship.event_management.dao.EventDAOImpl;
 import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
+import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.Invitation;
 import com.workfront.internship.event_management.model.Recurrence;
@@ -19,6 +20,9 @@ import java.util.List;
 import static com.workfront.internship.event_management.AssertionHelper.assertEqualEvents;
 import static com.workfront.internship.event_management.TestObjectCreator.*;
 import static junit.framework.TestCase.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -29,6 +33,8 @@ public class EventServiceUnitTest {
 
     private static EventService eventService;
     private EventDAO eventDAO;
+    private EmailService emailService;
+
     private Event testEvent;
     private List<Event> testEventList;
 
@@ -51,11 +57,13 @@ public class EventServiceUnitTest {
 
         //creating mocks
         eventDAO = Mockito.mock(EventDAOImpl.class);
+        emailService = Mockito.mock(EmailServiceImpl.class);
         RecurrenceService recurrenceService = Mockito.mock(RecurrenceServiceImpl.class);
         InvitationService invitationService = Mockito.mock(InvitationServiceImpl.class);
 
         //injecting mocks
         Whitebox.setInternalState(eventService, "eventDAO", eventDAO);
+        Whitebox.setInternalState(eventService, "emailService", emailService);
         Whitebox.setInternalState(eventService, "recurrenceService", recurrenceService);
         Whitebox.setInternalState(eventService, "invitationService", invitationService);
 
@@ -69,8 +77,16 @@ public class EventServiceUnitTest {
 
     //Testing addEvent method
     @Test(expected = InvalidObjectException.class)
-    public void addEvent_InvalidEvent() {
+    public void createEvent_InvalidEvent() {
         testEvent.setTitle("");
+
+        //method under test
+        eventService.createEvent(testEvent);
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void createEvent_UnableToInsert() {
+        when(eventDAO.addEvent(testEvent)).thenReturn(0);
 
         //method under test
         eventService.createEvent(testEvent);
@@ -96,7 +112,7 @@ public class EventServiceUnitTest {
         testEvent.setId(VALID_ID);
         testEvent.setEventRecurrences(recurrenceList);
 
-        when(eventDAO.addEvent(testEvent)).thenReturn(VALID_ID);
+        when(eventDAO.addEventWithRecurrences(testEvent)).thenReturn(VALID_ID);
 
         //method under test
         Event actualEvent = eventService.createEvent(testEvent);
@@ -126,6 +142,22 @@ public class EventServiceUnitTest {
         verify(invitationService).addInvitations(testEvent.getInvitations());
     }
 
+    @Test
+    public void addEvent_WithoutInvitations_Success() {
+        testEvent.setId(VALID_ID);
+        when(eventDAO.addEvent(testEvent)).thenReturn(VALID_ID);
+
+        //mock invitation service class
+        InvitationService invitationService = Mockito.mock(InvitationServiceImpl.class);
+        Whitebox.setInternalState(eventService, "invitationService", invitationService);
+
+        //method under test
+        eventService.createEvent(testEvent);
+
+        verify(invitationService, never()).addInvitations((List<Invitation>) anyObject());
+        verify(emailService, never()).sendInvitations(any(Event.class));
+    }
+
     //Testing getEventById method
     @Test(expected = InvalidObjectException.class)
     public void getEventById_InvalidId() {
@@ -149,6 +181,23 @@ public class EventServiceUnitTest {
         //method under test
         Event actualEvent = eventService.getEventById(TestObjectCreator.VALID_ID);
         assertEqualEvents(actualEvent, testEvent);
+    }
+
+    //Testing getFullEventById method
+    @Test
+    public void getFullEventById_Success() {
+        testEvent.setId(VALID_ID);
+        when(eventDAO.getEventById(VALID_ID)).thenReturn(testEvent);
+
+        //mock invitation service class
+        InvitationService invitationService = Mockito.mock(InvitationServiceImpl.class);
+        Whitebox.setInternalState(eventService, "invitationService", invitationService);
+
+        //method under test
+        Event actualEvent = eventService.getFullEventById(TestObjectCreator.VALID_ID);
+        assertEqualEvents(actualEvent, testEvent);
+
+        verify(invitationService).getInvitationsByEvent(VALID_ID);
     }
 
     //Testing getEventByCategory method
@@ -179,12 +228,12 @@ public class EventServiceUnitTest {
     }
 
     @Test
-    public void getUserOrganizedEvents_Success() throws ObjectNotFoundException, DAOException {
-        testEvent.setId(TestObjectCreator.VALID_ID);
+    public void getUserOrganizedEvents_Success() {
+        testEvent.setId(VALID_ID);
         when(eventDAO.getUserOrganizedEvents(VALID_ID)).thenReturn(testEventList);
 
         //method under test
-        List<Event> actualEventList = eventService.getUserOrganizedEvents(TestObjectCreator.VALID_ID);
+        List<Event> actualEventList = eventService.getUserOrganizedEvents(VALID_ID);
         assertNotNull(actualEventList);
         assertFalse(actualEventList.isEmpty());
         assertEquals(actualEventList.size(), 1);

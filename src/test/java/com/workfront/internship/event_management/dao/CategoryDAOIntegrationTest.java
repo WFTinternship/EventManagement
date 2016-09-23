@@ -5,7 +5,13 @@ import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.Category;
+import com.workfront.internship.event_management.spring.TestApplicationConfig;
 import org.junit.*;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
@@ -17,21 +23,15 @@ import static junit.framework.TestCase.*;
 /**
  * Created by Hermine Turshujyan 7/9/16.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestApplicationConfig.class)
+@ActiveProfiles("Test")
 public class CategoryDAOIntegrationTest {
 
+    @Autowired
     private static CategoryDAO categoryDAO;
 
     private Category testCategory;
-
-    @BeforeClass
-    public static void setUpClass() throws DAOException {
-        categoryDAO = new CategoryDAOImpl();
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-        categoryDAO = null;
-    }
 
     @Before
     public void setUp() {

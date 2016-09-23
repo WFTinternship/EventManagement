@@ -30,8 +30,8 @@ public class TestObjectCreator {
     public static User createTestUser() {
         User testUser = new User();
         testUser.setFirstName("Test FirstName")
-//                .setLastName("Test LastName")
-//                .setPassword("testPassword")
+                .setLastName("Test LastName")
+                .setPassword("testPassword")
                 .setEmail("test" + getRandomNumber() + "@test.com")
                 .setPhoneNumber("1111111")
                 .setAvatarPath("/users/test_user_av" + getRandomNumber() + ".jpg")
@@ -56,14 +56,15 @@ public class TestObjectCreator {
                 .setLocation("Test location")
                 .setLat(11111.0)
                 .setLng(11111.0)
-                .setFileName("/events/test_event.doc")
-                .setImageName("events/test_event.jpg")
+                .setFileName("test_event.doc")
+                .setImageName("test_event.jpg")
                 .setCreationDate(new Date())
                 .setPublicAccessed(true)
                 .setGuestsAllowed(true)
                 .setStartDate(new Date())
                 .setEndDate(new Date())
-                .setCategory(createTestCategory());
+                .setCategory(createTestCategory().setId(VALID_ID))
+                .setOrganizer(createTestUser().setId(VALID_ID));
 
         return testEvent;
     }
@@ -93,12 +94,11 @@ public class TestObjectCreator {
         user.setId(1);
 
         Invitation invitation = new Invitation();
-        invitation.setAttendeesCount(1)
+        invitation.setUser(user)
+                .setAttendeesCount(1)
                 .setParticipated(false)
-                .setUserResponse(new UserResponse(1, "Yes")) // TODO: 9/6/16 check
-                .setEventId(1)
-                .setUser(user);
-
+                .setUserResponse(new UserResponse(5, "Waiting for response"))
+                .setCreationDate(new Date());
         return invitation;
     }
 

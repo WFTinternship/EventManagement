@@ -162,7 +162,7 @@ public class InvitationServiceIntegrationTest {
         testCategory = categoryService.addCategory(testCategory);
 
         //insert event into db and get generated id
-        testEvent.setCategory(testCategory);
+        testEvent.setCategory(testCategory).setOrganizer(testUser);
         testEvent = eventService.createEvent(testEvent);
 
         //insert invitation into db and get generated id

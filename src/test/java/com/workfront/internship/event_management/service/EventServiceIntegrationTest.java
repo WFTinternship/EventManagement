@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -63,9 +64,9 @@ public class EventServiceIntegrationTest {
 
     @Test
     public void addEvent_Success() {
-        // EmailService emailService = Mockito.mock(EmailServiceImpl.class);
-        // Whitebox.setInternalState(userService, "emailService", emailService);
-        //  when(emailService.sendVerificationEmail(testUser)).thenReturn(true);
+//         EmailService emailService = Mockito.mock(EmailServiceImpl.class);
+//         Whitebox.setInternalState(userService, "emailService", emailService);
+//          when(emailService.sendVerificationEmail(testUser)).thenReturn(true);
 
         Event actualEvent = eventService.getEventById(testEvent.getId());
         assertNotNull(actualEvent);

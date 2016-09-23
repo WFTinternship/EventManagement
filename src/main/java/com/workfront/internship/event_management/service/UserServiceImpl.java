@@ -41,7 +41,6 @@ public class UserServiceImpl implements UserService {
         String encryptedPassword = HashGenerator.generateHashString(user.getPassword());
         user.setPassword(encryptedPassword);
 
-
         try {
             //insert user into db
             int userId = userDAO.addUser(user);

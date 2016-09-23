@@ -20,6 +20,7 @@
     <script src="<c:url value="/resources/js/lib/jquery.flexslider.js" />"></script>
     <script src="<c:url value="/resources/js/lib/bootstrap.min.js" />"></script>
     <script src="<c:url value="/resources/js/index.js" />"></script>
+    <script src="<c:url value="/resources/js/lib/bootstrap-notify.js" />"></script>
 
     <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
@@ -31,6 +32,7 @@
     <link href="<c:url value="/resources/css/lib/flexslider.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/main.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/icon_font.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/my-account.css" />" rel="stylesheet">
 
 </head>
 <%
