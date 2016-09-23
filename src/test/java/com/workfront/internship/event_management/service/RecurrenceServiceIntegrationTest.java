@@ -29,6 +29,8 @@ public class RecurrenceServiceIntegrationTest {
     @Autowired
     private CategoryService categoryService;
     @Autowired
+    private UserService userService;
+    @Autowired
     private EventService eventService;
     @Autowired
     private RecurrenceService recurrenceService;
@@ -38,6 +40,7 @@ public class RecurrenceServiceIntegrationTest {
     private RecurrenceOptionService recurrenceOptionService;
 
     private Category testCategory;
+    private User testUser;
     private Event testEvent;
     private RecurrenceType testRecurrenceType;
     private RecurrenceOption testRecurrenceOption;
@@ -124,6 +127,7 @@ public class RecurrenceServiceIntegrationTest {
 
     //helper methods
     private void createTestObjects() {
+        testUser = createTestUser();
         testCategory = createTestCategory();
         testEvent = createTestEvent();
         testRecurrenceType = createTestRecurrenceType();
@@ -132,11 +136,14 @@ public class RecurrenceServiceIntegrationTest {
     }
 
     private void insertTestObjectsIntoDB() {
+        //insert user into db and get generated id
+        testUser = userService.addAccount(testUser);
+
         //insert category into db and get generated id
         testCategory = categoryService.addCategory(testCategory);
 
         //insert event into db and get generated id
-        testEvent.setCategory(testCategory);
+        testEvent.setCategory(testCategory).setOrganizer(testUser);
         testEvent = eventService.createEvent(testEvent);
 
         //insert test recurrence type

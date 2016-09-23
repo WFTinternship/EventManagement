@@ -47,26 +47,26 @@ public class EventServiceIntegrationTest {
         categoryService.addCategory(testCategory);
 
         testEvent = createTestEvent();
-        testEvent.setCategory(testCategory);
+        testEvent.setCategory(testCategory).setOrganizer(testUser);
         eventService.createEvent(testEvent);
     }
 
     @After
     public void tearDown() {
         //delete inserted test events from db
-        userService.deleteAllUsers();
-        categoryService.deleteAllCategories();
         eventService.deleteAllEvents();
+        categoryService.deleteAllCategories();
+        userService.deleteAllUsers();
 
-        //delete test user object
+
+        //delete test objects
         testEvent = null;
+        testUser = null;
+        testCategory = null;
     }
 
     @Test
     public void addEvent_Success() {
-//         EmailService emailService = Mockito.mock(EmailServiceImpl.class);
-//         Whitebox.setInternalState(userService, "emailService", emailService);
-//          when(emailService.sendVerificationEmail(testUser)).thenReturn(true);
 
         Event actualEvent = eventService.getEventById(testEvent.getId());
         assertNotNull(actualEvent);
