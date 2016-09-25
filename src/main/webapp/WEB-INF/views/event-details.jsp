@@ -72,6 +72,16 @@
                                 <a href="#"><%=event.getTitle()%>
                                 </a>
                             </h6>
+                            <% if(sessionUser != null && event.getOrganizer().getId() == sessionUser.getId()) { %>
+                                <a id="edit-event" class="change-event-btn" href="/events/<%=event.getId()%>/edit">
+                                    <i class="icon-pencil"></i>
+                                    <span>Edit</span>
+                                </a>
+                                <button id="delete-event" class="change-event-btn" onclick="deleteEvent(<%=event.getId()%>)">
+                                    <i class="icon-delete"></i>
+                                    <span>Delete</span>
+                                </button>
+                            <% } %>
                             <span class="meta">
                                <span class="meta_part">
                                    <a href="#">

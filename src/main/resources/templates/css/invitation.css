@@ -5,7 +5,6 @@ a{
     text-decoration:none;
 }
 .list_item h6 {
-    font-family: "Oswald", "Open Sans", sans-serif;
     font-size: 20px;
     font-weight: 400;
     margin-bottom:10px;
@@ -130,6 +129,7 @@ span.meta_header {
     content: "\f29c";
     color: #ffd410;
 }
+
 .icon-response-2::before{
     content: "\f00d";
     color: #F86923;

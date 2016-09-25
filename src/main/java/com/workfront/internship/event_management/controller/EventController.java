@@ -119,8 +119,16 @@ public class EventController {
     }
 
     @GetMapping(value = "/events/{eventId}")
-    public String getEventDetails(@PathVariable("eventId") int id, Model model) {
+    public String getEventDetails(@PathVariable("eventId") int id, Model model, HttpServletRequest request) {
+
         Event event = eventService.getFullEventById(id);
+
+        //check if user is not authorized to view this event, redirect to home page
+        User sessionUser = (User) request.getSession().getAttribute("user");
+        if(!event.isPublicAccessed() && sessionUser == null) {
+            return HOME_VIEW;
+        }
+
         model.addAttribute("event", event);
 
         return EVENT_DETAILS_VIEW;

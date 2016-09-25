@@ -3,11 +3,12 @@
     <style>
 		#include( "/templates/css/invitation.css" )
 	</style>
-    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 </head>
 <body>
 <div class="list_item">
-    <h6 class="title"><a href="http://localhost:8085/events/${event.id}/">${event.title}</a></h6>
+    <h6 class="title"><a class="kuku" style="font-size: 20px;"
+                         href="http://localhost:8085/events/${event.id}/">${event.title}</a></h6>
     <div class="meta-row">
             <div>
                 <span class="meta_header">Start date:</span>
