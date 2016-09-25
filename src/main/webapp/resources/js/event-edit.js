@@ -31,6 +31,7 @@ $(document).ready(function () {
 
 /******* Validate and submit add event form ******/
 
+    //validator method for checkign start/end date range
     $.validator.addMethod("endDate_greater_startDate", function(value, element) {
         var startDate = new stringToDate($("#start_date").val(), "dd/MM/yyyy", "/");
         var endDate = new stringToDate($("#end_date").val(),  "dd/MM/yyyy", "/");
@@ -43,10 +44,12 @@ $(document).ready(function () {
         }
     }, "* End date should be greater than start date");
 
+    //validating file size
     $.validator.addMethod('fileSize', function(value, element, param) {
         return this.optional(element) || (element.files[0].size <= param)
     });
 
+    //validating event form
     $('#event_form').validate({
         rules: {
             eventTitle: "required",
@@ -199,6 +202,7 @@ $(document).ready(function () {
         }
     });
 
+    //ALL DAY implementation
     $("#check-all-day").change(function () {
         if (this.checked) {
             $("#start_time").css("display", "none");
@@ -217,8 +221,31 @@ $(document).ready(function () {
             $("#end_time").val("");
             $("#end_time").css("display", "block");
         }
-    });
+    })
 
+
+    //show image after selection
+
+    $("#event_image").on("change", function (elem) {
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+    
+            reader.onload = function (e) {
+                $('#img_prev').css("display", "block");
+                $('#selected_img').attr('src', e.target.result);
+            };
+    
+            reader.readAsDataURL(this.files[0]);
+        } else {
+            $('#selected_img').css("display", "none");
+        }
+    })
+    
+    // remove selected image prev
+    $("#delete-img").click(function () {
+        $("#event_image").val('');
+        $('#img_prev').css("display", "none");
+    })
 
     /********  helper methods **********/
     function createEmailSuggestion(user) {
@@ -291,4 +318,17 @@ $(document).ready(function () {
     })
 
 })
-
+//
+// function readURL(input) {
+//     if (input.files && input.files[0]) {
+//         var reader = new FileReader();
+//
+//         reader.onload = function (e) {
+//             $('#selected_img')
+//                 .attr('src', e.target.result)
+//                 .height(30);
+//         };
+//
+//         reader.readAsDataURL(input.files[0]);
+//     }
+// }

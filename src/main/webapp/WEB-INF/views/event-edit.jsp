@@ -167,19 +167,25 @@
                                      <button id="edit-img" class="thumb" onclick="">
                                          <i class="icon-pencil"></i>
                                      </button>
-                                     <button id="delete-img" class="thumb" onclick="">
+                                     <button id="delete-img_" class="thumb" onclick="">
                                          <i class="icon-delete"></i>
                                      </button>
                                  </div>
                                 <% } else { %>
-                                <input class="input_file" name="eventImage" id="event_image" type="file">
+                                <input class="input_file" name="eventImage" id="event_image" type="file"  >
+                                    <div id="img_prev" >
+                                        <img id="selected_img" src="#"  class="thumb-img"/>
+                                        <button id="delete-img" class="thumb" onclick="" type="button">
+                                            <i class="icon-delete"></i>
+                                        </button>
+                                    </div>
                                 <% } %>
                             </div>
                         </div>
                         <div class="form_col_half">
                             <div class="file_button_wrapper">
                                 Event file
-                                <%if(event.getFileName() != null) { %>
+                                <% if (event.getFileName() != null) { %>
                                 <div >
                                     <i class="icon-pdf"></i>
                                     <%--<img class="thumb-file" src = "/resources/uploads/events/images/<%=event.getFileName()%>" >--%>
