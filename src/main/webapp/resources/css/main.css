@@ -822,6 +822,39 @@ a{
     border: none;
     background: none;
 }
+
+#img_prev{
+    opacity:0;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+    margin: 10px 0px;
+    border: 1px solid #E5E5E5;
+    color: #888;
+    background: none;
+}
+.fileUpload:hover{
+    border-color: #1ccdca;
+    color: #1ccdca;
+    background: #fff;
+}
+
+.fileUpload input.input_file {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+
 .btn_row button{
     width:49%;
 }

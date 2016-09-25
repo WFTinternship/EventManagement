@@ -113,3 +113,7 @@
     content: "\f1c3";
     height:30px;
 }
+
+.icon-upload::before{
+    content: "\f093";
+}

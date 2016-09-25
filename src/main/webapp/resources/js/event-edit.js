@@ -44,6 +44,16 @@ $(document).ready(function () {
         }
     }, "* End date should be greater than start date");
 
+    // $("#event_image").validate({
+    //     success: function(element, errorClass) {
+    //         alert("kuku");
+    //         readURL(element);
+    //         // $('#img_prev').css("display", "block");
+    //         // $('#selected_img').attr('src', e.target.result);
+    //     }
+    //
+    // });
+
     //validating file size
     $.validator.addMethod('fileSize', function(value, element, param) {
         return this.optional(element) || (element.files[0].size <= param)
@@ -92,6 +102,13 @@ $(document).ready(function () {
                 extension: "Only .pdf, .doc, .xls files are allowed",
                 fileSize: "File size should be less then 5MB"
             }
+        },
+        
+        errorPlacement: function(error, element) {
+            if (element.attr("name") == "eventImage" )
+                error.insertAfter("#img_prev");
+            else
+                error.insertAfter(element);
         },
 
         submitHandler: function (form) {
@@ -225,26 +242,27 @@ $(document).ready(function () {
 
 
     //show image after selection
-
     $("#event_image").on("change", function (elem) {
-        if (this.files && this.files[0]) {
+
+        if (this.files && this.files[0] && $("#event_image").valid()) {
+
             var reader = new FileReader();
-    
             reader.onload = function (e) {
-                $('#img_prev').css("display", "block");
+                $('#img_prev').fadeTo(1000,1);
                 $('#selected_img').attr('src', e.target.result);
             };
-    
+
             reader.readAsDataURL(this.files[0]);
         } else {
-            $('#selected_img').css("display", "none");
+            debugger;
+            $('#img_prev').fadeTo(1000,0);
         }
     })
     
     // remove selected image prev
     $("#delete-img").click(function () {
         $("#event_image").val('');
-        $('#img_prev').css("display", "none");
+        $('#img_prev').fadeTo(1000,0);
     })
 
     /********  helper methods **********/
@@ -318,17 +336,17 @@ $(document).ready(function () {
     })
 
 })
-//
-// function readURL(input) {
-//     if (input.files && input.files[0]) {
-//         var reader = new FileReader();
-//
-//         reader.onload = function (e) {
-//             $('#selected_img')
-//                 .attr('src', e.target.result)
-//                 .height(30);
-//         };
-//
-//         reader.readAsDataURL(input.files[0]);
-//     }
-// }
+
+    function readURL(input) {
+        debugger;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#img_prev').css("display", "block");
+                $('#selected_img').attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }

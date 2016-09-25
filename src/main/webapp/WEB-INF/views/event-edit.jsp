@@ -160,7 +160,6 @@
                         </label>
                         <div class="form_col_half">
                             <div class="file_button_wrapper">
-                                Event image
                                 <% if (event.getImageName() != null) { %>
                                  <div >
                                      <img class="thumb-img" src = "/resources/uploads/events/images/<%=event.getImageName()%>" >
@@ -172,7 +171,12 @@
                                      </button>
                                  </div>
                                 <% } else { %>
-                                <input class="input_file" name="eventImage" id="event_image" type="file"  >
+                                <div class="fileUpload btn btn-primary">
+                                    <i class="icon-upload"></i>
+                                    <span class="btn_title" >Choose image</span>
+                                    <input type="file" class="input_file" name="eventImage" id="event_image"/>
+                                </div>
+
                                     <div id="img_prev" >
                                         <img id="selected_img" src="#"  class="thumb-img"/>
                                         <button id="delete-img" class="thumb" onclick="" type="button">
@@ -184,7 +188,6 @@
                         </div>
                         <div class="form_col_half">
                             <div class="file_button_wrapper">
-                                Event file
                                 <% if (event.getFileName() != null) { %>
                                 <div >
                                     <i class="icon-pdf"></i>
@@ -197,8 +200,14 @@
                                     </button>
                                 </div>
                                 <% } else { %>
-                                <input type="file" class="input_file" name="eventFile" id="event_file">
+                                <div class="fileUpload btn btn-primary">
+                                    <i class="icon-upload"></i>
+                                    <span class="btn_title">Choose file</span>
+                                    <input type="file" class="input_file" name="eventFile" id="event_file"/>
+                                </div>
+
                                 <% } %>
+
                             </div>
                         </div>
                     </div>
