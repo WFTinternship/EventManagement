@@ -56,7 +56,7 @@ public class EventDAOUnitTest {
 
     @Test(expected = DAOException.class)
     public void getEventsByCategoryId_dbError() throws DAOException {
-        eventDAO.getEventsByCategory(1);
+        eventDAO.getAllEventsByCategory(1);
 
     }
 

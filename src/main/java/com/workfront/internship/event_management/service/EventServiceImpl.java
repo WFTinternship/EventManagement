@@ -113,6 +113,29 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public List<Event> getEventsByKeyword(String keyword) {
+        return eventDAO.getEventsByKeyword(keyword);
+    }
+
+    @Override
+    public List<Event> getPublicEventsByCategory(int categoryId) {
+        if (categoryId < 1) {
+            throw new InvalidObjectException("Invalid category id");
+        }
+
+        return eventDAO.getPublicEventsByCategory(categoryId);
+    }
+
+    @Override
+    public List<Event> getAllEventsByCategory(int categoryId) {
+        if (categoryId < 1) {
+            throw new InvalidObjectException("Invalid category id");
+        }
+
+        return eventDAO.getAllEventsByCategory(categoryId);
+    }
+
+    @Override
     public boolean editEvent(Event event) throws OperationFailedException {
         if (!isValidEvent(event)) {
             throw new InvalidObjectException("Invalid event");
@@ -149,15 +172,6 @@ public class EventServiceImpl implements EventService {
         }
 
         return success;
-    }
-
-    @Override
-    public List<Event> getEventsByCategory(int categoryId) throws OperationFailedException {
-        if (categoryId < 1) {
-            throw new InvalidObjectException("Invalid category id");
-        }
-
-        return eventDAO.getEventsByCategory(categoryId);
     }
 
     @Override

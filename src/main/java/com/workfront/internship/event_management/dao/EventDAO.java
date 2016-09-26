@@ -19,8 +19,6 @@ public interface EventDAO {
     //read data from db
     Event getEventById(int eventId) throws DAOException, ObjectNotFoundException;
 
-    List<Event> getEventsByCategory(int categoryId) throws DAOException;
-
     List<Event> getUserOrganizedEvents(int userId) throws DAOException;
 
     List<Event> getUserParticipatedEvents(int userId) throws DAOException;
@@ -39,6 +37,12 @@ public interface EventDAO {
 
     List<Event> getPublicPastEvents() throws DAOException;
 
+    List<Event> getPublicEventsByCategory(int categoryId);
+
+    List<Event> getAllEventsByCategory(int categoryId);
+
+    List<Event> getEventsByKeyword(String keyword);
+
     //update record in db
     boolean updateEvent(Event event) throws DAOException, ObjectNotFoundException;
 
@@ -46,5 +50,6 @@ public interface EventDAO {
     boolean deleteEvent(int eventId) throws DAOException, ObjectNotFoundException;
 
     void deleteAllEvents() throws DAOException;
+
 
 }

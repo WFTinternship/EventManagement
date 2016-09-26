@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static com.workfront.internship.event_management.controller.util.PageParameters.HOME_VIEW;
+import static com.workfront.internship.event_management.controller.util.PageParameters.SEARCH_RESULTS_VIEW;
 
 /**
  * Created by Hermine Turshujyan 8/22/16.
@@ -40,5 +42,15 @@ public class HomeController {
         return HOME_VIEW;
     }
 
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public String search(HttpServletRequest request, Model model) {
+        String keyword = request.getParameter("keyword");
+
+        List<Event> eventList = eventService.getEventsByKeyword(keyword);
+        model.addAttribute("events", eventList);
+        model.addAttribute("keyword", keyword);
+
+        return SEARCH_RESULTS_VIEW;
+    }
 
 }

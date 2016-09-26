@@ -19,7 +19,11 @@ public interface EventService {
 
     Event getFullEventById(int eventId);
 
-    List<Event> getEventsByCategory(int categoryId);
+    List<Event> getEventsByKeyword(String keyword);
+
+    List<Event> getPublicEventsByCategory(int categoryId);
+
+    List<Event> getAllEventsByCategory(int categoryId);
 
     List<Event> getUserOrganizedEvents(int userId);
 

@@ -204,16 +204,16 @@ public class EventServiceUnitTest {
     @Test(expected = InvalidObjectException.class)
     public void getEventByCategory_InvalidId() {
         //method under test
-        eventService.getEventsByCategory(TestObjectCreator.INVALID_ID);
+        eventService.getAllEventsByCategory(TestObjectCreator.INVALID_ID);
     }
 
     @Test
     public void getEventByCategory_Success() {
         testEvent.setId(TestObjectCreator.VALID_ID);
-        when(eventDAO.getEventsByCategory(VALID_ID)).thenReturn(testEventList);
+        when(eventDAO.getAllEventsByCategory(VALID_ID)).thenReturn(testEventList);
 
         //method under test
-        List<Event> actualEventList = eventService.getEventsByCategory(TestObjectCreator.VALID_ID);
+        List<Event> actualEventList = eventService.getAllEventsByCategory(TestObjectCreator.VALID_ID);
         assertNotNull(actualEventList);
         assertFalse(actualEventList.isEmpty());
         assertEquals(actualEventList.size(), 1);

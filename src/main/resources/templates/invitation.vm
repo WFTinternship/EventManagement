@@ -5,61 +5,66 @@
 	</style>
     <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 </head>
-<body>
-<div class="list_item">
-    <h6 class="title"><a class="kuku" style="font-size: 20px;"
-                         href="http://localhost:8085/events/${event.id}/">${event.title}</a></h6>
-    <div class="meta-row">
+<body style="line-height:2">
+<div class="list_item" style="margin-bottom: 25px; border: 1px solid #e9e9e9; padding: 0px 30px 30px 30px;border-radius: 5px;">
+    <h6 style="font-size: 20px; font-weight: 400; margin-bottom:10px; margin-top:20px; display:inline-block;">
+        <a style="font-size: 20px; text-decoration:none; color: #576162;"
+                         href="http://localhost:8085/events/${event.id}/">${event.title}</a>
+    </h6>
+    <div style="margin-bottom:10px; border-bottom: dotted 1px #ccc; padding-bottom:10px;">
             <div>
-                <span class="meta_header">Start date:</span>
+                <span style="font-size: 13px; font-style: italic; width: 120px; display: inline-block; color: #00AFB2;
+">Start date:</span>
                 <i class="ev_icon icon-clock"></i>${event.startDate}
             </div>
             <div>
-                <span class="meta_header">End date:</span>
+                <span style="font-size: 13px; font-style: italic; width: 120px; display: inline-block; color: #00AFB2 ">End date:</span>
                 <i class="ev_icon icon-clock"></i>
                 <span>${event.endDate}</span>
             </div>
             <div>
-                <span class="meta_header">Location:</span>
+                <span style="font-size: 13px; font-style: italic; width: 120px; display: inline-block;  color: #00AFB2">Location:</span>
                 <i class="ev_icon icon-map-marker"></i>
                 <span>${event.location}</span>
             </div>
             <div>
-                <span class="meta_header">Organized by:</span>
+                <span style="font-size: 13px; font-style: italic; width: 120px; display: inline-block;  color: #00AFB2">Organized by:</span>
                 <i class="ev_icon icon-user"></i>
                 <span>${event.organizer.firstName} ${event.organizer.lastName}</span>
             </div>
-                    <div>
-                        <span class="meta_header">Event category:</span>
-                        <i class="ev_icon icon-folder"></i>
-                        <span>$event.getCategory().getTitle()</span>
-                    </div>
+            <div>
+                <span style="font-size: 13px; font-style: italic; width: 120px; display: inline-block;  color: #00AFB2">Event category:</span>
+                <i class="ev_icon icon-folder"></i>
+                <span>$event.getCategory().getTitle()</span>
+            </div>
     </div>
-	#if (${event.shortDescription})
-		<div class="desc">
-		<div class="desc_header">Short description:</div>
+	#if (${event.shortDescription} != "")
+		<div style="padding: 10px 0px; margin-bottom:10px; border-bottom: dotted 1px #ccc">
+		<div style="font-weight:bold;">Short description:</div>
 			${event.shortDescription}
 		</div>
 	#end
 	<div class="guest_list">
     	<h4>Guests</h4>
 		#foreach ($invitationItem in $event.invitations)
-                <div class='invitation_item' >
-                    <i class='icon-response-${invitationItem.userResponse.id}'></i>
-                    <div class='invitation_item_email'><span>${invitationItem.user.email}</span></div>
+                <div style='padding-left:20px; clear:left;' >
+                    <i style="margin-right: 10px; float:left" class='icon-response-${invitationItem.userResponse.id}'></i>
+                    <div style='float: left'><span>${invitationItem.user.email}</span></div>
 			  	#if (${event.organizer.id} == ${invitationItem.user.id})
-                    <span class="organizer"> (Organizer)</span>
+                    <span style="margin-left:10px;float:left;"> (Organizer)</span>
 			  	#end
             </div>
 		#end
     </div>
 	<br>
-    <div class="response_box">Going?
-        <a href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=1">Yes</a>
-        <a href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=2">No</a>
-        <a href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=3">Maybe</a>
+    <div style="margin-top:20px;">Going?
+        <a style="text-decoration:none; font-weight:bold; font-size:14px; color: #00AFB2" href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=1">Yes</a>
+        <a style="text-decoration:none; font-weight:bold; font-size:14px; color: #00AFB2" href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=2">No</a>
+        <a style="text-decoration:none; font-weight:bold; font-size:14px; color: #00AFB2" href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=3">Maybe</a>
     </div>
-    <div class="details_link"><a href="http://localhost:8085/events/${event.id}/">Event Details</a></div>
+    <div style="color: #888;font-weight:bold;font-size:13px;">
+        <a style="text-decoration:none;" href="http://localhost:8085/events/${event.id}/">Event Details</a>
+    </div>
 
     <br/>
 </div>

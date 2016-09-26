@@ -169,7 +169,7 @@ public class EventDAOIntegrationTest {
     @Test
     public void getEventsByCategoryId_Found() throws DAOException {
         //testing method
-        List<Event> eventList = eventDAO.getEventsByCategory(testCategory.getId());
+        List<Event> eventList = eventDAO.getAllEventsByCategory(testCategory.getId());
 
         assertNotNull(eventList);
         assertEquals(eventList.size(), 1);
@@ -179,7 +179,7 @@ public class EventDAOIntegrationTest {
     @Test
     public void getEventsByCategoryId_Empty_List() throws DAOException {
         //delete inserted test record
-        List<Event> eventList = eventDAO.getEventsByCategory(NON_EXISTING_ID);
+        List<Event> eventList = eventDAO.getAllEventsByCategory(NON_EXISTING_ID);
 
         assertNotNull(eventList);
         assertTrue(eventList.isEmpty());

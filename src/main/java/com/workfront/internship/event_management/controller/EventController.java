@@ -52,36 +52,39 @@ public class EventController {
 
 
     @RequestMapping(value = "/events")
-    public String loadAllEventsAndCategories(HttpServletRequest request, Model model) {
-        List<Category> categoryList = categoryService.getAllCategories();
+    public String loadEventsByCategory(Model model, HttpServletRequest request) {
 
         User sessionUser = (User) request.getSession().getAttribute("user");
+        String categoryIdStr = request.getParameter("categoryId");
+
         List<Event> eventList;
-        if (sessionUser == null){
-            eventList = eventService.getPublicEvents();
+
+        if(isEmptyString(categoryIdStr)) { //load all events
+            model.addAttribute("listHeader", ALL_EVENTS_HEADER);
+
+            if (sessionUser == null){
+                eventList = eventService.getPublicEvents();
+            } else {
+                eventList = eventService.getAllEvents();
+            }
         } else {
-            eventList = eventService.getAllEvents();
+            //load events by category
+            model.addAttribute("categoryId", categoryIdStr);
+
+            int categoryId = Integer.parseInt(categoryIdStr);
+            if (sessionUser == null){
+                eventList = eventService.getPublicEventsByCategory(categoryId);
+            } else {
+                eventList = eventService.getAllEventsByCategory(categoryId);
+            }
         }
+
+        //load all categories for left side menu
+        List<Category> categoryList = categoryService.getAllCategories();
 
         model.addAttribute("events", eventList);
         model.addAttribute("categories", categoryList);
-        model.addAttribute("list-name", ALL_EVENTS_HEADER);
-
         return EVENTS_LIST_VIEW;
-    }
-
-    @RequestMapping(value = "/events-ajax")
-    @ResponseBody
-    public CustomResponse loadEventsByCategory(HttpServletRequest request) {
-
-        String categoryIdStr = request.getParameter("categoryId");
-        List<Event> eventList = eventService.getEventsByCategory(Integer.parseInt(categoryIdStr));
-
-        CustomResponse result = new CustomResponse();
-        result.setStatus(ACTION_SUCCESS);
-        result.setResult(eventList);
-
-        return result;
     }
 
     @RequestMapping(value = "/past-events")
@@ -97,7 +100,7 @@ public class EventController {
         }
 
         model.addAttribute("events", eventList);
-        model.addAttribute("list-name", PAST_EVENTS_HEADER);
+        model.addAttribute("listHeader", PAST_EVENTS_HEADER);
 
         return EVENTS_LIST_VIEW;
     }
@@ -113,7 +116,7 @@ public class EventController {
             eventList = eventService.getAllUpcomingEvents();
         }
         model.addAttribute("events", eventList);
-        model.addAttribute("list-name", UPCOMING_EVENTS_HEADER);
+        model.addAttribute("listHeader", UPCOMING_EVENTS_HEADER);
 
         return EVENTS_LIST_VIEW;
     }
