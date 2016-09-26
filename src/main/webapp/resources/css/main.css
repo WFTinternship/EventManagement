@@ -813,8 +813,14 @@ a{
     width: 60%;
 }
 
+#start_date, #end_date{
+    float:left;
+}
+#start_time, #end_time{
+    float:right;
+}
 .thumb-img{
-    height:45px;
+    height:50px;
 }
 
 .thumb{
@@ -893,6 +899,8 @@ textarea{
 
 #category_select {
     width: 100%;
+    -webkit-appearance: menulist-button;
+    height: 35px;
 }
 
 #invitation-email {

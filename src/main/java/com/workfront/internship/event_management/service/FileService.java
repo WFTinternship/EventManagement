@@ -55,7 +55,7 @@ public class FileService {
 
             //generate random image name
             String uuid = UUID.randomUUID().toString();
-            uniqueFileName = String.format("%s.%s", uuid, ext);
+            uniqueFileName = String.format("%s%s", uuid, ext);
 
             //create file path
             filePath = uploadPath + File.separator + uniqueFileName;

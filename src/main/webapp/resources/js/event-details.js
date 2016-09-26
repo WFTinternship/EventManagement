@@ -1,5 +1,8 @@
 $(document).ready(function () {
 
+    // fb_share.href ='http://www.facebook.com/share.php?u=' + encodeURIComponent(location.href);
+
+
     $("#change_response").click(function () {
         $("#respond_wrapper").slideToggle( "fast", function () {
         });

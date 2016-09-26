@@ -54,8 +54,13 @@
         emptyEvent = false;
         categoryId = event.getCategory().getId();
     }
+
+    String imageSrc = "#";
+    String imgPreviewClass = "";
     if (event.getImageName() != null){
         hasImage = true;
+        imgPreviewClass = "visible_thumb";
+        imageSrc = "/resources/uploads/events/images/" + event.getImageName();
     }
 %>
 <body>
@@ -145,6 +150,7 @@
                         <label for="location">
                             <span class="field_name">Select Category</span>
                         </label>
+                        <i class="icon-angle-down"></i>
                         <select name="categoryId" id="category_select">
                             <% for (Category category : categoryList) { %>
                             <option class="cat_option" value="<%=category.getId()%>"
@@ -169,21 +175,12 @@
                                     <span class="btn_title" >Choose image</span>
                                     <input type="file" class="input_file" name="eventImage" id="event_image"/>
                                 </div>
-                                <% if(hasImage) { %>
-                                <div id="img_prev" class="visible_thumb" >
-                                        <img id="selected_img" src="/resources/uploads/events/images/<%=event.getImageName()%>"  class="thumb-img"/>
+                                <div id="img_prev" class="<%=imgPreviewClass%>" >
+                                        <img id="selected_img" src="<%=imageSrc%>"  class="thumb-img"/>
                                         <button id="delete-img" class="thumb" onclick="" type="button">
                                             <i class="icon-delete"></i>
                                         </button>
                                 </div>
-                                <% } else { %>
-                                <div id="img_prev">
-                                    <img id="selected_img" src="#"  class="thumb-img"/>
-                                    <button id="delete-img" class="thumb" onclick="" type="button">
-                                        <i class="icon-delete"></i>
-                                    </button>
-                                </div>
-                            <% } %>
                             </div>
                         </div>
                         <div class="form_col_half">
@@ -274,29 +271,28 @@
 
                     </div>
                 </div>
-                <% if(action.equals("create-event")) { %>
-                <div class="form_row clearfix">
-                    <input type="hidden" name="action" value="create">
-                    <button class="btn full_button" id="event_submit">
-                        <i class="icon-check"></i>
-                        <span>Save</span>
-                    </button>
-                </div>
-
-                <% } else if(action.equals("edit-event")) { %>
                 <div class="form_row clearfix btn_row">
-                    <input type="hidden" name="action" value="edit">
-                    <button type="submit" class="btn" id="event_save">
-                        <i class="icon-check"></i>
-                        <span>Save</span>
-                    </button>
+
+                    <% if(action.equals("create-event")) { %>
+                        <input type="hidden" name="action" value="create">
+                        <button class="btn" id="event_submit">
+                            <i class="icon-check"></i>
+                            <span>Save</span>
+                        </button>
+
+                    <% } else if(action.equals("edit-event")) { %>
+                        <input type="hidden" name="action" value="edit">
+                        <button type="submit" class="btn" id="event_save">
+                            <i class="icon-check"></i>
+                            <span>Save</span>
+                        </button>
+                    <% } %>
+
                     <button class="btn " id="event_discard" type="button">
                         <i class="icon-check"></i>
                         <span>Cancel</span>
                     </button>
                 </div>
-                <% } %>
-
             </form>
         </div>
     </section>

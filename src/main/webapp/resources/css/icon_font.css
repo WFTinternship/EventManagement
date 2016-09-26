@@ -117,3 +117,7 @@
 .icon-upload::before{
     content: "\f093";
 }
+
+.icon-angle-down::before{
+    content: "\f107";
+}

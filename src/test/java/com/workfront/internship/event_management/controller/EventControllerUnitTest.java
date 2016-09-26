@@ -95,7 +95,7 @@ public class EventControllerUnitTest {
         when(eventService.getEventById(VALID_ID)).thenReturn(testEvent);
 
         //method under test
-        String pageName = eventController.getEventDetails(VALID_ID, testModel);
+        String pageName = eventController.getEventDetails(VALID_ID, testModel, testRequest);
         verify(eventService).getEventById(VALID_ID);
 
         verify(testModel).addAttribute("event", testEvent);

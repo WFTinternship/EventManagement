@@ -60,6 +60,11 @@ public class EventServiceImpl implements EventService {
         //set generated id to event
         event.setId(eventId);
 
+        Category category = categoryService.getCategoryById(event.getCategory().getId());
+
+        //read category info from db
+        event.setCategory(category);
+
         if(eventId == 0){
             throw new OperationFailedException("Unable to add event!");
         }

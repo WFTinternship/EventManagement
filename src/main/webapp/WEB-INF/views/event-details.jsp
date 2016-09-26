@@ -40,6 +40,11 @@
     <link href="<c:url value="/resources/css/main.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/icon_font.css" />" rel="stylesheet">
 
+    <!-- FB  share settings -->
+    <meta property="og:url"           content="http://localhost:8085" />
+    <meta property="og:type"          content="article" />
+    <meta property="og:title"         content="Team Time | Event Management" />
+    <meta property="og:description"   content="Your description" />
 </head>
 <%
     Event event = (Event) request.getAttribute("event");
@@ -48,6 +53,19 @@
 
 %>
 <body class="events_page">
+<!-- FB Share -->
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.7";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
+</script>
+<!-- END FB Share -->
+
 <div id="main_wrapper">
     <!-- Main Header -->
     <jsp:include page="header.jsp"/>
@@ -72,6 +90,10 @@
                                 <a href="#"><%=event.getTitle()%>
                                 </a>
                             </h6>
+                            <div class="fb-share-button"
+                                 data-href="http://localhost:8085/"
+                                 data-layout="button_count">
+                            </div>
                             <% if(sessionUser != null && event.getOrganizer().getId() == sessionUser.getId()) { %>
                                 <a id="edit-event" class="change-event-btn" href="/events/<%=event.getId()%>/edit">
                                     <i class="icon-pencil"></i>
@@ -167,7 +189,7 @@
                             <% } %>
                                 <% List<Invitation> invitations = event.getInvitations();
                                     if(!isEmptyCollection(invitations)) { %>
-<div class="guest_list">
+                                    <div class="guest_list">
                                     <h4>Guests</h4>
                                     <div class="invitees">
                                         <% for(Invitation invitation :invitations) { %>
@@ -221,6 +243,7 @@
             </div>
         </div>
     </section>
+
     <!-- End Content Section -->
 
     <!-- Footer -->
