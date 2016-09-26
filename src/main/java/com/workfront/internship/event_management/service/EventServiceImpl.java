@@ -7,7 +7,6 @@ import com.workfront.internship.event_management.exception.service.OperationFail
 import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.Invitation;
-import com.workfront.internship.event_management.model.UserRole;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -113,8 +112,14 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> getEventsByKeyword(String keyword) {
-        return eventDAO.getEventsByKeyword(keyword);
+    public List<Event> getAllEventsByKeyword(String keyword) {
+        // TODO: 9/27/16 validate keyword
+        return eventDAO.getAllEventsByKeyword(keyword);
+    }
+
+    @Override
+    public List<Event> getPublicEventsByKeyword(String keyword) {
+        return eventDAO.getPublicEventsByKeyword(keyword);
     }
 
     @Override

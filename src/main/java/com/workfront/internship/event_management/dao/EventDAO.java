@@ -41,7 +41,9 @@ public interface EventDAO {
 
     List<Event> getAllEventsByCategory(int categoryId);
 
-    List<Event> getEventsByKeyword(String keyword);
+    List<Event> getAllEventsByKeyword(String keyword);
+
+    List<Event> getPublicEventsByKeyword(String keyword);
 
     //update record in db
     boolean updateEvent(Event event) throws DAOException, ObjectNotFoundException;

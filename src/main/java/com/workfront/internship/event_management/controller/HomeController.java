@@ -45,8 +45,18 @@ public class HomeController {
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String search(HttpServletRequest request, Model model) {
         String keyword = request.getParameter("keyword");
+        User sessionUser = (User) request.getSession().getAttribute("user");
 
-        List<Event> eventList = eventService.getEventsByKeyword(keyword);
+        List<Event> eventList = null;
+
+        if (sessionUser == null) {
+            //load only public events
+            eventList = eventService.getPublicEventsByKeyword(keyword);
+        } else {
+            //load all upcoming events
+            eventList = eventService.getAllEventsByKeyword(keyword);
+        }
+
         model.addAttribute("events", eventList);
         model.addAttribute("keyword", keyword);
 

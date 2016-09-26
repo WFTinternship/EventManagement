@@ -207,40 +207,13 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     }
 
     @Override
-    public List<Event> getEventsByKeyword(String keyword) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
+    public List<Event> getAllEventsByKeyword(String keyword) {
+        return getEventsByKeyword(keyword, false);
+    }
 
-        List<Event> eventsList = null;
-        String query = "SELECT * FROM (event " +
-                "LEFT JOIN event_category ON event.category_id = event_category.id) " +
-                "LEFT JOIN user ON user.id = event.organizer_id " +
-                "WHERE event.title LIKE ? OR event.short_desc LIKE ? OR event.full_desc like ? OR event.location like ?";
-        try {
-            //get connection
-            conn = dataSource.getConnection();
-
-            //create and initialize statement
-            stmt = conn.prepareStatement(query);
-            stmt.setString(1, "%" + keyword + "%");
-            stmt.setString(2, "%" + keyword + "%");
-            stmt.setString(3, "%" + keyword + "%");
-            stmt.setString(4, "%" + keyword + "%");
-
-
-            //execute query
-            rs = stmt.executeQuery();
-
-            //get results
-            eventsList = createEventListFromRS(rs);
-        } catch (SQLException e) {
-            LOGGER.error("SQL Exception", e);
-            throw new DAOException(e);
-        } finally {
-            closeResources(rs, stmt, conn);
-        }
-        return eventsList;
+    @Override
+    public List<Event> getPublicEventsByKeyword(String keyword) {
+        return getEventsByKeyword(keyword, true);
     }
 
     @Override
@@ -578,6 +551,47 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         return eventsList;
     }
 
+    private List<Event> getEventsByKeyword(String keyword, boolean publicAccessed){
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        String privacyChecking = "";
+        if(publicAccessed){
+            privacyChecking = " AND event.public_accessed = true";
+        }
+
+        List<Event> eventsList = null;
+        String query = "SELECT * FROM (event " +
+                "LEFT JOIN event_category ON event.category_id = event_category.id) " +
+                "LEFT JOIN user ON user.id = event.organizer_id " +
+                "WHERE event.title LIKE ? OR event.short_desc LIKE ? OR event.full_desc like ? OR event.location like ?" +
+                "OR event_category.title like ?" + privacyChecking;
+        try {
+            //get connection
+            conn = dataSource.getConnection();
+
+            //create and initialize statement
+            stmt = conn.prepareStatement(query);
+            stmt.setString(1, "%" + keyword + "%");
+            stmt.setString(2, "%" + keyword + "%");
+            stmt.setString(3, "%" + keyword + "%");
+            stmt.setString(4, "%" + keyword + "%");
+            stmt.setString(5, "%" + keyword + "%");
+
+            //execute query
+            rs = stmt.executeQuery();
+
+            //get results
+            eventsList = createEventListFromRS(rs);
+        } catch (SQLException e) {
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
+        } finally {
+            closeResources(rs, stmt, conn);
+        }
+        return eventsList;
+    }
     private List<Event> createEventListFromRS(ResultSet rs) throws SQLException {
         List<Event> eventsList = new ArrayList<>();
 
