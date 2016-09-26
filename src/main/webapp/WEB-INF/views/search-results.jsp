@@ -20,7 +20,7 @@
     <script src="<c:url value="/resources/js/lib/jquery.validate.js" />"></script>
     <script src="<c:url value="/resources/js/lib/bootstrap-notify.js" />"></script>
     <script src="<c:url value="/resources/js/lib/bootstrap.min.js" />"></script>
-    <script src="<c:url value="/resources/js/events.js" />"></script>
+    <script src="<c:url value="/resources/js/my-account.js" />"></script>
     <script src="<c:url value="/resources/js/header.js" />"></script>
 
     <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
@@ -40,8 +40,10 @@
     if(sessionUser != null) {
         userId = sessionUser.getId();
     }
+    String keyword = (String) request.getAttribute("keyword");
+    List<Event> eventList = (List<Event>) request.getAttribute("events");
 %>
-<body >
+<body class="search-results-page" onload="highlightKeywordOnload('<%=keyword%>')">
 <div id="main_wrapper">
     <!-- Main Header -->
     <jsp:include page="header.jsp"/>
@@ -53,12 +55,11 @@
             <div class="main_title centered upper">
                 <h2><span class="line"><i class="icon-search"></i></span>Search results</h2>
             </div>
-           <div>
-               Events matching keyword <span class="keyword"></span>
+           <div class="search_header">
+               Events matching keyword <span class="keyword">"<%=keyword%>"</span>
            </div>
             <div class="list">
                 <%
-                    List<Event> eventList = (List<Event>) request.getAttribute("events");
                     if (!eventList.isEmpty()) {
                         for (Event event : eventList) {
                 %>
@@ -108,14 +109,15 @@
                                            </a>
                                        </span>
                                    </span>
-                        <p class="desc"><%=event.getShortDescription()%>
-                        </p>
+                        <p class="desc"><%=event.getShortDescription()%></p>
 
                         <a class="btn" href="/events/<%=event.getId()%>"><span>Details</span></a>
                     </div>
                 </div>
                 <% }
-                } %>
+                }  else {%>
+                <div> Your search "<%=keyword%>" did not match any event. </div>
+                <% } %>
             </div>
         </div>
     </section>
