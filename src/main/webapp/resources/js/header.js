@@ -64,6 +64,9 @@ $(document).ready(function () {
         }
     })
     
+    
+    
+    $("#")
     //submit search form
    // $( "#top_search").submit(function( event ) {
    //      event.preventDefault();
@@ -96,3 +99,29 @@ $(document).ready(function () {
    //  })
    // });
 })
+
+function highlightKeywordOnload(keyword) {
+    var regExp = new RegExp(keyword, 'gi');
+
+
+    $(".search-results-page .title").each(function () {        
+        highlight(regExp, keyword, $(this))
+
+    })
+
+    $(".search-results-page .desc").each(function () {
+        highlight(regExp, keyword, $(this))
+    })
+    
+    $(".search-results-page .meta_part").each(function () {
+        highlight(regExp, keyword, $(this))
+
+    })
+
+}
+
+function  highlight(regExp, value, elem) {
+    var titleHTML = elem.html();
+    var changedHTML = titleHTML.replace(regExp, '<span class="highlight">' + value + '</span>');
+    elem.html(changedHTML);
+}
