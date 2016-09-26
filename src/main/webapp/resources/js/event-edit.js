@@ -44,15 +44,6 @@ $(document).ready(function () {
         }
     }, "* End date should be greater than start date");
 
-    // $("#event_image").validate({
-    //     success: function(element, errorClass) {
-    //         alert("kuku");
-    //         readURL(element);
-    //         // $('#img_prev').css("display", "block");
-    //         // $('#selected_img').attr('src', e.target.result);
-    //     }
-    //
-    // });
 
     //validating file size
     $.validator.addMethod('fileSize', function(value, element, param) {
@@ -118,6 +109,18 @@ $(document).ready(function () {
             var formData = new FormData($('#event_form')[0]);
             formData.append("invitations", invitations);
 
+            //send the same file name if no new file is uploaded
+            var selectedImage = $("#event_image").val();
+
+            var existingImageSrc = $('#selected_img').attr('src').split('/');
+            var existingImageName = existingImageSrc[existingImageSrc.length - 1];
+
+            if(!selectedImage){
+                if(existingImageName != "#") {
+                    formData.append("imageName", existingImageName);
+                }
+            }
+            
             $.ajax({
                 url: '/save-event',
                 type: 'POST',
@@ -248,7 +251,8 @@ $(document).ready(function () {
 
             var reader = new FileReader();
             reader.onload = function (e) {
-                $('#img_prev').fadeTo(1000,1);
+                
+                $('#img_prev').fadeTo(1000 , 1);
                 $('#selected_img').attr('src', e.target.result);
             };
 
@@ -261,8 +265,14 @@ $(document).ready(function () {
     
     // remove selected image prev
     $("#delete-img").click(function () {
+
+        $('#img_prev').fadeTo(1000, 0, function () {
+
+            $('#selected_img').attr('src', '#');
+        });
+        $('#img_prev').removeClass("visible_thumb");
         $("#event_image").val('');
-        $('#img_prev').fadeTo(1000,0);
+
     })
 
     /********  helper methods **********/
@@ -343,6 +353,7 @@ $(document).ready(function () {
             var reader = new FileReader();
 
             reader.onload = function (e) {
+                $('#img_prev').removeClass(".visible");
                 $('#img_prev').css("display", "block");
                 $('#selected_img').attr('src', e.target.result);
             };

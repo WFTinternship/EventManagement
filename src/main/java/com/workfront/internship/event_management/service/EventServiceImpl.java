@@ -33,6 +33,8 @@ public class EventServiceImpl implements EventService {
     @Autowired
     private CategoryService categoryService;
     @Autowired
+    private FileService fileService;
+    @Autowired
     private InvitationService invitationService;
     @Autowired
     private EmailService emailService;
@@ -112,6 +114,16 @@ public class EventServiceImpl implements EventService {
         }
         //add modification date
         event.setLastModifiedDate(new Date());
+
+        //if image deleted in edit page, delete from file system
+        if(isEmptyString(event.getFileName())) {
+            Event eventBeforeUpdate = getEventById(event.getId());
+            String prevImageName = eventBeforeUpdate.getImageName();
+
+            if (!isEmptyString(prevImageName)) {
+                // TODO: 9/26/16 delete image from fs
+            }
+        }
 
         //update event main info
         boolean success = eventDAO.updateEvent(event);

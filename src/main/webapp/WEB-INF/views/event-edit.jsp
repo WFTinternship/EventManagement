@@ -48,10 +48,14 @@
     String action = (String) request.getAttribute("action");
 
     boolean emptyEvent = true;
+    boolean hasImage = false;
     int categoryId = 0;
     if (event.getId() != 0) {
         emptyEvent = false;
         categoryId = event.getCategory().getId();
+    }
+    if (event.getImageName() != null){
+        hasImage = true;
     }
 %>
 <body>
@@ -160,30 +164,26 @@
                         </label>
                         <div class="form_col_half">
                             <div class="file_button_wrapper">
-                                <% if (event.getImageName() != null) { %>
-                                 <div >
-                                     <img class="thumb-img" src = "/resources/uploads/events/images/<%=event.getImageName()%>" >
-                                     <button id="edit-img" class="thumb" onclick="">
-                                         <i class="icon-pencil"></i>
-                                     </button>
-                                     <button id="delete-img_" class="thumb" onclick="">
-                                         <i class="icon-delete"></i>
-                                     </button>
-                                 </div>
-                                <% } else { %>
                                 <div class="fileUpload btn btn-primary">
                                     <i class="icon-upload"></i>
                                     <span class="btn_title" >Choose image</span>
                                     <input type="file" class="input_file" name="eventImage" id="event_image"/>
                                 </div>
-
-                                    <div id="img_prev" >
-                                        <img id="selected_img" src="#"  class="thumb-img"/>
+                                <% if(hasImage) { %>
+                                <div id="img_prev" class="visible_thumb" >
+                                        <img id="selected_img" src="/resources/uploads/events/images/<%=event.getImageName()%>"  class="thumb-img"/>
                                         <button id="delete-img" class="thumb" onclick="" type="button">
                                             <i class="icon-delete"></i>
                                         </button>
-                                    </div>
-                                <% } %>
+                                </div>
+                                <% } else { %>
+                                <div id="img_prev">
+                                    <img id="selected_img" src="#"  class="thumb-img"/>
+                                    <button id="delete-img" class="thumb" onclick="" type="button">
+                                        <i class="icon-delete"></i>
+                                    </button>
+                                </div>
+                            <% } %>
                             </div>
                         </div>
                         <div class="form_col_half">

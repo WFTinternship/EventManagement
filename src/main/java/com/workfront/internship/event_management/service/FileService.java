@@ -79,4 +79,7 @@ public class FileService {
                 || file.getContentType().equals("application/msword"));
     }
 
+    public void deleteFile(String path) throws IOException {
+        FileUtils.deleteDirectory(new File(path));
+    }
 }

@@ -358,6 +358,15 @@ public class EventController {
             }
         }
 
+        if(action.equals("edit")) {
+            String imageName = request.getParameter("imageName");
+
+            //save same image name in db if image is not changed in edit page
+            if (imageName != null) {
+                event.setImageName(imageName);
+            }
+        }
+
         //saving event file (if uploaded)
         if (file!= null && !file.isEmpty()) {
 
