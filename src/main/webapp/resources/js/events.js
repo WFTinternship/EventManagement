@@ -7,12 +7,6 @@ $(document).ready(function () {
 });
 
 function getEventsByCategory(categoryId, elem) {
-    // elem.className = "selected";
-    //
-    // $(elem).parent().siblings().children().each(function() {
-    //     alert($(this).className);
-    //     $(this).removeClass('selected');
-    // });
 
     $.getJSON("/events-ajax?categoryId=" + categoryId, function (data) {
         if (data.status == "SUCCESS") {

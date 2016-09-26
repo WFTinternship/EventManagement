@@ -75,9 +75,9 @@
             </nav>
 
             <!-- Search Section -->
-            <form class="top_search clearfix">
+            <form class="top_search clearfix" action="search">
                 <div class="top_search_con">
-                    <input class="s" placeholder="Search Here ..." type="text">
+                    <input class="s" placeholder="Search Here ..." type="text" name="keyword">
                     <span class="top_search_icon"><i class="icon-search"></i></span>
                     <input class="top_search_submit" type="submit">
                 </div>

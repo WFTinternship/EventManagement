@@ -22,6 +22,8 @@
     <script src="<c:url value="/resources/js/lib/bootstrap.min.js" />"></script>
     <script src="<c:url value="/resources/js/my-account.js" />"></script>
     <script src="<c:url value="/resources/js/events.js" />"></script>
+    <script src="<c:url value="/resources/js/header.js" />"></script>
+
 
     <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">

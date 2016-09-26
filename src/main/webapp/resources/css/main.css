@@ -520,7 +520,9 @@ input[type="text"]:focus, input[type="password"]:focus {
     float: left;
     width: 75%;
 }
-
+.cat_item {
+    color: #888
+}
 
 .list_item {
     margin-bottom: 50px;

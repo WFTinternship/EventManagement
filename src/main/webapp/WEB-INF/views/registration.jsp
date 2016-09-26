@@ -15,6 +15,7 @@
     <script src="<c:url value="/resources/js/lib/jquery.validate.js" />"></script>
     <script src="<c:url value="/resources/js/lib/bootstrap.min.js" />"></script>
     <script src="<c:url value="/resources/js/registration.js" />"></script>
+    <script src="<c:url value="/resources/js/header.js" />"></script>
 
 
     <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>

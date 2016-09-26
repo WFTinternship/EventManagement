@@ -8,7 +8,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.workfront.internship.event_management.common.DateParser" %>
 <%@ page import="static com.workfront.internship.event_management.service.util.Validator.isEmptyCollection" %>
-<%@ page import="com.workfront.internship.event_management.model.User" %><%--
+<%@ page import="com.workfront.internship.event_management.model.User" %>
+<%@ page import="static com.workfront.internship.event_management.service.util.Validator.isEmptyString" %><%--
   Created by IntelliJ IDEA.
   User: Inmelet
   Date: 8/8/2016
@@ -26,6 +27,8 @@
     <script src="<c:url value="/resources/js/lib/bootstrap-notify.js" />"></script>
     <script src="<c:url value="/resources/js/my-account.js" />"></script>
     <script src="<c:url value="/resources/js/events.js" />"></script>
+    <script src="<c:url value="/resources/js/header.js" />"></script>
+
 
     <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
@@ -45,6 +48,13 @@
     if(sessionUser != null) {
         userId = sessionUser.getId();
     }
+    List<Category> categoryList = (List<Category>) request.getAttribute("categories");
+    List<Event> eventList = (List<Event>) request.getAttribute("events");
+
+
+    String listHeader = (String) request.getAttribute("listHeader");
+    String currentCategoryId = (String) request.getAttribute("categoryId");
+
 %>
 <body class="events_page">
 <div id="main_wrapper">
@@ -57,7 +67,6 @@
     <section class="content_section">
         <div class="content">
             <%
-                List<Category> categoryList = (List<Category>) request.getAttribute("categories");
                 if (!isEmptyCollection(categoryList)) { %>
             <aside class="left_sidebar">
 
@@ -65,11 +74,15 @@
                     <h6 class="title">Categories</h6>
                     <ul class="cat_list">
                         <%
-                            for (Category category : categoryList) { %>
+                            for (Category category : categoryList) {
+                            if (!isEmptyString(currentCategoryId) && category.getId() == Integer.parseInt(currentCategoryId)) {
+                                listHeader = category.getTitle();
+                            }
+                        %>
                         <li>
-                            <div class="cat_item"
-                                 onclick='getEventsByCategory("<%=category.getId()%>", this);'><%=category.getTitle() %>
-                            </div>
+                            <a class="cat_item"
+                                href="/events?categoryId=<%=category.getId()%>"><%=category.getTitle() %>
+                            </a>
                             <span class="num_events">
                                 <% /*= eventService.getEventsByCategory(category.getId()).size()*/%>
                             </span>
@@ -85,13 +98,11 @@
                 <div class="event_list clearfix" id="event_list">
                     <div class="main_title centered upper">
                         <h2><span class="line"><i class="icon-calendar"></i></span>
-                            <span class="list_header"><%= (String) request.getAttribute("list-name") %></span>
+                            <span class="list_header"><%=listHeader %></span>
                         </h2>
                     </div>
                     <div class="list">
                         <%
-                            List<Event> eventList = (List<Event>) request.getAttribute("events");
-
                             if (!isEmptyCollection(eventList)) {
                                 for (Event event : eventList) {
                         %>
@@ -152,7 +163,7 @@
                         </div>
                         <% }
                         } else { %>
-                        <div> There are no <%=((String)request.getAttribute("list-name")).toLowerCase()%>.</div>
+                        <div> There are no events in this category. </div>
 
                         <% } %>
                     </div>

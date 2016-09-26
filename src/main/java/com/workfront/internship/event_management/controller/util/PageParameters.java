@@ -15,6 +15,7 @@ public class PageParameters {
     public static final String HOME_VIEW = "index";
     public static final String REGISTRATION_VIEW = "registration";
     public static final String MY_ACCOUNT_VIEW = "my-account";
+    public static final String SEARCH_RESULTS_VIEW = "search-results";
 
 
     //response messages, parameter values
