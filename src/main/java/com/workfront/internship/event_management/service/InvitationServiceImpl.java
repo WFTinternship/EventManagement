@@ -30,6 +30,8 @@ public class InvitationServiceImpl implements InvitationService {
     private UserService userService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private EventService eventService;
 
     @Override
     public Invitation createInvitation(String email) {
@@ -201,7 +203,23 @@ public class InvitationServiceImpl implements InvitationService {
             throw new InvalidObjectException("Invalid response id");
         }
 
-        return invitationDAO.updateInvitationResponse(eventId, userId, responseId);
+        boolean success = invitationDAO.updateInvitationResponse(eventId, userId, responseId);
+        if (success) {
+            Event event = eventService.getFullEventById(eventId);
+
+            Invitation respondedInvitation = null;
+            List<Invitation> invitations = event.getInvitations();
+            if(!isEmptyCollection(invitations)) {
+
+                for (Invitation invitation : invitations) {
+                    if(invitation.getUser().getId() == userId){
+                        respondedInvitation = invitation;
+                    }
+                }
+            }
+            emailService.sendRespondNotificationToOrganizer(event, respondedInvitation);
+        }
+        return success;
     }
 
     @Override

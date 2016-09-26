@@ -16,4 +16,5 @@ public interface EmailService {
 
     public void sendInvitations(final Event event);
 
+    void sendRespondNotificationToOrganizer(Event event, Invitation invitation);
 }

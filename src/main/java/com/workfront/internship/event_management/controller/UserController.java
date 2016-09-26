@@ -170,6 +170,32 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/check-invitation-email")
+    @ResponseBody
+    public CustomResponse findUserByEmail(HttpServletRequest request) {
+
+        CustomResponse customResponse = new CustomResponse();
+
+        String email = request.getParameter("email");
+
+        if (email.isEmpty()) {
+            customResponse.setStatus(ACTION_FAIL);
+            customResponse.setMessage("Empty email");
+
+            return customResponse;
+        }
+
+        List<User> users = userService.getUsersMatchingEmail(email);
+        if (users != null && !users.isEmpty()) {
+            customResponse.setStatus(ACTION_FOUND);
+            customResponse.setResult(users);
+        } else {
+            customResponse.setStatus(ACTION_NOT_FOUND);
+        }
+
+        return customResponse;
+    }
+
     //helper methods
     private void setRequestParametersToUser(User user, HttpServletRequest request) {
 
@@ -186,9 +212,5 @@ public class UserController {
         user.setPhoneNumber(phone);
     }
 
-//    @InitBinder
-//    public void initBinder (WebDataBinder binder ) {
-//        StringTrimmerEditor stringTrimmer = new StringTrimmerEditor(true);
-//        binder.registerCustomEditor(String.class, stringTrimmer);
-//    }
+
 }
