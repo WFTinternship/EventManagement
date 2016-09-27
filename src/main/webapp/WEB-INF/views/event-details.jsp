@@ -39,19 +39,13 @@
     <link href="<c:url value="/resources/css/main.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/icon_font.css" />" rel="stylesheet">
 
-    <!-- FB  share settings -->
-    <script>
-        window.onload = function() {
-            var fb_share ='http://www.facebook.com/share.php?u=' + encodeURIComponent(location.href);
-            alert(fb_share);
-        }
-    </script>
     <%
         Event event = (Event) request.getAttribute("event");
         User sessionUser = (User) session.getAttribute("user");
         String action = (String) request.getAttribute("action");
 
     %>
+    <!-- FB  share settings -->
     <meta property="og:type"          content="article" />
     <meta property="og:title"         content="<%=event.getTitle()%>" />
     <meta property="og:description"   content="<%=event.getShortDescription()%>" />
@@ -97,10 +91,15 @@
                                 <a href="#"><%=event.getTitle()%>
                                 </a>
                             </h6>
-
+                           <div class="sharing">
+                            <!-- FB share button -->
                             <div class="fb-share-button"
-                                 data-width="200" data-type="button_count"></div>
-
+                                 data-size="large" data-type="button_count"></div>
+                            <!-- Share via email button -->
+                            <a class="btn" href="javascript:emailCurrentPage()">
+                                <i class="icon-envelope"></i>Share by email
+                            </a>
+                        </div>
                             <% if(sessionUser != null && event.getOrganizer().getId() == sessionUser.getId()) { %>
                                 <a id="edit-event" class="change-event-btn" href="/events/<%=event.getId()%>/edit">
                                     <i class="icon-pencil"></i>

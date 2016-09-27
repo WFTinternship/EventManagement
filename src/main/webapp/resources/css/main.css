@@ -1008,6 +1008,16 @@ position:relative;
 }
 
 /* Event details */
+.sharing .btn{
+    margin-top: -20px;
+    height: 28px;
+    vertical-align: middle;
+    line-height: 12px;
+    font-weight: bold;
+}
+.sharing{
+    margin:10px 0px;
+}
 .event_img{
     width:600px;
     margin-bottom:30px;

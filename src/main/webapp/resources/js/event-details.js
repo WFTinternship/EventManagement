@@ -59,3 +59,10 @@ function saveResponse(elem, id){
         }
     })
 }
+
+function emailCurrentPage(){
+    var subject = $(".title a").text();
+
+    window.location.href="mailto:?subject="+ subject + "&body=" + encodeURI(window.location.href);
+}
+
