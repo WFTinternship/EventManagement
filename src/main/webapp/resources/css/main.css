@@ -265,8 +265,6 @@ img {
     font-size: 30px;
     font-weight: 400;
     letter-spacing: 1px;
-    padding-bottom: 20px;
-    margin-bottom: 30px;
     position: relative;
     font-family: 'Oswald', "Open Sans", sans-serif;
     line-height: 40px;
@@ -882,6 +880,8 @@ a{
     cursor: pointer;
     opacity: 0;
     filter: alpha(opacity=0);
+    width: 152px;
+    height: 40px;
 }
 
 .btn_row button{

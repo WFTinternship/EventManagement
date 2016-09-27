@@ -23,12 +23,22 @@ $(document).ready(function () {
         interval: 15
     });
 
+    /**** Guest list ***/
     if ($('#invitation_list').children().length == 0) {
         $("#guests_list").css("display", "none");
     } else{
         $("#guests_list").css("display", "block");
     }
 
+    /*** All day checkbox ***/
+    if ($("#check-all-day").is(':checked')){
+
+        $("#start_time").css("display", "none");
+        $("#end_time").css("display", "none");
+
+        $("#start_time-error").css("display", "none");
+        $("#end_time-error").css("display", "none");
+    }
 /******* Validate and submit add event form ******/
 
     //validator method for checkign start/end date range

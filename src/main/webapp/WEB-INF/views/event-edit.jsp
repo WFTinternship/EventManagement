@@ -56,6 +56,16 @@
         categoryId = event.getCategory().getId();
     }
 
+    //check if is ALL DAY event
+    boolean isAllDay = false;
+    String startTimeString = getTimeStringFromDate(event.getStartDate());
+    String endTimeString = getTimeStringFromDate(event.getEndDate());
+
+    if(event.getStartDate() != null && event.getEndDate() != null &&
+             startTimeString.equals("00:00") && endTimeString.equals("23:59")){
+        isAllDay = true;
+    }
+
     String imageSrc = "#";
     String imgPreviewClass = "";
     if (event.getImageName() != null){
@@ -112,7 +122,7 @@
                         <input type="text" name="endTime" id="end_time" class="time_picker_input"
                                 value="<%=(event.getEndDate() != null) ? getTimeStringFromDate(event.getEndDate()) : ""%>">
                     </div>
-                    <input type="checkbox" id="check-all-day"> All day
+                    <input type="checkbox" id="check-all-day" <%=isAllDay ? "checked" : "" %>> All day
                 </div>
 
                 <div class="form_row clearfix">
@@ -144,10 +154,8 @@
                         <input class="input_text" name="location" id="location-input" type="text"
                                value="<%=event.getLocation()%>" placeholder="Enter a location" >
                         <div id="map"></div>
-
                     </div>
                 </div>
-
                 <%
                     List<Category> categoryList = (List<Category>) request.getAttribute("categories");
                     if (!categoryList.isEmpty()) { %>

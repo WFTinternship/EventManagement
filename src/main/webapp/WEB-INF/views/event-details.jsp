@@ -7,7 +7,9 @@
 <%@ page import="static com.workfront.internship.event_management.service.util.Validator.isEmptyCollection" %>
 <%@ page import="com.workfront.internship.event_management.common.DateParser" %>
 <%@ page import="com.workfront.internship.event_management.model.*" %>
-<%@ page import="static com.workfront.internship.event_management.service.util.Validator.isEmptyString" %><%--
+<%@ page import="static com.workfront.internship.event_management.service.util.Validator.isEmptyString" %>
+<%@ page import="static com.workfront.internship.event_management.common.DateParser.getTimeStringFromDate" %>
+<%@ page import="static com.workfront.internship.event_management.common.DateParser.getDateStringFromDate" %><%--
   Created by IntelliJ IDEA.
   User: Inmelet
   Date: 8/8/2016
@@ -43,6 +45,16 @@
         Event event = (Event) request.getAttribute("event");
         User sessionUser = (User) session.getAttribute("user");
         String action = (String) request.getAttribute("action");
+
+        //check if is ALL DAY event
+        boolean isAllDay = false;
+        String startTimeString = getTimeStringFromDate(event.getStartDate());
+        String endTimeString = getTimeStringFromDate(event.getEndDate());
+
+        if(event.getStartDate() != null && event.getEndDate() != null &&
+                startTimeString.equals("00:00") && endTimeString.equals("23:59")){
+            isAllDay = true;
+        }
 
     %>
     <!-- FB  share settings -->
@@ -118,12 +130,14 @@
                             <div class="col_half">
                                 <div>
                                     <span class="meta_header">Start:</span>
-                                    <i class="ev_icon icon-clock"></i> <%=DateParser.parseDateToString(event.getStartDate()) %>
+                                    <i class="ev_icon icon-clock"></i>
+                                    <%= isAllDay ? getDateStringFromDate(event.getStartDate()) : DateParser.parseDateToString(event.getStartDate()) %>
                                 </div>
                                 <div>
                                     <span class="meta_header">End:</span>
                                     <i class="ev_icon icon-clock"></i>
-                                    <span><%=DateParser.parseDateToString(event.getEndDate()) %></span>
+                                    <span>
+                                        <%= isAllDay ? getDateStringFromDate(event.getEndDate()): DateParser.parseDateToString(event.getEndDate()) %></span>
                                 </div>
                                 <div>
                                     <span class="meta_header">Guests allowed:</span>
