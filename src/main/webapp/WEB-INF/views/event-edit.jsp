@@ -58,12 +58,14 @@
 
     //check if is ALL DAY event
     boolean isAllDay = false;
-    String startTimeString = getTimeStringFromDate(event.getStartDate());
-    String endTimeString = getTimeStringFromDate(event.getEndDate());
+    if(action.equals("edit-event")) {
+        String startTimeString = getTimeStringFromDate(event.getStartDate());
+        String endTimeString = getTimeStringFromDate(event.getEndDate());
 
-    if(event.getStartDate() != null && event.getEndDate() != null &&
-             startTimeString.equals("00:00") && endTimeString.equals("23:59")){
-        isAllDay = true;
+        if (event.getStartDate() != null && event.getEndDate() != null &&
+                startTimeString.equals("00:00") && endTimeString.equals("23:59")) {
+            isAllDay = true;
+        }
     }
 
     String imageSrc = "#";
@@ -149,8 +151,8 @@
                             <span class="field_name">Location</span>
                             <span class="required_star">*</span>
                         </label>
-                        <input type="hidden" id="lat" name="lat" />
-                        <input type="hidden" id="lng" name="lng" />
+                        <input type="hidden" id="lat" name="lat" value="<%=event.getLat()%>" />
+                        <input type="hidden" id="lng" name="lng" value="<%=event.getLng()%>"/>
                         <input class="input_text" name="location" id="location-input" type="text"
                                value="<%=event.getLocation()%>" placeholder="Enter a location" >
                         <div id="map"></div>

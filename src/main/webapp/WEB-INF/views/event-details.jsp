@@ -93,7 +93,7 @@
                     <div class="list_item">
                         <div class="list_content">
                             <%
-                                if(action == "invitation-responded"){
+                                if (action == "invitation-responded") {
                             %>
                             <script type="text/javascript">
                                 showResponseSavedMessage();
