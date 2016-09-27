@@ -40,28 +40,36 @@
     <link href="<c:url value="/resources/css/icon_font.css" />" rel="stylesheet">
 
     <!-- FB  share settings -->
-    <meta property="og:url"           content="http://localhost:8085" />
-    <meta property="og:type"          content="article" />
-    <meta property="og:title"         content="Team Time | Event Management" />
-    <meta property="og:description"   content="Your description" />
-</head>
-<%
-    Event event = (Event) request.getAttribute("event");
-    User sessionUser = (User) session.getAttribute("user");
-    String action = (String) request.getAttribute("action");
+    <script>
+        window.onload = function() {
+            var fb_share ='http://www.facebook.com/share.php?u=' + encodeURIComponent(location.href);
+            alert(fb_share);
+        }
+    </script>
+    <%
+        Event event = (Event) request.getAttribute("event");
+        User sessionUser = (User) session.getAttribute("user");
+        String action = (String) request.getAttribute("action");
 
-%>
+    %>
+    <meta property="og:type"          content="article" />
+    <meta property="og:title"         content="<%=event.getTitle()%>" />
+    <meta property="og:description"   content="<%=event.getShortDescription()%>" />
+    <meta property="og:image"         content="http://www.127.0.0.1:8085/resources/uploads/events/images/<%=event.getImageName()%>" />
+</head>
+</head>
+
 <body class="events_page">
 <!-- FB Share -->
 <div id="fb-root"></div>
-<script>(function(d, s, id) {
+<script>
+    (function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) return;
     js = d.createElement(s); js.id = id;
     js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.7";
     fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
-
 </script>
 <!-- END FB Share -->
 
@@ -89,10 +97,10 @@
                                 <a href="#"><%=event.getTitle()%>
                                 </a>
                             </h6>
+
                             <div class="fb-share-button"
-                                 data-href="http://localhost:8085/"
-                                 data-layout="button_count">
-                            </div>
+                                 data-width="200" data-type="button_count"></div>
+
                             <% if(sessionUser != null && event.getOrganizer().getId() == sessionUser.getId()) { %>
                                 <a id="edit-event" class="change-event-btn" href="/events/<%=event.getId()%>/edit">
                                     <i class="icon-pencil"></i>

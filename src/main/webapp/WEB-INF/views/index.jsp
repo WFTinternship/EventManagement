@@ -130,6 +130,10 @@
                         <% }
                         } %>
                     </div>
+                    </div>
+            </div>
+        </div>
+    </section>
 
 </div>
 <jsp:include page="footer.jsp"/>
