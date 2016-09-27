@@ -521,10 +521,7 @@ input[type="text"]:focus, input[type="password"]:focus , #category_select:focus{
     width: 10px;
 }
 
-.events_page .content_block {
-    float: left;
-    width: 75%;
-}
+
 .cat_item {
     color: #888
 }
@@ -623,6 +620,9 @@ a{
     font-size: 11px;
 }
 
+.events_page {
+
+}
 .left_sidebar li div {
     color: #777;
     display: inline-block;
@@ -1008,6 +1008,14 @@ position:relative;
 }
 
 /* Event details */
+.event_details_page .content_block, .events_page .content_block{
+    float: left;
+    width: 75%;
+}
+.event_details_page .meta-row{
+    margin-bottom: 10px;
+    border-top: dotted 1px #ccc;
+}
 .sharing .btn{
     margin-top: -20px;
     height: 28px;
@@ -1017,6 +1025,16 @@ position:relative;
 }
 .sharing{
     margin:10px 0px;
+}
+.sharing .btn i {
+    margin-right: 0px;
+}
+
+.event_details_page #map{
+    height:300px;
+}
+.event_details_page .meta-row{
+    line-height:2;
 }
 .event_img{
     width:600px;
@@ -1040,6 +1058,7 @@ span.meta_header {
 }
 .guest_list{
     margin-top:35px;
+    border-top: dotted 1px #ccc;
 }
 
 #respond_wrapper {

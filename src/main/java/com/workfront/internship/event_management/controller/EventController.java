@@ -237,7 +237,10 @@ public class EventController {
         String title = request.getParameter("eventTitle");
         String shortDescription = request.getParameter("shortDesc");
         String fullDescription = request.getParameter("fullDesc");
+
         String location = request.getParameter("location");
+        double longitude = Double.parseDouble(request.getParameter("lng"));
+        double latitude = Double.parseDouble(request.getParameter("lat"));
         String invitationsString = request.getParameter("invitations");
 
         List<Invitation> invitations = new ArrayList<>();
@@ -272,6 +275,8 @@ public class EventController {
                 .setFullDescription(fullDescription)
                 .setOrganizer(sessionUser)
                 .setLocation(location)
+                .setLat(latitude)
+                .setLng(longitude)
                 .setPublicAccessed(publicAccessed)
                 .setGuestsAllowed(guestsAllowed)
                 .setCategory(category)

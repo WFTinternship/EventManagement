@@ -25,7 +25,6 @@
     <script src="<c:url value="/resources/js/lib/jquery.timepicker.js" />"></script>
     <script src="<c:url value="/resources/js/lib/bootstrap.min.js" />"></script>
 
-
     <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
     <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
@@ -40,6 +39,8 @@
     <link href="<c:url value="/resources/css/lib/jquery.timepicker.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/main.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/icon_font.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/map.css" />" rel="stylesheet">
+
 
 </head>
 <%
@@ -134,20 +135,25 @@
 
                 <div class="form_row clearfix">
                     <div class="form_col_full">
-                        <label for="location">
+                        <label for="location-input">
                             <span class="field_name">Location</span>
                             <span class="required_star">*</span>
                         </label>
-                        <input class="input_text" name="location" id="location" type="text"
-                               value="<%=event.getLocation()%>">
+                        <input type="hidden" id="lat" name="lat" />
+                        <input type="hidden" id="lng" name="lng" />
+                        <input class="input_text" name="location" id="location-input" type="text"
+                               value="<%=event.getLocation()%>" placeholder="Enter a location" >
+                        <div id="map"></div>
+
                     </div>
                 </div>
+
                 <%
                     List<Category> categoryList = (List<Category>) request.getAttribute("categories");
                     if (!categoryList.isEmpty()) { %>
                 <div class="form_row clearfix">
                     <div class="form_col_full">
-                        <label for="location">
+                        <label for="category_select">
                             <span class="field_name">Select Category</span>
                         </label>
                         <select name="categoryId" id="category_select">
@@ -244,7 +250,7 @@
                         </label>
                         <input class="input_text" name="invitationEmail" id="invitation-email" type="text"
                                placeholder="Enter guest email address" autocomplete="off">
-                        <button id="add_invitation_btn" class="btn">Add</button>
+                        <button id="add_invitation_btn" class="btn" type="button">Add</button>
                     </div>
                 </div>
                 <div id="suggested_emails"></div>
@@ -295,12 +301,92 @@
                 </div>
             </form>
         </div>
+
     </section>
     <!-- End Content Section -->
+    <script >
+        function initAutocomplete() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: <%=event.getLat() != 0 ? event.getLat() : 40.1833%>,
+                    lng: <%=event.getLng() != 0 ? event.getLng() : 44.5167 %>}, //show Yerevan lat, lng in create eent page
+                zoom: 13,
+                mapTypeId: 'roadmap'
+            });
 
+            // Create the search box and link it to the UI element.
+            var input = document.getElementById('location-input');
+            var searchBox = new google.maps.places.SearchBox(input);
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
+            // Bias the SearchBox results towards current map's viewport.
+            map.addListener('bounds_changed', function() {
+                searchBox.setBounds(map.getBounds());
+            });
 
-</div>
+            var markers = [];
+            // Listen for the event fired when the user selects a prediction and retrieve
+            // more details for that place.
+            searchBox.addListener('places_changed', function() {
+                var places = searchBox.getPlaces();
+
+                if (places.length == 0) {
+                    return;
+                }
+
+                // Clear out the old markers.
+                markers.forEach(function(marker) {
+                    marker.setMap(null);
+                });
+                markers = [];
+
+                // For each place, get the icon, name and location.
+                var bounds = new google.maps.LatLngBounds();
+                places.forEach(function(place) {
+                    if (!place.geometry) {
+                        console.log("Returned place contains no geometry");
+                        return;
+                    }
+                    debugger;
+                    var address = place.formatted_address;
+                    var latitude = place.geometry.location.lat();
+                    var longitude = place.geometry.location.lng();
+
+                    //set lat lng to hidden input elements
+                    $("#lat").val(latitude);
+                    $("#lng").val(longitude);
+
+                    var icon = {
+                        url: place.icon,
+                        size: new google.maps.Size(71, 71),
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(17, 34),
+                        scaledSize: new google.maps.Size(25, 25)
+                    };
+
+                    // Create a marker for each place.
+                    markers.push(new google.maps.Marker({
+                        map: map,
+                        icon: icon,
+                        title: place.name,
+                        position: place.geometry.location
+                    }));
+
+                    if (place.geometry.viewport) {
+                        // Only geocodes have viewport.
+                        bounds.union(place.geometry.viewport);
+
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
+                });
+                map.fitBounds(bounds);
+            });
+        }
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBp1mWG670cx7hxNYJ1hlXuXFVKCQDnOQY&libraries=places&callback=initAutocomplete"
+                async defer></script>
+    </div>
 <!-- Footer -->
 <jsp:include page="footer.jsp"/>
 <!-- End Footer -->

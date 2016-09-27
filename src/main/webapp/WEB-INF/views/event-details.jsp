@@ -53,7 +53,7 @@
 </head>
 </head>
 
-<body class="events_page">
+<body class="event_details_page">
 <!-- FB Share -->
 <div id="fb-root"></div>
 <script>
@@ -91,79 +91,51 @@
                                 <a href="#"><%=event.getTitle()%>
                                 </a>
                             </h6>
+                            <% if(sessionUser != null && event.getOrganizer().getId() == sessionUser.getId()) { %>
+                            <a id="edit-event" class="change-event-btn" href="/events/<%=event.getId()%>/edit">
+                                <i class="icon-pencil"></i>
+                                <span>Edit</span>
+                            </a>
+                            <button id="delete-event" class="change-event-btn" onclick="deleteEvent(<%=event.getId()%>)">
+                                <i class="icon-delete"></i>
+                                <span>Delete</span>
+                            </button>
+                            <% } %>
+
                            <div class="sharing">
                             <!-- FB share button -->
                             <div class="fb-share-button"
                                  data-size="large" data-type="button_count"></div>
                             <!-- Share via email button -->
                             <a class="btn" href="javascript:emailCurrentPage()">
-                                <i class="icon-envelope"></i>Share by email
+                                <i class="icon-envelope"></i>
                             </a>
                         </div>
-                            <% if(sessionUser != null && event.getOrganizer().getId() == sessionUser.getId()) { %>
-                                <a id="edit-event" class="change-event-btn" href="/events/<%=event.getId()%>/edit">
-                                    <i class="icon-pencil"></i>
-                                    <span>Edit</span>
-                                </a>
-                                <button id="delete-event" class="change-event-btn" onclick="deleteEvent(<%=event.getId()%>)">
-                                    <i class="icon-delete"></i>
-                                    <span>Delete</span>
-                                </button>
-                            <% } %>
-                            <span class="meta">
-                               <span class="meta_part">
-                                   <a href="#">
-                                       <i class="ev_icon icon-clock"></i>
-                                       <span><%=DateParser.parseDateToString(event.getStartDate()) %></span>
-                                   </a>
-                               </span>
-                               <span class="meta_part">
-                                   <a href="#">
-                                       <i class="ev_icon icon-map-marker"></i>
-                                       <span>
-                                           <%=event.getLocation()%>
-                                       </span>
-                                   </a>
-                               </span>
-                               <span class="meta_part">
-                                   <i class="ev_icon icon-folder"></i>
-                                   <span>
-                                       <a href="#">
-                                           <%= event.getCategory().getTitle()%>
-                                       </a>
-                                   </span>
-                               </span>
-                               <span class="meta_part">
-                                    <a href="#">
-                                       <i class="ev_icon icon-user"></i>
-                                       <span><%=event.getOrganizer().getFirstName() %> <%=event.getOrganizer().getLastName() %></span>
-                                   </a>
-                               </span>
-                            </span>
                             <% if (event.getImageName() != null) {%>
                                 <img class="event_img" src = "/resources/uploads/events/images/<%=event.getImageName()%>" />
                             <% } %>
                             <div class="meta-row clearfix">
                             <div class="col_half">
                                 <div>
-                                    <span class="meta_header">Start date:</span>
+                                    <span class="meta_header">Start:</span>
                                     <i class="ev_icon icon-clock"></i> <%=DateParser.parseDateToString(event.getStartDate()) %>
                                 </div>
                                 <div>
-                                    <span class="meta_header">End date:</span>
+                                    <span class="meta_header">End:</span>
                                     <i class="ev_icon icon-clock"></i>
                                     <span><%=DateParser.parseDateToString(event.getEndDate()) %></span>
-                                </div>
-                                <div>
-                                    <span class="meta_header">Location:</span>
-                                    <i class="ev_icon icon-map-marker"></i>
-                                   <span><%=event.getLocation()%></span>
                                 </div>
                                 <div>
                                     <span class="meta_header">Guests allowed:</span>
                                     <i class="ev_icon icon-<%= event.isGuestsAllowed() ? "group" : "user"%>"></i>
                                     <span><%= event.isGuestsAllowed() ? "Yes" : "No"%></span>
                                 </div>
+                                <div>
+                                    <span class="meta_header">Location:</span>
+                                    <i class="ev_icon icon-map-marker"></i>
+                                   <span><%=event.getLocation()%></span>
+                                </div>
+
                             </div>
                             <div class="col_half">
                                 <div>
@@ -189,6 +161,7 @@
                                 </div>
                             </div>
                             </div>
+                            <div id="map"></div>
 
                             <% if (!isEmptyString(event.getShortDescription())) { %>
                                 <p class="desc">
@@ -260,6 +233,35 @@
     <!-- End Content Section -->
 
 </div>
+
+<!-- MAP -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBp1mWG670cx7hxNYJ1hlXuXFVKCQDnOQY"></script>
+<script>
+    var map;
+    function initialize() {
+        var mapOptions = {
+            zoom: 13,
+            center: {lat: <%=event.getLat()%>, lng: <%=event.getLng()%>}
+        };
+        map = new google.maps.Map(document.getElementById('map'),
+                mapOptions);
+
+        var marker = new google.maps.Marker({
+            position: {lat: <%=event.getLat()%>, lng: <%=event.getLng()%>},
+            map: map
+        });
+
+        var infowindow = new google.maps.InfoWindow({
+            content: '<p>Marker Location:' + marker.getPosition() + '</p>'
+        });
+
+        google.maps.event.addListener(marker, 'click', function() {
+            infowindow.open(map, marker);
+        });
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+</script>
 <!-- Footer -->
 <jsp:include page="footer.jsp"/>
 <!-- End Footer -->

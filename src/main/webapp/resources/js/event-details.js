@@ -65,4 +65,3 @@ function emailCurrentPage(){
 
     window.location.href="mailto:?subject="+ subject + "&body=" + encodeURI(window.location.href);
 }
-
