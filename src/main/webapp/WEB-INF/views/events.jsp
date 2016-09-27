@@ -26,7 +26,6 @@
     <script src="<c:url value="/resources/js/lib/bootstrap.min.js" />"></script>
     <script src="<c:url value="/resources/js/lib/bootstrap-notify.js" />"></script>
     <script src="<c:url value="/resources/js/my-account.js" />"></script>
-    <script src="<c:url value="/resources/js/events.js" />"></script>
     <script src="<c:url value="/resources/js/header.js" />"></script>
 
 
@@ -63,8 +62,7 @@
     <!-- End Main Header -->
 
     <!-- Content Section -->
-
-    <section class="content_section">
+    <section class="content_section clearfix">
         <div class="content">
             <%
                 if (!isEmptyCollection(categoryList)) { %>
@@ -80,7 +78,7 @@
                             }
                         %>
                         <li>
-                            <a class="cat_item"
+                            <a class="cat_item <%= (!isEmptyString(currentCategoryId) && category.getId() == Integer.parseInt(currentCategoryId ) )? "highlight": ""%>"
                                 href="/events?categoryId=<%=category.getId()%>"><%=category.getTitle() %>
                             </a>
                             <span class="num_events">
@@ -109,7 +107,7 @@
                         <div class="list_item" id="event_<%=event.getId()%>">
                             <div class="list_content">
                                 <h6 class="title">
-                                    <a href="#"><%=event.getTitle() %>
+                                    <a href="/events/<%=event.getId()%>"><%=event.getTitle() %>
                                     </a>
                                 </h6>
                                 <% if(userId == event.getOrganizer().getId()) { %>
@@ -164,7 +162,6 @@
                         <% }
                         } else { %>
                         <div> There are no events in this category. </div>
-
                         <% } %>
                     </div>
                 </div>
@@ -172,10 +169,9 @@
         </div>
     </section>
     <!-- End Content Section -->
-
-    <!-- Footer -->
-    <jsp:include page="footer.jsp"/>
-    <!-- End Footer -->
 </div>
+<!-- Footer -->
+<jsp:include page="footer.jsp"/>
+<!-- End Footer -->
 </body>
 </html>

@@ -23,11 +23,8 @@
     <script src="<c:url value="/resources/js/lib/jquery.validate.js" />"></script>
     <script src="<c:url value="/resources/js/lib/bootstrap.min.js" />"></script>
     <script src="<c:url value="/resources/js/lib/bootstrap-notify.js" />"></script>
-
-    <script src="<c:url value="/resources/js/events.js" />"></script>
     <script src="<c:url value="/resources/js/event-details.js" />"></script>
     <script src="<c:url value="/resources/js/header.js" />"></script>
-
 
 
     <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
@@ -155,6 +152,11 @@
                                     <i class="ev_icon icon-map-marker"></i>
                                    <span><%=event.getLocation()%></span>
                                 </div>
+                                <div>
+                                    <span class="meta_header">Guests allowed:</span>
+                                    <i class="ev_icon icon-<%= event.isGuestsAllowed() ? "group" : "user"%>"></i>
+                                    <span><%= event.isGuestsAllowed() ? "Yes" : "No"%></span>
+                                </div>
                             </div>
                             <div class="col_half">
                                 <div>
@@ -171,6 +173,12 @@
                                     <span class="meta_header">Event category:</span>
                                     <i class="ev_icon icon-folder"></i>
                                    <span><%= event.getCategory().getTitle()%></span>
+                                </div>
+                                <div>
+                                    <span class="meta_header">Privacy:</span>
+                                    <i class="ev_icon icon-<%= event.isPublicAccessed() ? "unlock" : "lock"%>"></i>
+                                    <span><%= event.isPublicAccessed() ? "Public" : "Private"%></span>
+
                                 </div>
                             </div>
                             </div>
@@ -233,12 +241,8 @@
                                             </div>
                                         <% }%>
                                     </div>
-    </div>
+                                </div>
                             <% }%>
-
-
-
-
                             </div>
                     </div>
                 </div>
@@ -248,9 +252,9 @@
 
     <!-- End Content Section -->
 
-    <!-- Footer -->
-    <jsp:include page="footer.jsp"/>
-    <!-- End Footer -->
 </div>
+<!-- Footer -->
+<jsp:include page="footer.jsp"/>
+<!-- End Footer -->
 </body>
 </html>

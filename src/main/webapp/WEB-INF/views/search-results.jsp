@@ -124,8 +124,9 @@
     <!-- End Content Section -->
 
     <!-- Footer -->
-    <jsp:include page="footer.jsp"/>
     <!-- End Footer -->
 </div>
+<jsp:include page="footer.jsp"/>
+
 </body>
 </html>

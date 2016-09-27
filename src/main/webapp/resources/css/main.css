@@ -3,6 +3,12 @@ body {
     font-family: "Open Sans", sans-serif;
     color: #666666;
     line-height: 1.5;
+    height:100%;
+}
+#main_wrapper{
+    min-height: 100%;
+    margin-bottom: -92px;
+    padding-bottom: 92px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -35,16 +41,14 @@ b {
 
 .content_section {
     margin-top: 40px;
-    min-height: 100%;
+    margin-bottom:40px;
 }
 
-.home_page .content_section {
-    margin-top: 80px;
-}
 
 /* Rounded corners */
 .login_dialog, input[type="text"], input[type=button], input[type="password"], .btn, .btn_a, .lf_header, .lf_forget_pass,
-#suggested_emails, #respond_wrapper, [data-notify="container"], .list_item, #selected_img, .event_img{
+#suggested_emails, #respond_wrapper, [data-notify="container"], .list_item, #selected_img, .event_img,
+#category_select {
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     -ms-border-radius: 3px;
@@ -53,7 +57,7 @@ b {
 }
 
 /* Common transitions */
-a, .btn, .close, .main_title .line::before, .dropdown-content{
+.btn, .close, .main_title .line::before, .dropdown-content{
     -webkit-transition: all 0.4s ease;
     -moz-transition: all 0.4s ease;
     -o-transition: all 0.4s ease;
@@ -243,7 +247,8 @@ img {
 }
 
 .flexslider {
-    bordeR: none !important;
+    border: none !important;
+    overflow: hidden;
 }
 
 .flexslider .slides img, .slider_img{
@@ -321,7 +326,7 @@ input[type="text"], input[type="password"], input[type="button"] {
     width: 100%;
 }
 
-input[type="text"]:focus, input[type="password"]:focus {
+input[type="text"]:focus, input[type="password"]:focus , #category_select:focus{
     border-color: #00AFB2;
     color: #324545;
 }
@@ -763,14 +768,11 @@ a{
 
 /* Footer */
 #footer {
-    position: relative;
-    width: 100%;
     background: #191E21;
-    overflow: hidden;
+    overflow: hidden;;
     color: #989898;
     font-size: 12px;
-    margin-top: 100px;
-    bottom: 0;
+    height:92px
 }
 
 #footer a {
@@ -852,6 +854,18 @@ a{
     color: #888;
     background: none;
 }
+
+#registration_form .fileUpload{
+    margin:0px;
+    margin-top: -9px;
+    height: 42px;
+}
+
+#registration_form .input_file {
+    width: 150px;
+    height: 43px;
+}
+
 .fileUpload:hover{
     border-color: #1ccdca;
     color: #1ccdca;
@@ -902,8 +916,28 @@ textarea{
 
 #category_select {
     width: 100%;
-    -webkit-appearance: menulist-button;
+    /*-webkit-appearance: menulist-button;*/
+    -webkit-appearance: none;
+    -moz-appearance:    none;
+    appearance:         none;
     height: 35px;
+    padding-left: 10px;
+    background: none;
+    height: 41px;
+    border: 1px solid #ddd;
+    color: #324545;
+    font-weight: 600;
+}
+
+#event_form .icon-angle-down{
+    position: absolute;
+    right: 13px;
+    bottom: 5px;
+    font-size: 20px;
+}
+
+#event_form  .form_col_full{
+position:relative;
 }
 
 #invitation-email {
@@ -1062,7 +1096,7 @@ span.meta_header {
 
 .search_header{
     margin-bottom:25px;
-    font-size:px;
+    font-size:20px;
 }
 .highlight{
     color: #00AFB2;

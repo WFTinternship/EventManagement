@@ -19,8 +19,6 @@
     <script src="<c:url value="/resources/js/lib/jquery-3.1.0.min.js" />"></script>
     <script src="<c:url value="/resources/js/lib/jquery.validate.js" />"></script>
     <script src="<c:url value="/resources/js/lib/jquery.validate-additional-methods.js" />"></script>
-    <script src="<c:url value="/resources/js/header.js" />"></script>
-
     <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/additional-methods.min.js"></script>
 
     <script src="<c:url value="/resources/js/lib/jquery-ui.js" />"></script>
@@ -152,7 +150,6 @@
                         <label for="location">
                             <span class="field_name">Select Category</span>
                         </label>
-                        <i class="icon-angle-down"></i>
                         <select name="categoryId" id="category_select">
                             <% for (Category category : categoryList) { %>
                             <option class="cat_option" value="<%=category.getId()%>"
@@ -161,6 +158,8 @@
                             </option>
                             <% } %>
                         </select>
+                        <i class="icon-angle-down"></i>
+
                     </div>
                 </div>
                 <%} %>
@@ -190,7 +189,6 @@
                                 <% if (event.getFileName() != null) { %>
                                 <div >
                                     <i class="icon-pdf"></i>
-                                    <%--<img class="thumb-file" src = "/resources/uploads/events/images/<%=event.getFileName()%>" >--%>
                                     <button id="edit-file" class="thumb" onclick="">
                                         <i class="icon-pencil"></i>
                                     </button>
@@ -301,11 +299,11 @@
     <!-- End Content Section -->
 
 
-    <!-- Footer -->
-    <jsp:include page="footer.jsp"/>
-    <!-- End Footer -->
-</div>
 
+</div>
+<!-- Footer -->
+<jsp:include page="footer.jsp"/>
+<!-- End Footer -->
 <script src="<c:url value="/resources/js/event-edit.js" />"></script>
 </body>
 </html>

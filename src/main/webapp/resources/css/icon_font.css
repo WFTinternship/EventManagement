@@ -23,6 +23,9 @@
 .icon-lock::before {
     content: "\f023";
 }
+.icon-unlock::before {
+    content: "\f13e";
+}
 
 .icon-clock::before {
     content: "\f017";

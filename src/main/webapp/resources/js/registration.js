@@ -74,4 +74,35 @@ $(document).ready(function () {
             })
         }
     })
+
+    //show image after selection
+    $("#avatar").on("change", function (elem) {
+
+        if (this.files && this.files[0]) {
+
+            var reader = new FileReader();
+            reader.onload = function (e) {
+
+                $('#img_prev').fadeTo(1000 , 1);
+                $('#selected_img').attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(this.files[0]);
+        } else {
+            debugger;
+            $('#img_prev').fadeTo(1000,0);
+        }
+    })
+
+    // remove selected image prev
+    $("#delete-img").click(function () {
+
+        $('#img_prev').fadeTo(1000, 0, function () {
+
+            $('#selected_img').attr('src', '#');
+        });
+        $('#img_prev').removeClass("visible_thumb");
+        $("#avatar").val('');
+
+    })
 })

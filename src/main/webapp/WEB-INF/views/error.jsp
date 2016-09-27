@@ -52,11 +52,9 @@
             </div>
         </div>
     </section>
-
+</div>
 <!-- Footer -->
 <jsp:include page="footer.jsp"/>
 <!-- End Footer -->
-
-</div>
 </body>
 </html>

@@ -108,8 +108,16 @@
                         <label for="avatar">
                             <span class="field_name">Avatar</span>
                         </label>
-                        <div class="file_button_wrapper">
+                        <div class="fileUpload btn btn-primary">
+                            <i class="icon-upload"></i>
+                            <span class="btn_title" >Choose image</span>
                             <input class="input_file" name="avatar" id="avatar" type="file">
+                        </div>
+                        <div id="img_prev" >
+                            <img id="selected_img" src="#"  class="thumb-img"/>
+                            <button id="delete-img" class="thumb" onclick="" type="button">
+                                <i class="icon-delete"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -124,11 +132,9 @@
         </div>
     </section>
     <!-- End Content Section -->
-
-
-    <!-- Footer -->
-    <jsp:include page="footer.jsp"/>
-    <!-- End Footer -->
 </div>
+<!-- Footer -->
+<jsp:include page="footer.jsp"/>
+<!-- End Footer -->
 </body>
 </html>

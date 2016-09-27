@@ -230,7 +230,7 @@ public class EventController {
         Event event = new Event();
         String action = request.getParameter("action");
 
-        //if action id ADD EVENT, eventId would be 0
+        //if action is ADD EVENT, eventId would be 0
         int eventId = Integer.parseInt(request.getParameter("eventId"));
         event.setId(eventId);
 
@@ -256,8 +256,8 @@ public class EventController {
         int categoryId = Integer.parseInt(request.getParameter("categoryId"));
         Category category = new Category().setId(categoryId);
 
-        boolean publicAccessed = Boolean.parseBoolean(request.getParameter("publicAccessed"));
-        boolean guestsAllowed = Boolean.parseBoolean(request.getParameter("guestsAllowed"));
+        boolean publicAccessed = (request.getParameter("publicAccessed")).equals("1");
+        boolean guestsAllowed = (request.getParameter("guestsAllowed")).equals("1");
 
         String startDateString = request.getParameter("startDate");
         String endDateString = request.getParameter("endDate");

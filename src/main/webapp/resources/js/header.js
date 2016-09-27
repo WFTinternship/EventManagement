@@ -63,41 +63,6 @@ $(document).ready(function () {
             })
         }
     })
-    
-    
-    
-    $("#")
-    //submit search form
-   // $( "#top_search").submit(function( event ) {
-   //      event.preventDefault();
-   //
-   //  $.get("/search?email=" + keyword, function (response) {
-   //      if (response.status == "FOUND") {
-   //
-   //          var emailsHTML = [];
-   //
-   //          $.each(response.result, function (key, user) {
-   //              //get selected invitation emails
-   //              var invitation_emails = getSelectedInvitationEmails();
-   //
-   //              //check if email already selected
-   //              var found = $.inArray(user.email, invitation_emails) > -1;
-   //
-   //              if (!found) {
-   //                  var suggestedEmailHTML = createEmailSuggestion(user)
-   //                  emailsHTML.push(suggestedEmailHTML);
-   //              }
-   //          });
-   //
-   //          if (emailsHTML != "") {
-   //              $("#suggested_emails").css("display", "block");
-   //              $("#suggested_emails").html(emailsHTML.join(""));
-   //          }
-   //      } else if (response.status == "NOT FOUND") {
-   //          clearEmailSuggestionsList();
-   //      }
-   //  })
-   // });
 })
 
 function highlightKeywordOnload(keyword) {

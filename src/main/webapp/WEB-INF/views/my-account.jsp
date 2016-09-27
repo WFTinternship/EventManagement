@@ -21,7 +21,6 @@
     <script src="<c:url value="/resources/js/lib/bootstrap-notify.js" />"></script>
     <script src="<c:url value="/resources/js/lib/bootstrap.min.js" />"></script>
     <script src="<c:url value="/resources/js/my-account.js" />"></script>
-    <script src="<c:url value="/resources/js/events.js" />"></script>
     <script src="<c:url value="/resources/js/header.js" />"></script>
 
 
@@ -142,10 +141,9 @@
         </div>
     </section>
     <!-- End Content Section -->
-
-    <!-- Footer -->
-    <jsp:include page="footer.jsp"/>
-    <!-- End Footer -->
 </div>
+<!-- Footer -->
+<jsp:include page="footer.jsp"/>
+<!-- End Footer -->
 </body>
 </html>

@@ -78,7 +78,7 @@
                         <div class="list_item" id="event_<%=event.getId()%>">
                             <div class="list_content">
                                 <h6 class="title">
-                                    <a href="#"><%=event.getTitle() %>
+                                    <a href="/events/<%=event.getId()%>"><%=event.getTitle() %>
                                     </a>
                                 </h6>
                                 <% if(userId == event.getOrganizer().getId()) { %>
@@ -130,18 +130,9 @@
                         <% }
                         } %>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- End Content Section -->
 
-    <!-- Footer -->
-    <jsp:include page="footer.jsp"/>
-    <!-- End Footer -->
-    <%--<% if(response.getAttribute("redirect_url") != null) { %>--%>
-        <%--<script type="text/javascript" >alert("kuku");</script>--%>
-    <%--<% } %>--%>
 </div>
+<jsp:include page="footer.jsp"/>
+
 </body>
 </html>
