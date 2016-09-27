@@ -114,13 +114,14 @@ public class EmailServiceImpl implements EmailService {
 				} else if(responseId == 2){
 					responseStatus = "rejected";
 				} else {
-					responseStatus = "replied 'Maybe'";
+					responseStatus = "replied 'Maybe' to";
 				}
 				Map model = new HashMap();
 
 				model.put("responseStatus", responseStatus);
 				model.put("invitation", invitation);
 				model.put("event", event);
+//				model.put("rootPath", )
 				String text = VelocityEngineUtils.mergeTemplateIntoString(
 						velocityEngine, "templates/event-responded-notificaton.vm", "UTF-8", model);
 				message.setText(text, true);
