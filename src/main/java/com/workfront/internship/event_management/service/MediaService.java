@@ -12,6 +12,8 @@ public interface MediaService {
     //Create
     Media addMedia(Media media);
 
+    void addMediaList(List<Media> medias);
+
     //Read
     Media getMediaById(int mediaId);
 

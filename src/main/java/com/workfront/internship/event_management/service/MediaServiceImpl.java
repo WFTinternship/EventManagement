@@ -5,15 +5,14 @@ import com.workfront.internship.event_management.exception.dao.DuplicateEntryExc
 import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
-import com.workfront.internship.event_management.model.Media;
+import com.workfront.internship.event_management.model.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.workfront.internship.event_management.service.util.Validator.isEmptyString;
-import static com.workfront.internship.event_management.service.util.Validator.isValidMedia;
+import static com.workfront.internship.event_management.service.util.Validator.*;
 
 /**
  * Created by Hermine Turshujyan 7/22/16.
@@ -41,10 +40,27 @@ public class MediaServiceImpl implements MediaService {
             media.setId(mediaId);
         } catch (DuplicateEntryException e) {
             logger.error(e.getMessage(), e);
-            throw new OperationFailedException("Media with path " + media.getPath() + " already exists!", e);
+            throw new OperationFailedException("Media with path " + media.getName() + " already exists!", e);
         }
         return media;
     }
+
+    @Override
+    public void addMediaList(List<Media> medias) {
+
+        if(isEmptyCollection(medias)){
+            throw new InvalidObjectException("Empty media list");
+        }
+
+        for(Media media: medias) {
+            if (!isValidMedia(media)) {
+                throw new InvalidObjectException("Invalid media");
+            }
+        }
+
+        //insert media list into d
+        mediaDAO.addMediaList(medias);
+        }
 
     @Override
     public Media getMediaById(int mediaId) {

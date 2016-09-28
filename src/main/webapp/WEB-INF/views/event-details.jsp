@@ -26,6 +26,8 @@
     <script src="<c:url value="/resources/js/lib/bootstrap.min.js" />"></script>
     <script src="<c:url value="/resources/js/lib/bootstrap-notify.js" />"></script>
     <script src="<c:url value="/resources/js/event-details.js" />"></script>
+    <script src="<c:url value="/resources/js/lib/jquery.validate.js" />"></script>
+
     <script src="<c:url value="/resources/js/header.js" />"></script>
 
 
@@ -238,11 +240,46 @@
                                 </div>
                             <% }%>
                             </div>
+
+                        <div>Photos:</div>
+                            <li data-src="img/img1.jpg">
+                                <img src="img/thumb1.jpg" />
+                            </li>
+                            <li data-src="img/img2.jpg">
+                                <img src="img/thumb2.jpg" />
+                            </li>
+                        </ul>
+
+                        <%
+                            List<Media> mediaList = event.getMedia();
+                            if(!isEmptyCollection(mediaList)){ %>
+                                <ul id="lightGallery">
+
+                        <% for (Media media : mediaList){
+                                int userId = media.getUploader().getId();
+                                String imagePath = "/resources/uploads/events/event" +
+                                event.getId() + "/user" + userId + "/" + media.getName();
+                        %>
+                            <li data-src="<%=imagePath%>">
+                                <img src="<%=imagePath%>">
+                            </li>
+                           <% } %>
+                            <ul/>
+                          <% } %>
+                        <% if (sessionUser != null) { %>
+                        <form id="upload_images" enctype="multipart/form-data">
+                            <input type="hidden" name="eventId" value="<%=event.getId()%>">
+                            <input type="file" class="input_file" name="eventImages" id="event_images" multiple/>
+                            <input type="submit" Value="Save">
+                        </form>
+                        <% } %>
                     </div>
                 </div>
             </div>
         </div>
+
     </section>
+
 
     <!-- End Content Section -->
 

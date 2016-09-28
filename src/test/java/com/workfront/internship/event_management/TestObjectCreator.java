@@ -104,12 +104,12 @@ public class TestObjectCreator {
 
     public static Media createTestMedia() {
         Media media = new Media();
-        media.setPath("/event/111/test_path" + getRandomNumber() + ".jpg")
+        media.setName("/event/111/test_path" + getRandomNumber() + ".jpg")
                 .setType(new MediaType(0, "Image"))
                 .setDescription("Test description")
                 .setUploadDate(new Date())
                 .setEventId(1)
-                .setUploaderId(1);
+                .setUploader(createTestUser().setId(VALID_ID));
         return media;
     }
 

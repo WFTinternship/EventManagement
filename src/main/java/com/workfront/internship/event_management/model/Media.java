@@ -9,10 +9,10 @@ public class Media {
 
     private int id;
     private MediaType type;
-    private String path;
+    private String name;
     private String description;
     private int eventId;
-    private int uploaderId;
+    private User uploader;
     private Date uploadDate;
 
     public int getId() {
@@ -33,12 +33,12 @@ public class Media {
         return this;
     }
 
-    public String getPath() {
-        return path;
+    public String getName() {
+        return name;
     }
 
-    public Media setPath(String path) {
-        this.path = path;
+    public Media setName(String name) {
+        this.name = name;
         return this;
     }
 
@@ -60,12 +60,12 @@ public class Media {
         return this;
     }
 
-    public int getUploaderId() {
-        return uploaderId;
+    public User getUploader() {
+        return uploader;
     }
 
-    public Media setUploaderId(int uploaderId) {
-        this.uploaderId = uploaderId;
+    public Media setUploader(User uploader) {
+        this.uploader = uploader;
         return this;
     }
 

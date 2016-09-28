@@ -68,9 +68,9 @@ public class Validator {
         boolean valid = false;
         if (media != null
                 && (isValidMediaType(media.getType())
-                && !isEmptyString(media.getPath()))
+                && !isEmptyString(media.getName()))
                 && media.getEventId() != 0
-                && media.getUploaderId() != 0
+                && isValidUser(media.getUploader())
                 && media.getUploadDate() != null) {
             valid = true;
         }

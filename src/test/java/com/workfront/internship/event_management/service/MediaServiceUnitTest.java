@@ -62,7 +62,7 @@ public class MediaServiceUnitTest {
     //Testing addMedia method
     @Test(expected = InvalidObjectException.class)
     public void addMedia_Invalid_Media() {
-        testMedia.setPath(null);
+        testMedia.setName(null);
 
         //method under test
         mediaService.addMedia(testMedia);

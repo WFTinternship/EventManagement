@@ -15,7 +15,7 @@ public interface MediaDAO {
     //insert media into db
     int addMedia(Media media) throws DuplicateEntryException, DAOException;
 
-    void addMedia(List<Media> mediaList) throws DAOException;
+    void addMediaList(List<Media> mediaList) throws DAOException;
 
 
     //read data from db

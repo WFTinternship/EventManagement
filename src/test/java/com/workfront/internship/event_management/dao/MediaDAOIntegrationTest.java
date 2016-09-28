@@ -133,7 +133,7 @@ public class MediaDAOIntegrationTest {
 
     @Test
     public void getMediaByUploader_Found() throws DAOException {
-        List<Media> mediaList = mediaDAO.getMediaByUploaderId(testMedia.getUploaderId());
+        List<Media> mediaList = mediaDAO.getMediaByUploaderId(testMedia.getUploader().getId());
 
         assertNotNull(mediaList);
         assertFalse(mediaList.isEmpty());
@@ -237,7 +237,7 @@ public class MediaDAOIntegrationTest {
         testMediaType.setId(mediaTypeId);
 
         //insert media into db and get generated id
-        testMedia.setUploaderId(testUser.getId());
+        testMedia.setUploader(testUser);
         testMedia.setEventId(testEvent.getId());
         testMedia.setType(testMediaType);
         int mediaId = mediaDAO.addMedia(testMedia);

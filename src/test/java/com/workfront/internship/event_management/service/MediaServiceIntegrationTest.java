@@ -88,7 +88,7 @@ public class MediaServiceIntegrationTest {
 
     @Test
     public void getMediaByUploader() {
-        List<Media> mediaList = mediaService.getMediaByUploader(testMedia.getUploaderId());
+        List<Media> mediaList = mediaService.getMediaByUploader(testMedia.getUploader().getId());
 
         assertNotNull(mediaList);
         assertFalse(mediaList.isEmpty());
@@ -156,7 +156,7 @@ public class MediaServiceIntegrationTest {
         testMediaType = mediaTypeService.addMediaType(testMediaType);
 
         //insert media into db and get generated id
-        testMedia.setUploaderId(testUser.getId());
+        testMedia.setUploader(testUser);
         testMedia.setEventId(testEvent.getId());
         testMedia.setType(testMediaType);
 

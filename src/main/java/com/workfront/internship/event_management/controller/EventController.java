@@ -4,10 +4,7 @@ import com.workfront.internship.event_management.controller.util.CustomResponse;
 import com.workfront.internship.event_management.common.DateParser;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.exception.service.UnauthorizedAccessException;
-import com.workfront.internship.event_management.model.Category;
-import com.workfront.internship.event_management.model.Event;
-import com.workfront.internship.event_management.model.Invitation;
-import com.workfront.internship.event_management.model.User;
+import com.workfront.internship.event_management.model.*;
 import com.workfront.internship.event_management.service.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +23,6 @@ import java.util.Date;
 import java.util.List;
 
 import static com.workfront.internship.event_management.controller.util.PageParameters.*;
-import static com.workfront.internship.event_management.service.util.Validator.isEmptyCollection;
 import static com.workfront.internship.event_management.service.util.Validator.isEmptyString;
 
 /**
@@ -47,6 +43,8 @@ public class EventController {
     private CategoryService categoryService;
     @Autowired
     private FileService fileService;
+    @Autowired
+    private MediaService mediaService;
 
 
     @RequestMapping(value = "/events")
@@ -356,6 +354,50 @@ public class EventController {
 
         result.setStatus(ACTION_SUCCESS);
         return result;
+    }
+
+    @RequestMapping(value="/upload-photos", method=RequestMethod.POST)
+    @ResponseBody
+    public CustomResponse handleFileUpload(
+            @RequestParam("eventImages") MultipartFile[] images,
+            HttpServletRequest request) {
+
+        CustomResponse response = new CustomResponse();
+
+        User sessionUser = (User) request.getSession().getAttribute("user");
+
+        if(sessionUser == null){
+            throw new UnauthorizedAccessException(UNAUTHORIZED_ACCESS_MESSAGE);
+        }
+
+        int userId = sessionUser.getId();
+        int eventId = Integer.parseInt(request.getParameter("eventId"));
+
+        ServletContext context = request.getSession().getServletContext();
+        String webContentRoot = context.getRealPath("/resources/uploads");
+            try {
+                List<String> photoNames = fileService.saveEventPhotos(webContentRoot, images, eventId, userId);
+
+                List<Media> mediaList = new ArrayList<>();
+                for(String photoName: photoNames){
+
+                    Media media = new Media();
+                    media.setEventId(eventId)
+                            .setUploader(sessionUser)
+                            .setType(new MediaType(1, "image"))
+                            .setName(photoName)
+                            .setUploadDate(new Date());
+
+                    mediaList.add(media);
+                }
+
+                mediaService.addMediaList(mediaList);
+                response.setMessage(ACTION_SUCCESS);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        return response;
     }
 
 

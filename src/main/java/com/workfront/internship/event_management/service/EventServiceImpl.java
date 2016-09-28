@@ -7,6 +7,7 @@ import com.workfront.internship.event_management.exception.service.OperationFail
 import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.Invitation;
+import com.workfront.internship.event_management.model.Media;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,11 +33,11 @@ public class EventServiceImpl implements EventService {
     @Autowired
     private CategoryService categoryService;
     @Autowired
-    private FileService fileService;
-    @Autowired
     private InvitationService invitationService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private MediaService mediaService;
 
     @Override
     public Event createEvent(Event event) {
@@ -107,6 +108,9 @@ public class EventServiceImpl implements EventService {
         //get event invitations
         List<Invitation> invitations = invitationService.getInvitationsByEvent(eventId);
         event.setInvitations(invitations);
+
+        List<Media> media = mediaService.getMediaByEvent(eventId);
+        event.setMedia(media);
 
         return event;
     }

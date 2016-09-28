@@ -47,11 +47,11 @@ public class AssertionHelper {
     public static void assertEqualMedia(Media expectedMedia, Media actualMedia) {
         assertEquals(actualMedia.getId(), expectedMedia.getId());
         assertEquals(actualMedia.getEventId(), expectedMedia.getEventId());
-        assertEquals(actualMedia.getPath(), expectedMedia.getPath());
+        assertEquals(actualMedia.getName(), expectedMedia.getName());
         assertEquals(actualMedia.getType().getId(), expectedMedia.getType().getId());
         assertEquals(actualMedia.getType().getTitle(), expectedMedia.getType().getTitle());
         assertEquals(actualMedia.getDescription(), expectedMedia.getDescription());
-        assertEquals(actualMedia.getUploaderId(), expectedMedia.getUploaderId());
+        assertEquals(actualMedia.getUploader(), expectedMedia.getUploader());
         assertNotNull(actualMedia.getUploadDate());
     }
 

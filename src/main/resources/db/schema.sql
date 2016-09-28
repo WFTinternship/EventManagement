@@ -40,7 +40,7 @@ CREATE TABLE event_invitation (
 CREATE TABLE event_media (
   id            INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
   event_id      INTEGER          NOT NULL,
-  path          VARCHAR(300)     NOT NULL,
+  name          VARCHAR(300)     NOT NULL,
   media_type_id INTEGER          NOT NULL,
   description   VARCHAR(300),
   uploader_id   INTEGER          NOT NULL,

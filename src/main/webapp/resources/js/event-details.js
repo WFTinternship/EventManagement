@@ -1,4 +1,7 @@
 $(document).ready(function () {
+
+    $("#lightGallery").lightGallery();
+
     
     $("#change_response").click(function () {
         $("#respond_wrapper").slideToggle( "fast", function () {
@@ -9,6 +12,33 @@ $(document).ready(function () {
         //close respond to invitation window
         $("#change_response").click();
     })
+
+    $("#upload_images").validate({
+
+        submitHandler: function (form) {
+            debugger;
+            var formData = new FormData($('#upload_images')[0]);
+
+            $.ajax({
+                url: '/upload-photos',
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (result) {
+                    if (result.status == "SUCCESS") {
+                        window.location = "/my-account";
+                    } else if (result.status == "FAIL") {
+                        window.location = "/error";
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                }
+            })
+        }
+
+    })
+
 })
 
 

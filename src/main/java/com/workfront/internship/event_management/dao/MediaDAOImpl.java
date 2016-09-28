@@ -5,6 +5,7 @@ import com.workfront.internship.event_management.exception.dao.DuplicateEntryExc
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.Media;
 import com.workfront.internship.event_management.model.MediaType;
+import com.workfront.internship.event_management.model.User;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -36,10 +37,10 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             //create and initialize statement
             stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, media.getEventId());
-            stmt.setString(2, media.getPath());
+            stmt.setString(2, media.getName());
             stmt.setInt(3, media.getType().getId());
             stmt.setString(4, media.getDescription());
-            stmt.setInt(5, media.getUploaderId());
+            stmt.setInt(5, media.getUploader().getId());
             if(media.getUploadDate() != null) {
                 stmt.setTimestamp(6, new Timestamp(media.getUploadDate().getTime()));
             } else {
@@ -53,7 +54,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             id = getInsertedId(stmt);
         } catch (SQLIntegrityConstraintViolationException e) {
             LOGGER.error("Duplicate media entry", e);
-            throw new DuplicateEntryException("Media with path " + media.getPath() + " already exists!", e);
+            throw new DuplicateEntryException("Media with path " + media.getName() + " already exists!", e);
         } catch (SQLException e) {
             LOGGER.error("SQL Exception", e);
             throw new DAOException(e);
@@ -64,7 +65,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
     }
 
     @Override
-    public void addMedia(List<Media> mediaList) throws DAOException {
+    public void addMediaList(List<Media> mediaList) throws DAOException {
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -80,10 +81,10 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             for (Media media : mediaList) {
                 stmt.setInt(1, media.getEventId());
-                stmt.setString(2, media.getPath());
+                stmt.setString(2, media.getName());
                 stmt.setInt(3, media.getType().getId());
                 stmt.setString(4, media.getDescription());
-                stmt.setInt(5, media.getUploaderId());
+                stmt.setInt(5, media.getUploader().getId());
                 if (media.getUploadDate() != null) {
                     stmt.setTimestamp(6, new Timestamp(media.getUploadDate().getTime()));
                 } else {
@@ -95,6 +96,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             //execute query
             stmt.executeBatch();
 
+            conn.commit();
         } catch (SQLException e) {
             LOGGER.error("SQL Exception", e);
             throw new DAOException(e);
@@ -131,6 +133,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
         List<Media> mediaList = new ArrayList<>();
         String query = "SELECT * FROM event_media " +
                 "LEFT JOIN media_type ON event_media.media_type_id = media_type.id " +
+                "LEFT JOIN USER ON event_media.uploader_id = user.id " +
                 "WHERE event_id = ?";
 
         try {
@@ -272,13 +275,24 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
         while (rs.next()) {
             MediaType mediaType = new MediaType(rs.getInt("media_type.id"), rs.getString("media_type.title"));
 
+            User user = new User();
+            user.setId(rs.getInt("user.id"))
+                    .setFirstName(rs.getString("first_name"))
+                    .setLastName(rs.getString("last_name"))
+                    .setPassword(rs.getString("password"))
+                    .setEmail(rs.getString("email"))
+                    .setAvatarPath(rs.getString("avatar_path"))
+                    .setPhoneNumber(rs.getString("phone_number"))
+                    .setVerified(rs.getBoolean("verified"))
+                    .setRegistrationDate(rs.getTimestamp("registration_date"));
+
             Media media = new Media();
             media.setId(rs.getInt("id"))
                     .setEventId(rs.getInt("event_id"))
                     .setType(mediaType)
-                    .setPath(rs.getString("path"))
+                    .setName(rs.getString("path"))
                     .setDescription(rs.getString("description"))
-                    .setUploaderId(rs.getInt("uploader_id"))
+                    .setUploader(user)
                     .setUploadDate(rs.getTimestamp("upload_date"));
 
             mediaList.add(media);

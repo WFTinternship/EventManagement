@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -21,6 +23,7 @@ public class FileService {
     private static final String EVENT_FILE_DIRECTORY = "/events/files";
     private static final String EVENT_IMAGE_DIRECTORY = "/events/images";
     private static final String USER_AVATAR_DIRECTORY = "/avatars";
+
 
     private static final Logger logger = Logger.getLogger(FileService.class);
 
@@ -34,6 +37,17 @@ public class FileService {
 
     public String saveAvatar(String rootPath, MultipartFile image) throws IOException {
         return saveFile(rootPath + USER_AVATAR_DIRECTORY, image);
+    }
+
+    public List<String> saveEventPhotos(String rootPath, MultipartFile[] images, int eventId, int userId) throws IOException {
+        List<String> photoNames = new ArrayList<>();
+
+        String folderPath = "/events/event" + eventId + "/user" + userId;
+        for (MultipartFile image: images) {
+            String photoName = saveFile(rootPath + folderPath, image);
+            photoNames.add(photoName);
+        }
+        return photoNames;
     }
 
     public String saveFile(String uploadPath, MultipartFile image) throws IOException {
