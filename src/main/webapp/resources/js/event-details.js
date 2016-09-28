@@ -33,7 +33,7 @@ $(document).ready(function () {
 
         messages: {
             eventImages: {
-                required:"Please, choose photo(s)",
+                required:"Please, choose photos",
                 extension: "Only .jpg and .png files are allowed",
                 fileSize: "Image size should be less then 5MB"
             }
@@ -58,7 +58,7 @@ $(document).ready(function () {
                 data: formData,
                 success: function (result) {
                     if (result.status == "SUCCESS") {
-                        window.location = "/my-account";
+                        location.reload();
                     } else if (result.status == "FAIL") {
                         window.location = "/error";
                     }
@@ -69,22 +69,6 @@ $(document).ready(function () {
         }
 
     })
-    // //show selected images
-    // $("#event_images").on("change", function (elem) {
-    //     debugger;
-    //     if (this.files && this.files[0] && $("#event_images").valid()) {
-    //         $(this.files).each(function () {
-    //             var reader = new FileReader();
-    //             reader.readAsDataURL(this);
-    //
-    //             reader.onload = function (e) {
-    //             $('#img_prev_div').append("<img id='img_prev' src='" + e.target.result + "'>");
-    //             };
-    //
-    //         });
-    //     }
-    // })
-
 })
 
 

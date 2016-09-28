@@ -63,6 +63,16 @@ $(document).ready(function () {
             })
         }
     })
+
+    $('#search_form').on('submit', function () {
+        
+        var keyword = $.trim($('#search_input').val());
+        $('#search_input').val(keyword)
+
+        if(!keyword) {
+            return false;
+        }
+    })
 })
 
 function highlightKeywordOnload(keyword) {

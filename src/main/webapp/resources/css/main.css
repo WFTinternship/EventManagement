@@ -840,6 +840,9 @@ a{
 #img_prev_photos{
     opacity:0;
 }
+label#event_images-error {
+    display: block;
+}
 #img_prev_photos .thumb-img{
     margin-right:5px;
 }

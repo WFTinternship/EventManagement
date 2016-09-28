@@ -55,10 +55,10 @@ public class EventController {
 
         List<Event> eventList;
 
-        if(isEmptyString(categoryIdStr)) { //load all events
+        if (isEmptyString(categoryIdStr)) { //load all events
             model.addAttribute("listHeader", ALL_EVENTS_HEADER);
 
-            if (sessionUser == null){
+            if (sessionUser == null) {
                 eventList = eventService.getPublicEvents();
             } else {
                 eventList = eventService.getAllEvents();
@@ -68,7 +68,7 @@ public class EventController {
             model.addAttribute("categoryId", categoryIdStr);
 
             int categoryId = Integer.parseInt(categoryIdStr);
-            if (sessionUser == null){
+            if (sessionUser == null) {
                 eventList = eventService.getPublicEventsByCategory(categoryId);
             } else {
                 eventList = eventService.getAllEventsByCategory(categoryId);
@@ -89,7 +89,7 @@ public class EventController {
         List<Event> eventList;
         User sessionUser = (User) request.getSession().getAttribute("user");
 
-        if (sessionUser == null){
+        if (sessionUser == null) {
             eventList = eventService.getPublicPastEvents();
         } else {
             eventList = eventService.getAllPastEvents();
@@ -106,7 +106,7 @@ public class EventController {
         List<Event> eventList;
         User sessionUser = (User) request.getSession().getAttribute("user");
 
-        if (sessionUser == null){
+        if (sessionUser == null) {
             eventList = eventService.getPublicUpcomingEvents();
         } else {
             eventList = eventService.getAllUpcomingEvents();
@@ -124,7 +124,7 @@ public class EventController {
 
         //check if user is not authorized to view this event, redirect to home page
         User sessionUser = (User) request.getSession().getAttribute("user");
-        if(!event.isPublicAccessed() && sessionUser == null) {
+        if (!event.isPublicAccessed() && sessionUser == null) {
             return HOME_VIEW;
         }
 
@@ -163,7 +163,7 @@ public class EventController {
         }
 
         Event event = eventService.getFullEventById(eventId);
-        if(event.getOrganizer().getId() != sessionUser.getId()){
+        if (event.getOrganizer().getId() != sessionUser.getId()) {
             throw new UnauthorizedAccessException(OPERATION_NOT_ALLOWED_MESSAGE);
         }
 
@@ -188,13 +188,13 @@ public class EventController {
         }
 
         Event event = eventService.getEventById(eventId);
-        if(event.getOrganizer().getId() != sessionUser.getId()){
+        if (event.getOrganizer().getId() != sessionUser.getId()) {
             throw new UnauthorizedAccessException(OPERATION_NOT_ALLOWED_MESSAGE);
         }
 
         CustomResponse response = new CustomResponse();
         boolean success = eventService.deleteEvent(eventId);
-        if(success){
+        if (success) {
             List<Event> updatedOrganizedEventsList = eventService.getUserOrganizedEvents(sessionUser.getId());
             session.setAttribute("userOrganizedEvents", updatedOrganizedEventsList);
             response.setStatus(ACTION_SUCCESS);
@@ -212,8 +212,8 @@ public class EventController {
     @RequestMapping(value = "/save-event", method = RequestMethod.POST)
     @ResponseBody
     public CustomResponse saveEvent(HttpServletRequest request,
-                                   @RequestParam(value = "eventImage", required = false) MultipartFile image,
-                                   @RequestParam(value = "eventFile", required = false) MultipartFile file) {
+                                    @RequestParam(value = "eventImage", required = false) MultipartFile image,
+                                    @RequestParam(value = "eventFile", required = false) MultipartFile file) {
 
         CustomResponse result = new CustomResponse();
 
@@ -242,7 +242,7 @@ public class EventController {
         String invitationsString = request.getParameter("invitations");
 
         List<Invitation> invitations = new ArrayList<>();
-        if(!isEmptyString(invitationsString)) {
+        if (!isEmptyString(invitationsString)) {
             //get invitees email list
             List<String> invitationEmails = Arrays.asList(invitationsString.split(","));
 
@@ -283,7 +283,7 @@ public class EventController {
                 .setInvitations(invitations);
 
         //saving event image (if uploaded)
-        if (image!= null && !image.isEmpty()) {
+        if (image != null && !image.isEmpty()) {
 
             if (!fileService.isValidImage(image)) {
                 String message = "Invalid image type!";
@@ -307,7 +307,7 @@ public class EventController {
             }
         }
 
-        if(action.equals("edit")) {
+        if (action.equals("edit")) {
             String imageName = request.getParameter("imageName");
 
             //save same image name in db if image is not changed in edit page
@@ -317,7 +317,7 @@ public class EventController {
         }
 
         //saving event file (if uploaded)
-        if (file!= null && !file.isEmpty()) {
+        if (file != null && !file.isEmpty()) {
 
             if (!fileService.isValidFile(file)) {
                 String message = "Invalid file type!";
@@ -356,7 +356,7 @@ public class EventController {
         return result;
     }
 
-    @RequestMapping(value="/upload-photos", method=RequestMethod.POST)
+    @RequestMapping(value = "/upload-photos", method = RequestMethod.POST)
     @ResponseBody
     public CustomResponse handleFileUpload(
             @RequestParam("eventImages") MultipartFile[] images,
@@ -366,7 +366,7 @@ public class EventController {
 
         User sessionUser = (User) request.getSession().getAttribute("user");
 
-        if(sessionUser == null){
+        if (sessionUser == null) {
             throw new UnauthorizedAccessException(UNAUTHORIZED_ACCESS_MESSAGE);
         }
 
@@ -375,31 +375,32 @@ public class EventController {
 
         ServletContext context = request.getSession().getServletContext();
         String webContentRoot = context.getRealPath("/resources/uploads");
-            try {
-                List<String> photoNames = fileService.saveEventPhotos(webContentRoot, images, eventId, userId);
+        try {
+            //save photos in gile system
+            List<String> photoNames = fileService.saveEventPhotos(webContentRoot, images, eventId, userId);
 
-                List<Media> mediaList = new ArrayList<>();
-                for(String photoName: photoNames){
+            //create media objects
+            List<Media> mediaList = new ArrayList<>();
+            for (String photoName : photoNames) {
+                Media media = new Media();
+                media.setEventId(eventId)
+                        .setUploader(sessionUser)
+                        .setType(new MediaType(1, "image"))
+                        .setName(photoName)
+                        .setUploadDate(new Date());
 
-                    Media media = new Media();
-                    media.setEventId(eventId)
-                            .setUploader(sessionUser)
-                            .setType(new MediaType(1, "image"))
-                            .setName(photoName)
-                            .setUploadDate(new Date());
-
-                    mediaList.add(media);
-                }
-
-                mediaService.addMediaList(mediaList);
-                response.setMessage(ACTION_SUCCESS);
-            } catch (IOException e) {
-                e.printStackTrace();
+                mediaList.add(media);
             }
+
+            mediaService.addMediaList(mediaList);
+            response.setStatus(ACTION_SUCCESS);
+        } catch (IOException e) {
+            response.setStatus(ACTION_FAIL);
+            response.setMessage("Unable to upload photos.");
+        }
 
         return response;
     }
-
 
 
 }
