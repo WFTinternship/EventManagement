@@ -219,7 +219,7 @@
                                                     <% if(invitation.getUser().getId() == event.getOrganizer().getId()){%>
                                                     <span class="organizer"> (Organizer)</span>
                                                     <% }%>
-                                                    <% if (sessionUser != null && sessionUser.getId() == invitation.getUser().getId()){  %>
+                                                    <% if (sessionUser != null && sessionUser.getId() == invitation.getUser().getId() && !isPassedEvent){  %>
                                                     <div id="change_response_wrapper">
                                                         <button id="change_response" class="">
                                                             <i class="icon-pencil change-response-icon"></i>

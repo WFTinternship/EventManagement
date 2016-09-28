@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="com.workfront.internship.event_management.model.User" %>
+<%@ page import="static com.workfront.internship.event_management.service.util.Validator.isEmptyString" %>
 
 <jsp:include page="login.jsp"/>
 
@@ -22,22 +23,21 @@
             <% } else { %>
             <div class="dropdown">
                 <span class="dropbtn">
-                    <i class="top_icon icon-user">
-                    </i>Hi, <%=user.getFirstName()%>
+                    <% if(!isEmptyString(user.getAvatarPath())) { %>
+                        <img class="avatar_icon" src="/resources/uploads/avatars/<%=user.getAvatarPath()%>">
+                   <% } else { %>
+                    <i class="top_icon icon-user"></i>
+                    <% }%>
+                    Hi, <%=user.getFirstName()%>
                     <i class="icon-angle-down"></i>
                 </span>
                 <div class="dropdown-content">
+                    <a href="/my-events">My Events</a>
                     <a href="/my-account">My Account</a>
-                    <a href="#">Invited events</a>
-                    <a href="#">Accepted Events</a>
-                    <a href="#">Participated Events</a>
                 </div>
             </div>
             <span><a href="/logout" class="upper" id="logout_button" >Logout</a></span>
-
-
-            <% }
-                ; %>
+            <% }; %>
         </div>
     </div>
 

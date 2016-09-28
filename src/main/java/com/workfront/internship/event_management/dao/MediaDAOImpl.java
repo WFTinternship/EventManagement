@@ -168,7 +168,9 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
 
         List<Media> mediaList = new ArrayList<>();
         String query = "SELECT * FROM event_media " +
-                "LEFT JOIN media_type ON event_media.media_type_id = media_type.id ";
+                "LEFT JOIN media_type ON event_media.media_type_id = media_type.id " +
+                "LEFT JOIN user ON event_media.uploader_id = user.id ";
+
 
         try {
             //acquire connection
@@ -244,6 +246,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
         List<Media> mediaList = new ArrayList<>();
         String query = "SELECT * FROM event_media " +
                 "LEFT JOIN media_type ON event_media.media_type_id = media_type.id " +
+                "LEFT JOIN user on user.id = event_media.uploader_id " +
                 "WHERE event_media." + columnName + " = ?";
         try {
             //get connection

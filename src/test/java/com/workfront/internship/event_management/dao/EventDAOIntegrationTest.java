@@ -133,7 +133,7 @@ public class EventDAOIntegrationTest {
         assertEqualEvents(event, testEvent);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void getEventById_Not_Found() throws DAOException, ObjectNotFoundException {
         //test method
         Event event = eventDAO.getEventById(NON_EXISTING_ID);
@@ -182,12 +182,13 @@ public class EventDAOIntegrationTest {
     }
 
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void deleteEvent_Found() throws DAOException, ObjectNotFoundException {
         //testing method
         eventDAO.deleteEvent(testEvent.getId());
 
         Event event = eventDAO.getEventById(testEvent.getId());
+        assertNull(event);
     }
 
     @Test
@@ -228,9 +229,9 @@ public class EventDAOIntegrationTest {
     }
 
     private void deleteTestRecordsFromDB() throws DAOException {
+        eventDAO.deleteAllEvents();
         userDAO.deleteAllUsers();
         recurrenceTypeDAO.deleteAllRecurrenceTypes();
-        eventDAO.deleteAllEvents();
         categoryDAO.deleteAllCategories();
 
     }

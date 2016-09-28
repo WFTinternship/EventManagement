@@ -165,9 +165,7 @@ public class RecurrenceOptionDAOImpl extends GenericDAO implements RecurrenceOpt
 
             //get results
             List<RecurrenceOption> optionsList = createRecurrenceOptionListFromRS(rs);
-            if (optionsList.isEmpty()) {
-                throw new ObjectNotFoundException("Recurrence option with id " + optionId + " not found!");
-            } else {
+            if (!optionsList.isEmpty()) {
                 option = optionsList.get(0);
             }
         } catch (SQLException e) {

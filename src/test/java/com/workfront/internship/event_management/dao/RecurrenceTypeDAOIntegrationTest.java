@@ -4,7 +4,13 @@ import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.RecurrenceType;
+import com.workfront.internship.event_management.spring.TestApplicationConfig;
 import org.junit.*;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
@@ -16,20 +22,15 @@ import static junit.framework.TestCase.*;
 /**
  * Created by Hermine Turshujyan 7/11/16.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestApplicationConfig.class)
+@ActiveProfiles("Test")
 public class RecurrenceTypeDAOIntegrationTest {
 
-    private static RecurrenceTypeDAO recurrenceTypeDAO = null;
-    private RecurrenceType testRecurrenceType = null;
+    @Autowired
+    private RecurrenceTypeDAO recurrenceTypeDAO;
 
-    @BeforeClass
-    public static void setUpClass() throws DAOException {
-        recurrenceTypeDAO = new RecurrenceTypeDAOImpl();
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-        recurrenceTypeDAO = null;
-    }
+    private RecurrenceType testRecurrenceType;
 
     @Before
     public void setUp() throws DuplicateEntryException, DAOException {
@@ -134,13 +135,14 @@ public class RecurrenceTypeDAOIntegrationTest {
         assertEqualRecurrenceTypes(recurrenceType, testRecurrenceType);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void updateRecurrenceType_Not_Found() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
         //create new recurrence type with non-existing id
         RecurrenceType recurrenceType = createTestRecurrenceType();
 
         //test method
-        recurrenceTypeDAO.updateRecurrenceType(recurrenceType);
+        boolean success = recurrenceTypeDAO.updateRecurrenceType(recurrenceType);
+        assertFalse(success);
     }
 
     @Test(expected = ObjectNotFoundException.class)
@@ -151,10 +153,11 @@ public class RecurrenceTypeDAOIntegrationTest {
         RecurrenceType recurrenceType = recurrenceTypeDAO.getRecurrenceTypeById(testRecurrenceType.getId());
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void deleteRecurrenceType_Not_Found() throws DAOException, ObjectNotFoundException {
         //testing method
-        recurrenceTypeDAO.deleteRecurrenceType(NON_EXISTING_ID);
+        boolean success = recurrenceTypeDAO.deleteRecurrenceType(NON_EXISTING_ID);
+        assertFalse(success);
     }
 
     @Test

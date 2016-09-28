@@ -21,7 +21,7 @@
     <script src="<c:url value="/resources/js/lib/jquery.flexslider.js" />"></script>
     <script src="<c:url value="/resources/js/lib/bootstrap-notify.js" />"></script>
     <script src="<c:url value="/resources/js/lib/bootstrap.min.js" />"></script>
-    <script src="<c:url value="/resources/js/my-account.js" />"></script>
+    <script src="<c:url value="/resources/js/my-events.js" />"></script>
     <script src="<c:url value="/resources/js/header.js" />"></script>
 
 
@@ -41,12 +41,11 @@
 </head>
 <%
     User sessionUser = (User) session.getAttribute("user");
-    List<Event> userOrganizedEvents = (List<Event>)session.getAttribute("userOrganizedEvents");
-    List<Event> userInvitedEvents = (List<Event>)session.getAttribute("userInvitedEvents");
-    List<Event> userAcceptedEvents = (List<Event>)session.getAttribute("userAcceptedEvents");
-    List<Event> userPendingEvents = (List<Event>)session.getAttribute("userPendingEvents");
-    List<Event> userParticipatedEvents = (List<Event>)session.getAttribute("userParticipatedEvents");
-
+    List<Event> userOrganizedEvents = (List<Event>)request.getAttribute("userOrganizedEvents");
+    List<Event> userInvitedEvents = (List<Event>)request.getAttribute("userInvitedEvents");
+    List<Event> userAcceptedEvents = (List<Event>)request.getAttribute("userAcceptedEvents");
+    List<Event> userPendingEvents = (List<Event>)request.getAttribute("userPendingEvents");
+    List<Event> userParticipatedEvents = (List<Event>)request.getAttribute("userParticipatedEvents");
 
 %>
 <body class="my-account">
@@ -67,7 +66,7 @@
                         <li><a data-content="all-invitations" href="#"><span><i class="icon-envelope"></i></span>Invites</a></li>
                         <li><a data-content="accepted-invitations" href="#"><span><i class="icon-accepted"></i></span>Accepted Invitation</a></li>
                         <li><a data-content="pending-invitations" href="#"><span><i class="icon-question"></i></span>Pending Invitations</a></li>
-                        <li><a data-content="participated-events" href="#"><span><i class="icon-group"></i></span>Participated Events</a></li>
+                        <li><a id="participated-events" data-content="participated-events" href="#"><span><i class="icon-group"></i></span>Participated Events</a></li>
                     </ul>
                     <!-- tabs-navi --></nav>
                     <ul style="height: auto;" class="tabs-body">
@@ -349,7 +348,6 @@
                         <li data-content="participated-events">
                             <%
                                 if(!isEmptyCollection(userParticipatedEvents)) { %>
-
                             <div class="list" id="organized-events-list">
                                 <% for (Event event : userParticipatedEvents) {
                                 %>

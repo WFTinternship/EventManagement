@@ -51,7 +51,7 @@ public class AssertionHelper {
         assertEquals(actualMedia.getType().getId(), expectedMedia.getType().getId());
         assertEquals(actualMedia.getType().getTitle(), expectedMedia.getType().getTitle());
         assertEquals(actualMedia.getDescription(), expectedMedia.getDescription());
-        assertEquals(actualMedia.getUploader(), expectedMedia.getUploader());
+        assertEquals(actualMedia.getUploader().getId(), expectedMedia.getUploader().getId());
         assertNotNull(actualMedia.getUploadDate());
     }
 

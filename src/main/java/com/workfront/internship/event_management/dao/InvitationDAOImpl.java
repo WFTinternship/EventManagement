@@ -126,11 +126,12 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
     public Invitation getInvitationById(int invitationId) throws ObjectNotFoundException, DAOException {
 
         List<Invitation> invitationList = getInvitationsByField("event_invitation.id", invitationId);
-        if (invitationList.isEmpty()) {
-            throw new ObjectNotFoundException("Invitation with id " + invitationId + " not found!");
+        if (!invitationList.isEmpty()) {
+            return invitationList.get(0);
+        } else {
+            return null;
         }
 
-        return invitationList.get(0);
     }
 
     @Override

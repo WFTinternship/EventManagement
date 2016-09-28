@@ -690,13 +690,9 @@ a{
 }
 
 /* Logged in topbar */
-.top_registration {
-
+img.avatar_icon {
+    height: 30px;
 }
-/*#login-reg-menu{*/
-    /*display:inline-block;*/
-    /*float:right;*/
-/*}*/
 
 #logout_button, #login_popup {
     background: none;

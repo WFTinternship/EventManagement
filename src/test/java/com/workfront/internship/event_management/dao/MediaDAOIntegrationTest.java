@@ -5,7 +5,13 @@ import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.*;
+import com.workfront.internship.event_management.spring.TestApplicationConfig;
 import org.junit.*;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
@@ -16,38 +22,27 @@ import static junit.framework.TestCase.*;
 /**
  * Created by Hermine Turshujyan 7/9/16.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestApplicationConfig.class)
+@ActiveProfiles("Test")
 public class MediaDAOIntegrationTest {
 
-    private static UserDAO userDAO;
-    private static CategoryDAO categoryDAO;
-    private static EventDAO eventDAO;
-    private static MediaDAO mediaDAO;
-    private static MediaTypeDAO mediaTypeDAO;
+    @Autowired
+    private UserDAO userDAO;
+    @Autowired
+    private CategoryDAO categoryDAO;
+    @Autowired
+    private EventDAO eventDAO;
+    @Autowired
+    private MediaDAO mediaDAO;
+    @Autowired
+    private MediaTypeDAO mediaTypeDAO;
 
     private MediaType testMediaType;
     private Media testMedia;
     private User testUser;
     private Event testEvent;
     private Category testCategory;
-
-
-    @BeforeClass
-    public static void setUpClass() throws DAOException {
-        userDAO = new UserDAOImpl();
-        categoryDAO = new CategoryDAOImpl();
-        eventDAO = new EventDAOImpl();
-        mediaTypeDAO = new MediaTypeDAOImpl();
-        mediaDAO = new MediaDAOImpl();
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-        userDAO = null;
-        categoryDAO = null;
-        eventDAO = null;
-        mediaTypeDAO = null;
-        mediaDAO = null;
-    }
 
     @Before
     public void setUp() throws DuplicateEntryException, DAOException {
@@ -60,7 +55,6 @@ public class MediaDAOIntegrationTest {
         deleteTestRecordsFromDB();
         deleteTestObjects();
     }
-
 
     @Test
     public void insertMedia_Success() throws DAOException, ObjectNotFoundException {
@@ -107,10 +101,12 @@ public class MediaDAOIntegrationTest {
         assertEqualMedia(media, testMedia);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void getMediaById_Not_Found() throws DAOException, ObjectNotFoundException {
         //testing method
-        mediaDAO.getMediaById(NON_EXISTING_ID);
+        Media media = mediaDAO.getMediaById(NON_EXISTING_ID);
+
+        assertNull(media);
     }
 
     @Test
@@ -157,7 +153,6 @@ public class MediaDAOIntegrationTest {
 
         //test method
         mediaDAO.updateMediaDescription(testMedia.getId(), description);
-
         //read updated record from db
         Media media = mediaDAO.getMediaById(testMedia.getId());
 
@@ -165,15 +160,16 @@ public class MediaDAOIntegrationTest {
         assertEqualMedia(media, testMedia);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void updateMediaDescription_Not_Found() throws ObjectNotFoundException, DAOException {
         String description = "Updated description";
 
         //test method
-        mediaDAO.updateMediaDescription(TestObjectCreator.NON_EXISTING_ID, description);
+        boolean success = mediaDAO.updateMediaDescription(TestObjectCreator.NON_EXISTING_ID, description);
+        assertFalse(success);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void deleteMedia_Found() throws DAOException, ObjectNotFoundException {
         //testing method
         mediaDAO.deleteMedia(testMedia.getId());
@@ -183,10 +179,12 @@ public class MediaDAOIntegrationTest {
         assertNull(media);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void deleteMedia_Not_Found() throws DAOException, ObjectNotFoundException {
         //testing method
-        mediaDAO.deleteMedia(TestObjectCreator.NON_EXISTING_ID);
+        boolean success = mediaDAO.deleteMedia(TestObjectCreator.NON_EXISTING_ID);
+
+        assertFalse(success);
     }
 
     @Test
@@ -228,7 +226,7 @@ public class MediaDAOIntegrationTest {
         testCategory.setId(categoryId);
 
         //insert event into db and get generated id
-        testEvent.setCategory(testCategory);
+        testEvent.setCategory(testCategory).setOrganizer(testUser);
         int eventId = eventDAO.addEvent(testEvent);
         testEvent.setId(eventId);
 
@@ -252,8 +250,8 @@ public class MediaDAOIntegrationTest {
     }
 
     private void deleteTestRecordsFromDB() throws DAOException {
-        mediaDAO.deleteAllMedia();
         eventDAO.deleteAllEvents();
+        mediaDAO.deleteAllMedia();
         categoryDAO.deleteAllCategories();
         userDAO.getAllUsers();
     }

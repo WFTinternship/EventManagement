@@ -113,9 +113,10 @@ $(document).ready(function () {
         },
 
         submitHandler: function (form) {
-            $('input').val(function(_, value) {
-                return $.trim(value);
-            });
+            // $('input').val(function(_, value) {
+            //     return $.trim(value);
+            // });
+            
             $('textarea').val(function(_, value) {
                 return $.trim(value);
             });
@@ -146,7 +147,7 @@ $(document).ready(function () {
                 data: formData,
                 success: function (result) {
                     if (result.status == "SUCCESS") {
-                        window.location = "/my-account";
+                        window.location = "/my-events";
                     } else if (result.status == "FAIL") {
                         window.location = "/error";
                     }
@@ -357,7 +358,7 @@ $(document).ready(function () {
     // edit event methods
     $("#event_discard").click(function (event) {
         event.preventDefault();
-        window.location = "/my-account";
+        window.location = "/my-events";
 
     })
 

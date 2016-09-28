@@ -5,48 +5,41 @@ import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.*;
+import com.workfront.internship.event_management.spring.TestApplicationConfig;
 import org.junit.*;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
 import static com.workfront.internship.event_management.AssertionHelper.assertEqualInvitations;
 import static junit.framework.TestCase.assertNull;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by Hermine Turshujyan 7/9/16.
  */
-
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestApplicationConfig.class)
+@ActiveProfiles("Test")
 public class InvitationDAOIntegrationTest {
 
-    private static UserDAO userDAO;
-    private static CategoryDAO categoryDAO;
-    private static EventDAO eventDAO;
-    private static InvitationDAO invitationDAO;
+   @Autowired
+    private UserDAO userDAO;
+    @Autowired
+    private CategoryDAO categoryDAO;
+    @Autowired
+    private EventDAO eventDAO;
+    @Autowired
+    private InvitationDAO invitationDAO;
 
     private User testUser;
     private Category testCategory;
     private Event testEvent;
     private Invitation testInvitation;
-
-
-    @BeforeClass
-    public static void setUpClass() throws DAOException {
-        userDAO = new UserDAOImpl();
-        categoryDAO = new CategoryDAOImpl();
-        eventDAO = new EventDAOImpl();
-        invitationDAO = new InvitationDAOImpl();
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-        userDAO = null;
-        categoryDAO = null;
-        eventDAO = null;
-        invitationDAO = null;
-    }
 
     @Before
     public void setUp() {
@@ -93,7 +86,6 @@ public class InvitationDAOIntegrationTest {
         assertNull(invitation);
     }
 
-    @Ignore
     @Test
     public void getInvitationsByEventId_Found() throws DAOException {
         //test method
@@ -113,7 +105,6 @@ public class InvitationDAOIntegrationTest {
         assertTrue(invitationList.isEmpty());
     }
 
-    @Ignore
     @Test
     public void getInvitationsByUserId_Found() throws DAOException {
         //test method
@@ -133,7 +124,6 @@ public class InvitationDAOIntegrationTest {
         assertTrue(invitationList.isEmpty());
     }
 
-    @Ignore
     @Test
     public void updateInvitation_Success() throws DuplicateEntryException, ObjectNotFoundException, DAOException {
         //change test invitation object
@@ -149,28 +139,31 @@ public class InvitationDAOIntegrationTest {
         assertEqualInvitations(invitation, testInvitation);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void updateInvitation_Not_Found() throws DuplicateEntryException, ObjectNotFoundException, DAOException {
         //create new invitation with no id
         Invitation newTestInvitation = TestObjectCreator.createTestInvitation();
 
         //test method
-        invitationDAO.updateInvitation(newTestInvitation);
+        boolean success = invitationDAO.updateInvitation(newTestInvitation);
+        assertFalse(success);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void deleteInvitation_Success() throws DAOException, ObjectNotFoundException {
         //test method
-        invitationDAO.deleteInvitation(testInvitation.getId());
+        boolean success = invitationDAO.deleteInvitation(testInvitation.getId());
 
         Invitation invitation = invitationDAO.getInvitationById(testInvitation.getId());
-
+        assertTrue(success);
         assertNull(invitation);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void deleteInvitation_Not_Found() throws DAOException, ObjectNotFoundException {
-        invitationDAO.deleteInvitation(TestObjectCreator.NON_EXISTING_ID);
+        boolean success = invitationDAO.deleteInvitation(TestObjectCreator.NON_EXISTING_ID);
+
+        assertFalse(success);
     }
 
     @Test
@@ -220,16 +213,16 @@ public class InvitationDAOIntegrationTest {
     //private methods
 
     private void insertTestObjectsIntoDB() throws DAOException, DuplicateEntryException {
-        //insert user info into db and get generated id
+        //insert user into db and get generated id
         int userId = userDAO.addUser(testUser);
         testUser.setId(userId);
 
-        //insert category info into db and get generated id
+        //insert category into db and get generated id
         int categoryId = categoryDAO.addCategory(testCategory);
         testCategory.setId(categoryId);
 
         //insert event into db and get generated id
-        testEvent.setCategory(testCategory);
+        testEvent.setCategory(testCategory).setOrganizer(testUser);
         int eventId = eventDAO.addEvent(testEvent);
         testEvent.setId(eventId);
 

@@ -6,7 +6,13 @@ import com.workfront.internship.event_management.exception.dao.DuplicateEntryExc
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.RecurrenceOption;
 import com.workfront.internship.event_management.model.RecurrenceType;
+import com.workfront.internship.event_management.spring.TestApplicationConfig;
 import org.junit.*;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
@@ -16,24 +22,19 @@ import static junit.framework.TestCase.*;
 /**
  * Created by Hermine Turshujyan 7/16/16.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestApplicationConfig.class)
+@ActiveProfiles("Test")
 public class RecurrenceOptionDAOIntegrationTest {
 
-    private static RecurrenceOptionDAO recurrenceOptionDAO;
-    private static RecurrenceTypeDAO recurrenceTypeDAO;
+    @Autowired
+    private RecurrenceOptionDAO recurrenceOptionDAO;
+    @Autowired
+    private RecurrenceTypeDAO recurrenceTypeDAO;
+
     private RecurrenceOption testRecurrenceOption;
     private RecurrenceType testRecurrenceType;
 
-    @BeforeClass
-    public static void setUpClass() throws DAOException {
-        recurrenceOptionDAO = new RecurrenceOptionDAOImpl();
-        recurrenceTypeDAO = new RecurrenceTypeDAOImpl();
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-        recurrenceOptionDAO = null;
-        recurrenceTypeDAO = null;
-    }
 
     @Before
     public void setUp() throws DuplicateEntryException, DAOException {
@@ -110,10 +111,11 @@ public class RecurrenceOptionDAOIntegrationTest {
         assertEqualRecurrenceOptions(recurrenceOption, testRecurrenceOption);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void getRecurrenceOptionById_Not_Found() throws ObjectNotFoundException, DAOException {
         //test method
-        recurrenceOptionDAO.getRecurrenceOptionById(TestObjectCreator.NON_EXISTING_ID);
+        RecurrenceOption recurrenceOption = recurrenceOptionDAO.getRecurrenceOptionById(TestObjectCreator.NON_EXISTING_ID);
+        assertNull(recurrenceOption);
     }
 
     @Test
@@ -151,16 +153,17 @@ public class RecurrenceOptionDAOIntegrationTest {
         assertEqualRecurrenceOptions(updatedRecurrenceOption, testRecurrenceOption);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void updateRepeatOption_Not_Found() throws DAOException, ObjectNotFoundException, DuplicateEntryException {
         //create new recurrence option with non-existing id
         RecurrenceOption recurrenceOption = TestObjectCreator.createTestRecurrenceOption();
 
         //test method
-        recurrenceOptionDAO.updateRecurrenceOption(recurrenceOption);
+        boolean success = recurrenceOptionDAO.updateRecurrenceOption(recurrenceOption);
+        assertFalse(success);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void deleteRecurrenceOption_Success() throws DAOException, ObjectNotFoundException {
         //testing method
         recurrenceOptionDAO.deleteRecurrenceOption(testRecurrenceOption.getId());
@@ -169,10 +172,11 @@ public class RecurrenceOptionDAOIntegrationTest {
         assertNull(recurrenceOption);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void deleteRecurrenceOption_Not_Found() throws DAOException, ObjectNotFoundException {
         //testing method
-        recurrenceOptionDAO.deleteRecurrenceOption(TestObjectCreator.NON_EXISTING_ID);
+        boolean success = recurrenceOptionDAO.deleteRecurrenceOption(TestObjectCreator.NON_EXISTING_ID);
+        assertFalse(success);
     }
 
     @Test

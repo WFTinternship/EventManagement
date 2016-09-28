@@ -25,7 +25,7 @@
     <script src="<c:url value="/resources/js/lib/jquery.validate.js" />"></script>
     <script src="<c:url value="/resources/js/lib/bootstrap.min.js" />"></script>
     <script src="<c:url value="/resources/js/lib/bootstrap-notify.js" />"></script>
-    <script src="<c:url value="/resources/js/my-account.js" />"></script>
+    <script src="<c:url value="/resources/js/my-events.js" />"></script>
     <script src="<c:url value="/resources/js/header.js" />"></script>
 
 

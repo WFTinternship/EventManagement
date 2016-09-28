@@ -34,32 +34,6 @@ $(document).ready(function () {
                 }, 200);
             }
         });
-
-        //hide the .hm-tabs::after element when tabbed navigation has scrolled to the end (mobile version)
-        checkScrolling(jQuery('.hm-tabs nav'));
-        jQuery(window).on('resize', function () {
-            checkScrolling(jQuery('.hm-tabs nav'));
-            tabContentWrapper.css('height', 'auto');
-        });
-        jQuery('.hm-tabs nav').on('scroll', function () {
-            checkScrolling(jQuery(this));
-        });
-
-        function checkScrolling(tabs) {
-            var totalTabWidth = parseInt(tabs.children('.tabs-navi').width()),
-                tabsViewport = parseInt(tabs.width());
-            if (tabs.scrollLeft() >= totalTabWidth - tabsViewport) {
-                tabs.parent('.hm-tabs').addClass('is-ended');
-            } else {
-                tabs.parent('.hm-tabs').removeClass('is-ended');
-            }
-        }
-
-    });
-
-    //**** Edit/Delete Event ***/
-    $("#edit-event").click(function (event) {
-
     });
 
     $("#edit-delete").click(function (event) {
@@ -82,38 +56,34 @@ $(document).ready(function () {
     });
 });
 
-function deleteEvent(id){
-    $.ajax({
-        url: '/events/' + id + "/delete",
-        type: 'GET',
-        success: function (result) {
-            if (result.status == "SUCCESS") {
-                $.notify(
-                    { message: 'Event successfully deleted' },
-                    { type: 'success',
-                        delay: 2000
-                    }
-                );
-                //delete from ui
-                $("#event_" + id).hide('slow', function(){
-                    $("#event_" + id).remove();
-                    if($('#organized-events-list').children().length == 0) {
-                        $("#organized-events-tab").html('<div class="no-events">No organized events.</div>');
-                    }
-                });
+    function deleteEvent(id){
+        $.ajax({
+            url: '/events/' + id + "/delete",
+            type: 'GET',
+            success: function (result) {
+                if (result.status == "SUCCESS") {
+                    $.notify(
+                        { message: 'Event successfully deleted' },
+                        { type: 'success',
+                            delay: 2000
+                        }
+                    );
+                    //delete from ui
+                    $("#event_" + id).hide('slow', function(){
+                        $("#event_" + id).remove();
+                        if($('#organized-events-list').children().length == 0) {
+                            $("#organized-events-tab").html('<div class="no-events">No organized events.</div>');
+                        }
+                    });
 
-            } else if (result.status == "FAIL") {
-                $.notify(
-                    { message: result.message },
-                    { type: 'danger'}
-                );
+                } else if (result.status == "FAIL") {
+                    $.notify(
+                        { message: result.message },
+                        { type: 'danger'}
+                    );
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
             }
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-        }
-    })
-}
-
-function removeDeletedEvent(){
-
-}
+        })
+    }

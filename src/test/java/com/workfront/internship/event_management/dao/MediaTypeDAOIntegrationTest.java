@@ -5,7 +5,13 @@ import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.MediaType;
+import com.workfront.internship.event_management.spring.TestApplicationConfig;
 import org.junit.*;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
@@ -15,20 +21,15 @@ import static junit.framework.TestCase.*;
 /**
  * Created by Hermine Turshujyan 7/21/16.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestApplicationConfig.class)
+@ActiveProfiles("Test")
 public class MediaTypeDAOIntegrationTest {
 
-    private static MediaTypeDAO mediaTypeDAO;
+    @Autowired
+    private MediaTypeDAO mediaTypeDAO;
+
     private MediaType testMediaType;
-
-    @BeforeClass
-    public static void setUpClass() throws DAOException {
-        mediaTypeDAO = new MediaTypeDAOImpl();
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-        mediaTypeDAO = null;
-    }
 
     @Before
     public void setUp() throws DuplicateEntryException, DAOException {
@@ -118,13 +119,14 @@ public class MediaTypeDAOIntegrationTest {
         assertEqualMediaTypes(mediaType, testMediaType);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void updateMediaType_Not_Found() throws DuplicateEntryException, DAOException, ObjectNotFoundException {
         //create new media type object with non-existing id
         MediaType mediaType = TestObjectCreator.createTestMediaType();
 
         //test method
-        mediaTypeDAO.updateMediaType(mediaType);
+        boolean success = mediaTypeDAO.updateMediaType(mediaType);
+        assertFalse(success);
     }
 
     @Test(expected = ObjectNotFoundException.class)
@@ -135,10 +137,11 @@ public class MediaTypeDAOIntegrationTest {
         mediaTypeDAO.getMediaTypeById(testMediaType.getId());
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void deleteMediaType_Not_Found() throws DAOException, ObjectNotFoundException {
         //testing method
-        mediaTypeDAO.deleteMediaType(TestObjectCreator.NON_EXISTING_ID);
+        boolean success = mediaTypeDAO.deleteMediaType(TestObjectCreator.NON_EXISTING_ID);
+        assertFalse(success);
     }
 
     @Test

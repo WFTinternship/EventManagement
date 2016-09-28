@@ -5,7 +5,13 @@ import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.User;
+import com.workfront.internship.event_management.spring.TestApplicationConfig;
 import org.junit.*;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
@@ -15,20 +21,14 @@ import static junit.framework.TestCase.*;
 /**
  * Created by Hermine Turshujyan 7/8/16.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestApplicationConfig.class)
+@ActiveProfiles("Test")
 public class UserDAOIntegrationTest {
 
-    private static UserDAO userDAO;
+    @Autowired
+    private UserDAO userDAO;
     private User testUser;
-
-    @BeforeClass
-    public static void setUpClass() throws DAOException {
-        userDAO = new UserDAOImpl();
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-        userDAO = null;
-    }
 
     @Before
     public void setUp() throws DAOException, DuplicateEntryException {
@@ -98,10 +98,12 @@ public class UserDAOIntegrationTest {
         assertEqualUsers(user, testUser);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void getUserById_Not_Found() throws DAOException, ObjectNotFoundException {
         //method under test
-        userDAO.getUserById(TestObjectCreator.NON_EXISTING_ID);
+        User user = userDAO.getUserById(TestObjectCreator.NON_EXISTING_ID);
+
+        assertNull(user);
     }
 
     @Test
@@ -113,10 +115,12 @@ public class UserDAOIntegrationTest {
         assertEqualUsers(user, testUser);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void getUserByEmail_Not_Fount() throws DAOException, ObjectNotFoundException {
         //method under test
-        userDAO.getUserByEmail(TestObjectCreator.NON_EXISTING_EMAIL);
+        User user = userDAO.getUserByEmail(TestObjectCreator.NON_EXISTING_EMAIL);
+        assertNull(user);
+
     }
 
     @Test
@@ -131,10 +135,12 @@ public class UserDAOIntegrationTest {
         assertTrue(user.isVerified());
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void updateVerifiedStatus_Not_Found() throws DAOException, ObjectNotFoundException {
         //method under test
-        userDAO.updateVerifiedStatus(TestObjectCreator.NON_EXISTING_ID);
+        boolean success = userDAO.updateVerifiedStatus(TestObjectCreator.NON_EXISTING_ID);
+
+        assertFalse(success);
     }
 
     @Test
@@ -153,29 +159,31 @@ public class UserDAOIntegrationTest {
         assertEqualUsers(user, updatedUser);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void updateUser_Not_Found() throws DAOException, DuplicateEntryException, ObjectNotFoundException {
         //create new user without id
         User updatedUser = TestObjectCreator.createTestUser();
 
         //method under test
-        userDAO.updateUser(updatedUser);
+        boolean success = userDAO.updateUser(updatedUser);
+        assertFalse(success);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void deleteUser_Success() throws DAOException, ObjectNotFoundException {
         //method under test
         userDAO.deleteUser(testUser.getId());
 
-        //non-existing user, method should throw ObjectNotFoundException
-        userDAO.getUserById(testUser.getId());
+        User user = userDAO.getUserById(testUser.getId());
+        assertNull(user);
     }
 
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void deleteUser_Not_Found() throws DAOException, ObjectNotFoundException {
         //method under test
-        userDAO.deleteUser(TestObjectCreator.NON_EXISTING_ID);
+        boolean success = userDAO.deleteUser(TestObjectCreator.NON_EXISTING_ID);
+        assertFalse(success);
     }
 
 

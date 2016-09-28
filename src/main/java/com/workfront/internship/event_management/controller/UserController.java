@@ -62,21 +62,21 @@ public class UserController {
             session.setAttribute("user", user);
             result.setStatus(ACTION_SUCCESS);
 
-            //load user related events from db and save in session
-            List<Event> userOrganizedEvents = eventService.getUserOrganizedEvents(user.getId());
-            session.setAttribute("userOrganizedEvents", userOrganizedEvents);
-
-            List<Event> userInvitedEvents = eventService.getUserInvitedEvents(user.getId());
-            session.setAttribute("userInvitedEvents", userInvitedEvents);
-
-            List<Event> userAcceptedEvents = eventService.getUserEventsByResponse(user.getId(), "Yes");
-            session.setAttribute("userAcceptedEvents", userAcceptedEvents);
-
-            List<Event> userPendingEvents = eventService.getUserEventsByResponse(user.getId(), "Waiting for response");
-            session.setAttribute("userPendingEvents", userPendingEvents);
-
-            List<Event> userParticipatedEvents = eventService.getUserParticipatedEvents(user.getId());
-            session.setAttribute("userParticipatedEvents", userParticipatedEvents);
+//            //load user related events from db and save in session
+//            List<Event> userOrganizedEvents = eventService.getUserOrganizedEvents(user.getId());
+//            session.setAttribute("userOrganizedEvents", userOrganizedEvents);
+//
+//            List<Event> userInvitedEvents = eventService.getUserInvitedEvents(user.getId());
+//            session.setAttribute("userInvitedEvents", userInvitedEvents);
+//
+//            List<Event> userAcceptedEvents = eventService.getUserEventsByResponse(user.getId(), "Yes");
+//            session.setAttribute("userAcceptedEvents", userAcceptedEvents);
+//
+//            List<Event> userPendingEvents = eventService.getUserEventsByResponse(user.getId(), "Waiting for response");
+//            session.setAttribute("userPendingEvents", userPendingEvents);
+//
+//            List<Event> userParticipatedEvents = eventService.getUserParticipatedEvents(user.getId());
+//            session.setAttribute("userParticipatedEvents", userParticipatedEvents);
 
         } catch (InvalidObjectException | OperationFailedException e) {
             result.setStatus(ACTION_FAIL);
@@ -106,10 +106,30 @@ public class UserController {
         return REGISTRATION_VIEW;
     }
 
-    @RequestMapping(value = "/my-account")
+    @RequestMapping(value = "/my-events")
     public String goToMyAccountPage(HttpServletRequest request) {
-        if(request.getSession().getAttribute("user") != null ){
-            return MY_ACCOUNT_VIEW;
+        HttpSession session = request.getSession();
+
+        User sessionUser = (User) session.getAttribute("user");
+
+        if(sessionUser != null ){
+            //load user related events from db and save in session
+            List<Event> userOrganizedEvents = eventService.getUserOrganizedEvents(sessionUser.getId());
+            request.setAttribute("userOrganizedEvents", userOrganizedEvents);
+
+            List<Event> userInvitedEvents = eventService.getUserInvitedEvents(sessionUser.getId());
+            request.setAttribute("userInvitedEvents", userInvitedEvents);
+
+            List<Event> userAcceptedEvents = eventService.getUserEventsByResponse(sessionUser.getId(), "Yes");
+            request.setAttribute("userAcceptedEvents", userAcceptedEvents);
+
+            List<Event> userPendingEvents = eventService.getUserEventsByResponse(sessionUser.getId(), "Waiting for response");
+            request.setAttribute("userPendingEvents", userPendingEvents);
+
+            List<Event> userParticipatedEvents = eventService.getUserParticipatedEvents(sessionUser.getId());
+            request.setAttribute("userParticipatedEvents", userParticipatedEvents);
+
+            return MY_EVENTS_VIEW;
         } else {
             //redirect to home
             return "redirect:/";
@@ -139,8 +159,8 @@ public class UserController {
 
             try {
                 ServletContext servletContext = request.getSession().getServletContext();
-                String uploadPath = servletContext.getRealPath("") + UPLOAD_DIRECTORY;
-                String avatarPath = fileService.saveAvatar(uploadPath, image);
+                String webContentRoot = servletContext.getRealPath("/resources/uploads");
+                String avatarPath = fileService.saveAvatar(webContentRoot, image);
 
                 //save avatar path to user obj
                 user.setAvatarPath(avatarPath);

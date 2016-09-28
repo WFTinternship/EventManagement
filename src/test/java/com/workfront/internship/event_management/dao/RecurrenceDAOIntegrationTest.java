@@ -5,7 +5,13 @@ import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.*;
+import com.workfront.internship.event_management.spring.TestApplicationConfig;
 import org.junit.*;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
@@ -15,36 +21,30 @@ import static junit.framework.TestCase.*;
 /**
  * Created by Hermine Turshujyan 7/13/16.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestApplicationConfig.class)
+@ActiveProfiles("Test")
 public class RecurrenceDAOIntegrationTest {
 
-    private static CategoryDAO categoryDAO;
-    private static EventDAO eventDAO;
-    private static RecurrenceDAO eventRecurrenceDAO;
-    private static RecurrenceTypeDAO recurrenceTypeDAO;
-    private static RecurrenceOptionDAO recurrenceOptionDAO;
+    @Autowired
+    private UserDAO userDAO;
+    @Autowired
+    private CategoryDAO categoryDAO;
+    @Autowired
+    private EventDAO eventDAO;
+    @Autowired
+    private RecurrenceDAO eventRecurrenceDAO;
+    @Autowired
+    private RecurrenceTypeDAO recurrenceTypeDAO;
+    @Autowired
+    private RecurrenceOptionDAO recurrenceOptionDAO;
 
+    private User testUser;
     private Category testCategory;
     private Event testEvent;
     private RecurrenceType testRecurrenceType;
     private RecurrenceOption testRecurrenceOption;
     private Recurrence testEventRecurrence;
-
-    @BeforeClass
-    public static void setUpClass() throws DAOException {
-        categoryDAO = new CategoryDAOImpl();
-        eventDAO = new EventDAOImpl();
-        recurrenceTypeDAO = new RecurrenceTypeDAOImpl();
-        eventRecurrenceDAO = new RecurrenceDAOImpl();
-        recurrenceOptionDAO = new RecurrenceOptionDAOImpl();
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-        categoryDAO = null;
-        eventDAO = null;
-        recurrenceTypeDAO = null;
-        eventRecurrenceDAO = null;
-    }
 
     @Before
     public void setUp() {
@@ -141,13 +141,14 @@ public class RecurrenceDAOIntegrationTest {
         assertEqualRecurrences(eventRecurrence, testEventRecurrence);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void updateEventRecurrence_Not_Found() throws DAOException, ObjectNotFoundException {
         //create new event recurrence  object with no id
         Recurrence newEventRecurrence = TestObjectCreator.createTestRecurrence();
 
         //test method
-        eventRecurrenceDAO.updateRecurrence(newEventRecurrence);
+        boolean success = eventRecurrenceDAO.updateRecurrence(newEventRecurrence);
+        assertFalse(success);
     }
 
     @Test(expected = ObjectNotFoundException.class)
@@ -160,10 +161,11 @@ public class RecurrenceDAOIntegrationTest {
         assertNull(eventRecurrence);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void deleteEventRecurrence_Not_Found() throws DAOException, ObjectNotFoundException {
         //test method
-        eventRecurrenceDAO.deleteRecurrence(TestObjectCreator.NON_EXISTING_ID);
+        boolean success = eventRecurrenceDAO.deleteRecurrence(TestObjectCreator.NON_EXISTING_ID);
+        assertFalse(success);
     }
 
     @Test
@@ -189,6 +191,7 @@ public class RecurrenceDAOIntegrationTest {
 
     //helper methods
     private void createTestObjects() {
+        testUser = TestObjectCreator.createTestUser();
         testCategory = TestObjectCreator.createTestCategory();
         testEvent = TestObjectCreator.createTestEvent();
         testRecurrenceType = TestObjectCreator.createTestRecurrenceType();
@@ -197,12 +200,16 @@ public class RecurrenceDAOIntegrationTest {
     }
 
     private void insertTestObjectsIntoDB() throws DAOException, DuplicateEntryException {
+        //insert user into db and get generated id
+        int userId = userDAO.addUser(testUser);
+        testUser.setId(userId);
+
         //insert category into db and get generated id
         int categoryId = categoryDAO.addCategory(testCategory);
         testCategory.setId(categoryId);
 
         //insert event into db and get generated id
-        testEvent.setCategory(testCategory);
+        testEvent.setCategory(testCategory).setOrganizer(testUser);
         int eventId = eventDAO.addEvent(testEvent);
         testEvent.setId(eventId);
 

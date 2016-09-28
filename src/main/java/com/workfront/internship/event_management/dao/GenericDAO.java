@@ -84,7 +84,6 @@ public class GenericDAO {
 
         Connection conn = null;
         PreparedStatement stmt = null;
-        int affectedRows = 0;
 
         try {
             //get connection
