@@ -57,8 +57,23 @@ public class EventDAOUnitTest {
     @Test(expected = DAOException.class)
     public void getEventsByCategoryId_dbError() throws DAOException {
         eventDAO.getAllEventsByCategory(1);
-
     }
+
+    @Test(expected = DAOException.class)
+    public void getAllPastEvents_dbError() throws DAOException {
+        eventDAO.getAllPastEvents();
+    }
+
+    @Test(expected = DAOException.class)
+    public void getAllUpcomingEvents_dbError() throws DAOException {
+        eventDAO.getAllUpcomingEvents();
+    }
+
+    @Test(expected = DAOException.class)
+    public void getUserAllEvents_dbError() throws DAOException {
+        eventDAO.getUserAllEvents(1);
+    }
+
 
     @Test(expected = DAOException.class)
     public void updateEvent_dbError() throws DAOException, ObjectNotFoundException {

@@ -129,7 +129,6 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     @Override
     public List<Event> getPublicEventsByCategory(int categoryId) throws DAOException {
         return getEventsByCategory(categoryId, true);
-
     }
 
     @Override
@@ -175,9 +174,9 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         List<Event> eventsList = null;
 
 
-        String query = "SELECT event.*, event_category.*, user.* FROM event_management.event_invitation " +
-        "LEFT JOIN event_management.event ON event_invitation.event_id = event.id " +
-                "LEFT JOIN event_management.event_category ON event.category_id = event_category.id " +
+        String query = "SELECT event.*, event_category.*, user.* FROM event_invitation " +
+        "LEFT JOIN event ON event_invitation.event_id = event.id " +
+                "LEFT JOIN event_category ON event.category_id = event_category.id " +
                 "LEFT JOIN user ON event.organizer_id = user.id " +
                 "WHERE event_invitation.user_id = ? AND event_invitation.user_response_id = 1 " +
                 "AND event.end < ? ORDER BY event.start DESC";
@@ -224,9 +223,9 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
         List<Event> eventsList = new ArrayList<>();
 
-        String sqlStr = "SELECT event.*, event_category.*, user.* FROM event_management.event_invitation " +
-                "LEFT JOIN event_management.event ON event_invitation.event_id = event.id " +
-                "LEFT JOIN event_management.event_category ON event.category_id = event_category.id " +
+        String sqlStr = "SELECT event.*, event_category.*, user.* FROM event_invitation " +
+                "LEFT JOIN event ON event_invitation.event_id = event.id " +
+                "LEFT JOIN event_category ON event.category_id = event_category.id " +
                 "LEFT JOIN user ON event.organizer_id =user.id " +
                 "WHERE event_invitation.user_id = ? ORDER BY event.start DESC";
         try {
@@ -517,7 +516,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         String query = "SELECT * FROM event " +
                 "LEFT JOIN event_category ON event.category_id = event_category.id "+
                 "LEFT JOIN user ON user.id = event.organizer_id " +
-                "WHERE event.start < ? " + privacyChecking + " ORDER BY event.start desc";
+                "WHERE event.end < ? " + privacyChecking + " ORDER BY event.start desc";
 
         try {
             //get connection
@@ -661,6 +660,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         }
         return eventsList;
     }
+
     private List<Event> createEventListFromRS(ResultSet rs) throws SQLException {
         List<Event> eventsList = new ArrayList<>();
 
@@ -705,22 +705,5 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             eventsList.add(event);
         }
         return eventsList;
-    }
-
-    private User createUserFromRS(ResultSet rs) throws SQLException {
-        User user = new User();
-
-        while (rs.next()) {
-            user.setId(rs.getInt("id"))
-                    .setFirstName(rs.getString("first_name"))
-                    .setLastName(rs.getString("last_name"))
-                    .setPassword(rs.getString("password"))
-                    .setEmail(rs.getString("email"))
-                    .setPhoneNumber(rs.getString("phone_number"))
-                    .setAvatarPath(rs.getString("avatar_path"))
-                    .setVerified(rs.getBoolean("verified"))
-                    .setRegistrationDate(rs.getTimestamp("registration_date"));
-        }
-        return user;
     }
 }

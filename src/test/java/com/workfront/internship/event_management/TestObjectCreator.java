@@ -21,6 +21,8 @@ public class TestObjectCreator {
     public static final String VALID_PASSWORD = "turshujyan";
     public static final String SERVLET_CONTEXT_PATH = "/Users/hermine/IdeaProjects/EventManagement/target/event-management-1.0-SNAPSHOT/";
     public static final String EXCEPTION_MESSAGE = "error message";
+    public static final String EXISTING_KEYWORD = "test";
+    public static final String NON_EXISTING_KEYWORD = "nonexistingkeyword";
 
     public static int NON_EXISTING_ID = 1;
     public static int INVALID_ID = -1;
@@ -61,8 +63,8 @@ public class TestObjectCreator {
                 .setCreationDate(new Date())
                 .setPublicAccessed(true)
                 .setGuestsAllowed(true)
-                .setStartDate(new Date())
-                .setEndDate(new Date())
+                .setStartDate(new Date(System.currentTimeMillis() + 24*60*60*1000))
+                .setEndDate(new Date(System.currentTimeMillis() + 2*24*60*60*1000))
                 .setCategory(createTestCategory().setId(VALID_ID))
                 .setOrganizer(createTestUser().setId(VALID_ID));
 
