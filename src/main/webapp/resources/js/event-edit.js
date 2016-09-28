@@ -39,7 +39,7 @@ $(document).ready(function () {
         $("#start_time-error").css("display", "none");
         $("#end_time-error").css("display", "none");
     }
-/******* Validate and submit add event form ******/
+    /******* Validate and submit add event form ******/
 
     //validator method for checkign start/end date range
     $.validator.addMethod("endDate_greater_startDate", function(value, element) {
@@ -113,6 +113,13 @@ $(document).ready(function () {
         },
 
         submitHandler: function (form) {
+            $('input').val(function(_, value) {
+                return $.trim(value);
+            });
+            $('textarea').val(function(_, value) {
+                return $.trim(value);
+            });
+
             //get invitations array
             var invitations = getSelectedInvitationEmails();
 

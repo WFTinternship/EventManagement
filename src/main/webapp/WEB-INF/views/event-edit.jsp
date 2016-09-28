@@ -132,7 +132,7 @@
                         <label for="short_desc">
                             <span class="field_name">Short description</span>
                         </label>
-                        <textarea form="event_form" name="shortDesc" id="short_desc" rows="5"><%=event.getShortDescription()%></textarea>
+                        <textarea maxlength="500" form="event_form" name="shortDesc" id="short_desc" rows="5"><%=event.getShortDescription()%></textarea>
                     </div>
                 </div>
 
@@ -141,7 +141,7 @@
                         <label for="short_desc">
                             <span class="field_name">Full description</span>
                         </label>
-                        <textarea form="event_form" name="fullDesc" id="full_desc" rows="7"><%=event.getFullDescription()%></textarea>
+                        <textarea maxlength="1500" form="event_form" name="fullDesc" id="full_desc" rows="7"><%=event.getFullDescription()%></textarea>
                     </div>
                 </div>
 

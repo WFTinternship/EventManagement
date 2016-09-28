@@ -65,7 +65,7 @@ $(document).ready(function () {
     })
 
     $('#search_form').on('submit', function () {
-        
+
         var keyword = $.trim($('#search_input').val());
         $('#search_input').val(keyword)
 
@@ -92,7 +92,6 @@ function highlightKeywordOnload(keyword) {
         highlight(regExp, keyword, $(this))
 
     })
-
 }
 
 function  highlight(regExp, value, elem) {

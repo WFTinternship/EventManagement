@@ -55,6 +55,10 @@ $(document).ready(function () {
         },
 
         submitHandler: function (form) {
+            $('input').val(function(_, value) {
+                return $.trim(value);
+            });
+            
             var formData = new FormData($('#registration_form')[0]);
 
             $.ajax({
