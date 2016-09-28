@@ -1,5 +1,5 @@
 $(document).ready(function () {
-
+    
     //validate and submit registration form
     $('#registration_form').validate({
         rules: {
@@ -58,7 +58,7 @@ $(document).ready(function () {
             $('input').val(function(_, value) {
                 return $.trim(value);
             });
-            
+
             var formData = new FormData($('#registration_form')[0]);
 
             $.ajax({

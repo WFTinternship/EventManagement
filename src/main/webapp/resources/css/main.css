@@ -268,6 +268,8 @@ img {
     position: relative;
     font-family: 'Oswald', "Open Sans", sans-serif;
     line-height: 40px;
+    padding-bottom: 20px;
+    margin-bottom:30px
 }
 
 .main_title .highlighted {

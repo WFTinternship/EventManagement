@@ -193,6 +193,15 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public List<Event> getUserInvitedEvents(int userId) {
+        if (userId < 1) {
+            throw new InvalidObjectException("Invalid user id");
+        }
+
+        return eventDAO.getUserAllEvents(userId);
+    }
+
+    @Override
     public List<Event> getUserParticipatedEvents(int userId) throws OperationFailedException {
         if (userId < 1) {
             throw new InvalidObjectException("Invalid user id");

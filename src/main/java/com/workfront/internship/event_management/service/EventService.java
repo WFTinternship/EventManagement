@@ -29,6 +29,8 @@ public interface EventService {
 
     List<Event> getUserOrganizedEvents(int userId);
 
+    List<Event> getUserInvitedEvents(int userId);
+
     List<Event> getUserParticipatedEvents(int userId);
 
     List<Event> getUserEventsByResponse(int userId, String userResponse);

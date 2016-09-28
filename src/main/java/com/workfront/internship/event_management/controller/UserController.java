@@ -66,6 +66,18 @@ public class UserController {
             List<Event> userOrganizedEvents = eventService.getUserOrganizedEvents(user.getId());
             session.setAttribute("userOrganizedEvents", userOrganizedEvents);
 
+            List<Event> userInvitedEvents = eventService.getUserInvitedEvents(user.getId());
+            session.setAttribute("userInvitedEvents", userInvitedEvents);
+
+            List<Event> userAcceptedEvents = eventService.getUserEventsByResponse(user.getId(), "Yes");
+            session.setAttribute("userAcceptedEvents", userAcceptedEvents);
+
+            List<Event> userPendingEvents = eventService.getUserEventsByResponse(user.getId(), "Waiting for response");
+            session.setAttribute("userPendingEvents", userPendingEvents);
+
+            List<Event> userParticipatedEvents = eventService.getUserParticipatedEvents(user.getId());
+            session.setAttribute("userParticipatedEvents", userParticipatedEvents);
+
         } catch (InvalidObjectException | OperationFailedException e) {
             result.setStatus(ACTION_FAIL);
             result.setMessage(e.getMessage());
@@ -128,7 +140,7 @@ public class UserController {
             try {
                 ServletContext servletContext = request.getSession().getServletContext();
                 String uploadPath = servletContext.getRealPath("") + UPLOAD_DIRECTORY;
-                String avatarPath = fileService.saveFile(uploadPath, image);
+                String avatarPath = fileService.saveAvatar(uploadPath, image);
 
                 //save avatar path to user obj
                 user.setAvatarPath(avatarPath);

@@ -29,7 +29,7 @@ import static junit.framework.TestCase.*;
 public class CategoryDAOIntegrationTest {
 
     @Autowired
-    private static CategoryDAO categoryDAO;
+    private CategoryDAO categoryDAO;
 
     private Category testCategory;
 
@@ -100,10 +100,11 @@ public class CategoryDAOIntegrationTest {
         assertEqualCategories(category, testCategory);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void getCategoryById_Not_Found() {
         //test method
-        categoryDAO.getCategoryById(NON_EXISTING_ID);
+        Category category = categoryDAO.getCategoryById(NON_EXISTING_ID);
+        assertNull(category);
     }
 
     @Test
@@ -122,27 +123,33 @@ public class CategoryDAOIntegrationTest {
         assertEqualCategories(category, updatedCategory);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void updateCategory_Not_Found() throws DAOException, DuplicateEntryException, ObjectNotFoundException {
         //create new category with non-existing id
         Category updatedCategory = TestObjectCreator.createTestCategory();
 
         //test method
-        categoryDAO.updateCategory(updatedCategory);
+        boolean success = categoryDAO.updateCategory(updatedCategory);
+
+        assertFalse(success);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void deleteCategory_Found() {
         //testing method
-        categoryDAO.deleteCategory(testCategory.getId());
+        boolean success = categoryDAO.deleteCategory(testCategory.getId());
+        Category category = categoryDAO.getCategoryById(testCategory.getId());
 
-        categoryDAO.getCategoryById(testCategory.getId());
+        assertTrue(success);
+        assertNull(category);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void deleteCategory_Not_Found() {
         //testing method
-        categoryDAO.deleteCategory(TestObjectCreator.NON_EXISTING_ID);
+        boolean success = categoryDAO.deleteCategory(TestObjectCreator.NON_EXISTING_ID);
+
+        assertFalse(success);
     }
 
     @Test

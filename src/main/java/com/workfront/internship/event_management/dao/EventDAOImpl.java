@@ -168,7 +168,41 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
     @Override
     public List<Event> getUserParticipatedEvents(int userId) throws DAOException {
-        return getUserEventsByField(userId, "participated", true);
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        List<Event> eventsList = null;
+
+
+        String query = "SELECT event.*, event_category.*, user.* FROM event_management.event_invitation " +
+        "LEFT JOIN event_management.event ON event_invitation.event_id = event.id " +
+                "LEFT JOIN event_management.event_category ON event.category_id = event_category.id " +
+                "LEFT JOIN user ON event.organizer_id = user.id " +
+                "WHERE event_invitation.user_id = ? AND event_invitation.user_response_id = 1 " +
+                "AND event.end < ? ORDER BY event.start DESC";
+
+        try {
+            //get connection
+            conn = dataSource.getConnection();
+
+            //create statement
+            stmt = conn.prepareStatement(query);
+            stmt.setInt(1, userId);
+            stmt.setDate(2, new java.sql.Date(new java.util.Date().getTime()));
+
+            //execute query
+            rs = stmt.executeQuery();
+
+            //get results
+            eventsList = createEventListFromRS(rs);
+        } catch (SQLException e) {
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
+        } finally {
+            closeResources(rs, stmt, conn);
+        }
+        return eventsList;
     }
 
     @Override
@@ -180,6 +214,41 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
     public List<Event> getAllEvents() throws DAOException {
         return getEvents(false);
     }
+
+    @Override
+    public List<Event> getUserAllEvents(int userId) {
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        List<Event> eventsList = new ArrayList<>();
+
+        String sqlStr = "SELECT event.*, event_category.*, user.* FROM event_management.event_invitation " +
+                "LEFT JOIN event_management.event ON event_invitation.event_id = event.id " +
+                "LEFT JOIN event_management.event_category ON event.category_id = event_category.id " +
+                "LEFT JOIN user ON event.organizer_id =user.id " +
+                "WHERE event_invitation.user_id = ? ORDER BY event.start DESC";
+        try {
+            //get connection
+            conn = dataSource.getConnection();
+
+            //create and initialize statement
+            stmt = conn.prepareStatement(sqlStr);
+            stmt.setInt(1, userId);
+
+            //execute query
+            rs = stmt.executeQuery();
+
+            //get results
+            eventsList = createEventListFromRS(rs);
+        } catch (SQLException e) {
+            LOGGER.error("SQL Exception", e);
+            throw new DAOException(e);
+        } finally {
+            closeResources(rs, stmt, conn);
+        }
+        return eventsList;    }
 
     @Override
     public List<Event> getPublicEvents() throws DAOException {

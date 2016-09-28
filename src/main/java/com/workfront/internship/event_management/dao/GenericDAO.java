@@ -110,8 +110,7 @@ public class GenericDAO {
         PreparedStatement stmt = null;
         boolean success = false;
 
-        String query = "DELETE FROM " + tableName + " WHERE " + columnName + " = ? " +
-                "";
+        String query = "DELETE FROM " + tableName + " WHERE " + columnName + " = ? ";
 
         try {
             //get connection

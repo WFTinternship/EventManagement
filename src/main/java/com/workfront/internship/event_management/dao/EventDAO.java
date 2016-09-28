@@ -27,6 +27,8 @@ public interface EventDAO {
 
     List<Event> getAllEvents() throws DAOException;
 
+    List<Event> getUserAllEvents(int userId);
+
     List<Event> getPublicEvents() throws DAOException;
 
     List<Event> getAllUpcomingEvents() throws DAOException;

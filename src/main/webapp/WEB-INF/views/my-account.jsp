@@ -3,6 +3,7 @@
 <%@ page import="com.workfront.internship.event_management.model.Event" %>
 <%@ page import="static com.workfront.internship.event_management.service.util.Validator.isEmptyCollection" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.workfront.internship.event_management.model.User" %>
 <%--
   Created by IntelliJ IDEA.
   User: Inmelet
@@ -38,6 +39,16 @@
     <link href="<c:url value="/resources/css/icon_font.css" />" rel="stylesheet">
 
 </head>
+<%
+    User sessionUser = (User) session.getAttribute("user");
+    List<Event> userOrganizedEvents = (List<Event>)session.getAttribute("userOrganizedEvents");
+    List<Event> userInvitedEvents = (List<Event>)session.getAttribute("userInvitedEvents");
+    List<Event> userAcceptedEvents = (List<Event>)session.getAttribute("userAcceptedEvents");
+    List<Event> userPendingEvents = (List<Event>)session.getAttribute("userPendingEvents");
+    List<Event> userParticipatedEvents = (List<Event>)session.getAttribute("userParticipatedEvents");
+
+
+%>
 <body class="my-account">
 <div id="main_wrapper">
     <!-- Main Header -->
@@ -61,7 +72,7 @@
                     <!-- tabs-navi --></nav>
                     <ul style="height: auto;" class="tabs-body">
                         <li data-content="my-events" class="selected clearfix" id="organized-events-tab">
-                            <% List<Event> userOrganizedEvents = (List<Event>)session.getAttribute("userOrganizedEvents");
+                            <%
                             if(!isEmptyCollection(userOrganizedEvents)) { %>
 
                             <div class="list" id="organized-events-list">
@@ -128,12 +139,281 @@
 
                         </li>
                         <li data-content="all-invitations">
-                        </li>
-                        <li data-content="pending-invitations">
+                            <%
+                                if(!isEmptyCollection(userInvitedEvents)) { %>
+
+                            <div class="list" id="organized-events-list">
+                                <% for (Event event : userInvitedEvents) {
+                                %>
+                                <div class="list_item" id="event_<%=event.getId()%>">
+                                    <div class="list_content">
+                                        <h6 class="title">
+                                            <a href="#"><%=event.getTitle() %></a>
+                                        </h6>
+                                        <% if(sessionUser.getId() == event.getOrganizer().getId()) { %>
+
+                                        <a id="edit-event" class="change-event-btn" href="/events/<%=event.getId()%>/edit">
+                                            <i class="icon-pencil"></i>
+                                            <span>Edit</span>
+                                        </a>
+                                        <button id="delete-event" class="change-event-btn" onclick="deleteEvent(<%=event.getId()%>)">
+                                            <i class="icon-delete"></i>
+                                            <span>Delete</span>
+                                        </button>
+                                        <% }%>
+                                        <span class="meta">
+                                       <span class="meta_part ">
+                                           <a href="#">
+                                               <i class="ev_icon icon-clock"></i>
+                                               <span><%=DateParser.parseDateToString(event.getStartDate()) %></span>
+                                           </a>
+                                       </span>
+                                    <% if (event.getLocation() != null) { %>
+
+                               <span class="meta_part">
+                                   <a href="#">
+                                       <i class="ev_icon icon-map-marker"></i>
+                                       <span>
+                                           <%=event.getLocation()%>
+                                       </span>
+                                   </a>
+                               </span>
+                                <% } %>
+                                       <span class="meta_part">
+                                           <i class="ev_icon icon-folder"></i>
+                                           <span>
+                                               <a href="#">
+                                                   <%= event.getCategory().getTitle()%>
+                                               </a>
+                                           </span>
+                                       </span>
+                                       <span class="meta_part">
+                                           <a href="#">
+                                               <i class="ev_icon icon-user"></i>
+                                               <span><%=event.getOrganizer().getFirstName() %> <%=event.getOrganizer().getLastName() %></span>
+                                           </a>
+                                       </span>
+                                   </span>
+                                        <p class="desc"><%=event.getShortDescription()%>
+                                        </p>
+
+                                        <a class="btn" href="/events/<%=event.getId()%>"><span>Details</span></a>
+                                    </div>
+                                </div>
+                                <% } %>
+                            </div>
+                            <% } else { %>
+
+                            <div class="no-events">No events.</div>
+                            <% } %>
+
                         </li>
                         <li data-content="accepted-invitations">
+                            <%
+                                if(!isEmptyCollection(userAcceptedEvents)) { %>
+
+                            <div class="list" id="organized-events-list">
+                                <% for (Event event : userAcceptedEvents) {
+                                %>
+                                <div class="list_item" id="event_<%=event.getId()%>">
+                                    <div class="list_content">
+                                        <h6 class="title">
+                                            <a href="#"><%=event.getTitle() %></a>
+                                        </h6>
+                                        <% if(sessionUser.getId() == event.getOrganizer().getId()) { %>
+
+                                        <a id="edit-event" class="change-event-btn" href="/events/<%=event.getId()%>/edit">
+                                            <i class="icon-pencil"></i>
+                                            <span>Edit</span>
+                                        </a>
+                                        <button id="delete-event" class="change-event-btn" onclick="deleteEvent(<%=event.getId()%>)">
+                                            <i class="icon-delete"></i>
+                                            <span>Delete</span>
+                                        </button>
+                                        <% }%>
+                                        <span class="meta">
+                                       <span class="meta_part ">
+                                           <a href="#">
+                                               <i class="ev_icon icon-clock"></i>
+                                               <span><%=DateParser.parseDateToString(event.getStartDate()) %></span>
+                                           </a>
+                                       </span>
+                                    <% if (event.getLocation() != null) { %>
+
+                               <span class="meta_part">
+                                   <a href="#">
+                                       <i class="ev_icon icon-map-marker"></i>
+                                       <span>
+                                           <%=event.getLocation()%>
+                                       </span>
+                                   </a>
+                               </span>
+                                <% } %>
+                                       <span class="meta_part">
+                                           <i class="ev_icon icon-folder"></i>
+                                           <span>
+                                               <a href="#">
+                                                   <%= event.getCategory().getTitle()%>
+                                               </a>
+                                           </span>
+                                       </span>
+                                       <span class="meta_part">
+                                           <a href="#">
+                                               <i class="ev_icon icon-user"></i>
+                                               <span><%=event.getOrganizer().getFirstName() %> <%=event.getOrganizer().getLastName() %></span>
+                                           </a>
+                                       </span>
+                                   </span>
+                                        <p class="desc"><%=event.getShortDescription()%>
+                                        </p>
+
+                                        <a class="btn" href="/events/<%=event.getId()%>"><span>Details</span></a>
+                                    </div>
+                                </div>
+                                <% } %>
+                            </div>
+                            <% } else { %>
+
+                            <div class="no-events">No events.</div>
+                            <% } %>
+                        </li>
+                        <li data-content="pending-invitations">
+                            <%
+                                if(!isEmptyCollection(userPendingEvents)) { %>
+
+                            <div class="list" id="organized-events-list">
+                                <% for (Event event : userPendingEvents) {
+                                %>
+                                <div class="list_item" id="event_<%=event.getId()%>">
+                                    <div class="list_content">
+                                        <h6 class="title">
+                                            <a href="#"><%=event.getTitle() %></a>
+                                        </h6>
+                                        <% if(sessionUser.getId() == event.getOrganizer().getId()) { %>
+
+                                        <a id="edit-event" class="change-event-btn" href="/events/<%=event.getId()%>/edit">
+                                            <i class="icon-pencil"></i>
+                                            <span>Edit</span>
+                                        </a>
+                                        <button id="delete-event" class="change-event-btn" onclick="deleteEvent(<%=event.getId()%>)">
+                                            <i class="icon-delete"></i>
+                                            <span>Delete</span>
+                                        </button>
+                                        <% }%>
+                                        <span class="meta">
+                                       <span class="meta_part ">
+                                           <a href="#">
+                                               <i class="ev_icon icon-clock"></i>
+                                               <span><%=DateParser.parseDateToString(event.getStartDate()) %></span>
+                                           </a>
+                                       </span>
+                                    <% if (event.getLocation() != null) { %>
+
+                               <span class="meta_part">
+                                   <a href="#">
+                                       <i class="ev_icon icon-map-marker"></i>
+                                       <span>
+                                           <%=event.getLocation()%>
+                                       </span>
+                                   </a>
+                               </span>
+                                <% } %>
+                                       <span class="meta_part">
+                                           <i class="ev_icon icon-folder"></i>
+                                           <span>
+                                               <a href="#">
+                                                   <%= event.getCategory().getTitle()%>
+                                               </a>
+                                           </span>
+                                       </span>
+                                       <span class="meta_part">
+                                           <a href="#">
+                                               <i class="ev_icon icon-user"></i>
+                                               <span><%=event.getOrganizer().getFirstName() %> <%=event.getOrganizer().getLastName() %></span>
+                                           </a>
+                                       </span>
+                                   </span>
+                                        <p class="desc"><%=event.getShortDescription()%>
+                                        </p>
+
+                                        <a class="btn" href="/events/<%=event.getId()%>"><span>Details</span></a>
+                                    </div>
+                                </div>
+                                <% } %>
+                            </div>
+                            <% } else { %>
+
+                            <div class="no-events">No events.</div>
+                            <% } %>
                         </li>
                         <li data-content="participated-events">
+                            <%
+                                if(!isEmptyCollection(userParticipatedEvents)) { %>
+
+                            <div class="list" id="organized-events-list">
+                                <% for (Event event : userParticipatedEvents) {
+                                %>
+                                <div class="list_item" id="event_<%=event.getId()%>">
+                                    <div class="list_content">
+                                        <h6 class="title">
+                                            <a href="#"><%=event.getTitle() %></a>
+                                        </h6>
+                                        <% if(sessionUser.getId() == event.getOrganizer().getId()) { %>
+
+                                        <a id="edit-event" class="change-event-btn" href="/events/<%=event.getId()%>/edit">
+                                            <i class="icon-pencil"></i>
+                                            <span>Edit</span>
+                                        </a>
+                                        <button id="delete-event" class="change-event-btn" onclick="deleteEvent(<%=event.getId()%>)">
+                                            <i class="icon-delete"></i>
+                                            <span>Delete</span>
+                                        </button>
+                                        <% }%>
+                                        <span class="meta">
+                                       <span class="meta_part ">
+                                           <a href="#">
+                                               <i class="ev_icon icon-clock"></i>
+                                               <span><%=DateParser.parseDateToString(event.getStartDate()) %></span>
+                                           </a>
+                                       </span>
+                                    <% if (event.getLocation() != null) { %>
+
+                               <span class="meta_part">
+                                   <a href="#">
+                                       <i class="ev_icon icon-map-marker"></i>
+                                       <span>
+                                           <%=event.getLocation()%>
+                                       </span>
+                                   </a>
+                               </span>
+                                <% } %>
+                                       <span class="meta_part">
+                                           <i class="ev_icon icon-folder"></i>
+                                           <span>
+                                               <a href="#">
+                                                   <%= event.getCategory().getTitle()%>
+                                               </a>
+                                           </span>
+                                       </span>
+                                       <span class="meta_part">
+                                           <a href="#">
+                                               <i class="ev_icon icon-user"></i>
+                                               <span><%=event.getOrganizer().getFirstName() %> <%=event.getOrganizer().getLastName() %></span>
+                                           </a>
+                                       </span>
+                                   </span>
+                                        <p class="desc"><%=event.getShortDescription()%>
+                                        </p>
+
+                                        <a class="btn" href="/events/<%=event.getId()%>"><span>Details</span></a>
+                                    </div>
+                                </div>
+                                <% } %>
+                            </div>
+                            <% } else { %>
+
+                            <div class="no-events">No events.</div>
+                            <% } %>
                         </li>
                     </ul>
                     <!-- Tabs Content --></div>
