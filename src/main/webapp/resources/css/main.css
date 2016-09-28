@@ -48,7 +48,7 @@ b {
 /* Rounded corners */
 .login_dialog, input[type="text"], input[type=button], input[type="password"], .btn, .btn_a, .lf_header, .lf_forget_pass,
 #suggested_emails, #respond_wrapper, [data-notify="container"], .list_item, #selected_img, .event_img,
-#category_select {
+#category_select , .photo-item, .img_prev_item, .thumb-img{
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     -ms-border-radius: 3px;
@@ -837,6 +837,12 @@ a{
     display: inline-block;
     margin-left: 10px;
 }
+#img_prev_photos{
+    opacity:0;
+}
+#img_prev_photos .thumb-img{
+    margin-right:5px;
+}
 .visible_thumb{
     opacity:1 !important;
 }
@@ -1012,6 +1018,20 @@ position:relative;
     float: left;
     width: 75%;
 }
+
+.photos_wrapper{
+    border-top: dotted 1px #ccc;
+    padding: 10px 0px;
+}
+
+img.photo-item {
+    height: 150px;
+    margin-top: 10px;
+    margin-right: 10px;
+    width:180px;
+    height:110px;
+}
+
 .event_details_page .meta-row{
     margin-bottom: 10px;
     border-top: dotted 1px #ccc;
@@ -1041,9 +1061,22 @@ position:relative;
     margin-bottom:30px;
 }
 
-.desc_header{
-    margin-bottom:20px;
-    font-weight:bold;
+.desc_header {
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #00AFB2;
+}
+
+#upload_images {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: dotted 1px #ccc;
+}
+
+.uploader_name {
+    margin-bottom: 10px;
+    margin-top: 20px;
+    font-style:italic;
 }
 span.meta_header {
     font-size: 13px;
@@ -1059,6 +1092,7 @@ span.meta_header {
 .guest_list{
     margin-top:35px;
     border-top: dotted 1px #ccc;
+    padding-bottom: 10px;
 }
 
 #respond_wrapper {

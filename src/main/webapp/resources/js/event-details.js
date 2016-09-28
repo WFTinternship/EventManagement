@@ -1,6 +1,10 @@
 $(document).ready(function () {
 
-    $("#lightGallery").lightGallery();
+    $("#animated-thumbnials").lightGallery({
+        thumbnail:true,
+        animateThumb: false,
+        showThumbByDefault: false
+    });
 
     
     $("#change_response").click(function () {
@@ -13,7 +17,34 @@ $(document).ready(function () {
         $("#change_response").click();
     })
 
+//validating input type=file
+    $.validator.addMethod('fileSize', function(value, element, param) {
+        return this.optional(element) || (element.files[0].size <= param)
+    });
+
     $("#upload_images").validate({
+        rules: {
+            eventImages:{
+                required:true,
+                extension: "png|jpeg|jpg",
+                fileSize: 5242880, //5MB
+            },
+        },
+
+        messages: {
+            eventImages: {
+                required:"Please, choose photo(s)",
+                extension: "Only .jpg and .png files are allowed",
+                fileSize: "Image size should be less then 5MB"
+            }
+        },
+
+        errorPlacement: function(error, element) {
+            if (element.attr("name") == "eventImages" )
+                error.insertAfter("#upload_photos_btn");
+            else
+                error.insertAfter(element);
+        },
 
         submitHandler: function (form) {
             debugger;
@@ -38,6 +69,21 @@ $(document).ready(function () {
         }
 
     })
+    // //show selected images
+    // $("#event_images").on("change", function (elem) {
+    //     debugger;
+    //     if (this.files && this.files[0] && $("#event_images").valid()) {
+    //         $(this.files).each(function () {
+    //             var reader = new FileReader();
+    //             reader.readAsDataURL(this);
+    //
+    //             reader.onload = function (e) {
+    //             $('#img_prev_div').append("<img id='img_prev' src='" + e.target.result + "'>");
+    //             };
+    //
+    //         });
+    //     }
+    // })
 
 })
 
@@ -89,6 +135,23 @@ function saveResponse(elem, id){
 
 function emailCurrentPage(){
     var subject = $(".title a").text();
-
     window.location.href="mailto:?subject="+ subject + "&body=" + encodeURI(window.location.href);
+}
+
+//preview images before upload
+function preview(input) {
+
+    if (input.files && input.files[0] && $("#event_images").valid()) {
+        $(input.files).each(function () {
+            var reader = new FileReader();
+            reader.readAsDataURL(this);
+            reader.onload = function (e) {
+                $("#img_prev_photos").append("<img class='thumb-img' src='" + e.target.result + "'>");
+                $("#img_prev_photos").fadeTo(1000 , 1);
+            }
+        });
+    } else {
+        $("#img_prev_photos").html('');
+        $("#img_prev_photos").fadeTo(1000 , 0);
+    }
 }

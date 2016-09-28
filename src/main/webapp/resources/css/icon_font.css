@@ -128,3 +128,7 @@
 .icon-search::before{
     content: "\f002";
 }
+
+.icon-img::before{
+    content: "\f03e";
+}

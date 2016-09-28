@@ -268,7 +268,6 @@ $(document).ready(function () {
 
             reader.readAsDataURL(this.files[0]);
         } else {
-            debugger;
             $('#img_prev').fadeTo(1000,0);
         }
     })
@@ -371,3 +370,4 @@ $(document).ready(function () {
             reader.readAsDataURL(input.files[0]);
         }
     }
+

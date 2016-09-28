@@ -3,13 +3,13 @@
 <%@ page import="com.workfront.internship.event_management.service.CategoryServiceImpl" %>
 <%@ page import="com.workfront.internship.event_management.service.EventService" %>
 <%@ page import="com.workfront.internship.event_management.service.EventServiceImpl" %>
-<%@ page import="java.util.List" %>
 <%@ page import="static com.workfront.internship.event_management.service.util.Validator.isEmptyCollection" %>
 <%@ page import="com.workfront.internship.event_management.common.DateParser" %>
 <%@ page import="com.workfront.internship.event_management.model.*" %>
 <%@ page import="static com.workfront.internship.event_management.service.util.Validator.isEmptyString" %>
 <%@ page import="static com.workfront.internship.event_management.common.DateParser.getTimeStringFromDate" %>
-<%@ page import="static com.workfront.internship.event_management.common.DateParser.getDateStringFromDate" %><%--
+<%@ page import="static com.workfront.internship.event_management.common.DateParser.getDateStringFromDate" %>
+<%@ page import="java.util.*" %><%--
   Created by IntelliJ IDEA.
   User: Inmelet
   Date: 8/8/2016
@@ -25,8 +25,11 @@
     <script src="<c:url value="/resources/js/lib/jquery.validate.js" />"></script>
     <script src="<c:url value="/resources/js/lib/bootstrap.min.js" />"></script>
     <script src="<c:url value="/resources/js/lib/bootstrap-notify.js" />"></script>
-    <script src="<c:url value="/resources/js/event-details.js" />"></script>
     <script src="<c:url value="/resources/js/lib/jquery.validate.js" />"></script>
+    <script src="<c:url value="/resources/js/lib/jquery.validate-additional-methods.js" />"></script>
+    <script src="<c:url value="/resources/js/lib/lightgallery.js" />"></script>
+    <script src="<c:url value="/resources/js/lib/lightgallery.min.js" />"></script>
+    <script src="<c:url value="/resources/js/event-details.js" />"></script>
 
     <script src="<c:url value="/resources/js/header.js" />"></script>
 
@@ -39,6 +42,8 @@
     <link href="<c:url value="/resources/css/lib/bootstrap.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/lib/bootstrap.min.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/lib/bootstrap-notify.animate.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/lib/lightgallery.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/lib/lightgallery.min.css" />" rel="stylesheet">
 
     <link href="<c:url value="/resources/css/main.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/icon_font.css" />" rel="stylesheet">
@@ -46,16 +51,23 @@
     <%
         Event event = (Event) request.getAttribute("event");
         User sessionUser = (User) session.getAttribute("user");
-        String action = (String) request.getAttribute("action");
+        String action = request.getAttribute("action") != null ? (String) request.getAttribute("action") : " ";
 
         //check if is ALL DAY event
         boolean isAllDay = false;
         String startTimeString = getTimeStringFromDate(event.getStartDate());
         String endTimeString = getTimeStringFromDate(event.getEndDate());
 
-        if(event.getStartDate() != null && event.getEndDate() != null &&
+        if (event.getStartDate() != null && event.getEndDate() != null &&
                 startTimeString.equals("00:00") && endTimeString.equals("23:59")){
             isAllDay = true;
+        }
+
+        //check if event is passed
+        Date today = new Date();
+        boolean isPassedEvent = false;
+        if(today.after(event.getStartDate()) && event.getStartDate().before(today)) {
+            isPassedEvent = true;
         }
 
     %>
@@ -95,7 +107,7 @@
                     <div class="list_item">
                         <div class="list_content">
                             <%
-                                if (action == "invitation-responded") {
+                                if (action.equals("invitation-responded")) {
                             %>
                             <script type="text/javascript">
                                 showResponseSavedMessage();
@@ -180,18 +192,18 @@
                             <div id="map"></div>
 
                             <% if (!isEmptyString(event.getShortDescription())) { %>
-                                <p class="desc">
+                                <div class="desc">
                                     <div class="desc_header">Short description:</div>
                                     <%=event.getShortDescription()%>
-                                </p>
+                                </div>
                             <% }
 
                                 if (!isEmptyString(event.getFullDescription())) { %>
-                             <p class="desc">
-                            <div class="desc_header">Full description:</div>
+                             <div class="desc">
+                                <div class="desc_header">Full description:</div>
                                 <%=event.getFullDescription()%>
 
-                                </p>
+                             </div>
                             <% } %>
                                 <% List<Invitation> invitations = event.getInvitations();
                                     if(!isEmptyCollection(invitations)) { %>
@@ -239,40 +251,75 @@
                                     </div>
                                 </div>
                             <% }%>
-                            </div>
 
-                        <div>Photos:</div>
-                            <li data-src="img/img1.jpg">
-                                <img src="img/thumb1.jpg" />
-                            </li>
-                            <li data-src="img/img2.jpg">
-                                <img src="img/thumb2.jpg" />
-                            </li>
-                        </ul>
 
                         <%
                             List<Media> mediaList = event.getMedia();
-                            if(!isEmptyCollection(mediaList)){ %>
-                                <ul id="lightGallery">
+                            if(!isEmptyCollection(mediaList)) { %>
+                            <div class="photos_wrapper">
+                                <div class="desc_header">Photos:</div>
 
-                        <% for (Media media : mediaList){
-                                int userId = media.getUploader().getId();
-                                String imagePath = "/resources/uploads/events/event" +
-                                event.getId() + "/user" + userId + "/" + media.getName();
+                                <div id="animated-thumbnials">
+
+
+                        <% Map<String, List<Media>> userMediaMap = new HashMap<>();
+                                for (Media media: mediaList) {
+                                    User user = media.getUploader();
+                                    String userName = user.getFirstName() + " " + user.getLastName() +
+                                            " ( "+ user.getEmail() + " )";
+
+                                    List<Media> currentUserMediaList = userMediaMap.get(userName);
+                                    if(currentUserMediaList == null) {
+                                        currentUserMediaList = new ArrayList<>();
+                                        currentUserMediaList.add(media);
+                                    } else {
+                                        currentUserMediaList.add(media);
+                                    }
+
+                                    userMediaMap.put(userName, currentUserMediaList);
+                                }
                         %>
-                            <li data-src="<%=imagePath%>">
-                                <img src="<%=imagePath%>">
-                            </li>
-                           <% } %>
-                            <ul/>
-                          <% } %>
-                        <% if (sessionUser != null) { %>
-                        <form id="upload_images" enctype="multipart/form-data">
+
+
+                        <%
+                            for (Map.Entry<String, List<Media>> entry : userMediaMap.entrySet()) {
+                                List<Media> userMediaList = entry.getValue();
+                                String userName = entry.getKey();
+                        %>
+                        <div class="uploader_name"><%=userName%></div>
+                            <%
+                                for ( Media media: userMediaList ) {
+                                    User user = media.getUploader();
+                                    String imagePath = "/resources/uploads/events/event" +
+                                            event.getId() + "/user" + user.getId() + "/" + media.getName();
+                            %>
+                                <a data-src="<%=imagePath%>">
+                                    <img class="photo-item" src="<%=imagePath%>">
+                                </a>
+                            <% } %>
+
+                            <% } %>
+                            </div>
+                            </div>
+
+
+                            <% } %>
+
+                        <% if (sessionUser != null && isPassedEvent) { %>
+
+                            <form id="upload_images" enctype="multipart/form-data">
                             <input type="hidden" name="eventId" value="<%=event.getId()%>">
-                            <input type="file" class="input_file" name="eventImages" id="event_images" multiple/>
-                            <input type="submit" Value="Save">
-                        </form>
+                                <div class="desc_header">Add photos:</div>
+                                <div class="fileUpload btn btn-primary">
+                                        <i class="icon-img"></i>
+                                        <span class="btn_title" >Choose photos</span>
+                                        <input onchange="preview(this);" type="file" class="input_file" name="eventImages" id="event_images" multiple/>
+                                    </div>
+                                <input id="upload_photos_btn" type="submit" Value="Upload" class="btn">
+                                <div id="img_prev_photos" ></div>
+                            </form>
                         <% } %>
+                    </div>
                     </div>
                 </div>
             </div>
