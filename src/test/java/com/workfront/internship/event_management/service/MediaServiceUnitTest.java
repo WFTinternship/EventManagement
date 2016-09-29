@@ -17,6 +17,7 @@ import java.util.List;
 import static com.workfront.internship.event_management.AssertionHelper.assertEqualMedia;
 import static com.workfront.internship.event_management.TestObjectCreator.*;
 import static junit.framework.TestCase.*;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -86,6 +87,46 @@ public class MediaServiceUnitTest {
         Media actualMedia = mediaService.addMedia(testMedia);
 
         assertEqualMedia(actualMedia, testMedia);
+    }
+
+    @Test(expected = InvalidObjectException.class)
+    public void addMediaList_EmptyList() {
+        //method under test
+        mediaService.addMediaList(new ArrayList<Media>());
+    }
+
+    @Test(expected = InvalidObjectException.class)
+    public void addMediaList_InvalidMedia() {
+        testMedia.setUploader(null);
+
+        List<Media> testMediaList = new ArrayList<>();
+        testMediaList.add(testMedia);
+
+        //method under test
+        mediaService.addMediaList(testMediaList);
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void addMediaList_Duplicate() {
+        List<Media> testMediaList = new ArrayList<>();
+        testMediaList.add(testMedia);
+
+        doThrow(DuplicateEntryException.class).when(mediaDAO).addMediaList(testMediaList);
+
+        //method under test
+        mediaService.addMediaList(testMediaList);
+    }
+
+    @Test
+    public void addMediaList_Success() {
+        testMedia.setId(VALID_ID);
+        List<Media> testMediaList = new ArrayList<>();
+        testMediaList.add(testMedia);
+
+        //method under test
+        mediaService.addMediaList(testMediaList);
+
+        verify(mediaDAO).addMediaList(testMediaList);
     }
 
     //Testing getMediaById method

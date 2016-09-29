@@ -46,21 +46,26 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public void addMediaList(List<Media> medias) {
+    public void addMediaList(List<Media> mediaList) {
 
-        if(isEmptyCollection(medias)){
+        if(isEmptyCollection(mediaList)){
             throw new InvalidObjectException("Empty media list");
         }
 
-        for(Media media: medias) {
+        for(Media media: mediaList) {
             if (!isValidMedia(media)) {
                 throw new InvalidObjectException("Invalid media");
             }
         }
 
         //insert media list into d
-        mediaDAO.addMediaList(medias);
+        try {
+            mediaDAO.addMediaList(mediaList);
+        } catch (DuplicateEntryException e) {
+            logger.error(e.getMessage(), e);
+            throw new OperationFailedException("Media already exists!", e);
         }
+    }
 
     @Override
     public Media getMediaById(int mediaId) {
