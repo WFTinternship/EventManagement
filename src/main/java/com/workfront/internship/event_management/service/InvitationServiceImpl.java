@@ -37,13 +37,17 @@ public class InvitationServiceImpl implements InvitationService {
     public Invitation createInvitation(String email) {
 
         if (!isValidEmailAddressForm(email)) {
-            throw new InvalidObjectException("Invalid email address form");
+            String message = "Invalid email address form";
+            logger.error(message);
+            throw new InvalidObjectException(message);
         }
 
         User user = userService.getUserByEmail(email);
 
         if (user == null) {
-            throw new ObjectNotFoundException("User not found!");
+            String message = "User with this email not found!";
+            logger.error(message);
+            throw new ObjectNotFoundException(message);
         } else {
 
             Invitation invitation = new Invitation();
@@ -59,14 +63,22 @@ public class InvitationServiceImpl implements InvitationService {
 
     @Override
     public Invitation addInvitation(Invitation invitation) {
+
         if (!isValidInvitation(invitation)) {
-            throw new InvalidObjectException("Invalid invitation");
+            String message = "Invalid invitation";
+            logger.error(message);
+            throw new InvalidObjectException(message);
         }
 
         try {
             //insert invitation into db
             int invitationId = invitationDAO.addInvitation(invitation);
 
+            if (invitationId == 0){
+                String message = "Could not add invitation";
+                logger.error(message);
+                throw new OperationFailedException(message);
+            }
             //set generated it to invitation
             invitation.setId(invitationId);
         } catch (DuplicateEntryException e) {
@@ -79,11 +91,23 @@ public class InvitationServiceImpl implements InvitationService {
 
     @Override
     public void addInvitations(List<Invitation> invitationList) {
+
         if (isEmptyCollection(invitationList)) {
-            throw new InvalidObjectException("Empty invitation list");
+            String message = "Empty invitation list";
+            logger.error(message);
+            throw new InvalidObjectException(message);
+        }
+
+        for(Invitation invitation : invitationList){
+            if (!isValidInvitation(invitation)) {
+                String message = "Invalid invitation";
+                logger.error(message);
+                throw new InvalidObjectException(message);
+            }
         }
 
         try {
+
             //insert invitation list into db
             invitationDAO.addInvitations(invitationList);
         } catch (DuplicateEntryException e) {

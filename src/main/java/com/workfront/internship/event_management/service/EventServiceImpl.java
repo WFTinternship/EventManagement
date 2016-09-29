@@ -10,8 +10,10 @@ import com.workfront.internship.event_management.model.Invitation;
 import com.workfront.internship.event_management.model.Media;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -29,8 +31,6 @@ public class EventServiceImpl implements EventService {
     @Autowired
     private EventDAO eventDAO;
     @Autowired
-    private RecurrenceService recurrenceService;
-    @Autowired
     private CategoryService categoryService;
     @Autowired
     private InvitationService invitationService;
@@ -38,49 +38,69 @@ public class EventServiceImpl implements EventService {
     private EmailService emailService;
     @Autowired
     private MediaService mediaService;
+    @Autowired
+    private FileService fileService;
 
     @Override
     public Event createEvent(Event event) {
-        //set creation date
-        setDefaultFields(event);
+
+        event.setCreationDate(new Date());
 
         //check if event object is valid
         if (!isValidEvent(event)) {
-            throw new InvalidObjectException("Invalid event");
+            String message = "Invalid event";
+            logger.error(message);
+            throw new InvalidObjectException(message);
         }
 
         int eventId;
-
         if (isEmptyCollection(event.getEventRecurrences())) {
             eventId = eventDAO.addEvent(event);
         } else {
             eventId = eventDAO.addEventWithRecurrences(event);
         }
 
+        if (eventId == 0){
+            String message = "Unable to add event";
+            logger.error(message);
+            throw new OperationFailedException(message);
+        }
+
         //set generated id to event
         event.setId(eventId);
 
-        Category category = categoryService.getCategoryById(event.getCategory().getId());
-
-        //read category info from db
-        event.setCategory(category);
-
-        if(eventId == 0){
-            throw new OperationFailedException("Unable to add event!");
-        }
-
         if (!isEmptyCollection(event.getInvitations())) {
+
             //set event id to all invitations
             List<Invitation> invitations = event.getInvitations();
             for (int i = 0; i < invitations.size(); i++) {
                 Invitation invitation = invitations.get(i);
                 invitation.setEventId(eventId);
             }
-            //insert into db
-            invitationService.addInvitations(event.getInvitations());
 
-            //send invitations to invitees
-            emailService.sendInvitations(event);
+            try {
+                //insert into db
+                invitationService.addInvitations(event.getInvitations());
+            } catch (InvalidObjectException | OperationFailedException e) {
+                String message = "Could not save invitations (" + e.getMessage() +
+                        "). Event successfully added.";
+                logger.error(message);
+                throw new OperationFailedException(message);
+            }
+
+            try {
+                //read category info(title) from db for email template
+                Category category = categoryService.getCategoryById(event.getCategory().getId());
+                event.setCategory(category);
+
+                //send invitations to invitees
+                emailService.sendInvitations(event);
+            } catch (MailException e) {
+                String message = "Could not send email invitations. " +
+                        "Event with invitations successfully added.";
+                logger.error(message);
+                throw new OperationFailedException(message);
+            }
         }
 
         return event;
@@ -117,12 +137,19 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> getAllEventsByKeyword(String keyword) {
-        // TODO: 9/27/16 validate keyword
+        if(isEmptyString(keyword)){
+            throw new InvalidObjectException("Empty keyword");
+        }
+
         return eventDAO.getAllEventsByKeyword(keyword);
     }
 
     @Override
     public List<Event> getPublicEventsByKeyword(String keyword) {
+        if(isEmptyString(keyword)){
+            throw new InvalidObjectException("Empty keyword");
+        }
+
         return eventDAO.getPublicEventsByKeyword(keyword);
     }
 
@@ -146,40 +173,59 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public boolean editEvent(Event event) throws OperationFailedException {
+
         if (!isValidEvent(event)) {
             throw new InvalidObjectException("Invalid event");
         }
-        //add modification date
+
+        //get event's image name before update
+        Event oldEvent = getEventById(event.getId());
+        String oldImageName = oldEvent.getImageName();
+
+        //set modification date
         event.setLastModifiedDate(new Date());
 
-        //if image deleted in edit page, delete from file system
-        if(isEmptyString(event.getFileName())) {
-            Event eventBeforeUpdate = getEventById(event.getId());
-            String prevImageName = eventBeforeUpdate.getImageName();
+        //update event main info
+        boolean success = eventDAO.updateEvent(event);
+        if (!success) {
+            String message = "Could not update event information";
+            logger.error(message);
+            throw new OperationFailedException(message);
+        }
 
-            if (!isEmptyString(prevImageName)) {
+        //if event is successfully updated and image is changed/deleted in edit page,
+        //delete also previous from fs
+        if (!isEmptyString(oldImageName)) {
+            String newFileName = event.getFileName();
+            if (isEmptyString(newFileName) || !newFileName.equals(oldImageName)) {
+                try {
+                    fileService.deleteFile(oldImageName);
+                } catch (IOException e) {
+                    logger.warn("Could not delete old image from file system");
+                }
                 // TODO: 9/26/16 delete image from fs
             }
         }
 
-        //update event main info
-        boolean success = eventDAO.updateEvent(event);
-
+        //read updated main data from db for invitation template (included category title and event creation date)
         Category updatedCategory = categoryService.getCategoryById(event.getCategory().getId());
-
-        //read updated main data from db (included category title and event creation date)
         event.setCategory(updatedCategory);
 
-        if (success) {
-            //update event recurrences
-            recurrenceService.editRecurrenceList(event.getId(), event.getEventRecurrences());
-
+        try {
             //update event invitations
             invitationService.editInvitationList(event);
-        } else {
-            throw new ObjectNotFoundException("Event not found");
-        }
 
+        } catch (InvalidObjectException | OperationFailedException e) {
+            String message = "Could not edit invitations (" + e.getMessage() +
+                    "). Event main info successfully edited.";
+            logger.error(message);
+            throw new OperationFailedException(message);
+        } catch (MailException e){
+            String message = "Could not send email invitations. " +
+                    "Event with invitations successfully edited.";
+            logger.error(message);
+            throw new OperationFailedException(message);
+        }
         return success;
     }
 
@@ -277,10 +323,5 @@ public class EventServiceImpl implements EventService {
                 .setPublicAccessed(true);
 
         return event;
-    }
-
-    //helper methods
-    private void setDefaultFields(Event event) {
-        event.setCreationDate(new Date());
     }
 }

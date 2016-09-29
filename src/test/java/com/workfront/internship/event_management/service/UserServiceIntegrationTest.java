@@ -111,7 +111,7 @@ public class UserServiceIntegrationTest {
     }
 
     @Test(expected = ObjectNotFoundException.class)
-    public void updateVerifiedStatus_NotFound() {
+    public void updateVerifiedStatus_Failed() {
         //method under test
         userService.verifyAccount(NON_EXISTING_ID);
     }
@@ -133,9 +133,9 @@ public class UserServiceIntegrationTest {
     }
 
     @Test(expected = ObjectNotFoundException.class)
-    public void updateUser_NotFound() {
+    public void updateUser_Fail() {
         //create new user without id
-        User updatedUser = createTestUser();
+        User updatedUser = createTestUser().setId(testUser.getId()-1);
 
         //method under test
         userService.editAccount(updatedUser);

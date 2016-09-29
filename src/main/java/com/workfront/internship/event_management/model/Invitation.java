@@ -24,15 +24,6 @@ public class Invitation {
         return this;
     }
 
-    public Invitation(Invitation invitation) {
-        this.id = invitation.id;
-        this.eventId = invitation.eventId;
-        this.user = invitation.user;
-        this.userResponse = invitation.userResponse;
-        this.attendeesCount = invitation.attendeesCount;
-        this.participated = invitation.participated;
-    }
-
     public Invitation() {
     }
 

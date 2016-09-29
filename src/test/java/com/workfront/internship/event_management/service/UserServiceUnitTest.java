@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.service;
 
+import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 import com.workfront.internship.event_management.TestObjectCreator;
 import com.workfront.internship.event_management.dao.CategoryDAOImpl;
 import com.workfront.internship.event_management.dao.UserDAO;
@@ -24,10 +25,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.workfront.internship.event_management.AssertionHelper.assertEqualUsers;
 import static com.workfront.internship.event_management.TestObjectCreator.NON_EXISTING_ID;
 import static com.workfront.internship.event_management.TestObjectCreator.VALID_ID;
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
@@ -39,7 +44,7 @@ import static org.mockito.Mockito.*;
 public class UserServiceUnitTest {
 
     private static UserService userService;
-    private EmailService emailService;
+    private static EmailService emailService;
     private UserDAO userDAO;
 
     @BeforeClass
@@ -57,9 +62,11 @@ public class UserServiceUnitTest {
     @Before
     public void setUp() {
         userDAO = Mockito.mock(UserDAOImpl.class);
+        emailService = Mockito.mock(EmailServiceImpl.class);
 
         //inject mocks
         Whitebox.setInternalState(userService, "userDAO", userDAO);
+        Whitebox.setInternalState(userService, "emailService", emailService);
 
         //create test user object
         testUser = TestObjectCreator.createTestUser();
@@ -86,7 +93,6 @@ public class UserServiceUnitTest {
     @Test
     public void addAccount_EncryptPassword() {
         when(userDAO.addUser(testUser)).thenReturn(1);
-        // when(emailService.sendVerificationEmail(testUser)).thenReturn(true);
 
         String expectedPassword = HashGenerator.generateHashString(testUser.getPassword());
 
@@ -94,12 +100,20 @@ public class UserServiceUnitTest {
         userService.addAccount(testUser);
 
         String actualPassword = testUser.getPassword();
-        assertEquals("Unable to hash password.", actualPassword, expectedPassword);
+        assertEquals("Unable to hash password", actualPassword, expectedPassword);
     }
 
     @Test(expected = OperationFailedException.class)
     public void addAccount_InsertFailed_DuplicateUser() throws DuplicateEntryException, DAOException {
         when(userDAO.addUser(testUser)).thenThrow(DuplicateEntryException.class);
+
+        //method under test
+        userService.addAccount(testUser);
+    }
+
+    @Test(expected = OperationFailedException.class)
+    public void addAccount_UnableToSendConfirmationEmail() throws DuplicateEntryException, DAOException, javax.mail.MessagingException {
+        when(emailService.sendConfirmationEmail(testUser)).thenThrow(MessagingException.class);
 
         //method under test
         userService.addAccount(testUser);
@@ -256,6 +270,27 @@ public class UserServiceUnitTest {
     public void getUserById_InvalidUserId() {
         //method under test
         userService.getUserById(TestObjectCreator.INVALID_ID);
+    }
+
+    @Test(expected = InvalidObjectException.class)
+    public void getUsersMatchingEmail_EmptyString() {
+        //method under test
+        userService.getUsersMatchingEmail("");
+    }
+
+    @Test
+    public void getUsersMatchingEmail_Success() {
+        List<User> userList = new ArrayList<>();
+        userList.add(testUser);
+
+        when(userDAO.getUsersMatchingEmail(testUser.getEmail())).thenReturn(userList);
+
+        //method under test
+        List<User> actualUserList = userService.getUsersMatchingEmail(testUser.getEmail());
+
+        assertNotNull("User list is null", actualUserList);
+        assertFalse("User list is empty", actualUserList.isEmpty());
+        assertEqualUsers(testUser, actualUserList.get(0));
     }
 
     @Test(expected = ObjectNotFoundException.class)

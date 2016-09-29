@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.service;
 
+import com.workfront.internship.event_management.exception.service.InvalidObjectException;
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.*;
 import org.apache.velocity.app.VelocityEngine;
@@ -28,29 +29,17 @@ public class EmailServiceImpl implements EmailService {
 	@Autowired
 	private VelocityEngine velocityEngine;
 
-	public boolean sendConfirmationEmail(final User user) {
-
-		MimeMessage mimeMessage = mailSender.createMimeMessage();
-		MimeMessageHelper mailMsg = new MimeMessageHelper(mimeMessage);
-		try {
-			mailMsg.setFrom("turshujyan@gmail.com");
-			mailMsg.setTo(user.getEmail());
-			mailMsg.setSubject("Test mail");
-			mailMsg.setText("Hello World!");
-			mailSender.send(mimeMessage);
-		} catch (MessagingException e) {
-			e.printStackTrace();
-		}
-
-		return false;
+	public boolean sendConfirmationEmail(final User user){
+		return true; // TODO: 9/29/16 implement
 	}
+
 	@Override
 	public void sendInvitations(final Event event) {
 
 		List<Invitation> invitations = event.getInvitations();
 
 		if (isEmptyCollection(invitations)) {
-			throw new OperationFailedException("Empty email list");
+			throw new InvalidObjectException("Empty email list");
 		}
 
 		for (final Invitation invitation : invitations) {

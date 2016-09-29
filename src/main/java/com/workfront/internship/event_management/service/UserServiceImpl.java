@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.mail.MessagingException;
 import java.util.Date;
 import java.util.List;
 
@@ -22,19 +23,24 @@ import static com.workfront.internship.event_management.service.util.Validator.*
 @Component
 public class UserServiceImpl implements UserService {
 
-    private static final Logger LOGGER = Logger.getLogger(UserServiceImpl.class);
+    private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserDAO userDAO;
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public User addAccount(User user) {
+
         //set user default fields
         setDefaultFields(user);
 
         //check if user object is valid
         if (!isValidUser(user)) {
-            throw new InvalidObjectException("Invalid user object");
+            String message = "Invalid user object";
+            logger.error(message);
+            throw new InvalidObjectException(message);
         }
 
         //encrypt user password
@@ -45,10 +51,18 @@ public class UserServiceImpl implements UserService {
             //insert user into db
             int userId = userDAO.addUser(user);
 
-            //set generated it to user
+            if (userId == 0) {
+                String message = "Could not add user into database";
+                logger.error(message);
+                throw new OperationFailedException(message);
+            }
+
+            //set generated it to user if successfully inserted
             user.setId(userId);
+
+//            emailService.sendConfirmationEmail(user);
         } catch (DuplicateEntryException e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             throw new OperationFailedException("User with email " + user.getEmail() + " already exists!", e);
         }
         return user;
@@ -56,41 +70,56 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean editAccount(User user) {
+
         if (!isValidUser(user)) {
-            throw new InvalidObjectException("Invalid user object");
+            String message = "Invalid user object";
+            logger.error(message);
+            throw new InvalidObjectException(message);
         }
 
         boolean success;
+
         try {
             success = userDAO.updateUser(user);
+
+            if (!success) {
+                String message = "User not found";
+                logger.error(message);
+                throw new ObjectNotFoundException(message);
+            }
         } catch (DuplicateEntryException e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             throw new OperationFailedException("User with email " + user.getEmail() + " already exists!", e);
         }
 
-        if (!success) {
-            throw new ObjectNotFoundException("User with id " + user.getId() + " not found.");
-        }
         return success;
     }
 
     @Override
     public boolean verifyAccount(int userId) {
         if (userId < 1) {
-            throw new InvalidObjectException("Invalid user id");
+            String message = "Invalid user id";
+            logger.error(message);
+            throw new InvalidObjectException(message);
         }
 
         boolean success = userDAO.updateVerifiedStatus(userId);
+
         if (!success) {
-            throw new ObjectNotFoundException("User with id " + userId + " not found");
+            String message = "User not found";
+            logger.error(message);
+            throw new ObjectNotFoundException(message);
         }
+
         return success;
     }
 
     @Override
     public boolean deleteAccount(int userId) {
         if (userId < 1) {
-            throw new InvalidObjectException("Invalid user id");
+            String message = "Invalid user id";
+            logger.error(message);
+            throw new InvalidObjectException(message);
         }
 
         return userDAO.deleteUser(userId);
@@ -98,41 +127,56 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User login(String email, String password) {
+
         //email/password validation
         if (isEmptyString(email)) {
-            throw new InvalidObjectException("Empty email");
+            String message = "Empty email";
+            logger.error(message);
+            throw new InvalidObjectException(message);
         }
 
         if (isEmptyString(password)) {
-            throw new InvalidObjectException("Empty password");
+            String message = "Empty password";
+            logger.error(message);
+            throw new InvalidObjectException(message);
         }
 
         if (!isValidEmailAddressForm(email)) {
-            throw new InvalidObjectException("Invalid email address form");
+            String message = "Invalid email address form";
+            logger.error(message);
+            throw new InvalidObjectException(message);
         }
 
         //read user data from db
         User user = userDAO.getUserByEmail(email);
-        String str = HashGenerator.generateHashString(password);
+
+        String hashedPassword = HashGenerator.generateHashString(password);
 
         //check if passwords match
-        if (user != null && user.getPassword().equals(HashGenerator.generateHashString(password))) {
+        if (user != null && user.getPassword().equals(hashedPassword)) {
             return user;
         } else {
-            throw new OperationFailedException("Invalid email/password combination!");
+            String message = "Invalid email/password combination!";
+            logger.warn(message);
+            throw new OperationFailedException(message);
         }
     }
 
     @Override
     public User getUserById(int userId) {
         if (userId < 1) {
-            throw new InvalidObjectException("Invalid user id");
+            String message = "Invalid user id";
+            logger.error(message);
+            throw new InvalidObjectException(message);
         }
 
         //get user data from db
         User user = userDAO.getUserById(userId);
+
         if (user == null) {
-            throw new ObjectNotFoundException("User with id " + userId + " not found.");
+            String message = "User not found";
+            logger.error(message);
+            throw new ObjectNotFoundException(message);
         }
         return user;
     }
@@ -140,7 +184,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByEmail(String email) {
         if (!isValidEmailAddressForm(email)) {
-            throw new InvalidObjectException("Invalid email address form!");
+            String message = "Invalid email address form!";
+            logger.error(message);
+            throw new InvalidObjectException(message);
         }
 
         //get user data from db
@@ -149,8 +195,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getUsersMatchingEmail(String email) {
-        if (email.isEmpty()) {
-            throw new InvalidObjectException("Empty string!");
+        if (isEmptyString(email)) {
+            String message = "Empty email string";
+            logger.error(message);
+            throw new InvalidObjectException(message);
         }
 
         //get user data from db

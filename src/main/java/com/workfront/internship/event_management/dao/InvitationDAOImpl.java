@@ -111,10 +111,17 @@ public class InvitationDAOImpl extends GenericDAO implements InvitationDAO {
             //execute query
             stmt.executeBatch();
             conn.commit();
+            conn.setAutoCommit(true);
         } catch (SQLIntegrityConstraintViolationException e) {
             LOGGER.error("Duplicate invitation entry", e);
             throw new DuplicateEntryException("Invitation already exists", e);
         } catch (SQLException e) {
+            try {
+                conn.rollback();
+            } catch (SQLException e1) {
+                LOGGER.error("Unable to rollback insertion", e);
+                throw new DAOException(e);
+            }
             LOGGER.error("SQL Exception", e);
             throw new DAOException(e);
         } finally {

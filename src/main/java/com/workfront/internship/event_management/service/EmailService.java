@@ -3,6 +3,7 @@ package com.workfront.internship.event_management.service;
 import com.workfront.internship.event_management.model.*;
 import org.springframework.stereotype.Component;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 
 /**

@@ -16,6 +16,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.Whitebox;
+import org.omg.CORBA.DynAnyPackage.Invalid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,10 +80,10 @@ public class InvitationServiceUnitTest {
         invitationService.createInvitation(VALID_EMAIL);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test
     public void createInvitation_Success() {
         User testUser = createTestUser().setId(VALID_ID);
-        when(userService.getUserByEmail(VALID_EMAIL)).thenReturn(null);
+        when(userService.getUserByEmail(VALID_EMAIL)).thenReturn(testUser);
 
         //method under test
         Invitation invitation = invitationService.createInvitation(VALID_EMAIL);
@@ -119,6 +120,15 @@ public class InvitationServiceUnitTest {
         invitationService.addInvitation(testInvitation);
     }
 
+    @Test(expected = OperationFailedException.class)
+    public void addInvitation_Failed() {
+
+        when(invitationDAO.addInvitation(testInvitation)).thenReturn(0);
+
+        //method under test
+        invitationService.addInvitation(testInvitation);
+    }
+
 
     //Testing addInvitations method
     @Test(expected = InvalidObjectException.class)
@@ -143,6 +153,16 @@ public class InvitationServiceUnitTest {
         //method under test
         invitationService.addInvitations(testInvitationList);
     }
+
+    @Test(expected = InvalidObjectException.class)
+    public void addInvitations_InvalidInvitation() {
+        Invitation invalidInvitation = createTestInvitation();
+        testInvitationList.add(invalidInvitation);
+
+        //method under test
+        invitationService.addInvitations(testInvitationList);
+    }
+
 
     //Testing getInvitationById method
     @Test(expected = InvalidObjectException.class)
@@ -271,12 +291,14 @@ public class InvitationServiceUnitTest {
         invitationService.editInvitationList(testEvent);
 
         verify(invitationService).addInvitations(testInvitationList);
+        verify(emailService).sendInvitations(testEvent);
+
     }
 
-    @Ignore
     @Test
     public void editInvitations_Insert_NonEmptyDBList() {
-        //db list does not contains testInvitation object, test method should add it to db
+
+        //db list does not contains testInvitation object, method should add it to db
         Event testEvent = createTestEvent().setId(VALID_ID);
         List<Invitation> testInvitations = new ArrayList<>();
         testInvitations.add(testInvitation);
@@ -301,7 +323,7 @@ public class InvitationServiceUnitTest {
     public void editInvitationList_Update_NonEmptyDBList() {
         testInvitation.setId(VALID_ID);
 
-        Invitation dbInvitation = new Invitation(testInvitation);
+        Invitation dbInvitation = new Invitation();
         dbInvitation.setAttendeesCount(100);
 
         List<Invitation> dbList = new ArrayList<>();

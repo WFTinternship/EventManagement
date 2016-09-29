@@ -48,6 +48,8 @@ public class RecurrenceServiceIntegrationTest {
 
     @Before
     public void setUp() {
+
+
         createTestObjects();
         insertTestObjectsIntoDB();
     }
