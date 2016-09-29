@@ -105,7 +105,7 @@ public class EventControllerIntegrationTest {
     @Test
     public void getEvent() {
         //method under test
-        String pageName = eventController.getEventDetails(testEvent.getId(), testModel, testRequest);
+        String pageName = eventController.loadEventDetails(testEvent.getId(), testRequest);
 
         Event event = (Event) testModel.asMap().get("event");
 
@@ -140,7 +140,7 @@ public class EventControllerIntegrationTest {
         testRequest.getSession().setAttribute("user", new User());
 
         //method under test
-        String pageName = eventController.goToCreateEventPage(testRequest, testModel);
+        String pageName = eventController.goToCreateEventPage(testRequest);
 
         Event emptyEvent = (Event) testModel.asMap().get("event");
         List<Category> categoryList = (List<Category>) testModel.asMap().get("categories");

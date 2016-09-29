@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.controller;
 
+import com.workfront.internship.event_management.exception.service.UnauthorizedAccessException;
 import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.User;
@@ -34,8 +35,8 @@ public class EventControllerUnitTest {
     private List<Category> testCategoryList;
     private List<Event> testEventList;
     private Event testEvent;
+    private User testUser;
 
-    private Model testModel;
     private HttpServletRequest testRequest;
     private HttpSession testSession;
 
@@ -49,25 +50,26 @@ public class EventControllerUnitTest {
         eventController = null;
     }
 
-
     @Before
     public void setUp() {
+        testUser = createTestUser();
+        testEvent = createTestEvent()
+                .setOrganizer(testUser);
 
         //create test objects
-        createTestObjects();
+//        createTestObjects();
 
         //creating mocks
-        testModel = mock(Model.class);
         eventService = mock(EventServiceImpl.class);
         categoryService = mock(CategoryServiceImpl.class);
+
         testRequest = mock(HttpServletRequest.class);
         testSession = mock(HttpSession.class);
+        when(testRequest.getSession()).thenReturn(testSession);
 
         //injecting mocks
         Whitebox.setInternalState(eventController, "eventService", eventService);
         Whitebox.setInternalState(eventController, "categoryService", categoryService);
-
-        when(testRequest.getSession()).thenReturn(testSession);
     }
 
     @After
@@ -78,101 +80,208 @@ public class EventControllerUnitTest {
     }
 
     @Test
-    public void loadAllEventsAndCategories_Success() {
-        when(categoryService.getAllCategories()).thenReturn(testCategoryList);
-        when(eventService.getAllEvents()).thenReturn(testEventList);
+    public void loadEventsByCategory_All_Success() {
+        when(testSession.getAttribute("user")).thenReturn(testUser);
+        when(testRequest.getParameter("categoryId")).thenReturn("");
 
-//        String pageName = eventController.loadAllEventsAndCategories(testRequest, testModel);
+        //method under test
+        String pageView = eventController.loadEventsByCategory(testRequest);
 
-        verify(testModel).addAttribute("events", testEventList);
-//        assertEquals("Incorrect redirect page", pageName, EVENTS_LIST_VIEW);
+        assertEquals("Incorrect redirect page", EVENTS_LIST_VIEW, pageView);
+        verify(testRequest).setAttribute("listHeader", ALL_EVENTS_HEADER);
+        verify(eventService).getAllEvents();
+
     }
 
     @Test
-    public void getEvent_Success() {
-
-        when(eventService.getEventById(VALID_ID)).thenReturn(testEvent);
+    public void loadEventsByCategory_AllPublic_Success() {
+        when(testSession.getAttribute("user")).thenReturn(null);
+        when(testRequest.getParameter("categoryId")).thenReturn("");
 
         //method under test
-        String pageName = eventController.getEventDetails(VALID_ID, testModel, testRequest);
-        verify(eventService).getEventById(VALID_ID);
+        String pageView = eventController.loadEventsByCategory(testRequest);
 
-        verify(testModel).addAttribute("event", testEvent);
+        assertEquals("Incorrect redirect page", EVENTS_LIST_VIEW, pageView);
+        verify(testRequest).setAttribute("listHeader", ALL_EVENTS_HEADER);
+        verify(eventService).getPublicEvents();
+
+    }
+
+    @Test
+    public void loadEventsByCategory_Success() {
+        when(testSession.getAttribute("user")).thenReturn(testUser);
+        when(testRequest.getParameter("categoryId")).thenReturn(Integer.toString(VALID_ID));
+
+        //method under test
+        String pageView = eventController.loadEventsByCategory(testRequest);
+
+        assertEquals("Incorrect redirect page", EVENTS_LIST_VIEW, pageView);
+        verify(testRequest).setAttribute("categoryId", Integer.toString(VALID_ID));
+        verify(eventService).getAllEventsByCategory(VALID_ID);
+    }
+
+    @Test
+    public void loadEventsByCategory_Public_Success() {
+        when(testSession.getAttribute("user")).thenReturn(null);
+        when(testRequest.getParameter("categoryId")).thenReturn(Integer.toString(VALID_ID));
+
+        //method under test
+        String pageView = eventController.loadEventsByCategory(testRequest);
+
+        assertEquals("Incorrect redirect page", EVENTS_LIST_VIEW, pageView);
+        verify(testRequest).setAttribute("categoryId", Integer.toString(VALID_ID));
+        verify(eventService).getPublicEventsByCategory(VALID_ID);
+    }
+
+    @Test
+    public void loadPastEvents_PublicOnly() {
+        when(testSession.getAttribute("user")).thenReturn(null);
+
+        //method under test
+        String pageView = eventController.loadPastEvents(testRequest);
+
+        assertEquals("Incorrect redirect page", EVENTS_LIST_VIEW, pageView);
+        verify(testRequest).setAttribute(eq("events"), anyListOf(Event.class));
+        verify(testRequest).setAttribute("listHeader", PAST_EVENTS_HEADER);
+        verify(eventService).getPublicPastEvents();
+    }
+
+    @Test
+    public void loadPastEvents_All() {
+        when(testSession.getAttribute("user")).thenReturn(testUser);
+
+        //method under test
+        String pageView = eventController.loadPastEvents(testRequest);
+
+        assertEquals("Incorrect redirect page", EVENTS_LIST_VIEW, pageView);
+        verify(testRequest).setAttribute(eq("events"), anyListOf(Event.class));
+        verify(testRequest).setAttribute("listHeader", PAST_EVENTS_HEADER);
+        verify(eventService).getAllPastEvents();
+    }
+
+    @Test
+    public void loadUpcomingEvents_PublicOnly() {
+        when(testSession.getAttribute("user")).thenReturn(null);
+
+        //method under test
+        String pageView = eventController.loadUpcomingEvents(testRequest);
+
+        assertEquals("Incorrect redirect page", EVENTS_LIST_VIEW, pageView);
+        verify(testRequest).setAttribute(eq("events"), anyListOf(Event.class));
+        verify(testRequest).setAttribute("listHeader", UPCOMING_EVENTS_HEADER);
+        verify(eventService).getPublicUpcomingEvents();
+    }
+
+    @Test
+    public void loadUpcomingEvents_All() {
+        when(testSession.getAttribute("user")).thenReturn(testUser);
+
+        //method under test
+        String pageView = eventController.loadUpcomingEvents(testRequest);
+
+        assertEquals("Incorrect redirect page", EVENTS_LIST_VIEW, pageView);
+        verify(testRequest).setAttribute(eq("events"), anyListOf(Event.class));
+        verify(testRequest).setAttribute("listHeader", UPCOMING_EVENTS_HEADER);
+        verify(eventService).getAllUpcomingEvents();
+    }
+
+    @Test
+    public void loadEventDetails_Success() {
+        when(testSession.getAttribute("user")).thenReturn(testUser);
+        when(eventService.getFullEventById(anyInt())).thenReturn(testEvent);
+
+        //method under test
+        String pageName = eventController.loadEventDetails(VALID_ID, testRequest);
+
+        verify(testRequest).setAttribute("event", testEvent);
         assertEquals("Incorrect redirect page", pageName, EVENT_DETAILS_VIEW);
     }
 
     @Test
-    public void goToCreateEventPage_Success() {
-        when(testSession.getAttribute("user")).thenReturn(new User());
-        when(categoryService.getAllCategories()).thenReturn(testCategoryList);
+    public void loadEventDetails_Failed() {
+        testEvent.setPublicAccessed(false);
+        when(testSession.getAttribute("user")).thenReturn(null);
+        when(eventService.getFullEventById(VALID_ID)).thenReturn(testEvent);
 
         //method under test
-        String pageName = eventController.goToCreateEventPage(testRequest, testModel);
+        String pageName = eventController.loadEventDetails(VALID_ID, testRequest);
 
-        verify(categoryService).getAllCategories();
-        verify(testModel).addAttribute("categories", testCategoryList);
-        verify(testModel).addAttribute(eq("event"), any(Event.class));
-        assertEquals("Incorrect redirect page", pageName, EVENT_EDIT_VIEW);
+        verify(testRequest, never()).setAttribute("event", testEvent);
+        assertEquals("Incorrect redirect page", pageName, HOME_VIEW_REDIRECT);
     }
 
     @Test
-    public void goToEditEventPage_Fail_Unauthorized() {
-        when(testSession.getAttribute("user")).thenReturn(null);
+    public void goToCreateEventPage_Success() {
+        when(testSession.getAttribute("user")).thenReturn(testUser);
+        when(categoryService.getAllCategories()).thenReturn(testCategoryList);
 
         //method under test
-        String pageName = eventController.goToEditEventPage(testRequest, testModel, VALID_ID);
+        String pageName = eventController.goToCreateEventPage(testRequest);
 
-        assertEquals("Incorrect redirect page", pageName, DEFAULT_ERROR_VIEW);
+        verify(categoryService).getAllCategories();
+        verify(eventService).createEmptyEvent();
+        verify(testRequest).setAttribute("action", "create-event");
+        verify(testRequest).setAttribute(eq("categories"), anyListOf(Category.class));
+        verify(testRequest).setAttribute(eq("event"), any(Event.class));
+        assertEquals("Incorrect redirect page", pageName, EVENT_EDIT_VIEW);
     }
 
     @Test
     public void goToEditEventPage_Success() {
-        when(testSession.getAttribute("user")).thenReturn(new User());
-        when(eventService.getEventById(VALID_ID)).thenReturn(testEvent);
+        testEvent.setOrganizer(testUser);
 
-        when(categoryService.getAllCategories()).thenReturn(testCategoryList);
+        when(eventService.getFullEventById(VALID_ID)).thenReturn(testEvent);
+        when(testSession.getAttribute("user")).thenReturn(testUser);
 
         //method under test
-        String pageName = eventController.goToEditEventPage(testRequest, testModel, VALID_ID);
+        String pageName = eventController.goToEditEventPage(testRequest, VALID_ID);
 
         verify(categoryService).getAllCategories();
-        verify(testModel).addAttribute("categories", testCategoryList);
-        verify(testModel).addAttribute("event", testEvent);
+        verify(testRequest).setAttribute("action", "edit-event");
+        verify(testRequest).setAttribute(eq("categories"), anyListOf(Category.class));
+        verify(testRequest).setAttribute(eq("event"), any(Event.class));
         assertEquals("Incorrect redirect page", pageName, EVENT_EDIT_VIEW);
     }
 
-    @Test
-    public void goToCreateEventPage_Fail_Unauthorized() {
+    @Test(expected = UnauthorizedAccessException.class)
+    public void goToCreateEventPage_UnauthorizedUser() {
         when(testSession.getAttribute("user")).thenReturn(null);
 
         //method under test
-        String pageName = eventController.goToCreateEventPage(testRequest, testModel);
-
-        assertEquals("Incorrect redirect page", pageName, DEFAULT_ERROR_VIEW);
+        eventController.goToCreateEventPage(testRequest);
     }
 
-
-    @Test
-    public void loadEvents_ByCategory() {
-        when(testRequest.getParameter("categoryId")).thenReturn(String.valueOf(VALID_ID));
+    @Test(expected = UnauthorizedAccessException.class)
+    public void goToEditEventPage_Failed_UnauthorizedUser() {
+        when(testSession.getAttribute("user")).thenReturn(null);
 
         //method under test
-//        CustomResponse result = eventController.loadEventsByCategory(testRequest);
+        eventController.goToEditEventPage(testRequest, VALID_ID);
+    }
+
 //
-//        verify(eventService).getEventsByCategory(VALID_ID);
-//        assertEquals("Status is incorrect", result.getStatus(), ACTION_SUCCESS);
-    }
-
-    @Test
-    public void loadEvents_All() {
-        when(testRequest.getParameter("categoryId")).thenReturn(null);
-
-        //method under test
-//        String result = eventController.loadAllEventsAndCategories((testRequest);
-
-        verify(eventService).getAllEvents();
-       // assertEquals("Status is incorrect", result.getStatus(), ACTION_SUCCESS);
-    }
+//
+//    @Test
+//    public void loadEvents_ByCategory() {
+//        when(testRequest.getParameter("categoryId")).thenReturn(String.valueOf(VALID_ID));
+//
+//        //method under test
+////        CustomResponse result = eventController.loadEventsByCategory(testRequest);
+////
+////        verify(eventService).getEventsByCategory(VALID_ID);
+////        assertEquals("Status is incorrect", result.getStatus(), ACTION_SUCCESS);
+//    }
+//
+//    @Test
+//    public void loadEvents_All() {
+//        when(testRequest.getParameter("categoryId")).thenReturn(null);
+//
+//        //method under test
+////        String result = eventController.loadAllEventsAndCategories((testRequest);
+//
+//        verify(eventService).getAllEvents();
+//       // assertEquals("Status is incorrect", result.getStatus(), ACTION_SUCCESS);
+//    }
 
 
     //helper methods

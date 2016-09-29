@@ -48,7 +48,7 @@ public class EventController {
 
 
     @RequestMapping(value = "/events")
-    public String loadEventsByCategory(Model model, HttpServletRequest request) {
+    public String loadEventsByCategory(HttpServletRequest request) {
 
         User sessionUser = (User) request.getSession().getAttribute("user");
         String categoryIdStr = request.getParameter("categoryId");
@@ -56,7 +56,7 @@ public class EventController {
         List<Event> eventList;
 
         if (isEmptyString(categoryIdStr)) { //load all events
-            model.addAttribute("listHeader", ALL_EVENTS_HEADER);
+            request.setAttribute("listHeader", ALL_EVENTS_HEADER);
 
             if (sessionUser == null) {
                 eventList = eventService.getPublicEvents();
@@ -65,7 +65,7 @@ public class EventController {
             }
         } else {
             //load events by category
-            model.addAttribute("categoryId", categoryIdStr);
+            request.setAttribute("categoryId", categoryIdStr);
 
             int categoryId = Integer.parseInt(categoryIdStr);
             if (sessionUser == null) {
@@ -78,13 +78,13 @@ public class EventController {
         //load all categories for left side menu
         List<Category> categoryList = categoryService.getAllCategories();
 
-        model.addAttribute("events", eventList);
-        model.addAttribute("categories", categoryList);
+        request.setAttribute("events", eventList);
+        request.setAttribute("categories", categoryList);
         return EVENTS_LIST_VIEW;
     }
 
     @RequestMapping(value = "/past-events")
-    public String loadPastEvents(HttpServletRequest request, Model model) {
+    public String loadPastEvents(HttpServletRequest request) {
 
         List<Event> eventList;
         User sessionUser = (User) request.getSession().getAttribute("user");
@@ -95,14 +95,14 @@ public class EventController {
             eventList = eventService.getAllPastEvents();
         }
 
-        model.addAttribute("events", eventList);
-        model.addAttribute("listHeader", PAST_EVENTS_HEADER);
+        request.setAttribute("events", eventList);
+        request.setAttribute("listHeader", PAST_EVENTS_HEADER);
 
         return EVENTS_LIST_VIEW;
     }
 
     @RequestMapping(value = "/upcoming-events")
-    public String loadUpcomingEvents(HttpServletRequest request, Model model) {
+    public String loadUpcomingEvents(HttpServletRequest request) {
         List<Event> eventList;
         User sessionUser = (User) request.getSession().getAttribute("user");
 
@@ -111,31 +111,31 @@ public class EventController {
         } else {
             eventList = eventService.getAllUpcomingEvents();
         }
-        model.addAttribute("events", eventList);
-        model.addAttribute("listHeader", UPCOMING_EVENTS_HEADER);
+        request.setAttribute("events", eventList);
+        request.setAttribute("listHeader", UPCOMING_EVENTS_HEADER);
 
         return EVENTS_LIST_VIEW;
     }
 
     @GetMapping(value = "/events/{eventId}")
-    public String getEventDetails(@PathVariable("eventId") int id, Model model, HttpServletRequest request) {
+    public String loadEventDetails(@PathVariable("eventId") int id, HttpServletRequest request) {
 
         Event event = eventService.getFullEventById(id);
 
         //check if user is not authorized to view this event, redirect to home page
         User sessionUser = (User) request.getSession().getAttribute("user");
         if (!event.isPublicAccessed() && sessionUser == null) {
-            return HOME_VIEW;
+            return HOME_VIEW_REDIRECT;
         }
 
-        model.addAttribute("event", event);
+        request.setAttribute("event", event);
 
         return EVENT_DETAILS_VIEW;
     }
 
 
     @RequestMapping(value = "/new-event")
-    public String goToCreateEventPage(HttpServletRequest request, Model model) {
+    public String goToCreateEventPage(HttpServletRequest request) {
         HttpSession session = request.getSession();
 
         //check if user is logged in
@@ -145,15 +145,15 @@ public class EventController {
 
         List<Category> categoryList = categoryService.getAllCategories();
 
-        model.addAttribute("action", "create-event");
-        model.addAttribute("categories", categoryList);
-        model.addAttribute("event", eventService.createEmptyEvent());
+        request.setAttribute("action", "create-event");
+        request.setAttribute("categories", categoryList);
+        request.setAttribute("event", eventService.createEmptyEvent());
 
         return EVENT_EDIT_VIEW;
     }
 
     @RequestMapping(value = "/events/{eventId}/edit")
-    public String goToEditEventPage(HttpServletRequest request, Model model, @PathVariable("eventId") int eventId) {
+    public String goToEditEventPage(HttpServletRequest request, @PathVariable("eventId") int eventId) {
         HttpSession session = request.getSession();
         User sessionUser = (User) session.getAttribute("user");
 
@@ -169,9 +169,9 @@ public class EventController {
 
         List<Category> categoryList = categoryService.getAllCategories();
 
-        model.addAttribute("action", "edit-event");
-        model.addAttribute("categories", categoryList);
-        model.addAttribute("event", event);
+        request.setAttribute("action", "edit-event");
+        request.setAttribute("categories", categoryList);
+        request.setAttribute("event", event);
 
         return EVENT_EDIT_VIEW;
     }
@@ -179,6 +179,7 @@ public class EventController {
     @RequestMapping(value = "/events/{eventId}/delete")
     @ResponseBody
     public CustomResponse deleteEvent(HttpServletRequest request, Model model, @PathVariable("eventId") int eventId) {
+
         HttpSession session = request.getSession();
         User sessionUser = (User) session.getAttribute("user");
 
@@ -195,8 +196,6 @@ public class EventController {
         CustomResponse response = new CustomResponse();
         boolean success = eventService.deleteEvent(eventId);
         if (success) {
-            List<Event> updatedOrganizedEventsList = eventService.getUserOrganizedEvents(sessionUser.getId());
-            session.setAttribute("userOrganizedEvents", updatedOrganizedEventsList);
             response.setStatus(ACTION_SUCCESS);
         } else {
             logger.warn(OPERATION_FAILED_MESSAGE);
