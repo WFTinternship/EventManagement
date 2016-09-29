@@ -259,7 +259,6 @@
                             <div class="photos_wrapper">
                                 <div class="desc_header">Photos:</div>
 
-                                <div id="animated-thumbnials">
 
 
                         <% Map<String, List<Media>> userMediaMap = new HashMap<>();
@@ -287,7 +286,9 @@
                                 String userName = entry.getKey();
                         %>
                         <div class="uploader_name"><%=userName%></div>
-                            <%
+                                <div class="animated-thumbnials">
+
+                                <%
                                 for ( Media media: userMediaList ) {
                                     User user = media.getUploader();
                                     String imagePath = "/resources/uploads/events/event" +
@@ -301,8 +302,6 @@
                             <% } %>
                             </div>
                             </div>
-
-
                             <% } %>
 
                         <% if (sessionUser != null && isPassedEvent) { %>

@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    $("#animated-thumbnials").lightGallery({
+    $(".animated-thumbnials").lightGallery({
         thumbnail:true,
         animateThumb: false,
         showThumbByDefault: false
