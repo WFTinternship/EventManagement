@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static com.workfront.internship.event_management.controller.util.PageParameters.*;
+import static com.workfront.internship.event_management.controller.util.CongrollerConstants.*;
 import static com.workfront.internship.event_management.service.util.Validator.isEmptyString;
 
 /**

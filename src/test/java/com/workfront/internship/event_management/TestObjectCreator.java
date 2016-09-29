@@ -19,7 +19,8 @@ public class TestObjectCreator {
     public static final String WRONG_PASSWORD = "wrongPassword";
     public static final String VALID_EMAIL = "turshujyan@gmail.com";
     public static final String VALID_PASSWORD = "turshujyan";
-    public static final String SERVLET_CONTEXT_PATH = "/Users/hermine/IdeaProjects/EventManagement/target/event-management-1.0-SNAPSHOT/";
+    public static final String WEB_CONTENT_ROOT = "/resources/uploads";
+    public static final String VALID_IMAGE_NAME = "img.jpg";
     public static final String EXCEPTION_MESSAGE = "error message";
     public static final String EXISTING_KEYWORD = "test";
     public static final String NON_EXISTING_KEYWORD = "nonexistingkeyword";

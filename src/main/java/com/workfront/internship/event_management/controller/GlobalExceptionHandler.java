@@ -5,16 +5,13 @@ import com.workfront.internship.event_management.exception.service.InvalidObject
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.exception.service.UnauthorizedAccessException;
 import org.apache.log4j.Logger;
-import org.springframework.beans.propertyeditors.StringTrimmerEditor;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.workfront.internship.event_management.controller.util.PageParameters.DEFAULT_ERROR_VIEW;
+import static com.workfront.internship.event_management.controller.util.CongrollerConstants.DEFAULT_ERROR_VIEW;
 
 /**
  * Created by Hermine Turshujyan 8/25/16.

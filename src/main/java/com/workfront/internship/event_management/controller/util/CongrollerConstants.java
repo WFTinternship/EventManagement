@@ -3,16 +3,16 @@ package com.workfront.internship.event_management.controller.util;
 /**
  * Created by Hermine Turshujyan 8/26/16.
  */
-public class PageParameters {
+public class CongrollerConstants {
     //jsp page names
     public static final String DEFAULT_ERROR_VIEW = "error";
 
     public static final String EVENT_EDIT_VIEW = "event-edit";
     public static final String EVENT_DETAILS_VIEW = "event-details";
-    public static final String EVENT_INVITATION_RESPOND = "invitation-respond";
     public static final String EVENTS_LIST_VIEW = "events";
 
     public static final String HOME_VIEW = "index";
+    public static final String HOME_VIEW_REDIRECT = "redirect:/";
     public static final String REGISTRATION_VIEW = "registration";
     public static final String MY_EVENTS_VIEW = "my-events";
     public static final String SEARCH_RESULTS_VIEW = "search-results";

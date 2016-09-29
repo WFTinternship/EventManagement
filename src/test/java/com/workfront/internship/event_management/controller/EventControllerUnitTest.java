@@ -1,6 +1,5 @@
 package com.workfront.internship.event_management.controller;
 
-import com.workfront.internship.event_management.controller.util.CustomResponse;
 import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.User;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.workfront.internship.event_management.TestObjectCreator.*;
-import static com.workfront.internship.event_management.controller.util.PageParameters.*;
+import static com.workfront.internship.event_management.controller.util.CongrollerConstants.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 

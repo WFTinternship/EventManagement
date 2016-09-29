@@ -5,7 +5,6 @@ import com.workfront.internship.event_management.exception.service.InvalidObject
 import com.workfront.internship.event_management.exception.service.OperationFailedException;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.User;
-import com.workfront.internship.event_management.service.EmailService;
 import com.workfront.internship.event_management.service.EventService;
 import com.workfront.internship.event_management.service.FileService;
 import com.workfront.internship.event_management.service.UserService;
@@ -24,17 +23,16 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-import static com.workfront.internship.event_management.controller.util.PageParameters.*;
+import static com.workfront.internship.event_management.controller.util.CongrollerConstants.*;
+import static com.workfront.internship.event_management.service.util.Validator.isEmptyString;
 
 /**
  * Created by Hermine Turshujyan 8/22/16.
  */
 @Controller
 public class UserController {
-    private static final Logger logger = Logger.getLogger(UserController.class);
 
-    // location to store file uploaded
-    private static final String UPLOAD_DIRECTORY = "uploads/avatar";
+    private static final Logger logger = Logger.getLogger(UserController.class);
 
     @Autowired
     private UserService userService;
@@ -42,8 +40,6 @@ public class UserController {
     private EventService eventService;
     @Autowired
     private FileService fileService;
-    @Autowired
-    private EmailService emailService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
@@ -62,22 +58,6 @@ public class UserController {
             session.setAttribute("user", user);
             result.setStatus(ACTION_SUCCESS);
 
-//            //load user related events from db and save in session
-//            List<Event> userOrganizedEvents = eventService.getUserOrganizedEvents(user.getId());
-//            session.setAttribute("userOrganizedEvents", userOrganizedEvents);
-//
-//            List<Event> userInvitedEvents = eventService.getUserInvitedEvents(user.getId());
-//            session.setAttribute("userInvitedEvents", userInvitedEvents);
-//
-//            List<Event> userAcceptedEvents = eventService.getUserEventsByResponse(user.getId(), "Yes");
-//            session.setAttribute("userAcceptedEvents", userAcceptedEvents);
-//
-//            List<Event> userPendingEvents = eventService.getUserEventsByResponse(user.getId(), "Waiting for response");
-//            session.setAttribute("userPendingEvents", userPendingEvents);
-//
-//            List<Event> userParticipatedEvents = eventService.getUserParticipatedEvents(user.getId());
-//            session.setAttribute("userParticipatedEvents", userParticipatedEvents);
-
         } catch (InvalidObjectException | OperationFailedException e) {
             result.setStatus(ACTION_FAIL);
             result.setMessage(e.getMessage());
@@ -93,21 +73,21 @@ public class UserController {
         session.setAttribute("user", null);
         session.invalidate();
 
-        return "redirect:/";
+        return HOME_VIEW_REDIRECT;
     }
 
     @RequestMapping(value = "/registration")
     public String goToRegistrationPage(HttpServletRequest request) {
 
         if(request.getSession().getAttribute("user") != null ) {
-            return "redirect:/";
+            return HOME_VIEW_REDIRECT;
         }
 
         return REGISTRATION_VIEW;
     }
 
     @RequestMapping(value = "/my-events")
-    public String goToMyAccountPage(HttpServletRequest request) {
+    public String goToMyEventsPage(HttpServletRequest request) {
         HttpSession session = request.getSession();
 
         User sessionUser = (User) session.getAttribute("user");
@@ -131,8 +111,7 @@ public class UserController {
 
             return MY_EVENTS_VIEW;
         } else {
-            //redirect to home
-            return "redirect:/";
+            return HOME_VIEW_REDIRECT;
         }
     }
 
@@ -210,7 +189,7 @@ public class UserController {
 
         String email = request.getParameter("email");
 
-        if (email.isEmpty()) {
+        if (isEmptyString(email)) {
             customResponse.setStatus(ACTION_FAIL);
             customResponse.setMessage("Empty email");
 

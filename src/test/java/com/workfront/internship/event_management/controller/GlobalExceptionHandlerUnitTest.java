@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 
 import static com.workfront.internship.event_management.TestObjectCreator.EXCEPTION_MESSAGE;
-import static com.workfront.internship.event_management.controller.util.PageParameters.DEFAULT_ERROR_VIEW;
+import static com.workfront.internship.event_management.controller.util.CongrollerConstants.DEFAULT_ERROR_VIEW;
 import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Mockito.mock;
 

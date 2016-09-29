@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-import static com.workfront.internship.event_management.controller.util.PageParameters.HOME_VIEW;
-import static com.workfront.internship.event_management.controller.util.PageParameters.SEARCH_RESULTS_VIEW;
+import static com.workfront.internship.event_management.controller.util.CongrollerConstants.HOME_VIEW;
+import static com.workfront.internship.event_management.controller.util.CongrollerConstants.SEARCH_RESULTS_VIEW;
 
 /**
  * Created by Hermine Turshujyan 8/22/16.
@@ -25,7 +25,7 @@ public class HomeController {
     private EventService eventService;
 
     @RequestMapping(value = {"/", "home"})
-    public String loadUpcomingEventsForHomePage(HttpServletRequest request, Model model) {
+    public String loadUpcomingEvents(HttpServletRequest request) {
         User sessionUser = (User) request.getSession().getAttribute("user");
 
         List<Event> eventList = null;
@@ -37,13 +37,14 @@ public class HomeController {
             //load all upcoming events
             eventList = eventService.getAllUpcomingEvents();
         }
-        model.addAttribute("events", eventList);
+        request.setAttribute("events", eventList);
 
         return HOME_VIEW;
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public String search(HttpServletRequest request, Model model) {
+    public String search(HttpServletRequest request) {
+
         String keyword = request.getParameter("keyword");
         User sessionUser = (User) request.getSession().getAttribute("user");
 
@@ -57,8 +58,8 @@ public class HomeController {
             eventList = eventService.getAllEventsByKeyword(keyword);
         }
 
-        model.addAttribute("events", eventList);
-        model.addAttribute("keyword", keyword);
+        request.setAttribute("events", eventList);
+        request.setAttribute("keyword", keyword);
 
         return SEARCH_RESULTS_VIEW;
     }
