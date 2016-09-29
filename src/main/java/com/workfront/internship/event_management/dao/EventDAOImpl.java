@@ -4,6 +4,7 @@ import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.*;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
@@ -17,6 +18,9 @@ import java.util.List;
 public class EventDAOImpl extends GenericDAO implements EventDAO {
 
     static final Logger LOGGER = Logger.getLogger(EventDAOImpl.class);
+
+    @Autowired
+    RecurrenceDAO recurrenceDAO;
 
     @Override
     public int addEvent(Event event) throws DAOException {
@@ -62,7 +66,6 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
             }
 
             //insert event recurrence info
-            RecurrenceDAO recurrenceDAO = new RecurrenceDAOImpl();
             ((RecurrenceDAOImpl) recurrenceDAO).addEventRecurrences(event.getEventRecurrences(), conn);
 
             //commit transaction
@@ -276,6 +279,7 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
 
     @Override
     public List<Event> getAllEventsByKeyword(String keyword) {
+
         return getEventsByKeyword(keyword, false);
     }
 
@@ -633,8 +637,9 @@ public class EventDAOImpl extends GenericDAO implements EventDAO {
         String query = "SELECT * FROM (event " +
                 "LEFT JOIN event_category ON event.category_id = event_category.id) " +
                 "LEFT JOIN user ON user.id = event.organizer_id " +
-                "WHERE event.title LIKE ? OR event.short_desc LIKE ? OR event.full_desc like ? OR event.location like ?" +
-                "OR event_category.title like ?" + privacyChecking;
+                "WHERE ( event.title LIKE ? OR event.short_desc LIKE ? OR event.full_desc like ? " +
+                "OR event.location like ? " +
+                "OR event_category.title like ? )" + privacyChecking;
         try {
             //get connection
             conn = dataSource.getConnection();

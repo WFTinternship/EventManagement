@@ -4,7 +4,9 @@ import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.Media;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.Whitebox;
@@ -23,14 +25,13 @@ import static org.mockito.Mockito.when;
  */
 public class MediaDAOUnitTest {
 
-    private DataSource dataSource;
-    private MediaDAO mediaDAO;
+    private static MediaDAO mediaDAO;
 
     @SuppressWarnings("unchecked")
-    @Before
-    public void setUp() throws Exception {
+    @BeforeClass
+    public static void setUpClass() throws Exception {
 
-        dataSource = Mockito.mock(DataSource.class);
+        DataSource dataSource = Mockito.mock(DataSource.class);
         Connection connection = Mockito.mock(Connection.class);
 
         when(dataSource.getConnection()).thenReturn(connection);
@@ -40,6 +41,11 @@ public class MediaDAOUnitTest {
         mediaDAO = new MediaDAOImpl();
         Whitebox.setInternalState(mediaDAO, "dataSource", dataSource);
 
+    }
+
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+        mediaDAO = null;
     }
 
 

@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.List;
 
 import static com.workfront.internship.event_management.AssertionHelper.assertEqualUsers;
+import static com.workfront.internship.event_management.TestObjectCreator.NON_EXISTING_EMAIL;
 import static junit.framework.TestCase.*;
 
 /**
@@ -116,11 +117,30 @@ public class UserDAOIntegrationTest {
     }
 
     @Test
-    public void getUserByEmail_Not_Fount() throws DAOException, ObjectNotFoundException {
+    public void getUserByEmail_Not_Found() throws DAOException, ObjectNotFoundException {
         //method under test
-        User user = userDAO.getUserByEmail(TestObjectCreator.NON_EXISTING_EMAIL);
+        User user = userDAO.getUserByEmail(NON_EXISTING_EMAIL);
         assertNull(user);
 
+    }
+
+    @Test
+    public void getUsersMatchingEmail_Found() throws DAOException, ObjectNotFoundException {
+        //method under test
+        List<User> userList = userDAO.getUsersMatchingEmail(testUser.getEmail().substring(0, 3));
+
+        assertNotNull(userList);
+        assertFalse(userList.isEmpty());
+        assertEqualUsers(testUser, userList.get(0));
+    }
+
+    @Test
+    public void getUsersMatchingEmail_Not_Found() throws DAOException, ObjectNotFoundException {
+        //method under test
+        List<User> userList = userDAO.getUsersMatchingEmail(NON_EXISTING_EMAIL);
+
+        assertNotNull(userList);
+        assertTrue(userList.isEmpty());
     }
 
     @Test

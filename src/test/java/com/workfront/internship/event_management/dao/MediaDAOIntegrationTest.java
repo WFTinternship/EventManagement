@@ -13,11 +13,15 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.workfront.internship.event_management.AssertionHelper.assertEqualMedia;
-import static com.workfront.internship.event_management.TestObjectCreator.NON_EXISTING_ID;
+import static com.workfront.internship.event_management.TestObjectCreator.*;
 import static junit.framework.TestCase.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by Hermine Turshujyan 7/9/16.
@@ -63,6 +67,38 @@ public class MediaDAOIntegrationTest {
 
         assertNotNull(media);
         assertEqualMedia(media, testMedia);
+    }
+
+    @Test
+    public void insertMediaList_Success() {
+        mediaDAO.deleteAllMedia();
+
+        //add new user for invitation
+        User user = createTestUser();
+        int userId = userDAO.addUser(user);
+        user.setId(userId);
+
+        //add invitations for event
+        List<Media> testMediaList = new ArrayList<>();
+        Media media1 = createTestMedia()
+                .setEventId(testEvent.getId())
+                .setUploader(testUser)
+                .setType(testMediaType);
+        Media media2 = createTestMedia()
+                .setEventId(testEvent.getId())
+                .setUploader(testUser)
+                .setType(testMediaType);
+
+        testMediaList.add(media1);
+        testMediaList.add(media2);
+
+        //method under test
+        mediaDAO.addMediaList(testMediaList);
+        List<Media> mediaList = mediaDAO.getMediaByEventId(testEvent.getId());
+
+        assertNotNull(mediaList);
+        assertFalse(mediaList.isEmpty());
+        assertEquals(mediaList.size(), 2);
     }
 
     @Test(expected = DuplicateEntryException.class)

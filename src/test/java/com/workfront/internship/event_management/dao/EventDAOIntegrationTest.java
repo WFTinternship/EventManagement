@@ -225,6 +225,56 @@ public class EventDAOIntegrationTest {
     }
 
     @Test
+    public void getPublicPastEvents_Found() throws DAOException {
+        //add public past event
+        testEvent.setEndDate(new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000));
+        int eventId = eventDAO.addEvent(testEvent);
+        testEvent.setId(eventId);
+
+
+        //add private event
+        Event privateTestEvent = createTestEvent().
+                setCategory(testCategory).
+                setOrganizer(testUser1).
+                setPublicAccessed(false);
+
+        int privateEventId = eventDAO.addEvent(privateTestEvent);
+        privateTestEvent.setId(privateEventId);
+
+        List<Event> eventList = eventDAO.getPublicPastEvents();
+
+        assertNotNull(eventList);
+        assertFalse(eventList.isEmpty());
+        assertEqualEvents(testEvent, eventList.get(0));
+    }
+
+    @Test
+    public void getPublicPastEvents_Not_Found() throws DAOException {
+        //delete inserted test event
+        eventDAO.deleteAllEvents();
+
+        //add public upcoming event
+        testEvent.setEndDate(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000));
+        int eventId = eventDAO.addEvent(testEvent);
+        testEvent.setId(eventId);
+
+        //add private event
+        Event privateTestEvent = createTestEvent().
+                setCategory(testCategory).
+                setOrganizer(testUser1).
+                setPublicAccessed(false);
+
+        int privateEventId = eventDAO.addEvent(privateTestEvent);
+        privateTestEvent.setId(privateEventId);
+
+        //method under test
+        List<Event> eventList = eventDAO.getPublicPastEvents();
+
+        assertNotNull(eventList);
+        assertTrue(eventList.isEmpty());
+    }
+
+    @Test
     public void getAllUpcomingEvents_EmptyList() throws DAOException {
         //delete upcomming event
         eventDAO.deleteAllEvents();
@@ -247,6 +297,43 @@ public class EventDAOIntegrationTest {
         assertFalse(eventList.isEmpty());
         assertEqualEvents(testEvent, eventList.get(0));
     }
+
+    @Test
+    public void getPublicUpcomingEvents_EmptyList() throws DAOException {
+        //delete all test event
+        eventDAO.deleteAllEvents();
+
+        //create private upcoming event
+        testEvent.setStartDate(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
+                .setPublicAccessed(false);
+        int eventId = eventDAO.addEvent(testEvent);
+        testEvent.setId(eventId);
+
+        List<Event> eventList = eventDAO.getPublicUpcomingEvents();
+
+        assertNotNull(eventList);
+        assertTrue(eventList.isEmpty());
+    }
+
+    @Test
+    public void getPublicUpcomingEvents_Found() throws DAOException {
+        //delete all test event
+        eventDAO.deleteAllEvents();
+
+        //create private upcoming event
+        testEvent.setStartDate(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
+                .setPublicAccessed(true);
+        int eventId = eventDAO.addEvent(testEvent);
+        testEvent.setId(eventId);
+
+        //method under test
+        List<Event> eventList = eventDAO.getPublicUpcomingEvents();
+
+        assertNotNull(eventList);
+        assertFalse(eventList.isEmpty());
+        assertEqualEvents(testEvent, eventList.get(0));
+    }
+
 
     @Test
     public void getUserParticipatedEvents_EmptyList() throws DAOException {
@@ -315,6 +402,33 @@ public class EventDAOIntegrationTest {
     }
 
     @Test
+    public void getPublicEventsByKeyword_EmptyList() throws DAOException, ObjectNotFoundException {
+        //delete inserted test event
+        eventDAO.deleteAllEvents();
+
+        //create private upcoming event
+        testEvent.setPublicAccessed(false);
+        int eventId = eventDAO.addEvent(testEvent);
+        testEvent.setId(eventId);
+
+        //testing method
+        List<Event> eventList = eventDAO.getPublicEventsByKeyword(EXISTING_KEYWORD);
+
+        assertNotNull(eventList);
+        assertTrue(eventList.isEmpty());
+    }
+
+    @Test
+    public void getPublicEventsByKeyword_Found() throws DAOException, ObjectNotFoundException {
+        //testing method (public event in already inserted in setup)
+        List<Event> eventList = eventDAO.getPublicEventsByKeyword(EXISTING_KEYWORD);
+
+        assertNotNull(eventList);
+        assertFalse(eventList.isEmpty());
+        assertEqualEvents(testEvent, eventList.get(0));
+    }
+
+    @Test
     public void getAllEventsByKeyword_EmptyList() throws DAOException, ObjectNotFoundException {
         //testing method
         List<Event> eventList = eventDAO.getAllEventsByKeyword(NON_EXISTING_KEYWORD);
@@ -322,6 +436,7 @@ public class EventDAOIntegrationTest {
         assertNotNull(eventList);
         assertTrue(eventList.isEmpty());
     }
+
 
     @Test
     public void deleteEvent_Found() throws DAOException, ObjectNotFoundException {

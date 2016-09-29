@@ -97,6 +97,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             stmt.executeBatch();
 
             conn.commit();
+            conn.setAutoCommit(true);
         } catch (SQLException e) {
             LOGGER.error("SQL Exception", e);
             throw new DAOException(e);

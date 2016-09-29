@@ -23,6 +23,8 @@ public class TestObjectCreator {
     public static final String EXCEPTION_MESSAGE = "error message";
     public static final String EXISTING_KEYWORD = "test";
     public static final String NON_EXISTING_KEYWORD = "nonexistingkeyword";
+    public static final String VALID_RESPONSE_STRING = "Yes";
+
 
     public static int NON_EXISTING_ID = 1;
     public static int INVALID_ID = -1;

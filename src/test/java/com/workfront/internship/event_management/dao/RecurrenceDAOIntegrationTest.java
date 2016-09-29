@@ -13,9 +13,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.workfront.internship.event_management.AssertionHelper.assertEqualRecurrences;
+import static com.workfront.internship.event_management.TestObjectCreator.createTestRecurrence;
+import static com.workfront.internship.event_management.TestObjectCreator.createTestRecurrenceOption;
+import static com.workfront.internship.event_management.TestObjectCreator.createTestRecurrenceType;
 import static junit.framework.TestCase.*;
 
 /**
@@ -144,7 +148,7 @@ public class RecurrenceDAOIntegrationTest {
     @Test
     public void updateEventRecurrence_Not_Found() throws DAOException, ObjectNotFoundException {
         //create new event recurrence  object with no id
-        Recurrence newEventRecurrence = TestObjectCreator.createTestRecurrence();
+        Recurrence newEventRecurrence = createTestRecurrence();
 
         //test method
         boolean success = eventRecurrenceDAO.updateRecurrence(newEventRecurrence);
@@ -195,8 +199,8 @@ public class RecurrenceDAOIntegrationTest {
         testCategory = TestObjectCreator.createTestCategory();
         testEvent = TestObjectCreator.createTestEvent();
         testRecurrenceType = TestObjectCreator.createTestRecurrenceType();
-        testEventRecurrence = TestObjectCreator.createTestRecurrence();
-        testRecurrenceOption = TestObjectCreator.createTestRecurrenceOption();
+        testEventRecurrence = createTestRecurrence();
+        testRecurrenceOption = createTestRecurrenceOption();
     }
 
     private void insertTestObjectsIntoDB() throws DAOException, DuplicateEntryException {

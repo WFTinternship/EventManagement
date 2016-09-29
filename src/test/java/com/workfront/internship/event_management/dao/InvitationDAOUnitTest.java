@@ -4,7 +4,9 @@ import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.Invitation;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.Whitebox;
@@ -21,14 +23,13 @@ import static org.mockito.Mockito.*;
  */
 public class InvitationDAOUnitTest {
 
-    private DataSource dataSource;
-    private InvitationDAO invitationDAO;
+    private static InvitationDAO invitationDAO;
 
     @SuppressWarnings("unchecked")
-    @Before
-    public void setUp() throws Exception {
+    @BeforeClass
+    public static void setUpClass() throws Exception {
 
-        dataSource = Mockito.mock(DataSource.class);
+        DataSource dataSource = Mockito.mock(DataSource.class);
         Connection connection = Mockito.mock(Connection.class);
 
         when(dataSource.getConnection()).thenReturn(connection);
@@ -40,6 +41,10 @@ public class InvitationDAOUnitTest {
 
     }
 
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+        invitationDAO = null;
+    }
 
     @Test(expected = DAOException.class)
     public void addInvitation_dbError() throws DAOException, DuplicateEntryException {

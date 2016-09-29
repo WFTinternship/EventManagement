@@ -4,7 +4,9 @@ import com.workfront.internship.event_management.exception.dao.DAOException;
 import com.workfront.internship.event_management.exception.dao.DuplicateEntryException;
 import com.workfront.internship.event_management.exception.service.ObjectNotFoundException;
 import com.workfront.internship.event_management.model.RecurrenceType;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.Whitebox;
@@ -23,14 +25,13 @@ import static org.mockito.Mockito.when;
  */
 public class RecurrenceTypeDAOUnitTest {
 
-    private DataSource dataSource;
-    private RecurrenceTypeDAO recurrenceTypeDAO;
+    private static RecurrenceTypeDAO recurrenceTypeDAO;
 
     @SuppressWarnings("unchecked")
-    @Before
-    public void setUp() throws Exception {
+    @BeforeClass
+    public static void setUpClass() throws Exception {
 
-        dataSource = Mockito.mock(DataSource.class);
+        DataSource dataSource = Mockito.mock(DataSource.class);
         Connection connection = Mockito.mock(Connection.class);
 
         when(dataSource.getConnection()).thenReturn(connection);
@@ -39,11 +40,19 @@ public class RecurrenceTypeDAOUnitTest {
 
         recurrenceTypeDAO = new RecurrenceTypeDAOImpl();
         Whitebox.setInternalState(recurrenceTypeDAO, "dataSource", dataSource);
+    }
 
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+        recurrenceTypeDAO = null;
     }
 
     @Test(expected = DAOException.class)
     public void addRecurrenceType_dbError() throws DuplicateEntryException, DAOException {
+        recurrenceTypeDAO.addRecurrenceType(new RecurrenceType());
+    }
+    @Test(expected = DAOException.class)
+    public void addRecurrenceType_DuplicateEntry() throws DuplicateEntryException, DAOException {
         recurrenceTypeDAO.addRecurrenceType(new RecurrenceType());
     }
 

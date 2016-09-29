@@ -16,18 +16,9 @@ import java.sql.*;
 public class GenericDAO {
 
     static final Logger LOGGER = Logger.getLogger(GenericDAO.class);
-    // private DataSourceManager dataSourceManager;
 
     @Autowired
     DataSource dataSource;
-
-    /*public GenericDAO(DataSourceManager dataSourceManager) throws Exception {
-        this.dataSourceManager = dataSourceManager;
-    }
-
-    public GenericDAO() {
-
-    }*/
 
     void closeResources(ResultSet rs, Statement stmt, Connection conn) {
         try {

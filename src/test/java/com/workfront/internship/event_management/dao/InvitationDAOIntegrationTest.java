@@ -13,9 +13,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static com.workfront.internship.event_management.AssertionHelper.assertEqualEvents;
 import static com.workfront.internship.event_management.AssertionHelper.assertEqualInvitations;
+import static com.workfront.internship.event_management.TestObjectCreator.createTestInvitation;
+import static com.workfront.internship.event_management.TestObjectCreator.createTestUser;
 import static junit.framework.TestCase.assertNull;
 import static org.junit.Assert.*;
 
@@ -68,6 +72,37 @@ public class InvitationDAOIntegrationTest {
         //insert duplicate entry (the same eventId - userId pair)
         invitationDAO.addInvitation(testInvitation);
     }
+
+    @Test
+    public void addInvitations_Success() {
+        invitationDAO.deleteAllInvitations();
+
+        //add new user for invitation
+        User user = createTestUser();
+        int userId = userDAO.addUser(user);
+        user.setId(userId);
+
+        //add invitations for event
+        List<Invitation> testInvitationList = new ArrayList<>();
+        Invitation invitation1 = createTestInvitation()
+                .setEventId(testEvent.getId())
+                .setUser(testUser);
+        Invitation invitation2 = createTestInvitation()
+                .setEventId(testEvent.getId())
+                .setUser(user);
+
+        testInvitationList.add(invitation1);
+        testInvitationList.add(invitation2);
+
+        //method under test
+        invitationDAO.addInvitations(testInvitationList);
+        List<Invitation> invitationList = invitationDAO.getInvitationsByEventId(testEvent.getId());
+
+        assertNotNull(invitationList);
+        assertFalse(invitationList.isEmpty());
+        assertEquals(invitationList.size(), 2);
+    }
+
 
     @Test
     public void getInvitationById_Found() throws DAOException, ObjectNotFoundException {
@@ -138,11 +173,23 @@ public class InvitationDAOIntegrationTest {
         assertNotNull(invitation);
         assertEqualInvitations(invitation, testInvitation);
     }
+    @Test
+    public void updateInvitationResponse_Success() throws DuplicateEntryException, ObjectNotFoundException, DAOException {
+        testInvitation.setUserResponse(new UserResponse(3, "Maybe"));
+        //test method
+        invitationDAO.updateInvitationResponse(testEvent.getId(), testUser.getId(), testInvitation.getUserResponse().getId());
+
+        //read updated method from db
+        Invitation invitation = invitationDAO.getInvitationById(testInvitation.getId());
+
+        assertNotNull(invitation);
+        assertEqualInvitations(invitation, testInvitation);
+    }
 
     @Test
     public void updateInvitation_Not_Found() throws DuplicateEntryException, ObjectNotFoundException, DAOException {
         //create new invitation with no id
-        Invitation newTestInvitation = TestObjectCreator.createTestInvitation();
+        Invitation newTestInvitation = createTestInvitation();
 
         //test method
         boolean success = invitationDAO.updateInvitation(newTestInvitation);
@@ -237,7 +284,7 @@ public class InvitationDAOIntegrationTest {
         testUser = TestObjectCreator.createTestUser();
         testCategory = TestObjectCreator.createTestCategory();
         testEvent = TestObjectCreator.createTestEvent();
-        testInvitation = TestObjectCreator.createTestInvitation();
+        testInvitation = createTestInvitation();
     }
 
     private void deleteTestRecordsFromDB() throws DAOException {

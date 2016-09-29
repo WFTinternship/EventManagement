@@ -24,16 +24,14 @@ import static org.mockito.Mockito.when;
  */
 public class UserDAOUnitTest {
 
-    private static DataSource dataSource;
-    private static Connection connection;
     private static UserDAO userDAO;
 
     @SuppressWarnings("unchecked")
     @BeforeClass
     public static void setUpClass() throws Exception {
 
-        dataSource = Mockito.mock(DataSource.class);
-        connection = Mockito.mock(Connection.class);
+        DataSource dataSource = Mockito.mock(DataSource.class);
+        Connection connection = Mockito.mock(Connection.class);
 
         when(dataSource.getConnection()).thenReturn(connection);
         when(connection.prepareStatement(any(String.class), eq(PreparedStatement.RETURN_GENERATED_KEYS))).thenThrow(SQLException.class);
@@ -46,8 +44,6 @@ public class UserDAOUnitTest {
     @AfterClass
     public static void tearDownClass() throws Exception {
         userDAO = null;
-        dataSource = null;
-        connection = null;
     }
 
     @Test(expected = DAOException.class)
