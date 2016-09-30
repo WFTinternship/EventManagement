@@ -28,28 +28,28 @@ public class TestApplicationConfig {
     @Bean
     public DataSource getTestDataSource() throws IOException {
 
-//        BasicDataSource dataSource = new BasicDataSource();
-//
-//        //loading db property list
-//        Properties props = new Properties();
-//        props.load(TestApplicationConfig.class.getClassLoader().getResourceAsStream("db.properties"));
-//
-//        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-//
-//        dataSource.setUsername(props.getProperty("jdbc.username"));
-//        dataSource.setPassword(props.getProperty("jdbc.password"));
-//        dataSource.setUrl(props.getProperty("jdbc.url.test"));
-//
-//        return dataSource;
+        BasicDataSource dataSource = new BasicDataSource();
 
-        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-        EmbeddedDatabase db = builder
-                .setType(EmbeddedDatabaseType.H2)
-                .setName("event_management_test")
-                .addScript("db/schema.sql")
-                .addScript("db/data.sql")
-                .build();
-        return db;
+        //loading db property list
+        Properties props = new Properties();
+        props.load(TestApplicationConfig.class.getClassLoader().getResourceAsStream("db.properties"));
+
+        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+
+        dataSource.setUsername(props.getProperty("jdbc.username"));
+        dataSource.setPassword(props.getProperty("jdbc.password"));
+        dataSource.setUrl(props.getProperty("jdbc.url.test"));
+
+        return dataSource;
+
+//        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+//        EmbeddedDatabase db = builder
+//                .setType(EmbeddedDatabaseType.H2)
+//                .setName("event_management_test")
+//                .addScript("db/schema.sql")
+//                .addScript("db/data.sql")
+//                .build();
+//        return db;
     }
 
 

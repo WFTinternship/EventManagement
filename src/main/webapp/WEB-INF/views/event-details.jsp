@@ -185,8 +185,14 @@
                                     <span class="meta_header">Privacy:</span>
                                     <i class="ev_icon icon-<%= event.isPublicAccessed() ? "unlock" : "lock"%>"></i>
                                     <span><%= event.isPublicAccessed() ? "Public" : "Private"%></span>
-
                                 </div>
+                                <% if(event.getLastModifiedDate() != null) { %>
+                                    <div>
+                                        <span class="meta_header">Last modified:</span>
+                                        <i class="ev_icon icon-pencil"></i>
+                                        <span><%=DateParser.parseDateToString(event.getLastModifiedDate()) %></span>
+                                    </div>
+                                <% } %>
                             </div>
                             </div>
                             <% if (event.getLng() != 0 && event.getLat() != 0) { %>
