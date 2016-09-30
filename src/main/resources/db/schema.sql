@@ -1,6 +1,5 @@
 CREATE TABLE event (
   id              INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  organizer_id    INTEGER UNSIGNED NOT NULL,
   title           VARCHAR(255)     NOT NULL,
   short_desc      VARCHAR(300),
   full_desc       VARCHAR(1500),
@@ -9,13 +8,14 @@ CREATE TABLE event (
   lng             DOUBLE,
   file_path       VARCHAR(255),
   image_path      VARCHAR(255),
-  category_id     INTEGER          NOT NULL,
+  category_id     INTEGER UNSIGNED NOT NULL,
   public_accessed INTEGER          NOT NULL,
   guests_allowed  INTEGER          NOT NULL,
   start           TIMESTAMP        NOT NULL,
   end             TIMESTAMP        NOT NULL,
   creation_date   TIMESTAMP        NOT NULL,
-  last_modified   TIMESTAMP
+  last_modified   TIMESTAMP,
+  organizer_id    INTEGER UNSIGNED NOT NULL
 );
 
 
@@ -93,7 +93,7 @@ CREATE TABLE user_response (
 
 ALTER TABLE event
   ADD FOREIGN KEY (category_id) REFERENCES event_category (id)
-  ON DELETE SET NULL
+  ON DELETE CASCADE
   ON UPDATE NO ACTION;
 
   ALTER TABLE event
@@ -105,24 +105,30 @@ ALTER TABLE event_invitation
   ADD FOREIGN KEY (event_id) REFERENCES event (id)
   ON DELETE CASCADE
   ON UPDATE NO ACTION;
+
 ALTER TABLE event_invitation
   ADD FOREIGN KEY (user_id) REFERENCES user (id)
   ON DELETE CASCADE
   ON UPDATE NO ACTION;
+
 ALTER TABLE event_invitation
   ADD FOREIGN KEY (user_response_id) REFERENCES user_response (id)
   ON DELETE CASCADE
   ON UPDATE NO ACTION;
 
 ALTER TABLE event_media
-  ADD FOREIGN KEY (event_id) REFERENCES event (id);
-ALTER TABLE event_media
-  ADD FOREIGN KEY (media_type_id) REFERENCES media_type (id)
+  ADD FOREIGN KEY (event_id) REFERENCES event (id)
   ON DELETE CASCADE
   ON UPDATE NO ACTION;
+
+ALTER TABLE event_media
+  ADD FOREIGN KEY (media_type_id) REFERENCES media_type (id)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
 ALTER TABLE event_media
   ADD FOREIGN KEY (uploader_id) REFERENCES user (id)
-  ON DELETE CASCADE
+  ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
 ALTER TABLE event_recurrence

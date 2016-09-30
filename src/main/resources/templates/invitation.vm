@@ -49,21 +49,22 @@
         #foreach ($invitationItem in $event.invitations)
             <div style='padding-left:20px; clear:left;' >
                 <i style="margin-right: 10px; float:left" class='icon-response-${invitationItem.userResponse.id}'></i>
-                <div style='float: left'><span>${invitationItem.user.email}</span></div>
+                <div style='float: left'><span>${invitationItem.user.email} (${invitationItem.userResponse.title})</span></div>
+
                 #if (${event.organizer.id} == ${invitationItem.user.id})
-                    <span style="margin-left:10px;float:left;"> (Organizer)</span>
+                    <span style="margin-left:10px;float:left; font-weight:bold"> [Organizer]</span>
                 #end
             </div>
         #end
     </div>
     <br>
     <div style="margin-top:20px;">Going?
-        <a style="text-decoration:none; font-weight:bold; font-size:14px; color: #888" href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=1">Yes</a>
-        <a style="text-decoration:none; font-weight:bold; font-size:14px; color: #888" href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=2">No</a>
-        <a style="text-decoration:none; font-weight:bold; font-size:14px; color: #888" href="http://localhost:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=3">Maybe</a>
+        <a style="text-decoration:none; font-weight:bold; font-size:14px; color: #888" href="http://10.39.2.157:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=1">Yes</a>
+        <a style="text-decoration:none; font-weight:bold; font-size:14px; color: #888" href="http://10.39.2.157:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=2">No</a>
+        <a style="text-decoration:none; font-weight:bold; font-size:14px; color: #888" href="http://10.39.2.157:8085/events/${event.id}/invitation-respond?user=${invitation.user.id}&response=3">Maybe</a>
     </div>
     <div style="color: #888;font-weight:bold;font-size:13px;">
-        <a style="text-decoration:none;" href="http://localhost:8085/events/${event.id}/">Event Details</a>
+        <a style="text-decoration:none;" href="http://10.39.2.157:8085/events/${event.id}/">Event Details</a>
     </div>
 
     <br/>
