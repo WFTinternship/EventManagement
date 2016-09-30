@@ -189,8 +189,9 @@
                                 </div>
                             </div>
                             </div>
-                            <div id="map"></div>
-
+                            <% if (event.getLng() != 0 && event.getLat() != 0) { %>
+                                <div id="map"></div>
+                            <% } %>
                             <% if (!isEmptyString(event.getShortDescription())) { %>
                                 <div class="desc">
                                     <div class="desc_header">Short description:</div>
@@ -330,6 +331,7 @@
     <!-- End Content Section -->
 
 </div>
+<% if (event.getLng() != 0 && event.getLat() != 0) { %>
 
 <!-- MAP -->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBp1mWG670cx7hxNYJ1hlXuXFVKCQDnOQY"></script>
@@ -359,6 +361,7 @@
 
     google.maps.event.addDomListener(window, 'load', initialize);
 </script>
+<% } %>
 <!-- Footer -->
 <jsp:include page="footer.jsp"/>
 <!-- End Footer -->
