@@ -45,6 +45,7 @@ public class TestApplicationConfig {
 //        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
 //        EmbeddedDatabase db = builder
 //                .setType(EmbeddedDatabaseType.H2)
+//                .setName("event_management_test")
 //                .addScript("db/schema.sql")
 //                .addScript("db/data.sql")
 //                .build();

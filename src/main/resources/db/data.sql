@@ -35,3 +35,7 @@ INSERT INTO `event_invitation` VALUES
   (2, 2, 2, 4, '1', 0,  null, '2016-08-10 12:09:26'),
   (3, 2, 2, 4, '1', 0,  null, '2016-08-10 12:09:26');
 
+
+INSERT INTO `media_type` VALUES
+  (1, 'image'),
+  (2, 'video');

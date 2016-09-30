@@ -53,6 +53,7 @@ public class DevApplicationConfig {
 //        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
 //        EmbeddedDatabase db = builder
 //                .setType(EmbeddedDatabaseType.H2)
+//                .setName("event_management")
 //                .addScript("db/schema.sql")
 //                .addScript("db/data.sql")
 //                .build();

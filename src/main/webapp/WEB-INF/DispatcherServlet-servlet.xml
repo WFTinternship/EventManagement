@@ -19,13 +19,4 @@
 
     <mvc:resources mapping="/resources/**" location="/resources/"/>
     <mvc:annotation-driven/>
-    <!--<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">-->
-    <!--<property name="webBindingInitializer">-->
-        <!--<bean class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">-->
-            <!--<property name="propertyEditorRegistrar">-->
-                <!--<bean class="org.springframework.beans.propertyeditors.StringTrimmerEditor" />-->
-            <!--</property>-->
-        <!--</bean>-->
-    <!--</property>-->
-    <!--</bean>-->
 </beans>
