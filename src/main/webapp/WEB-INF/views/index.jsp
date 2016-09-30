@@ -55,6 +55,9 @@
                 <img src="<c:url value="/resources/img/slide2.jpg" />" class="slider_img"/>
             </li>
             <li>
+                <img src="<c:url value="/resources/img/slide3.jpg" />" class="slider_img"/>
+            </li>
+            <li>
                 <img src="<c:url value="/resources/img/slide1.jpg" />" class="slider_img"/>
             </li>
         </ul>

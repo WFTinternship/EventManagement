@@ -252,15 +252,11 @@
                                     </div>
                                 </div>
                             <% }%>
-
-
                         <%
                             List<Media> mediaList = event.getMedia();
                             if(!isEmptyCollection(mediaList)) { %>
                             <div class="photos_wrapper">
                                 <div class="desc_header">Photos:</div>
-
-
 
                         <% Map<String, List<Media>> userMediaMap = new HashMap<>();
                                 for (Media media: mediaList) {
@@ -286,7 +282,7 @@
                                 List<Media> userMediaList = entry.getValue();
                                 String userName = entry.getKey();
                         %>
-                        <div class="uploader_name"><%=userName%></div>
+                                <div class="uploader_name"><%=userName%></div>
                                 <div class="animated-thumbnials">
 
                                 <%
@@ -299,11 +295,10 @@
                                     <img class="photo-item" src="<%=imagePath%>">
                                 </a>
                             <% } %>
-
-                            <% } %>
-                            </div>
                             </div>
                             <% } %>
+                            <% } %>
+                            </div>
 
                         <% if (sessionUser != null && isPassedEvent) { %>
 

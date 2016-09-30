@@ -260,7 +260,7 @@
                         </label>
                         <input class="input_text" name="invitationEmail" id="invitation-email" type="text"
                                placeholder="Enter guest email address" autocomplete="off">
-                        <button id="add_invitation_btn" class="btn" type="button">Add</button>
+                        <%--<button id="add_invitation_btn" class="btn" type="button">Add</button>--%>
                     </div>
                 </div>
                 <div id="suggested_emails"></div>
