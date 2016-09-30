@@ -178,7 +178,7 @@ public class EventController {
 
     @RequestMapping(value = "/events/{eventId}/delete")
     @ResponseBody
-    public CustomResponse deleteEvent(HttpServletRequest request, Model model, @PathVariable("eventId") int eventId) {
+    public CustomResponse deleteEvent(HttpServletRequest request, @PathVariable("eventId") int eventId) {
 
         HttpSession session = request.getSession();
         User sessionUser = (User) session.getAttribute("user");
@@ -240,19 +240,6 @@ public class EventController {
         double latitude = Double.parseDouble(request.getParameter("lat"));
         String invitationsString = request.getParameter("invitations");
 
-        List<Invitation> invitations = new ArrayList<>();
-        if (!isEmptyString(invitationsString)) {
-            //get invitees email list
-            List<String> invitationEmails = Arrays.asList(invitationsString.split(","));
-
-            for (String email : invitationEmails) {
-                Invitation invitation = invitationService.createInvitation(email);
-                invitation.setEventId(eventId);
-                invitations.add(invitation);
-            }
-        }
-
-        //get category
         int categoryId = Integer.parseInt(request.getParameter("categoryId"));
         Category category = new Category().setId(categoryId);
 
@@ -266,6 +253,18 @@ public class EventController {
 
         Date startDate = DateParser.parseStringToDate(startDateString, startTimeString);
         Date endDate = DateParser.parseStringToDate(endDateString, endTimeString);
+
+        List<Invitation> invitations = new ArrayList<>();
+        if (!isEmptyString(invitationsString)) {
+            //get invitees email list
+            List<String> invitationEmails = Arrays.asList(invitationsString.split(","));
+
+            for (String email : invitationEmails) {
+                Invitation invitation = invitationService.createInvitation(email);
+                invitation.setEventId(eventId);
+                invitations.add(invitation);
+            }
+        }
 
         event.setTitle(title)
                 .setShortDescription(shortDescription)
@@ -347,9 +346,9 @@ public class EventController {
             throw new OperationFailedException("Unknown action");
         }
 
-        //update logged in user's organized events in session
-        List<Event> userOrganizedEvents = eventService.getUserOrganizedEvents(sessionUser.getId());
-        session.setAttribute("userOrganizedEvents", userOrganizedEvents);
+//        //update logged in user's organized events in session
+//        List<Event> userOrganizedEvents = eventService.getUserOrganizedEvents(sessionUser.getId());
+//        session.setAttribute("userOrganizedEvents", userOrganizedEvents);
 
         result.setStatus(ACTION_SUCCESS);
         return result;

@@ -1,5 +1,6 @@
 package com.workfront.internship.event_management.controller;
 
+import com.workfront.internship.event_management.controller.util.CustomResponse;
 import com.workfront.internship.event_management.exception.service.UnauthorizedAccessException;
 import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Event;
@@ -104,7 +105,6 @@ public class EventControllerUnitTest {
         assertEquals("Incorrect redirect page", EVENTS_LIST_VIEW, pageView);
         verify(testRequest).setAttribute("listHeader", ALL_EVENTS_HEADER);
         verify(eventService).getPublicEvents();
-
     }
 
     @Test
@@ -259,40 +259,44 @@ public class EventControllerUnitTest {
         eventController.goToEditEventPage(testRequest, VALID_ID);
     }
 
-//
-//
-//    @Test
-//    public void loadEvents_ByCategory() {
-//        when(testRequest.getParameter("categoryId")).thenReturn(String.valueOf(VALID_ID));
-//
-//        //method under test
-////        CustomResponse result = eventController.loadEventsByCategory(testRequest);
-////
-////        verify(eventService).getEventsByCategory(VALID_ID);
-////        assertEquals("Status is incorrect", result.getStatus(), ACTION_SUCCESS);
-//    }
-//
-//    @Test
-//    public void loadEvents_All() {
-//        when(testRequest.getParameter("categoryId")).thenReturn(null);
-//
-//        //method under test
-////        String result = eventController.loadAllEventsAndCategories((testRequest);
-//
-//        verify(eventService).getAllEvents();
-//       // assertEquals("Status is incorrect", result.getStatus(), ACTION_SUCCESS);
-//    }
+    @Test(expected = UnauthorizedAccessException.class)
+    public void deleteEvent_Failed_UnauthorizedUser() {
+        when(testSession.getAttribute("user")).thenReturn(null);
 
-
-    //helper methods
-    private void createTestObjects() {
-        testCategoryList = new ArrayList<>();
-        Category testCategory = createTestCategory();
-        testCategoryList.add(testCategory);
-
-        testEventList = new ArrayList<>();
-        testEvent = createTestEvent();
-        testEventList.add(testEvent);
+        //method under test
+        eventController.deleteEvent(testRequest, VALID_ID);
     }
 
+    @Test(expected = UnauthorizedAccessException.class)
+    public void deleteEvent_Failed_UnauthorizedUser_NotOrganizer() {
+        User sessionUser = createTestUser().setId(VALID_ID + 1);
+
+        when(testSession.getAttribute("user")).thenReturn(sessionUser);
+        when(eventService.getEventById(anyInt())).thenReturn(testEvent);
+
+        //method under test
+        eventController.deleteEvent(testRequest, testUser.getId());
+    }
+
+    @Test
+    public void deleteEvent_Success() {
+        when(testSession.getAttribute("user")).thenReturn(testUser);
+        when(eventService.getEventById(anyInt())).thenReturn(testEvent);
+        when(eventService.deleteEvent(anyInt())).thenReturn(true);
+
+        //method under test
+        CustomResponse response = eventController.deleteEvent(testRequest, testUser.getId());
+        assertEquals("Failed to delete event. Incorrect response status", ACTION_SUCCESS, response.getStatus());
+    }
+
+    @Test
+    public void deleteEvent_Fail() {
+        when(testSession.getAttribute("user")).thenReturn(testUser);
+        when(eventService.getEventById(anyInt())).thenReturn(testEvent);
+        when(eventService.deleteEvent(anyInt())).thenReturn(false);
+
+        //method under test
+        CustomResponse response = eventController.deleteEvent(testRequest, testUser.getId());
+        assertEquals("Failed to delete event. Incorrect response status", ACTION_FAIL, response.getStatus());
+    }
 }

@@ -17,12 +17,13 @@ public class CongrollerConstants {
     public static final String MY_EVENTS_VIEW = "my-events";
     public static final String SEARCH_RESULTS_VIEW = "search-results";
 
-
     //response messages, parameter values
     public static final String ACTION_SUCCESS = "SUCCESS";
     public static final String ACTION_FAIL = "FAIL";
     public static final String ACTION_FOUND = "FOUND";
     public static final String ACTION_NOT_FOUND = "NOT FOUND";
+
+    public static final String ACTION_CREATE_EVENT = "create-event";
 
     public static final String RESPONSE_TRUE = "true";
     public static final String RESPONSE_FALSE = "false";

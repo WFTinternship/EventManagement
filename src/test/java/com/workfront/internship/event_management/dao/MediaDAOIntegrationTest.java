@@ -286,8 +286,8 @@ public class MediaDAOIntegrationTest {
     }
 
     private void deleteTestRecordsFromDB() throws DAOException {
-        eventDAO.deleteAllEvents();
         mediaDAO.deleteAllMedia();
+        eventDAO.deleteAllEvents();
         categoryDAO.deleteAllCategories();
         userDAO.getAllUsers();
     }

@@ -1,14 +1,19 @@
 package com.workfront.internship.event_management.controller;
 
+import com.workfront.internship.event_management.common.DateParser;
+import com.workfront.internship.event_management.controller.util.CustomResponse;
 import com.workfront.internship.event_management.controller.util.TestHttpServletRequest;
+import com.workfront.internship.event_management.controller.util.TestHttpSession;
 import com.workfront.internship.event_management.model.Category;
 import com.workfront.internship.event_management.model.Event;
 import com.workfront.internship.event_management.model.User;
 import com.workfront.internship.event_management.service.CategoryService;
 import com.workfront.internship.event_management.service.EventService;
+import com.workfront.internship.event_management.service.UserService;
 import com.workfront.internship.event_management.spring.TestApplicationConfig;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +24,18 @@ import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import static com.workfront.internship.event_management.TestObjectCreator.createTestCategory;
-import static com.workfront.internship.event_management.TestObjectCreator.createTestEvent;
+import static com.workfront.internship.event_management.TestObjectCreator.*;
+import static com.workfront.internship.event_management.TestObjectCreator.VALID_IMAGE_NAME;
+import static com.workfront.internship.event_management.TestObjectCreator.WEB_CONTENT_ROOT;
 import static com.workfront.internship.event_management.controller.util.CongrollerConstants.*;
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by Hermine Turshujyan 8/30/16.
@@ -42,97 +51,115 @@ public class EventControllerIntegrationTest {
     private EventService eventService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private UserService userService;
 
-    private Model testModel;
     private TestHttpServletRequest testRequest;
+    private TestHttpSession testSession;
     private Event testEvent;
     private Category testCategory;
-
+    private User testUser;
 
     @Before
     public void setUp() {
         testRequest = new TestHttpServletRequest();
-        testModel = new ExtendedModelMap();
+        testSession = new TestHttpSession();
 
         //create test objects, insert into db
+        testUser = createTestUser();
+        userService.addAccount(testUser);
+
         testCategory = createTestCategory();
         categoryService.addCategory(testCategory);
 
-        testEvent = createTestEvent();
-        testEvent.setCategory(testCategory);
+        testEvent = createTestEvent()
+                .setCategory(testCategory)
+                .setOrganizer(testUser);
         eventService.createEvent(testEvent);
     }
 
     @After
     public void tearDown() {
-        testRequest = null;
-        testModel = null;
-        testEvent = null;
-        testCategory = null;
-
         //delete test records from db
-        categoryService.deleteAllCategories();
         eventService.deleteAllEvents();
+        categoryService.deleteAllCategories();
+        userService.deleteAllUsers();
     }
 
     @Test
-    public void loadAllEventsAndCategories() {
-
-        List<Event> testEventList = new ArrayList<>();
-        testEventList.add(testEvent);
-
-        List<Category> testCategoryList = new ArrayList<>();
-        testCategoryList.add(testCategory);
-
+    public void loadAllEventsAndCategories_Public() {
         //method under test
-//        String pageView = eventController.loadAllEventsAndCategories(testRequest, testModel);
+        String pageView = eventController.loadEventsByCategory(testRequest);
 
-        List eventList = (ArrayList) testModel.asMap().get("events");
-        List categoryList = (ArrayList) testModel.asMap().get("categories");
+        List<Event> eventList = (List<Event>) testRequest.getAttribute("events");
+        List<Category> categoryList = (List<Category>) testRequest.getAttribute("categories");
 
         //assertions
+        assertEquals("Invalid redirect page", pageView, EVENTS_LIST_VIEW);
+
         assertNotNull("Event list is null", eventList);
         assertFalse("Event list is empty", eventList.isEmpty());
         assertEquals("Failed to load events", eventList.size(), 1);
+        assertEquals("Failed to load event", eventList.get(0).getId(), testEvent.getId());
 
         assertNotNull("Category list is null", categoryList);
         assertFalse("Category list is empty", categoryList.isEmpty());
         assertEquals("Failed to load categories", categoryList.size(), 1);
-
-//        assertEquals("Invalid redirect page", pageView, EVENTS_LIST_VIEW);
+        assertEquals("Failed to load event", categoryList.get(0).getId(), testCategory.getId());
     }
 
     @Test
-    public void getEvent() {
+    public void loadPastEvents_Public() {
+
+        //make test event past, insert into db
+        testEvent.setEndDate(new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000));
+        eventService.createEvent(testEvent);
+
         //method under test
-        String pageName = eventController.loadEventDetails(testEvent.getId(), testRequest);
+        String pageView = eventController.loadPastEvents(testRequest);
 
-        Event event = (Event) testModel.asMap().get("event");
+        //assertions
+        List eventList = (List<Event>) testRequest.getAttribute("events");
+        String listHeader = (String) testRequest.getAttribute("listHeader");
 
-        assertNotNull("Event not found", event);
-        assertEquals("Wrong event id", event.getId(), testEvent.getId());
-        assertEquals("Invalid redirect page", pageName, EVENT_DETAILS_VIEW);
+        assertEquals("Invalid redirect page", pageView, EVENTS_LIST_VIEW);
+
+        assertEquals("Invalid header for past events page", listHeader, PAST_EVENTS_HEADER);
+
+        assertNotNull("Event list is null", eventList);
+        assertFalse("Event list is empty", eventList.isEmpty());
+        assertEquals("Failed to load events", eventList.size(), 1);
     }
 
     @Test
-    public void loadEvents_By_Category() {
-        List<Event> testEventList = new ArrayList<>();
-        testEventList.add(testEvent);
+    public void loadUpcomingEvents_Public() {
 
-        testRequest.setAttribute("categoryId", testCategory.getId());
-
+        //testEvent is already upcoming
         //method under test
-//        CustomResponse response = eventController.loadEventsByCategory(testRequest);
-//        List<Event> eventList = (List<Event>) response.getResult();
-//
-//        //assertions
-//        assertEquals("Status is incorrect", response.getStatus(), ACTION_SUCCESS);
-//
-//        assertNotNull("Event list is null", eventList);
-//        assertFalse("Event list is empty", eventList.isEmpty());
-//        assertEquals("Incorrect event list size", eventList.size(), 1);
-//        assertEquals("Fail to load all events", eventList.get(0).getId(), testEvent.getId());
+        String pageView = eventController.loadUpcomingEvents(testRequest);
 
+        //assertions
+        List eventList = (List<Event>) testRequest.getAttribute("events");
+        String listHeader = (String) testRequest.getAttribute("listHeader");
+
+        assertEquals("Invalid redirect page", pageView, EVENTS_LIST_VIEW);
+        assertEquals("Invalid header for past events page", listHeader, UPCOMING_EVENTS_HEADER);
+
+        assertNotNull("Event list is null", eventList);
+        assertFalse("Event list is empty", eventList.isEmpty());
+        assertEquals("Failed to load events", eventList.size(), 1);
+    }
+
+    @Test
+    public void loadEventDetails_Success() {
+        //method under test
+        String pageView = eventController.loadEventDetails(testEvent.getId(), testRequest);
+
+        Event actualEvent = (Event) testRequest.getAttribute("event");
+
+        assertEquals("Invalid redirect page", pageView, EVENT_DETAILS_VIEW);
+        assertNotNull("Event not found", actualEvent);
+        assertEquals("Wrong event id", actualEvent.getId(), testEvent.getId());
     }
 
     @Test
@@ -142,14 +169,55 @@ public class EventControllerIntegrationTest {
         //method under test
         String pageName = eventController.goToCreateEventPage(testRequest);
 
-        Event emptyEvent = (Event) testModel.asMap().get("event");
-        List<Category> categoryList = (List<Category>) testModel.asMap().get("categories");
+        List<Category> categoryList = (List<Category>) testRequest.getAttribute("categories");
+        String action = (String) testRequest.getAttribute("action");
+        Event emptyEvent = (Event) testRequest.getAttribute("event");
 
-        assertNotNull("Empty event not created", emptyEvent);
+        assertEquals("Invalid redirect page", EVENT_EDIT_VIEW, pageName);
+        assertEquals("Invalid action", ACTION_CREATE_EVENT, action);
+
         assertNotNull("Category list is null", categoryList);
-        assertEquals("Incorrect category list size", categoryList.size(), 1);
-        assertEquals("Fail to load all categories", categoryList.get(0).getId(), testCategory.getId());
-        assertEquals("Invalid redirect page", pageName, EVENT_EDIT_VIEW);
+        assertFalse("Category list is empty", categoryList.isEmpty());
+        assertEquals("Failed to load categories", categoryList.size(), 1);
+        assertEquals("Failed to load event", categoryList.get(0).getId(), testCategory.getId());
+
+        assertNotNull("Failed to create empty event object", emptyEvent);
+    }
+
+
+    @Test
+    public void saveEvent_Create_Success() {
+        //delete inserted event from db
+        eventService.deleteAllEvents();
+
+        testRequest.getSession().setAttribute("user", testUser);
+        testRequest.setParameter("action", "create");
+
+        testRequest.setParameter("eventTitle", testEvent.getTitle());
+        testRequest.setParameter("shortDesc", testEvent.getShortDescription());
+        testRequest.setParameter("fullDesc", testEvent.getFullDescription());
+
+        testRequest.setParameter("categoryId", Integer.toString(testEvent.getCategory().getId()));
+        testRequest.setParameter("eventId", "0");
+        testRequest.setParameter("publicAccessed", "1");
+        testRequest.setParameter("guestsAllowed", "1");
+        testRequest.setParameter("startDate", DateParser.getDateStringFromDate(testEvent.getStartDate()));
+        testRequest.setParameter("endDate", DateParser.getDateStringFromDate(testEvent.getEndDate()));
+        testRequest.setParameter("startTime", DateParser.getTimeStringFromDate(testEvent.getStartDate()));
+        testRequest.setParameter("endTime", DateParser.getTimeStringFromDate(testEvent.getEndDate()));
+        testRequest.setParameter("categoryId", Integer.toString(testEvent.getCategory().getId()));
+        testRequest.setParameter("location", testEvent.getLocation());
+        testRequest.setParameter("lng", "1.1");
+        testRequest.setParameter("lat", "1.1");
+
+        //method under test
+        CustomResponse response = eventController.saveEvent(testRequest, null, null);
+
+        List<Event> userOrganizedEvents = eventService.getUserOrganizedEvents(testUser.getId());
+
+        assertEquals("Create event failed", response.getStatus(), ACTION_SUCCESS);
+        assertNotNull("User organized event list is null", userOrganizedEvents);
+        assertFalse("User organized event list is empty", userOrganizedEvents.isEmpty());
     }
 
 }

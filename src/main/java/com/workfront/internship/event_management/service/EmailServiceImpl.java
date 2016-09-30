@@ -62,7 +62,8 @@ public class EmailServiceImpl implements EmailService {
 
 					MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
 					message.setTo(invitation.getUser().getEmail());
-					message.setFrom("turshujyan@gmail.com"); // TODO: 9/16/16 read from plist
+					message.setFrom(event.getOrganizer().getFirstName() + event.getOrganizer().getLastName());
+					// TODO: 9/16/16 read from plist
 					message.setSubject(String.format("Invitation: %s", event.getTitle()));
 
 					Map model = new HashMap();
