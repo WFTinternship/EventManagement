@@ -19,9 +19,12 @@ public class EventsPage extends AbstractPage {
         WebElement category = getWebDriver().findElement(By.cssSelector(".cat_item"));
         category.click();
     }
+    public void clickEventDetailsButton() throws InterruptedException {
+        WebElement category = getWebDriver().findElement(By.cssSelector(".list_item a.btn"));
+        category.click();
+    }
 
     public WebElement getAllEventsHeader() throws InterruptedException {
         return getWebDriver().findElement(By.cssSelector(".list_header"));
     }
-
 }

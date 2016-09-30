@@ -2,11 +2,11 @@ package com.workfront.internship.event_management.selenium.tests;
 
 import com.workfront.internship.event_management.selenium.pages.HomePage;
 import com.workfront.internship.event_management.selenium.pages.LoginPopup;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static com.workfront.internship.event_management.selenium.TestHelper.*;
 import static junit.framework.TestCase.assertTrue;
@@ -21,42 +21,41 @@ public class LoginPopupTest {
     private static LoginPopup loginPopup;
     private static HomePage homePage;
 
-    @BeforeClass
-    public static void setUp() {
+    @Before
+    public void setUp() {
         loginPopup = new LoginPopup();
         homePage = new HomePage();
         homePage.init(HOME_PAGE_URL);
     }
 
-    @AfterClass
-    public static void tearDownClass() {
+    @After
+    public void tearDown() {
         homePage.getWebDriver().close();
         loginPopup = null;
         homePage = null;
-    }
-
-    @After
-    public void tearDown() {
-        // redirectToHome();
     }
 
 
     @Test
     public void login_success() throws InterruptedException {
 
-        homePage.clickLogin();
+        homePage.clickLoginButton();
+
         loginPopup.typeEmail(EXISTING_EMAIL);
         loginPopup.typePassword(VALID_PASSWORD);
+
         loginPopup.clickSignin();
 
+        WebDriverWait wait = new WebDriverWait(homePage.getWebDriver(), 15, 100);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("logout_button")));
+
         assertFalse("Login popup is not closed", homePage.getLoginPopup().isDisplayed());
-        assertNotNull("Loguot button is not displayed", homePage.getLogoutButton());
     }
 
     @Test
     public void login_failed() throws InterruptedException {
 
-        homePage.clickLogin();
+        homePage.clickLoginButton();
         loginPopup.typeEmail(EXISTING_EMAIL);
         loginPopup.typePassword(INVALID_PASSWORD);
 

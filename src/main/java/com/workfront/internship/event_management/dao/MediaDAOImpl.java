@@ -28,7 +28,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
         PreparedStatement stmt = null;
 
         int id = 0;
-        String query = "INSERT INTO event_media (event_id, path, media_type_id, description, uploader_id, upload_date) "
+        String query = "INSERT INTO event_media (event_id, name, media_type_id, description, uploader_id, upload_date) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
         try {
             //get connection
@@ -54,7 +54,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             id = getInsertedId(stmt);
         } catch (SQLIntegrityConstraintViolationException e) {
             LOGGER.error("Duplicate media entry", e);
-            throw new DuplicateEntryException("Media with path " + media.getName() + " already exists!", e);
+            throw new DuplicateEntryException("Media with name " + media.getName() + " already exists!", e);
         } catch (SQLException e) {
             LOGGER.error("SQL Exception", e);
             throw new DAOException(e);
@@ -70,7 +70,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
         Connection conn = null;
         PreparedStatement stmt = null;
 
-        String query = "INSERT INTO event_media (event_id, path, media_type_id, description, uploader_id, upload_date) "
+        String query = "INSERT INTO event_media (event_id, name, media_type_id, description, uploader_id, upload_date) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
         try {
             //get connection
@@ -294,7 +294,7 @@ public class MediaDAOImpl extends GenericDAO implements MediaDAO {
             media.setId(rs.getInt("id"))
                     .setEventId(rs.getInt("event_id"))
                     .setType(mediaType)
-                    .setName(rs.getString("path"))
+                    .setName(rs.getString("name"))
                     .setDescription(rs.getString("description"))
                     .setUploader(user)
                     .setUploadDate(rs.getTimestamp("upload_date"));

@@ -7,9 +7,9 @@ import java.util.UUID;
  */
 
 public class TestHelper {
-    public static final String HOME_PAGE_URL = "http://localhost:8080/index.jsp";
-    public static final String EVENTS_PAGE_URL = "http://localhost:8080/events.jsp";
-    public static final String REGISTRATION_PAGE_URL = "http://localhost:8080/registration.jsp";
+    public static final String HOME_PAGE_URL = "http://localhost:8085/";
+    public static final String EVENTS_PAGE_URL = "http://localhost:8085/events";
+    public static final String REGISTRATION_PAGE_URL = "http://localhost:8085/registration";
 
     public static final String INVALID_EMAIL = "afasfdfdf.co"; //invalid format
     public static final String INVALID_PASSWORD = "issword"; //length < 6

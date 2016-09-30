@@ -1,10 +1,7 @@
 package com.workfront.internship.event_management.selenium.tests;
 
 import com.workfront.internship.event_management.selenium.pages.RegistrationPage;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -20,28 +17,23 @@ public class RegistrationPageTest {
 
     static private RegistrationPage registrationPage;
 
-    @BeforeClass
-    public static void setUpClass() {
+    @Before
+    public void setUp() {
         registrationPage = new RegistrationPage();
         registrationPage.init(REGISTRATION_PAGE_URL);
     }
 
-    @AfterClass
-    public static void tearDownClass() {
-        registrationPage.getWebDriver().close();
-        registrationPage = null;
-    }
-
     @After
     public void tearDown() {
-        //registrationPage.redirectToRegistrationPage();
+        registrationPage.getWebDriver().close();
+        registrationPage = null;
     }
 
     @Test
     public void registration_fail_existingEmail() throws InterruptedException {
 
         registrationPage.typeEmail(EXISTING_EMAIL);
-        registrationPage.getEmailField().sendKeys("\t");
+        registrationPage.getPasswordField().sendKeys("\t");
 
         assertTrue("Error message is not displayed", registrationPage.getEmailFieldError().isDisplayed());
     }
@@ -50,7 +42,7 @@ public class RegistrationPageTest {
     public void registration_fail_wrongEmailFormat() throws InterruptedException {
 
         registrationPage.typeEmail(INVALID_EMAIL);
-        registrationPage.getEmailField().sendKeys("\t");
+        registrationPage.getPasswordField().sendKeys("\t");
 
         assertTrue("Error message is not displayed", registrationPage.getEmailFieldError().isDisplayed());
     }
@@ -60,7 +52,7 @@ public class RegistrationPageTest {
 
         registrationPage.typeEmail(NON_EXISTING_EMAIL);
         registrationPage.typeEmailConfirm("test@test.com");
-        registrationPage.getEmailConfirmField().sendKeys("\t");
+        registrationPage.getPasswordField().sendKeys("\t");
 
         assertTrue("Error message is not displayed", registrationPage.getEmailConfirmError().isDisplayed());
     }
@@ -88,7 +80,7 @@ public class RegistrationPageTest {
 
         registrationPage.clickRegister();
 
-        WebDriverWait wait = new WebDriverWait(registrationPage.getWebDriver(), 10);
+        WebDriverWait wait = new WebDriverWait(registrationPage.getWebDriver(), 15, 100);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("flexslider"))); //slider
 
         String currentUrl = registrationPage.getWebDriver().getCurrentUrl();

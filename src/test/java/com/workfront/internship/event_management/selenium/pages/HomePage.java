@@ -14,7 +14,7 @@ public class HomePage extends AbstractPage {
         redirectToPage(HOME_PAGE_URL);
     }
 
-    public WebElement clickLogin() throws InterruptedException {
+    public WebElement clickLoginButton() throws InterruptedException {
         WebElement loginButton = getWebDriver().findElement(By.id("login_button"));
         loginButton.click();
         return getLoginPopup();
@@ -27,7 +27,7 @@ public class HomePage extends AbstractPage {
     }
 
     public void clickAllEventsMenuItem() {
-        WebElement allEventsMenuItem = getWebDriver().findElement(By.cssSelector("#all_events"));
+        WebElement allEventsMenuItem = getWebDriver().findElement(By.id("all_events"));
         allEventsMenuItem.click();
     }
 
@@ -42,9 +42,15 @@ public class HomePage extends AbstractPage {
         return getWebDriver().findElement(By.className("flexslider"));
     }
 
+    public WebElement getLoginButton() throws InterruptedException {
+        return getWebDriver().findElement(By.id("login_button"));
+    }
+
     public WebElement getLogoutButton() {
         return getWebDriver().findElement(By.id("logout_button"));
     }
 
-
+    public WebElement getAllEventsMenuItem() throws InterruptedException {
+        return getWebDriver().findElement(By.id("all_events"));
+    }
 }

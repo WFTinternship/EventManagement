@@ -10,7 +10,6 @@ public class LoginPopup extends AbstractPage {
 
     public void typeEmail(String username) throws InterruptedException {
         WebElement emailField = getWebDriver().findElement(By.id("lf_email"));
-        Thread.sleep(2000);
         emailField.sendKeys(username);
     }
 

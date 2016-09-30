@@ -4,8 +4,15 @@ import com.workfront.internship.event_management.selenium.pages.EventsPage;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+import java.util.regex.Pattern;
 
 import static com.workfront.internship.event_management.selenium.TestHelper.EVENTS_PAGE_URL;
+import static com.workfront.internship.event_management.selenium.TestHelper.HOME_PAGE_URL;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 /**
@@ -29,9 +36,12 @@ public class EventsPageTest {
     }
 
     @Test
-    public void categoryClicked() throws InterruptedException {
-        eventsPage.clickCategory();
+    public void eventDetailsButtonClicked() throws InterruptedException {
+        eventsPage.clickEventDetailsButton();
 
-        assertFalse("List is not updates", eventsPage.getAllEventsHeader().isDisplayed());
+        String currentUrl = eventsPage.getWebDriver().getCurrentUrl();
+        WebElement elem = eventsPage.getWebDriver().findElement(By.cssSelector(".event_details_page"));
+
+        assertNotNull(elem);
     }
 }

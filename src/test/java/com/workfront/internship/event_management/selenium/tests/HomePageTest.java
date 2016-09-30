@@ -6,7 +6,10 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static com.workfront.internship.event_management.selenium.TestHelper.*;
 import static org.junit.Assert.assertEquals;
@@ -34,24 +37,27 @@ public class HomePageTest {
 
     @Test
     public void logoutButtonClick() throws InterruptedException {
-        homePage.clickLogin();
+        homePage.clickLoginButton();
 
         LoginPopup loginPopup = new LoginPopup();
         loginPopup.typeEmail(EXISTING_EMAIL);
         loginPopup.typePassword(VALID_PASSWORD);
         loginPopup.clickSignin();
 
+        WebDriverWait wait = new WebDriverWait(homePage.getWebDriver(), 15, 100);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("logout_button")));
+
         homePage.clickLogout();
 
         String currentUrl = homePage.getWebDriver().getCurrentUrl();
         assertEquals("Page isn't redirecting properly", currentUrl, HOME_PAGE_URL);
-        assertNotNull("login button is not displayed", homePage.getLoginPopup());
+        assertNotNull("Login button is not displayed", homePage.getLoginPopup());
 
     }
 
     @Test
     public void loginButtonClick() throws InterruptedException {
-        WebElement loginPopup = homePage.clickLogin();
+        WebElement loginPopup = homePage.clickLoginButton();
         Assert.assertNotNull("Login Popup is not displayed", loginPopup);
     }
 
@@ -60,8 +66,11 @@ public class HomePageTest {
 
         homePage.clickAllEventsMenuItem();
 
+        WebDriverWait wait = new WebDriverWait(homePage.getWebDriver(), 15, 100);
+        WebElement categoryMenu = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".cat_menu")));
+
         String currentUrl = homePage.getWebDriver().getCurrentUrl();
-        assertEquals("Page isn't redirecting properly", currentUrl, EVENTS_PAGE_URL);
+        assertEquals("Page isn't redirecting properly", EVENTS_PAGE_URL, currentUrl);
     }
 
 }
