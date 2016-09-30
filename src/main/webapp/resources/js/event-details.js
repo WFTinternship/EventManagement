@@ -69,6 +69,7 @@ $(document).ready(function () {
         }
 
     })
+
 })
 
 
@@ -138,4 +139,20 @@ function preview(input) {
         $("#img_prev_photos").html('');
         $("#img_prev_photos").fadeTo(1000 , 0);
     }
+}
+
+function deleteEvent(id){
+    $.ajax({
+        url: '/events/' + id + "/delete",
+        type: 'GET',
+        success: function (result) {
+            if (result.status == "SUCCESS") {
+                window.location = "/events";
+            } else if (result.status == "FAIL") {
+                window.location = "/error";
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+        }
+    })
 }
