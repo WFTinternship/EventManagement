@@ -56,19 +56,19 @@
                             <a href="/"><span>Home</span></a>
                         </li>
                         <li>
-                            <a href="/events"><span id="all_events">All Events</span></a>
+                            <a href="/events" id="all_events"><span >All Events</span></a>
                         </li>
                         <li>
-                            <a href="/upcoming-events"><span>Upcoming events</span></a>
+                            <a href="/upcoming-events" id="upcoming_events"><span>Upcoming events</span></a>
                         </li>
                         <li>
-                            <a href="/past-events"><span>Past events</span></a>
+                            <a href="/past-events" id="past-events"><span>Past events</span></a>
                         </li>
                         <li>
-                            <a href=""><span>Gallery</span></a>
+                            <a href="#" id="gallery"><span>Gallery</span></a>
                         </li>
                         <li>
-                            <a href=""><span>Contacts</span></a>
+                            <a href="#" id="contacts"><span>Contacts</span></a>
                         </li>
                     </ul>
                 </div>
